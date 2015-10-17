@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">HTWDresden</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="settings_bibNummer">Bibliotheksnummer</string>
+    <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
+    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
+    <string name="settings_rzLogin">RZLogin</string>
+    <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
+    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
 </resources>

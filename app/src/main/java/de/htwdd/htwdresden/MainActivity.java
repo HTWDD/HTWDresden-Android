@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -98,6 +100,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int position) {
+        Fragment fragment;
+        FragmentManager fragmentManager = getFragmentManager();
+
+        switch (position) {
+            case 7:
+                fragment = new SettingsFragment();
+                break;
+            default:
+                fragment = new Fragment();
+                break;
+        }
+
+        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Fragment ersetzen
+        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment).commit();
+
         // Item markieren
         mDrawerList.setItemChecked(position, true);
 

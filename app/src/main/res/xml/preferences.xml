@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_key_storage_settings"
+        android:title="Zugangsdaten">
+        <EditTextPreference
+            android:dialogMessage="@string/settings_bibNummer_dialogMessage"
+            android:key="sNummer"
+            android:numeric="integer"
+            android:summary="@string/settings_bibNummer_summary"
+            android:title="@string/settings_bibNummer" />
+        <EditTextPreference
+            android:dialogMessage="@string/settings_rzLogin_dialogMessage"
+            android:inputType="textPassword"
+            android:key="RZLogin"
+            android:password="true"
+            android:summary="@string/settings_rzLogin_summary"
+            android:title="@string/settings_rzLogin" />
+    </PreferenceCategory>
+</PreferenceScreen>
