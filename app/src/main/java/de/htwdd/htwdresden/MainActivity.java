@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             case 7:
                 fragment = new SettingsFragment();
                 break;
+            case 8:
+                fragment = new AboutFragment();
+                break;
             default:
                 fragment = new Fragment();
                 break;
