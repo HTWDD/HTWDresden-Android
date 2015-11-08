@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getFragmentManager();
 
         switch (position) {
+            case 2:
+                fragment = new MensaFragment();
+                break;
             case 7:
                 fragment = new SettingsFragment();
                 break;
