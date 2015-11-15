@@ -7,6 +7,8 @@
     <string name="app_github">github.com/HTWDD/HTWDresden</string>
 
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
+    <string name="info_error_parse">Fehler beim Parsen</string>
+    <string name="info_no_internet">Keine Internetverbindung!</string>
 
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
@@ -18,6 +20,7 @@
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
+    <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>

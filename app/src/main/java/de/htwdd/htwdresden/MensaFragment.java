@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.types.TabItem;
 
 
@@ -30,21 +31,26 @@ public class MensaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = getArguments();
+        Bundle bundle_1 = new Bundle();
+        bundle_1.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 0);
+        Bundle bundle_2 = new Bundle();
+        bundle_2.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
+        Bundle bundle_3 = new Bundle();
+        bundle_3.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 2);
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_today),
-                AboutFragment.class,
-                bundle
+                MensaDetailFragment.class,
+                bundle_1
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_this_week),
-                AboutFragment.class,
-                bundle
+                MensaDetailFragment.class,
+                bundle_2
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_next_week),
-                AboutFragment.class,
-                bundle
+                MensaDetailFragment.class,
+                bundle_3
         ));
     }
 
