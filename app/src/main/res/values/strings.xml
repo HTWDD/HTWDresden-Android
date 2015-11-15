@@ -5,6 +5,17 @@
     <string name="app_email">htwcampusapp@htw-dresden.de</string>
     <string name="app_website">www.htwdd.github.io</string>
     <string name="app_github">github.com/HTWDD/HTWDresden</string>
+    
+    <string name="navi_overview">Übersicht</string>
+    <string name="navi_mensa">Mensa</string>
+    <string name="navi_timetable">Stundenplan</string>
+    <string name="navi_room_timetable">Belegungsplan</string>
+    <string name="navi_exams">Noten / Prüfungen</string>
+    <string name="navi_uni_administration">Verwaltung</string>
+    <string name="navi_settings">Einstellungen</string>
+    <string name="navi_about">Über die App</string>
+    <string name="navi_head_uni">Uni Alltag</string>
+    <string name="navi_head_settings">Optionen</string>
 
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
