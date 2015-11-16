@@ -117,16 +117,17 @@ public class MensaDetailFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
                 meals.clear();
 
-                // Ändere Encoding
-                response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
-
                 Mensa mensa = new Mensa(getActivity(), mensaID);
                 switch (modus) {
                     case 1:
                     case 2:
+                        // Ändere Encoding
+                        response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
+                        // Parse Ergebniss
                         meals.addAll(mensa.parseCompleteWeek(response));
                         break;
                     default:
+                        // Parse Ergebniss
                         meals.addAll(mensa.parseCurrentDay(response));
                         break;
                 }

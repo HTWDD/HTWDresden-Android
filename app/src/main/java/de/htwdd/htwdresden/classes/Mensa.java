@@ -27,7 +27,7 @@ public class Mensa {
     public ArrayList<Meal> parseCurrentDay(String result) {
         Calendar calendar = Calendar.getInstance();
         ArrayList<Meal> meals = new ArrayList<>();
-        Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>");
+        Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
         Matcher matcher = pattern.matcher(result);
         while (matcher.find()) {
