@@ -147,13 +147,13 @@ public class MensaDetailFragment extends Fragment {
         String url;
         switch (modus) {
             case 1:
-                url = "http://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
+                url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
                 break;
             case 2:
-                url = "http://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
+                url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
                 break;
             default:
-                url = "http://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID;
+                url = "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID;
                 break;
         }
 
