@@ -105,7 +105,11 @@ public class MensaDetailFragment extends Fragment {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Liste ausblenden
+                meals.clear();
+                // Fehlermeldung anzeigen
                 textView.setText(R.string.info_error);
+                // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
             }
         };
@@ -159,6 +163,11 @@ public class MensaDetailFragment extends Fragment {
 
         // Überprüfe Internetverbindung
         if (!VolleyDownloader.CheckInternet(getActivity())) {
+            // Liste ausblenden
+            meals.clear();
+            // Refresh ausschalten
+            swipeRefreshLayout.setRefreshing(false);
+            // Meldung anzeigen
             textView.setText(R.string.info_no_internet);
             return;
         }
