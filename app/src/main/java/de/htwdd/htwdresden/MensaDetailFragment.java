@@ -145,7 +145,12 @@ public class MensaDetailFragment extends Fragment {
         };
 
         // Starte Refreshing
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         // Wähle URL aus
         String url;
@@ -166,7 +171,12 @@ public class MensaDetailFragment extends Fragment {
             // Liste ausblenden
             meals.clear();
             // Refresh ausschalten
-            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
             // Meldung anzeigen
             textView.setText(R.string.info_no_internet);
             return;
