@@ -42,10 +42,12 @@ public class MensaArrayAdapter extends AbstractBaseAdapter<Meal> {
             viewHolder.title.setText(meal.getTitle());
         if (meal.getPrice() != null)
             viewHolder.price.setText(meal.getPrice());
-        if (meal.getImageUrl() != null) {
+        if (!meal.getImageUrl().isEmpty()) {
             ImageLoader imageLoader = VolleyDownloader.getInstance(context).getImageLoader();
             viewHolder.imageView.setImageUrl(meal.getImageUrl(), imageLoader);
+            viewHolder.imageView.setVisibility(View.VISIBLE);
         }
+        else viewHolder.imageView.setVisibility(View.GONE);
 
         return convertView;
     }
