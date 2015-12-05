@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_about:
                 fragment = new AboutFragment();
                 break;
+            case R.id.navigation_uni_administration:
+                fragment = new ManagementFragment();
+                break;
             default:
                 fragment = new Fragment();
                 break;
