@@ -22,6 +22,27 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem mPreviousMenuItem;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionBar;
+    private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            // Markiere aktuelles Feld
+            if (mPreviousMenuItem != null) {
+                mPreviousMenuItem.setChecked(false);
+            }
+            mPreviousMenuItem = item;
+            item.setChecked(true);
+
+            // Setze Title
+            if (item.getItemId() != R.id.navigation_overview)
+                actionBar.setTitle(item.getTitle());
+            else actionBar.setTitle(R.string.app_name);
+
+            // Ändere Inhalt
+            selectItem(item.getItemId());
+
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,34 +88,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                // Markiere aktuelles Feld
-                if (mPreviousMenuItem != null) {
-                    mPreviousMenuItem.setChecked(false);
-                }
-                mPreviousMenuItem = item;
-                item.setChecked(true);
-
-                // Setze Title
-                if (item.getItemId() != R.id.navigation_overview)
-                    actionBar.setTitle(item.getTitle());
-                else actionBar.setTitle(R.string.app_name);
-
-                // Ändere Inhalt
-                selectItem(item.getItemId());
-
-                return false;
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
     }
 
     private void selectItem(int position) {
         Fragment fragment;
+        String tag = null;
+
         FragmentManager fragmentManager = getFragmentManager();
 
         switch (position) {
+            case R.id.navigation_overview:
+                fragment = new Fragment();
+                tag = "overview";
+                break;
             case R.id.navigation_mensa:
                 fragment = new MensaFragment();
                 break;
@@ -113,12 +120,27 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         // Fragment ersetzen
-        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commit();
 
         // NavigationDrawer schliesen
         mDrawerLayout.closeDrawers();
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() == 0)
+            // Wenn das Übersichtsfragment das aktuelle ist, die App beenden
+            if (fragmentManager.findFragmentByTag("overview") != null)
+                finish();
+            else {
+                // Zur Übersichtsseite springen
+                NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+                onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
+            }
+        else fragmentManager.popBackStack();
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
