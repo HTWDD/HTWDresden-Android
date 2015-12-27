@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+
 
 /**
  * Fragement zur Übersicht aller wichtigen Uni-Einrichtungen
@@ -24,6 +26,9 @@ public class ManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_management, container, false);
+
+        // Setze Toolbartitle
+        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
 
         CardView management_office = (CardView) view.findViewById(R.id.management_office);
         management_office.setOnClickListener(new View.OnClickListener() {

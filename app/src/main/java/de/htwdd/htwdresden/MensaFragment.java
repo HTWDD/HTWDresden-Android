@@ -14,6 +14,7 @@ import java.util.List;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.interfaces.IToolbarTitel;
 import de.htwdd.htwdresden.types.TabItem;
 
 
@@ -58,6 +59,9 @@ public class MensaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mensa, container, false);
+
+        // Setze Toolbartitle
+        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_mensa));
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 

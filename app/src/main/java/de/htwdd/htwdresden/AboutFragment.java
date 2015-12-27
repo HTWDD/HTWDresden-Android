@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+
 
 /**
  * Fragment zur Anzeige der App-Infos
@@ -28,6 +30,9 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+        // Setze Toolbartitle
+        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_about));
 
         // Hole Views
         TextView viewVersion = (TextView) view.findViewById(R.id.app_version);

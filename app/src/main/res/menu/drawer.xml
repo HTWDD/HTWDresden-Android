@@ -7,42 +7,38 @@
             android:title="@string/navi_overview" />
         <item android:title="@string/navi_head_uni">
             <menu>
-                <group android:checkableBehavior="single">
-                    <item
-                        android:id="@+id/navigation_mensa"
-                        android:icon="@drawable/food"
-                        android:title="@string/navi_mensa" />
-                    <item
-                        android:id="@+id/navigation_timetable"
-                        android:icon="@drawable/ic_access_time_24dp"
-                        android:title="@string/navi_timetable" />
-                    <item
-                        android:id="@+id/navigation_room_timetable"
-                        android:icon="@drawable/ic_room_24dp"
-                        android:title="@string/navi_room_timetable" />
-                    <item
-                        android:id="@+id/navigation_exams"
-                        android:icon="@drawable/ic_mode_edit_24dp"
-                        android:title="@string/navi_exams" />
-                    <item
-                        android:id="@+id/navigation_uni_administration"
-                        android:icon="@drawable/ic_supervisor_account_24dp"
-                        android:title="@string/navi_uni_administration" />
-                </group>
+                <item
+                    android:id="@+id/navigation_mensa"
+                    android:icon="@drawable/food"
+                    android:title="@string/navi_mensa" />
+                <item
+                    android:id="@+id/navigation_timetable"
+                    android:icon="@drawable/ic_access_time_24dp"
+                    android:title="@string/navi_timetable" />
+                <item
+                    android:id="@+id/navigation_room_timetable"
+                    android:icon="@drawable/ic_room_24dp"
+                    android:title="@string/navi_room_timetable" />
+                <item
+                    android:id="@+id/navigation_exams"
+                    android:icon="@drawable/ic_mode_edit_24dp"
+                    android:title="@string/navi_exams" />
+                <item
+                    android:id="@+id/navigation_uni_administration"
+                    android:icon="@drawable/ic_supervisor_account_24dp"
+                    android:title="@string/navi_uni_administration" />
             </menu>
         </item>
         <item android:title="@string/navi_head_settings">
             <menu>
-                <group android:checkableBehavior="single">
-                    <item
-                        android:id="@+id/navigation_settings"
-                        android:icon="@drawable/ic_settings_24dp"
-                        android:title="@string/navi_settings" />
-                    <item
-                        android:id="@+id/navigation_about"
-                        android:icon="@drawable/ic_info_outline_24dp"
-                        android:title="@string/navi_about" />
-                </group>
+                <item
+                    android:id="@+id/navigation_settings"
+                    android:icon="@drawable/ic_settings_24dp"
+                    android:title="@string/navi_settings" />
+                <item
+                    android:id="@+id/navigation_about"
+                    android:icon="@drawable/ic_info_outline_24dp"
+                    android:title="@string/navi_about" />
             </menu>
         </item>
     </group>

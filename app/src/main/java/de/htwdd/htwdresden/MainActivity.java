@@ -11,13 +11,22 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import de.htwdd.htwdresden.interfaces.IToolbarTitel;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Hinweis zum Navigation Drawer:
+ * Das Highlighting ist aktuell in der Support-Libary nicht vollständig / richtig implentiert,
+ * darum manuelle Behandlung im Code
+ * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
+ */
+
+public class MainActivity extends AppCompatActivity implements IToolbarTitel {
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -31,11 +40,6 @@ public class MainActivity extends AppCompatActivity {
             }
             mPreviousMenuItem = item;
             item.setChecked(true);
-
-            // Setze Title
-            if (item.getItemId() != R.id.navigation_overview)
-                actionBar.setTitle(item.getTitle());
-            else actionBar.setTitle(R.string.app_name);
 
             // Ändere Inhalt
             selectItem(item.getItemId());
@@ -83,8 +87,12 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         // Setze Start-Fragment
-        if (savedInstanceState == null)
-            selectItem(0);
+        if (savedInstanceState == null) {
+            onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
+            selectItem(R.id.navigation_overview);
+            mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
+            mPreviousMenuItem.setChecked(true);
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -164,5 +172,33 @@ public class MainActivity extends AppCompatActivity {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
         return mDrawerToggle.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mPreviousMenuItem != null)
+            outState.putInt("mPreviousMenuItem", mPreviousMenuItem.getItemId());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null)
+            if (savedInstanceState.containsKey("mPreviousMenuItem")) {
+                NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+                mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
+                mPreviousMenuItem.setChecked(false);
+                mPreviousMenuItem = mNavigationView.getMenu().findItem(savedInstanceState.getInt("mPreviousMenuItem"));
+                mPreviousMenuItem.setChecked(true);
+                Log.d("Activity", "Markiere: " + mPreviousMenuItem.getTitle());
+            }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (title == null || title.isEmpty())
+            actionBar.setTitle(R.string.app_name);
+        else actionBar.setTitle(title);
     }
 }
