@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
             case R.id.navigation_mensa:
                 fragment = new MensaFragment();
                 break;
+            case R.id.navigation_timetable:
+                fragment = new TimetableFragment();
+                break;
             case R.id.navigation_settings:
                 fragment = new SettingsFragment();
                 break;

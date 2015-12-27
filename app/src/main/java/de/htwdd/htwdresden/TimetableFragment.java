@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
 import de.htwdd.htwdresden.classes.Const;
@@ -21,10 +24,10 @@ import de.htwdd.htwdresden.types.TabItem;
 /**
  * Hauptfragment welches die verschiedenen Sub-Fragmente enthält
  */
-public class MensaFragment extends Fragment {
+public class TimetableFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
 
-    public MensaFragment() {
+    public TimetableFragment() {
         // Required empty public constructor
     }
 
@@ -32,26 +35,24 @@ public class MensaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Calendar calendar = GregorianCalendar.getInstance(Locale.getDefault());
+        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+
         Bundle bundle_1 = new Bundle();
-        bundle_1.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 0);
+        bundle_1.putInt(Const.BundleParams.TIMETABLE_WEEK, currentWeek);
         Bundle bundle_2 = new Bundle();
-        bundle_2.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
-        Bundle bundle_3 = new Bundle();
-        bundle_3.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 2);
+        bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
         mTabs.add(new TabItem(
-                getResources().getString(R.string.mensa_tab_today),
-                MensaDetailFragment.class,
+                getResources().getString(R.string.timetable_current_week, currentWeek),
+                TimetableDetailFragment.class,
                 bundle_1
         ));
         mTabs.add(new TabItem(
-                getResources().getString(R.string.mensa_tab_this_week),
-                MensaDetailFragment.class,
+                getResources().getString(R.string.timetable_next_week, nextWeek),
+                TimetableDetailFragment.class,
                 bundle_2
-        ));
-        mTabs.add(new TabItem(
-                getResources().getString(R.string.mensa_tab_next_week),
-                MensaDetailFragment.class,
-                bundle_3
         ));
     }
 
@@ -61,7 +62,7 @@ public class MensaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tabs, container, false);
 
         // Setze Toolbartitle
-        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_mensa));
+        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 

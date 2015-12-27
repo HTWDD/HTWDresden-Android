@@ -5,7 +5,7 @@
     <string name="app_email">htwcampusapp@htw-dresden.de</string>
     <string name="app_website">www.htwdd.github.io</string>
     <string name="app_github">github.com/HTWDD/HTWDresden</string>
-    
+
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>
     <string name="navi_timetable">Stundenplan</string>
@@ -32,6 +32,9 @@
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
+
+    <string name="timetable_current_week">Aktuelle Woche (%s)</string>
+    <string name="timetable_next_week">Nächste Woche (%s)</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
