@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+import de.htwdd.htwdresden.interfaces.INavigation;
 
 
 /**
@@ -28,7 +28,7 @@ public class ManagementFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_management, container, false);
 
         // Setze Toolbartitle
-        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
+        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
 
         CardView management_office = (CardView) view.findViewById(R.id.management_office);
         management_office.setOnClickListener(new View.OnClickListener() {

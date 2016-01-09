@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+import de.htwdd.htwdresden.interfaces.INavigation;
 
 
 /**
@@ -32,7 +32,7 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
         // Setze Toolbartitle
-        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_about));
+        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_about));
 
         // Hole Views
         TextView viewVersion = (TextView) view.findViewById(R.id.app_version);

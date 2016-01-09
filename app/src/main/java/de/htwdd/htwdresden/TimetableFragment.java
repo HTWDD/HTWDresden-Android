@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.TabItem;
 
 
@@ -62,12 +62,12 @@ public class TimetableFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tabs, container, false);
 
         // Setze Toolbartitle
-        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
+        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         // Adapter für Tabs erstellen und an view hängen
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), mTabs);
         viewPager.setAdapter(viewPagerAdapter);
 
         // TabLayout "stylen"

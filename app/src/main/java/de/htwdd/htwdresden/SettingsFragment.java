@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
  * Fragment für die Einstellungen
@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Setze Toolbartitle
-        ((IToolbarTitel)getActivity()).setTitle(getResources().getString(R.string.navi_settings));
+        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_settings));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

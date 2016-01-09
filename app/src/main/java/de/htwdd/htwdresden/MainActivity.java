@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import de.htwdd.htwdresden.interfaces.IToolbarTitel;
+import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
  * Hinweis zum Navigation Drawer:
@@ -26,7 +26,7 @@ import de.htwdd.htwdresden.interfaces.IToolbarTitel;
  * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
  */
 
-public class MainActivity extends AppCompatActivity implements IToolbarTitel {
+public class MainActivity extends AppCompatActivity implements INavigation {
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -34,15 +34,10 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
     private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-            // Markiere aktuelles Feld
-            if (mPreviousMenuItem != null) {
-                mPreviousMenuItem.setChecked(false);
-            }
-            mPreviousMenuItem = item;
-            item.setChecked(true);
-
+            // Makriere im NavigationDrawer
+            setNavigationItem(item);
             // Ändere Inhalt
-            selectItem(item.getItemId());
+            selectFragment(item.getItemId());
 
             return false;
         }
@@ -89,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
         // Setze Start-Fragment
         if (savedInstanceState == null) {
             onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
-            selectItem(R.id.navigation_overview);
+            selectFragment(R.id.navigation_overview);
             mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
             mPreviousMenuItem.setChecked(true);
         }
@@ -99,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
         navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
     }
 
-    private void selectItem(int position) {
+    private void selectFragment(int position) {
         Fragment fragment;
         String tag = null;
 
@@ -138,6 +133,21 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
 
         // NavigationDrawer schliesen
         mDrawerLayout.closeDrawers();
+    }
+
+    /**
+     * Markiert das übergebene MenuItem im NavigationDraver
+     *
+     * @param item Item welches markiert werden soll oder null falls Markierung aufgehoben werden soll
+     */
+    private void setNavigationItem(final MenuItem item) {
+        // Markiere aktuelles Feld
+        if (mPreviousMenuItem != null) {
+            mPreviousMenuItem.setChecked(false);
+        }
+        mPreviousMenuItem = item;
+        if (item != null)
+            item.setChecked(true);
     }
 
     @Override
@@ -199,9 +209,15 @@ public class MainActivity extends AppCompatActivity implements IToolbarTitel {
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         if (title == null || title.isEmpty())
             actionBar.setTitle(R.string.app_name);
         else actionBar.setTitle(title);
+    }
+
+    @Override
+    public void setNavigationItem(int item) {
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        setNavigationItem(mNavigationView.getMenu().findItem(item));
     }
 }
