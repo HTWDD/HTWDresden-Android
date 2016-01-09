@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="pref_key_storage_settings"
-        android:title="Zugangsdaten">
+        android:title="@string/settings_category_access_data">
         <EditTextPreference
             android:dialogMessage="@string/settings_bibNummer_dialogMessage"
             android:key="sNummer"
@@ -15,5 +15,29 @@
             android:password="true"
             android:summary="@string/settings_rzLogin_summary"
             android:title="@string/settings_rzLogin" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_category_study">
+        <ListPreference
+            android:entries="@array/abschluss_list"
+            android:entryValues="@array/abschluss_values"
+            android:key="abschluss"
+            android:summary="@string/settings_abschluss_summary"
+            android:title="@string/settings_abschluss" />
+        <EditTextPreference
+            android:inputType="number"
+            android:maxLength="2"
+            android:key="StgJhr"
+            android:summary="@string/settings_jahrgang_summary"
+            android:title="@string/settings_jahrgang" />
+        <EditTextPreference
+            android:title="@string/settings_studiengang"
+            android:key="Stg"
+            android:numeric="integer"
+            android:maxLength="3"
+            android:summary="@string/settings_studiengang_summary"/>
+        <EditTextPreference
+            android:title="@string/settings_studiengruppe"
+            android:key="StgGrp"
+            android:summary="@string/settings_studiengruppe_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

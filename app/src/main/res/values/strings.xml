@@ -17,16 +17,30 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
+    <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_no_internet">Keine Internetverbindung!</string>
+    <string name="info_internet_timeout">Zeitüberschreitung bei der Anfrage!</string>
+    <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
+    <string name="info_internet_error">Unbekannter Netzwerkfehler</string>
 
+    <string name="settings_category_access_data">Zugangsdaten</string>
+    <string name="settings_category_study">Studium</string>
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
     <string name="settings_rzLogin">RZLogin</string>
     <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
+    <string name="settings_abschluss">Abschluss</string>
+    <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
+    <string name="settings_jahrgang">Jahrgang</string>
+    <string name="settings_jahrgang_summary">z.B. 16, 15, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studiengang">Studiengang</string>
+    <string name="settings_studiengang_summary">z.B. 043\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studiengruppe">Studiengruppe</string>
+    <string name="settings_studiengruppe_summary">z.B. 01, Kfz, 61, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
