@@ -1,9 +1,16 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.htwdd.htwdresden.TimetableDetailFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
+    <GridView
+        android:id="@+id/Timetable"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:horizontalSpacing="1sp"
+        android:numColumns="7"
+        android:scrollingCache="false"
+        android:verticalSpacing="1sp" />
 
-</FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
