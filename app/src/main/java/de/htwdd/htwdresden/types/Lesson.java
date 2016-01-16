@@ -13,6 +13,8 @@ import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import de.htwdd.htwdresden.interfaces.IParseJSON;
 
 /**
+ * Beschreibung einer Lehrveranstaltung
+ *
  * @author Kay Förster
  */
 public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
@@ -28,6 +30,37 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
     private String weeksOnly;
     private String rooms;
 
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public int getTypeInt(){
+        if (type.contains("V"))
+            return 0;
+        else if (type.contains("Pr"))
+            return 1;
+        else if (type.contains("Ü"))
+            return 2;
+        else return 3;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
     public void setDs(int ds) {
         this.ds = ds;
     }
@@ -38,6 +71,22 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
 
     public Time getEndTime() {
         return endTime;
+    }
+
+    public void setWeeksOnly(String weeksOnly) {
+        this.weeksOnly = weeksOnly;
+    }
+
+    public String getWeeksOnly() {
+        return weeksOnly;
+    }
+
+    public void setRooms(String rooms) {
+        this.rooms = rooms;
+    }
+
+    public String getRooms() {
+        return rooms;
     }
 
     @Override

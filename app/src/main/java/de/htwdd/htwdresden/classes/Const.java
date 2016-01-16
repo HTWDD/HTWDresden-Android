@@ -39,6 +39,10 @@ public final class Const {
                 Time.valueOf("16:30:00"),
                 Time.valueOf("18:20:00"),
                 Time.valueOf("20:00:00")};
+
+        public static int db_week(final int calendarWeek) {
+            return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
+        }
     }
 
     public static final class database {

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="lesson_type">
+        <item>Vorlesung</item>
+        <item>Praktikum</item>
+        <item>Übung</item>
+        <item>sonstiges</item>
+    </string-array>
+
     <string-array name="abschluss_list">
         <item>Bachelor</item>
         <item>Master</item>

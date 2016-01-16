@@ -12,26 +12,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
+import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Lesson;
 
 
 public class TimetableDetailFragment extends Fragment {
     private View mLayout;
+    private int week;
+    private TimetableGridAdapter gridAdapter;
+    private ArrayList<Lesson> lessons_week;
 
     public TimetableDetailFragment() {
         // Required empty public constructor
@@ -40,12 +50,31 @@ public class TimetableDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lessons_week = new ArrayList<>();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getInstance().unregister(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_detail, container, false);
+
+        // Arguments überprüfen
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar().get(Calendar.WEEK_OF_YEAR));
+        else week = new GregorianCalendar().get(Calendar.WEEK_OF_YEAR);
 
         // SwipeRefreshLayout Listener
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
@@ -56,9 +85,40 @@ public class TimetableDetailFragment extends Fragment {
             }
         });
 
+        // Lade Daten aus DB
+        loadLessons();
+
+        // Adapter zum handeln der Daten
+        gridAdapter = new TimetableGridAdapter(getActivity(), lessons_week, week);
+
+        // GridView
+        GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
+        gridView.setAdapter(gridAdapter);
+
         return mLayout;
     }
 
+    /**
+     * Behandelt die Benachrichtigung vom Eventbus das ein neuer Stundenplan zur Verfügung steht
+     *
+     * @param event Typ der Benachrichtigung
+     */
+    @Subscribe
+    public void updateTimetable(UpdateTimetableEvent event) {
+        loadLessons();
+        gridAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Lädt die Stunden der aktuellen Woche {@see week} aus der Datenbank und speichert sie in einer
+     * Liste {@see lesson_week}
+     */
+    void loadLessons() {
+        DatabaseManager databaseManager = new DatabaseManager(getActivity());
+        TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
+        lessons_week.clear();
+        lessons_week.addAll(timetableUserDAO.getWeekShort(week));
+    }
 
     /**
      * Lädt die entsprechenden Pläne aus dem Internet
@@ -165,9 +225,11 @@ public class TimetableDetailFragment extends Fragment {
                 TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
                 // Daten speichern
                 boolean result = timetableUserDAO.replaceTimetable(lessons);
-                if (result)
+                if (result) {
+                    EventBus.getInstance().post(new UpdateTimetableEvent());
                     Snackbar.make(mLayout, R.string.timetable_updade_success, Snackbar.LENGTH_SHORT).show();
-                else Snackbar.make(mLayout, R.string.timetable_save_error, Snackbar.LENGTH_LONG).show();
+                } else
+                    Snackbar.make(mLayout, R.string.timetable_save_error, Snackbar.LENGTH_LONG).show();
             }
         };
 

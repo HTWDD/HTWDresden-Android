@@ -51,6 +51,10 @@
     <string name="timetable_save_error">Fehler beim Speichern des Stundeplans!</string>
     <string name="timetable_current_week">Aktuelle Woche (%s)</string>
     <string name="timetable_next_week">Nächste Woche (%s)</string>
+    <string name="timetable_moreLessons">mehrere Stunden</string>
+    <string name="timetable_moreLessonsPoints">***</string>
+    <string name="timetable_only_KW">einige KW</string>
+    <string name="timetable_ds">%1$s\n-\n%2$s</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
