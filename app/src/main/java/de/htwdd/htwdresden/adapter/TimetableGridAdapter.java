@@ -29,7 +29,7 @@ public class TimetableGridAdapter extends BaseAdapter {
     private Context context;
     private int week;
     private ArrayList<Lesson> lessons_week;
-    LayoutInflater mLayoutInflater;
+    private LayoutInflater mLayoutInflater;
     private static String[] lessonType;
     private static final String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
     private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -116,7 +116,7 @@ public class TimetableGridAdapter extends BaseAdapter {
             case 35:
             case 42:
             case 49:
-                viewHolder.type.setText(context.getResources().getString(R.string.timetable_ds, format.format(Const.Timetable.beginDS[(i / 7) - 1]), format.format(Const.Timetable.endDS[(i / 7) - 1])));
+                viewHolder.type.setText(context.getResources().getString(R.string.timetable_ds_grid, format.format(Const.Timetable.beginDS[(i / 7) - 1]), format.format(Const.Timetable.endDS[(i / 7) - 1])));
                 viewHolder.type.setHeight(180);
                 viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                 break;
@@ -173,6 +173,8 @@ public class TimetableGridAdapter extends BaseAdapter {
 
                     // Es gibt keine passende Veranstaltung die angezeigt werden kann
                     if (single != 1) {
+                        viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        viewHolder.tag.setText(null);
                         viewHolder.room.setVisibility(View.GONE);
                         viewHolder.type.setText(R.string.timetable_moreLessons);
                         break;

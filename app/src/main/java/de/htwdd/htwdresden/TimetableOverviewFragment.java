@@ -3,6 +3,7 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -37,13 +39,13 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Lesson;
 
 
-public class TimetableDetailFragment extends Fragment {
+public class TimetableOverviewFragment extends Fragment {
     private View mLayout;
     private int week;
     private TimetableGridAdapter gridAdapter;
     private ArrayList<Lesson> lessons_week;
 
-    public TimetableDetailFragment() {
+    public TimetableOverviewFragment() {
         // Required empty public constructor
     }
 
@@ -51,17 +53,14 @@ public class TimetableDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lessons_week = new ArrayList<>();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         EventBus.getInstance().register(this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
+        // Erst Abmelden wenn Fragment entgültig zerstört wird, da ansonsten Nachrichten aus anderen
+        // Activitys nicht registriert werden.
         EventBus.getInstance().unregister(this);
     }
 
@@ -94,6 +93,34 @@ public class TimetableDetailFragment extends Fragment {
         // GridView
         GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt(Const.BundleParams.TIMETABLE_WEEK, week);
+                bundle1.putInt(Const.BundleParams.TIMETABLE_DAY, i % 7);
+                bundle1.putInt(Const.BundleParams.TIMETABLE_DS, i / 7);
+                bundle1.putBoolean(Const.BundleParams.TIMETABLE_EDIT, true);
+
+                Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
+                intent.putExtras(bundle1);
+                startActivity(intent);
+                return true;
+            }
+        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt(Const.BundleParams.TIMETABLE_WEEK, week);
+                bundle1.putInt(Const.BundleParams.TIMETABLE_DAY, i % 7);
+                bundle1.putInt(Const.BundleParams.TIMETABLE_DS, i / 7);
+
+                Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
+                intent.putExtras(bundle1);
+                startActivity(intent);
+            }
+        });
 
         return mLayout;
     }

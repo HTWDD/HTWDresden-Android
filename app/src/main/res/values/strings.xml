@@ -20,6 +20,8 @@
     <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
+    <string name="info_error_save">Fehler beim Speichern</string>
+    <string name="info_error_error">Fehler beim Löschen</string>
     <string name="info_no_internet">Keine Internetverbindung!</string>
     <string name="info_internet_timeout">Zeitüberschreitung bei der Anfrage!</string>
     <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
@@ -49,12 +51,36 @@
 
     <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundeplans!</string>
+    <string name="timetable_add">Stunde hinzufügen</string>
+    <string name="timetable_details">Stunden-Details</string>
     <string name="timetable_current_week">Aktuelle Woche (%s)</string>
     <string name="timetable_next_week">Nächste Woche (%s)</string>
     <string name="timetable_moreLessons">mehrere Stunden</string>
     <string name="timetable_moreLessonsPoints">***</string>
     <string name="timetable_only_KW">einige KW</string>
-    <string name="timetable_ds">%1$s\n-\n%2$s</string>
+    <string name="timetable_ds_grid">%1$s\n-\n%2$s</string>
+    <string name="timetable_ds_list">%1$s. DS (%2$s - %3$s)</string>
+    <string name="timetable_edit_activity_titel">Stunde bearbeiten</string>
+    <string name="timetable_edit_lessonName">Vorlesung</string>
+    <string name="timetable_edit_lessonName_hint">Name der Vorlesung</string>
+    <string name="timetable_edit_lessonTag">Kurzform</string>
+    <string name="timetable_edit_lessonTag_hint">z.B. Ma</string>
+    <string name="timetable_edit_lessonType">Art</string>
+    <string name="timetable_edit_lessonRoom">Raum</string>
+    <string name="timetable_edit_lessonRoom_hint">z.B. S311</string>
+    <string name="timetable_edit_label_time">Zeit</string>
+    <string name="timetable_edit_label_general">Allgemein</string>
+    <string name="timetable_edit_lessonWeek">Woche</string>
+    <string name="timetable_edit_lessonDay">Tag</string>
+    <string name="timetable_edit_lessonDS">DS</string>
+    <string name="timetable_edit_lessonWeeks">nur KW</string>
+    <string name="timetable_edit_lessonWeeks_hint">z.B. 20;22</string>
+    <string name="timetable_edit_save">Speichern</string>
+    <string name="timetable_edit_delete">Löschen</string>
+    <string name="timetable_edit_lessonSaveSuccess">Stunde erfolgreich gepeichert!</string>
+    <string name="timetable_edit_lessonDeleteSuccess">Stunde erfolgreich gelöscht!</string>
+    <string name="timetable_details_title">(%1$s) %2$s</string>
+    <string name="timetable_details_subtitle">%1$s von %2$s</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>

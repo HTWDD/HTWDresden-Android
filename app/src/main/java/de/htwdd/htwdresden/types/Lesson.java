@@ -18,6 +18,7 @@ import de.htwdd.htwdresden.interfaces.IParseJSON;
  * @author Kay Förster
  */
 public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
+    private long id;
     private String tag;
     private String name;
     private String type;
@@ -30,6 +31,13 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
     private String weeksOnly;
     private String rooms;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public void setTag(String tag) {
         this.tag = tag;
@@ -39,7 +47,15 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         return tag;
     }
 
-    public int getTypeInt(){
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getTypeInt() {
         if (type.contains("V"))
             return 0;
         else if (type.contains("Pr"))
@@ -49,8 +65,37 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         else return 3;
     }
 
+    public void setTypeInt(int value) {
+        switch (value) {
+            case 0:
+                type = "V";
+                break;
+            case 1:
+                type = "Pr";
+                break;
+            case 2:
+                type = "Ü";
+                break;
+            default:
+                type = "sonst.";
+                break;
+        }
+    }
+
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
+    }
+
+    public int getWeek() {
+        return week;
     }
 
     public void setDay(int day) {
@@ -71,6 +116,14 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
 
     public Time getEndTime() {
         return endTime;
+    }
+
+    public void setProfessor(String professor) {
+        this.professor = professor;
+    }
+
+    public String getProfessor() {
+        return professor;
     }
 
     public void setWeeksOnly(String weeksOnly) {
@@ -139,11 +192,13 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_WEEK, week);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_DAY, day);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_DS, ds);
-        contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_BEGINTIME, beginTime.toString());
-        contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_ENDTIME, endTime.toString());
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_PROFESSOR, professor);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_WEEKSONLY, weeksOnly);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_ROOMS, rooms);
+        if (beginTime != null)
+            contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_BEGINTIME, beginTime.toString());
+        if (endTime != null)
+            contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_ENDTIME, endTime.toString());
         return contentValues;
     }
 }

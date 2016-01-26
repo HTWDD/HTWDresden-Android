@@ -46,12 +46,12 @@ public class TimetableFragment extends Fragment {
         bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
         mTabs.add(new TabItem(
                 getResources().getString(R.string.timetable_current_week, currentWeek),
-                TimetableDetailFragment.class,
+                TimetableOverviewFragment.class,
                 bundle_1
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.timetable_next_week, nextWeek),
-                TimetableDetailFragment.class,
+                TimetableOverviewFragment.class,
                 bundle_2
         ));
     }

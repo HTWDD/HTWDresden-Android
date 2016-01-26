@@ -7,6 +7,12 @@
         <item>sonstiges</item>
     </string-array>
 
+    <string-array name="lesson_week">
+        <item>jede KW</item>
+        <item>ungerade KW</item>
+        <item>gerade KW</item>
+    </string-array>
+
     <string-array name="abschluss_list">
         <item>Bachelor</item>
         <item>Master</item>
