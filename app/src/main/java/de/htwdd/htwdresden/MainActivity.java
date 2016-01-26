@@ -5,13 +5,13 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +23,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
  * Hinweis zum Navigation Drawer:
  * Das Highlighting ist aktuell in der Support-Libary nicht vollständig / richtig implentiert,
  * darum manuelle Behandlung im Code
+ *
  * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
  */
 
@@ -94,42 +95,47 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
     }
 
-    private void selectFragment(int position) {
-        Fragment fragment;
-        String tag = null;
+    private void selectFragment(final int position) {
 
-        FragmentManager fragmentManager = getFragmentManager();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Fragment fragment;
+                String tag = null;
+                FragmentManager fragmentManager = getFragmentManager();
 
-        switch (position) {
-            case R.id.navigation_overview:
-                fragment = new Fragment();
-                tag = "overview";
-                break;
-            case R.id.navigation_mensa:
-                fragment = new MensaFragment();
-                break;
-            case R.id.navigation_timetable:
-                fragment = new TimetableFragment();
-                break;
-            case R.id.navigation_settings:
-                fragment = new SettingsFragment();
-                break;
-            case R.id.navigation_about:
-                fragment = new AboutFragment();
-                break;
-            case R.id.navigation_uni_administration:
-                fragment = new ManagementFragment();
-                break;
-            default:
-                fragment = new Fragment();
-                break;
-        }
+                switch (position) {
+                    case R.id.navigation_overview:
+                        fragment = new Fragment();
+                        tag = "overview";
+                        break;
+                    case R.id.navigation_mensa:
+                        fragment = new MensaFragment();
+                        break;
+                    case R.id.navigation_timetable:
+                        fragment = new TimetableFragment();
+                        break;
+                    case R.id.navigation_settings:
+                        fragment = new SettingsFragment();
+                        break;
+                    case R.id.navigation_about:
+                        fragment = new AboutFragment();
+                        break;
+                    case R.id.navigation_uni_administration:
+                        fragment = new ManagementFragment();
+                        break;
+                    default:
+                        fragment = new Fragment();
+                        break;
+                }
 
-        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-        // Fragment ersetzen
-        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commit();
+                // Fragment ersetzen
+                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commit();
+            }
+        }, 250);
 
         // NavigationDrawer schliesen
         mDrawerLayout.closeDrawers();
@@ -204,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 mPreviousMenuItem.setChecked(false);
                 mPreviousMenuItem = mNavigationView.getMenu().findItem(savedInstanceState.getInt("mPreviousMenuItem"));
                 mPreviousMenuItem.setChecked(true);
-                Log.d("Activity", "Markiere: " + mPreviousMenuItem.getTitle());
             }
     }
 
