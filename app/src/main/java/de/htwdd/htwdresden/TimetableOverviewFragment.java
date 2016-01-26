@@ -67,7 +67,7 @@ public class TimetableOverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mLayout = inflater.inflate(R.layout.fragment_timetable_detail, container, false);
+        mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
 
         // Arguments überprüfen
         Bundle bundle = getArguments();
