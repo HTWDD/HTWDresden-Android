@@ -38,8 +38,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Const.database.TimetableEntry.COLUMN_NAME_WEEK + Const.database.TYPE_INT + Const.database.COMMA_SEP +
                 Const.database.TimetableEntry.COLUMN_NAME_DAY + Const.database.TYPE_INT + Const.database.COMMA_SEP +
                 Const.database.TimetableEntry.COLUMN_NAME_DS + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_BEGINTIME + Const.database.TYPE_TIME + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_ENDTIME + Const.database.TYPE_TIME + Const.database.COMMA_SEP +
                 Const.database.TimetableEntry.COLUMN_NAME_PROFESSOR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.TimetableEntry.COLUMN_NAME_WEEKSONLY + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.TimetableEntry.COLUMN_NAME_ROOMS + Const.database.TYPE_TEXT + ")");

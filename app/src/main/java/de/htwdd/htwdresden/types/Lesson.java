@@ -25,7 +25,6 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
     private int week;
     private int day;
     private int ds;
-    private Time beginTime;
     private Time endTime;
     private String professor;
     private String weeksOnly;
@@ -84,10 +83,6 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public void setWeek(int week) {
@@ -154,7 +149,7 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         type = jsonObject.getString("type");
         week = jsonObject.getInt("week");
         day = jsonObject.getInt("day");
-        beginTime = Time.valueOf(jsonObject.getString("beginTime"));
+        Time beginTime = Time.valueOf(jsonObject.getString("beginTime"));
         endTime = Time.valueOf(jsonObject.getString("endTime"));
         professor = jsonObject.getString("professor");
         weeksOnly = jsonObject.getString("WeeksOnly");
@@ -195,10 +190,6 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_PROFESSOR, professor);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_WEEKSONLY, weeksOnly);
         contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_ROOMS, rooms);
-        if (beginTime != null)
-            contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_BEGINTIME, beginTime.toString());
-        if (endTime != null)
-            contentValues.put(Const.database.TimetableEntry.COLUMN_NAME_ENDTIME, endTime.toString());
         return contentValues;
     }
 }

@@ -65,8 +65,6 @@ public final class Const {
             public static final String COLUMN_NAME_WEEK = "week";
             public static final String COLUMN_NAME_DAY = "day";
             public static final String COLUMN_NAME_DS = "ds";
-            public static final String COLUMN_NAME_BEGINTIME = "beginTime";
-            public static final String COLUMN_NAME_ENDTIME = "endTime";
             public static final String COLUMN_NAME_PROFESSOR = "professor";
             public static final String COLUMN_NAME_WEEKSONLY = "WeeksOnly";
             public static final String COLUMN_NAME_ROOMS = "rooms";
