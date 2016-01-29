@@ -31,6 +31,7 @@ import java.util.GregorianCalendar;
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
+import de.htwdd.htwdresden.classes.LessonParse;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
@@ -183,65 +184,19 @@ public class TimetableOverviewFragment extends Fragment {
         Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                int count = response.length();
-                ArrayList<Lesson> lessons = new ArrayList<>();
+                ArrayList<Lesson> lessons;
+                try {
+                    lessons = LessonParse.getList(response);
+                } catch (Exception e) {
+                    Log.e(this.getClass().getSimpleName(), "[Fehler] beim Parsen: Daten: " + response);
+                    Log.e(this.getClass().getSimpleName(), e.toString());
 
-                for (int i = 0; i < count; i++) {
-                    Lesson lesson = new Lesson();
-                    try {
-                        lesson.parseFromJSON(response.getJSONObject(i));
-                        lessons.add(lesson);
+                    // Fehlermeldung anzeigen
+                    Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
 
-                        // Bestimme End DS und ggf neu eintragen
-                        switch (lesson.getDs()) {
-                            case 1:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[1]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(2);
-                                lessons.add(lesson);
-                            case 2:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[2]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(3);
-                                lessons.add(lesson);
-                            case 3:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[3]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(4);
-                                lessons.add(lesson);
-                            case 4:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[4]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(5);
-                                lessons.add(lesson);
-                            case 5:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[5]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(6);
-                                lessons.add(lesson);
-                            case 6:
-                                if (lesson.getEndTime().before(Const.Timetable.beginDS[6]))
-                                    break;
-                                lesson = lesson.clone();
-                                lesson.setDs(7);
-                                lessons.add(lesson);
-                        }
-                    } catch (Exception e) {
-                        Log.e(this.getClass().getSimpleName(), "[Fehler] beim Parsen: Index: " + i);
-                        Log.e(this.getClass().getSimpleName(), e.toString());
-
-                        // Fehlermeldung anzeigen
-                        Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
-
-                        // Refresh ausschalten
-                        swipeRefreshLayout.setRefreshing(false);
-                        return;
-                    }
+                    // Refresh ausschalten
+                    swipeRefreshLayout.setRefreshing(false);
+                    return;
                 }
 
                 // Refresh ausschalten
