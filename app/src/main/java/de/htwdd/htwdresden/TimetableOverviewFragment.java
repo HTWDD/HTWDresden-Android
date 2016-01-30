@@ -174,7 +174,12 @@ public class TimetableOverviewFragment extends Fragment {
                     default:
                         message = getString(R.string.info_internet_error);
                 }
-                Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loadData();
+                    }
+                }).show();
 
                 // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
