@@ -31,7 +31,7 @@ import java.util.GregorianCalendar;
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
-import de.htwdd.htwdresden.classes.LessonParse;
+import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
@@ -186,7 +186,7 @@ public class TimetableOverviewFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 ArrayList<Lesson> lessons;
                 try {
-                    lessons = LessonParse.getList(response);
+                    lessons = LessonHelper.getList(response);
                 } catch (Exception e) {
                     Log.e(this.getClass().getSimpleName(), "[Fehler] beim Parsen: Daten: " + response);
                     Log.e(this.getClass().getSimpleName(), e.toString());

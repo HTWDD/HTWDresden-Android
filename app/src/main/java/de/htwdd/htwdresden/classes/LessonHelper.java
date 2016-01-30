@@ -6,13 +6,54 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.htwdd.htwdresden.types.Lesson;
 
 /**
  * @author Kay Förster
  */
-public class LessonParse {
+public class LessonHelper {
+    public Lesson lesson = null;
+
+    /**
+     * @param lessons Liste der zu überprüfenden Stunden
+     * @param week    KW in der die zu suchende Veranstaltung stattfindet
+     * @return 0=keine passende Stunden gefunden, 1=eine Stunden gefunden, 2=mehrere Stunden gefunden
+     */
+    public int searchLesson(@NonNull ArrayList<Lesson> lessons, int week) {
+        int single = 0;
+
+        // Suche nach einer passenden Veranstaltung
+        for (Lesson tmp : lessons) {
+            // Es ist keine spezielle KW gesetzt, d.h. die Veranstaltung ist immer
+            if (tmp.getWeeksOnly().isEmpty()) {
+                single++;
+
+                if (single == 1)
+                    lesson = tmp;
+                else
+                    // Zweite Veranstallung gefunden, die "immer" ist, weitersuchen sinnlos
+                    break;
+            }
+
+            // Es sind spezielle KW gestzt, suche aktuelle zum anzeigen
+            String[] lessonWeek = tmp.getWeeksOnly().split(";");
+
+            // Aktuelle Woche enthalten?
+            if (Arrays.asList(lessonWeek).contains(String.valueOf(week))) {
+                single++;
+
+                if (single == 1)
+                    lesson = tmp;
+                else
+                    // Zweite Veranstallung gefunden, die "immer" ist
+                    break;
+            }
+        }
+
+        return single;
+    }
 
     /**
      * Erstellt aus einem JSON-Array von Stunden eine Liste von Stunden-Objekten
