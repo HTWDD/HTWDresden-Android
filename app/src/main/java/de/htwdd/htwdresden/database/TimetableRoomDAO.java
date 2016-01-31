@@ -3,6 +3,7 @@ package de.htwdd.htwdresden.database;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -125,6 +126,43 @@ public class TimetableRoomDAO extends AbstractDAO<Lesson> {
         sqLiteDatabase.close();
 
         return roomTimetables;
+    }
+
+    public ArrayList<Lesson> getWeekShort(int week, @NonNull String room) {
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();
+
+        Cursor cursor = database.query(
+                getTableName(),
+                new String[]{
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_DAY,
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_DS,
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_LESSONTAG,
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_TYP,
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_WEEKSONLY,
+                        Const.database.RoomTimetableEntry.COLUMN_NAME_ROOMS},
+                "(" + Const.database.RoomTimetableEntry.COLUMN_NAME_WEEK + "= ? OR " + Const.database.RoomTimetableEntry.COLUMN_NAME_WEEK + " = 0) AND " +
+                Const.database.RoomTimetableEntry.COLUMN_NAME_ROOMS + "= ?",
+                new String[]{String.valueOf(Const.Timetable.db_week(week)), room},
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst())
+            do {
+                Lesson lesson = new Lesson();
+                lesson.setDay(cursor.getInt(0));
+                lesson.setDs(cursor.getInt(1));
+                lesson.setTag(cursor.getString(2));
+                lesson.setType(cursor.getString(3));
+                lesson.setWeeksOnly(cursor.getString(4));
+                lesson.setRooms(cursor.getString(5));
+                lessons.add(lesson);
+            } while (cursor.moveToNext());
+
+        cursor.close();
+        database.close();
+        return lessons;
     }
 
     public boolean deleteRoom(final String room) {

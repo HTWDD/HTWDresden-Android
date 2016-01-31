@@ -4,6 +4,7 @@ package de.htwdd.htwdresden;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -76,6 +77,16 @@ public class RoomTimetableFragment extends Fragment {
         ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         listView.setAdapter(roomTimetableAdapter);
         listView.addFooterView(inflater.inflate(R.layout.fragment_room_timetable_footer, listView, false), null, false);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, roomTimetableAdapter.getItem(i).roomName);
+                Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
         // Daten zum anzeigen laden
         loadData();
