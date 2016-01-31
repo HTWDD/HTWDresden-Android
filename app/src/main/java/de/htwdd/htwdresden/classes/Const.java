@@ -1,8 +1,11 @@
 package de.htwdd.htwdresden.classes;
 
 import android.provider.BaseColumns;
+import android.support.annotation.Nullable;
 
 import java.sql.Time;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public final class Const {
 
@@ -48,6 +51,36 @@ public final class Const {
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
         }
+
+        /**
+         * Liefert die DS zur übergebene Zeit
+         *
+         * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht
+         * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
+         */
+        public static int getCurrentDS(@Nullable Date currentTime) {
+            if (currentTime == null)
+                currentTime = GregorianCalendar.getInstance().getTime();
+
+            if (currentTime.after(endDS[6]))
+                return 0;
+            else if (currentTime.after(beginDS[6]))
+                return 7;
+            else if (currentTime.after(beginDS[5]))
+                return 6;
+            else if (currentTime.after(beginDS[4]))
+                return 5;
+            else if (currentTime.after(beginDS[3]))
+                return 4;
+            else if (currentTime.after(beginDS[2]))
+                return 3;
+            else if (currentTime.after(beginDS[1]))
+                return 2;
+            else if (currentTime.after(beginDS[0]))
+                return 1;
+
+            return 0;
+        }
     }
 
     public static final class database {
@@ -69,6 +102,10 @@ public final class Const {
             public static final String COLUMN_NAME_WEEKSONLY = "WeeksOnly";
             public static final String COLUMN_NAME_ROOMS = "rooms";
             public static final String TABLE_NAME = "TimetableUser";
+        }
+
+        public static class RoomTimetableEntry extends TimetableEntry {
+            public static final String TABLE_NAME = "TimetableRoom";
         }
     }
 }

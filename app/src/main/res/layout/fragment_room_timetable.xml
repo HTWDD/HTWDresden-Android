@@ -5,7 +5,7 @@
     tools:context="de.htwdd.fragments.RoomTimetableFragment">
 
     <TextView
-        android:id="@+id/room_timetable_info"
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -21,7 +21,7 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/room_timetable_listview"
+            android:id="@+id/listView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

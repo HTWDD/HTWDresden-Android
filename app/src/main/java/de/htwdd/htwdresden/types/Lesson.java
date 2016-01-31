@@ -54,6 +54,10 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         return name;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public int getTypeInt() {
         if (type.contains("V"))
             return 0;
