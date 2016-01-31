@@ -54,8 +54,16 @@ public class TimetableRoomDAO extends AbstractDAO<Lesson> {
         return true;
     }
 
+    /**
+     * Gibt eine Liste aller gespeicherten Räume mit ihren aktuellen Stundenplan zurück
+     *
+     * @param day Tag nach {@link java.util.Calendar}
+     * @param week Kalenderwoche des Jahres
+     * @return ArrayList vom Typ RoomTimetable
+     */
     public ArrayList<RoomTimetable> getOverview(int day, int week) {
         ArrayList<RoomTimetable> roomTimetables = new ArrayList<>();
+        day--;
 
         // Datenbank öffnen
         SQLiteDatabase sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();

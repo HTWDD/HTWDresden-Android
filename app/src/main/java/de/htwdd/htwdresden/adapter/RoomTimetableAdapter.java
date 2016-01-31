@@ -89,7 +89,7 @@ public class RoomTimetableAdapter extends BaseAdapter {
 
         // Bestimme Tag
         if (roomTimetable.day != calendar.get(Calendar.DAY_OF_WEEK) - 1) {
-            viewHolder.day.setText(nameOfDays[roomTimetable.day - 2]);
+            viewHolder.day.setText(nameOfDays[roomTimetable.day - 1]);
             // Anzeige der aktuellen Stunde "ausschalten"
             current_ds = 0;
         }
