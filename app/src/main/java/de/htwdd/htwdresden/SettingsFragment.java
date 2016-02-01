@@ -3,6 +3,7 @@ package de.htwdd.htwdresden;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,11 @@ public class SettingsFragment extends PreferenceFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Setze Toolbartitle
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_settings));
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view =  super.onCreateView(inflater, container, savedInstanceState);
+        if (view != null) {
+            view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+        }
+        return view;
     }
 
     @Override
