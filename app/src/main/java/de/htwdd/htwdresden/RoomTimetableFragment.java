@@ -63,6 +63,13 @@ public class RoomTimetableFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Aktualisieren der aktuellen Stunden-Markierung
+        roomTimetableAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_room_timetable, container, false);
