@@ -4,8 +4,9 @@ import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 
 import java.sql.Time;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 public final class Const {
 
@@ -59,25 +60,28 @@ public final class Const {
          * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht
          * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
          */
-        public static int getCurrentDS(@Nullable Date currentTime) {
-            if (currentTime == null)
-                currentTime = GregorianCalendar.getInstance().getTime();
+        public static int getCurrentDS(@Nullable Long currentTime) {
+            if (currentTime == null) {
+                Calendar gregorianCalendar = GregorianCalendar.getInstance();
+                currentTime = TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
+                        + TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
+            }
 
-            if (currentTime.after(endDS[6]))
+            if (currentTime >= endDS[6].getTime()) {
                 return 0;
-            else if (currentTime.after(beginDS[6]))
+            } else if (currentTime >= beginDS[6].getTime())
                 return 7;
-            else if (currentTime.after(beginDS[5]))
+            else if (currentTime >= beginDS[5].getTime())
                 return 6;
-            else if (currentTime.after(beginDS[4]))
+            else if (currentTime >= beginDS[4].getTime())
                 return 5;
-            else if (currentTime.after(beginDS[3]))
+            else if (currentTime >= beginDS[3].getTime())
                 return 4;
-            else if (currentTime.after(beginDS[2]))
+            else if (currentTime >= beginDS[2].getTime())
                 return 3;
-            else if (currentTime.after(beginDS[1]))
+            else if (currentTime >= beginDS[1].getTime())
                 return 2;
-            else if (currentTime.after(beginDS[0]))
+            else if (currentTime >= beginDS[0].getTime())
                 return 1;
 
             return 0;
