@@ -111,7 +111,11 @@ public class RoomTimetableFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 TextView textView = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.textView);
-                                loadRoom(textView.getText().toString());
+                                String room = textView.getText().toString();
+
+                                if (room.isEmpty())
+                                    Toast.makeText(getActivity(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
+                                else loadRoom(room);
                             }
                         })
                         .setNegativeButton(R.string.general_close, new DialogInterface.OnClickListener() {
@@ -254,7 +258,7 @@ public class RoomTimetableFragment extends Fragment {
 
                 // Anzahl der Stunden überprüfen
                 if (lessons.size() == 0) {
-                    Snackbar.make(mLayout, R.string.room_timetable_add_no_Lessons, Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.room_timetable_add_no_Lessons, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
