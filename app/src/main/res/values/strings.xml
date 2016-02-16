@@ -6,6 +6,12 @@
     <string name="app_website">www.htwdd.github.io</string>
     <string name="app_github">github.com/HTWDD/HTWDresden</string>
 
+    <string name="general_repeat">Wiederholen</string>
+    <string name="general_close">Schließen</string>
+    <string name="general_add">Hinzufügen</string>
+    <string name="general_update">Aktualisieren</string>
+    <string name="general_delete">Löschen</string>
+
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>
     <string name="navi_timetable">Stundenplan</string>
@@ -49,6 +55,7 @@
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
 
+    <string name="timetable_overview_today">Heute</string>
     <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundeplans!</string>
     <string name="timetable_add">Stunde hinzufügen</string>
@@ -60,6 +67,7 @@
     <string name="timetable_only_KW">einige KW</string>
     <string name="timetable_ds_grid">%1$s\n-\n%2$s</string>
     <string name="timetable_ds_list">%1$s. DS (%2$s - %3$s)</string>
+    <string name="timetable_ds_list_simple">%1$s - %2$s</string>
     <string name="timetable_edit_activity_titel">Stunde bearbeiten</string>
     <string name="timetable_edit_lessonName">Vorlesung</string>
     <string name="timetable_edit_lessonName_hint">Name der Vorlesung</string>
@@ -82,6 +90,17 @@
     <string name="timetable_details_title">(%1$s) %2$s</string>
     <string name="timetable_details_subtitle">%1$s von %2$s</string>
 
+    <string name="room_timetable_no_rooms">Du hast noch keine Räume hinzugefügt!</string>
+    <string name="room_timetable_add">Raum hinzufügen</string>
+    <string name="room_timetable_add_success">Raum erfolgreich hinzugefügt!</string>
+    <string name="room_timetable_add_save_error">Fehler beim Speichern des Belegungsplanes!</string>
+    <string name="room_timetable_add_no_Lessons">Raum nicht gefunden!</string>
+    <string name="room_timetable_addDialog_message">Bitte gib die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer ein.</string>
+    <string name="room_timetable_addDialog_hint">z.B. S 531</string>
+    <string name="room_timetable_update_success">Ausgewählte Räume erfolgreich aktuallisiert!</string>
+    <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
+    <string name="room_timetable_details_title">Belegungsplan %s</string>
+
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
     <string name="about_developer">Entwickler</string>
@@ -90,4 +109,5 @@
     <string name="about_website">Webseite</string>
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
+    <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
 </resources>

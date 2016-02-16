@@ -27,6 +27,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.htwdd.htwdresden.MainActivity" />
         </activity>
+        <activity
+            android:name=".RoomTimetableDetailsActivity"
+            android:label="@string/title_activity_room_timetable_details"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.htwdd.htwdresden.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
