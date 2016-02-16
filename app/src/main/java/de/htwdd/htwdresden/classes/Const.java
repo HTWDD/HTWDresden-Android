@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public final class Const {
@@ -62,27 +63,28 @@ public final class Const {
          * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
          */
         public static int getCurrentDS(@Nullable Long currentTime) {
+            final long offset = TimeZone.getDefault().getOffset(new GregorianCalendar().getTimeInMillis());
             if (currentTime == null) {
                 Calendar gregorianCalendar = GregorianCalendar.getInstance();
                 currentTime = TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
                         + TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
             }
 
-            if (currentTime >= endDS[6].getTime()) {
+            if (currentTime >= endDS[6].getTime() + offset) {
                 return 0;
-            } else if (currentTime >= beginDS[6].getTime())
+            } else if (currentTime >= beginDS[6].getTime() + offset)
                 return 7;
-            else if (currentTime >= beginDS[5].getTime())
+            else if (currentTime >= beginDS[5].getTime() + offset)
                 return 6;
-            else if (currentTime >= beginDS[4].getTime())
+            else if (currentTime >= beginDS[4].getTime() + offset)
                 return 5;
-            else if (currentTime >= beginDS[3].getTime())
+            else if (currentTime >= beginDS[3].getTime() + offset)
                 return 4;
-            else if (currentTime >= beginDS[2].getTime())
+            else if (currentTime >= beginDS[2].getTime() + offset)
                 return 3;
-            else if (currentTime >= beginDS[1].getTime())
+            else if (currentTime >= beginDS[1].getTime() + offset)
                 return 2;
-            else if (currentTime >= beginDS[0].getTime())
+            else if (currentTime >= beginDS[0].getTime() + offset)
                 return 1;
 
             return 0;
