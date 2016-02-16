@@ -30,6 +30,7 @@ public final class Const {
         public static final int HTTP_NO_CONNECTION = 997;
         public static final int HTTP_NETWORK_ERROR = 996;
         public static final int HTTP_DOWNLOAD_OK = 200;
+        public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
     }
 
     public static final class Timetable {

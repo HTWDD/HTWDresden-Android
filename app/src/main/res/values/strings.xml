@@ -97,6 +97,7 @@
     <string name="room_timetable_add_no_Lessons">Raum nicht gefunden!</string>
     <string name="room_timetable_addDialog_message">Bitte gib die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer ein.</string>
     <string name="room_timetable_addDialog_hint">z.B. S 531</string>
+    <string name="room_timetable_update_success">Ausgewählte Räume erfolgreich aktuallisiert!</string>
     <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
     <string name="room_timetable_details_title">Belegungsplan %s</string>
 

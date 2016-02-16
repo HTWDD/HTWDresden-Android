@@ -37,12 +37,10 @@ import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableRoomDAO;
-import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.RoomTimetable;
@@ -115,7 +113,7 @@ public class RoomTimetableFragment extends Fragment {
 
                                 if (room.isEmpty())
                                     Toast.makeText(getActivity(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
-                                else loadRoom(room);
+                                else loadRoom(room, new QueueCount());
                             }
                         })
                         .setNegativeButton(R.string.general_close, new DialogInterface.OnClickListener() {
@@ -125,6 +123,42 @@ public class RoomTimetableFragment extends Fragment {
                             }
                         })
                         .show();
+            }
+        });
+
+        // SwipeRefreseh
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+                final QueueCount queueCount = new QueueCount();
+                queueCount.update = true;
+
+                // Überprüfe Internetverbindung
+                if (!VolleyDownloader.CheckInternet(getActivity())) {
+                    // Refresh ausschalten
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
+                    // Meldung anzeigen
+                    Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (roomTimetables.size() != 0) {
+                    // Download der einzelnen Räume
+                    for (RoomTimetable room : roomTimetables) {
+                        loadRoom(room.roomName, queueCount);
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
 
@@ -155,7 +189,9 @@ public class RoomTimetableFragment extends Fragment {
                 loadData();
                 return true;
             case R.id.room_timetable_update:
-                loadRoom(room);
+                QueueCount queueCount = new QueueCount();
+                queueCount.update = true;
+                loadRoom(room, queueCount);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -200,7 +236,7 @@ public class RoomTimetableFragment extends Fragment {
      *
      * @param room für welchen der Belegungsplan geladen werden soll
      */
-    private void loadRoom(@NonNull final String room) {
+    private void loadRoom(@NonNull final String room, @NonNull final QueueCount queueCount) {
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -208,6 +244,12 @@ public class RoomTimetableFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // Bestimme Fehlermeldung
                 int responseCode = VolleyDownloader.getResponseCode(error);
+
+                // aktuell laufende Requests reduzieren
+                queueCount.countQueue--;
+
+                // weitere Download abbrechen
+                VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
 
                 // Fehlermeldung anzeigen
                 String message;
@@ -223,12 +265,16 @@ public class RoomTimetableFragment extends Fragment {
                     default:
                         message = getString(R.string.info_internet_error);
                 }
-                Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        loadRoom(room);
-                    }
-                }).show();
+
+                Snackbar snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
+                if (!queueCount.update)
+                    snackbar.setAction(R.string.general_repeat, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            loadRoom(room, queueCount);
+                        }
+                    });
+                snackbar.show();
 
                 // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
@@ -239,6 +285,11 @@ public class RoomTimetableFragment extends Fragment {
             @Override
             public void onResponse(JSONArray response) {
                 ArrayList<Lesson> lessons;
+
+                // Aktuell laufende Requests minimieren
+                queueCount.countQueue--;
+
+                // Ergebnis verarbeiten
                 try {
                     lessons = LessonHelper.getList(response);
                 } catch (Exception e) {
@@ -248,13 +299,17 @@ public class RoomTimetableFragment extends Fragment {
                     // Fehlermeldung anzeigen
                     Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
 
+                    // Weitere Download abbrechen
+                    VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
+
                     // Refresh ausschalten
                     swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
 
                 // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
+                if (queueCount.countQueue == 0)
+                    swipeRefreshLayout.setRefreshing(false);
 
                 // Anzahl der Stunden überprüfen
                 if (lessons.size() == 0) {
@@ -268,14 +323,21 @@ public class RoomTimetableFragment extends Fragment {
 
                 // Daten speichern
                 boolean result = timetableRoomDAO.replaceTimetable(room.toUpperCase(), lessons);
-                if (result) {
-                    EventBus.getInstance().post(new UpdateTimetableEvent());
-                    Snackbar.make(mLayout, R.string.room_timetable_add_success, Snackbar.LENGTH_SHORT).show();
-                } else
+                if (!result) {
                     Snackbar.make(mLayout, R.string.room_timetable_add_save_error, Snackbar.LENGTH_LONG).show();
+                    // Weitere Downloads abbrechen
+                    VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
+                    // Lade neue Daten aus der Datenbank
+                    loadData();
+                } else if (queueCount.countQueue == 0) {
+                    if (queueCount.update)
+                        Snackbar.make(mLayout, R.string.room_timetable_update_success, Snackbar.LENGTH_SHORT).show();
+                    else
+                        Snackbar.make(mLayout, R.string.room_timetable_add_success, Snackbar.LENGTH_SHORT).show();
 
-                // Lade neue Daten aus der Datenbank
-                loadData();
+                    // Lade neue Daten aus der Datenbank
+                    loadData();
+                }
             }
         };
 
@@ -297,6 +359,9 @@ public class RoomTimetableFragment extends Fragment {
                 }
             });
 
+            // Weitere Downloads abbrechen
+            VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
+
             // Meldung anzeigen
             Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
             return;
@@ -306,9 +371,19 @@ public class RoomTimetableFragment extends Fragment {
         try {
             JsonArrayRequest stringRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetTimetable.php?Room=" + URLEncoder.encode(room, "utf-8"), jsonArrayListener, errorListener);
             VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            // Anzahl der laufenden Requests zählen
+            queueCount.countQueue++;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             Toast.makeText(getActivity(), R.string.info_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Hilfsklasse um die Anzahl der laufendenen Requeste zu zählen
+     */
+    public class QueueCount {
+        public long countQueue = 0;
+        public boolean update;
     }
 }
