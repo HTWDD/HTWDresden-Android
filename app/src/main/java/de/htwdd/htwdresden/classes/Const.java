@@ -23,6 +23,7 @@ public final class Const {
     }
 
     public static final class internet {
+        public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
         public static final int HTTP_NOT_MODIFIED = 304;
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;

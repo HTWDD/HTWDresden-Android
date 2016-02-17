@@ -270,10 +270,10 @@ public class TimetableOverviewFragment extends Fragment {
         switch (modus) {
             default:
             case 1:
-                url = "https://www2.htw-dresden.de/~app/API/GetTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
+                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
                 break;
             case 2:
-                url = "https://www2.htw-dresden.de/~app/API/GetTimetable.php?prof_kennung=" + prof_kennung;
+                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?prof_kennung=" + prof_kennung;
                 break;
         }
 
@@ -293,7 +293,7 @@ public class TimetableOverviewFragment extends Fragment {
         }
 
         // Download der Informationen
-        JsonArrayRequest stringRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
-        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
+        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(arrayRequest);
     }
 }
