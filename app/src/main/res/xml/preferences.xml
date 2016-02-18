@@ -39,5 +39,9 @@
             android:title="@string/settings_studiengruppe"
             android:key="StgGrp"
             android:summary="@string/settings_studiengruppe_summary"/>
+        <EditTextPreference
+            android:title="@string/settings_studienrichtung"
+            android:key="StgRi"
+            android:summary="@string/settings_studienrichtung_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

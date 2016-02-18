@@ -49,6 +49,8 @@
     <string name="settings_studiengang_summary">z.B. 043\n(Verwendung: Stundenplan, Prüfungen)</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
     <string name="settings_studiengruppe_summary">z.B. 01, Kfz, 61, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studienrichtung">Studienrichtung</string>
+    <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
@@ -104,6 +106,17 @@
     <string name="exams_grade">Noten</string>
     <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
+    <string name="exams_no_settings">Bitte Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
+    <string name="exams_type">Art</string>
+    <string name="exams_studyBranch">Richtung</string>
+    <string name="exams_day">Datum</string>
+    <string name="exams_time">Zeit</string>
+    <string name="exams_time_value">%1$s - %2$s</string>
+    <string name="exams_room">Raum</string>
+    <string name="exams_note">Hinweis</string>
+    <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
+    <string name="exams_from_Jhr">Jahrgang %s</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
