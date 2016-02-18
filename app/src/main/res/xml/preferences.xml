@@ -25,23 +25,31 @@
             android:title="@string/settings_abschluss" />
         <EditTextPreference
             android:inputType="number"
-            android:maxLength="2"
             android:key="StgJhr"
+            android:maxLength="2"
             android:summary="@string/settings_jahrgang_summary"
             android:title="@string/settings_jahrgang" />
         <EditTextPreference
-            android:title="@string/settings_studiengang"
             android:key="Stg"
-            android:numeric="integer"
             android:maxLength="3"
-            android:summary="@string/settings_studiengang_summary"/>
+            android:numeric="integer"
+            android:summary="@string/settings_studiengang_summary"
+            android:title="@string/settings_studiengang" />
         <EditTextPreference
-            android:title="@string/settings_studiengruppe"
             android:key="StgGrp"
-            android:summary="@string/settings_studiengruppe_summary"/>
+            android:summary="@string/settings_studiengruppe_summary"
+            android:title="@string/settings_studiengruppe" />
         <EditTextPreference
-            android:title="@string/settings_studienrichtung"
             android:key="StgRi"
-            android:summary="@string/settings_studienrichtung_summary"/>
+            android:summary="@string/settings_studienrichtung_summary"
+            android:title="@string/settings_studienrichtung" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="@string/settings_category_profs_summary"
+        android:title="@string/settings_category_profs">
+        <EditTextPreference
+            android:key="ProfName"
+            android:summary="@string/settungs_prof_name_summary"
+            android:title="@string/settungs_prof_name" />
     </PreferenceCategory>
 </PreferenceScreen>
