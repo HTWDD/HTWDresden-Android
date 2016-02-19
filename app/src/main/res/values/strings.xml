@@ -46,11 +46,11 @@
     <string name="settings_abschluss">Abschluss</string>
     <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
     <string name="settings_jahrgang">Jahrgang</string>
-    <string name="settings_jahrgang_summary">z.B. 16, 15, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
     <string name="settings_studiengang">Studiengang</string>
-    <string name="settings_studiengang_summary">z.B. 043\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studiengang_split">/</string>
+    <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
+    <string name="settings_studiengang_dialogMessage">Beispiel: 15/021/61</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
-    <string name="settings_studiengruppe_summary">z.B. 01, Kfz, 61, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
     <string name="settings_studienrichtung">Studienrichtung</string>
     <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
     <string name="settungs_prof_name">Prüfer-Name</string>
@@ -110,7 +110,7 @@
     <string name="exams_grade">Noten</string>
     <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
-    <string name="exams_no_settings">Bitte Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_settings">Bitte Abschluss und Studiengruppe in den Einstellungen richtig setzen!</string>
     <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
     <string name="exams_type">Art</string>
     <string name="exams_studyBranch">Richtung</string>

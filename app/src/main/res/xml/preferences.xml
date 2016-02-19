@@ -23,21 +23,8 @@
             android:key="abschluss"
             android:summary="@string/settings_abschluss_summary"
             android:title="@string/settings_abschluss" />
-        <EditTextPreference
-            android:inputType="number"
-            android:key="StgJhr"
-            android:maxLength="2"
-            android:summary="@string/settings_jahrgang_summary"
-            android:title="@string/settings_jahrgang" />
-        <EditTextPreference
-            android:key="Stg"
-            android:maxLength="3"
-            android:numeric="integer"
+        <de.htwdd.htwdresden.SettingsStudiengruppePreference
             android:summary="@string/settings_studiengang_summary"
-            android:title="@string/settings_studiengang" />
-        <EditTextPreference
-            android:key="StgGrp"
-            android:summary="@string/settings_studiengruppe_summary"
             android:title="@string/settings_studiengruppe" />
         <EditTextPreference
             android:key="StgRi"
