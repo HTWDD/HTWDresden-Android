@@ -370,6 +370,7 @@ public class RoomTimetableFragment extends Fragment {
         // Download der Informationen
         try {
             JsonArrayRequest stringRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetTimetable.php?Room=" + URLEncoder.encode(room, "utf-8"), jsonArrayListener, errorListener);
+            stringRequest.setTag(Const.internet.TAG_ROOM_TIMETABLE);
             VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
             // Anzahl der laufenden Requests zählen
             queueCount.countQueue++;
