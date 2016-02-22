@@ -24,4 +24,9 @@
         <item>M</item>
         <item>D</item>
     </string-array>
+
+    <string-array name="semesterName">
+        <item>Sommersemester</item>
+        <item>Wintersemester</item>
+    </string-array>
 </resources>

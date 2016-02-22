@@ -123,7 +123,14 @@
     <string name="exams_from_Jhr">Jahrgang %s</string>
     <string name="exams_result_no_results">Noch keine Noten vorhanden.</string>
     <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
+    <string name="exams_result_update_newGrades">Neue Noten hinzugefügt</string>
+    <string name="exams_result_update_noNewGrades">Keine neuen Noten</string>
     <string name="exams_result_wrong_auth">Fehler bei der Authentifikation! Bitte überprüfe deine Zugangsdaten.</string>
+    <string name="exams_result_sign_off">Abgemeldet</string>
+    <string name="exams_result_ill">Krankgeschrieben</string>
+    <string name="exams_result_not_allowed">Nicht zugelassen</string>
+    <string name="exams_result_credits">Credits: %s</string>
+    <string name="exams_result_grade">Note: %s</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>

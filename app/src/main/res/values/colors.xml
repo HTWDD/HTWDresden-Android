@@ -12,4 +12,6 @@
     <color name="timetable_green">#bbe535</color>
     <color name="timetable_organge">#ffbb22</color>
     <color name="timetable_blue">#66ccdd</color>
+
+    <color name="exam_results_green">#090</color>
 </resources>

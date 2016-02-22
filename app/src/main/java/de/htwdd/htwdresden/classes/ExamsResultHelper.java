@@ -43,6 +43,10 @@ public class ExamsResultHelper {
         return queueCount;
     }
 
+    public ArrayList<ExamResult> getExamResults() {
+        return examResults;
+    }
+
     /**
      * Prüft ob zur Notenabfrage alle Einstellunen gesetzt sind.
      *

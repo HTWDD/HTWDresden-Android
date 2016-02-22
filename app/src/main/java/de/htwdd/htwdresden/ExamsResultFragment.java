@@ -3,13 +3,16 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import de.htwdd.htwdresden.adapter.ExamResultListAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsResultHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
@@ -35,18 +40,19 @@ import de.htwdd.htwdresden.types.ExamResult;
  */
 public class ExamsResultFragment extends Fragment {
     private final static String LOG_TAG = "ExamsResultFragment";
-    private ArrayList<ExamResult> examResults = new ArrayList<>();
+    private HashMap<Integer, ArrayList<ExamResult>> listExamResults = new HashMap<>();
+    private ExamResultListAdapter adapter;
     private View mLayout;
 
     public ExamsResultFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
+        adapter = new ExamResultListAdapter(getActivity(), listExamResults);
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -55,6 +61,9 @@ public class ExamsResultFragment extends Fragment {
                 loadData();
             }
         });
+
+        ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
+        expandableListView.setAdapter(adapter);
 
         showData();
 
@@ -66,16 +75,29 @@ public class ExamsResultFragment extends Fragment {
      */
     private void showData() {
         final TextView message = (TextView) mLayout.findViewById(R.id.info_message);
+
         // Lade Daten aus Datenbank
-        ExamResultDAO dao = new ExamResultDAO( new DatabaseManager(getActivity()));
-        examResults.clear();
-        examResults.addAll(dao.getAll());
+        ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
+        ArrayList<ExamResult> examResults = dao.getAll();
+
+        // Daten in HashMap umwandeln
+        listExamResults.clear();
+        for (ExamResult examResult : examResults) {
+            if (!listExamResults.containsKey(examResult.semester))
+                listExamResults.put(examResult.semester, new ArrayList<ExamResult>());
+            listExamResults.get(examResult.semester).add(examResult);
+        }
+
+        adapter.notifyDataSetChanged();
 
         // Meldung anzeigen
         if (examResults.size() == 0) {
             message.setText(R.string.exams_result_no_results);
+            mLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.app_background));
+        } else {
+            message.setText(null);
+            mLayout.setBackgroundColor(Color.WHITE);
         }
-        else message.setText(null);
     }
 
     private void loadData() {
@@ -134,8 +156,7 @@ public class ExamsResultFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 try {
                     examsResultHelper.getGradesListener(response);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Log.e(LOG_TAG, "[Fehler] beim Parsen: Daten: " + response);
                     Log.e(LOG_TAG, e.toString());
 
@@ -158,6 +179,8 @@ public class ExamsResultFragment extends Fragment {
 
                 // Ergebnisse speichern
                 if (examsResultHelper.getQueueCount().countQueue == 0) {
+                    ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
+                    long count = dao.queryNumEntries();
                     boolean result = examsResultHelper.saveExamResults();
 
                     // Refresh ausschalten
@@ -169,17 +192,23 @@ public class ExamsResultFragment extends Fragment {
                     });
 
                     // Ergebniss des speicherns überprüfen
-                    if (!result) {
+                    if (result) {
+                        if (count != examsResultHelper.getExamResults().size())
+                            Toast.makeText(getActivity(), R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getActivity(), R.string.exams_result_update_noNewGrades, Toast.LENGTH_SHORT).show();
+                    } else {
                         Toast.makeText(getActivity(), R.string.info_error_save, Toast.LENGTH_LONG).show();
                         info_message.setText(R.string.info_error_save);
                         return;
                     }
-
-                    // geänderte Daten anzeigen
-                    showData();
                 }
+
+                // geänderte Daten anzeigen
+                showData();
             }
         };
+
         /**
          * Response Listener für die Studiengänge
          */

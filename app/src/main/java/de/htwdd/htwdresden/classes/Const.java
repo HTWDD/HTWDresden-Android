@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.sql.Time;
@@ -35,6 +36,16 @@ public final class Const {
         public static final int HTTP_DOWNLOAD_OK = 200;
         public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
         public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
+    }
+
+    public static final class Semester {
+        public static String getSemesterName(final @NonNull String[] semesterNames, final @NonNull Integer semester) {
+            int semesterCalc = semester - 20000;
+            if (semesterCalc % 2 == 1)
+                return semesterNames[0] + " " + semesterCalc / 10;
+            else
+                return semesterNames[1] + " " + semesterCalc / 10 + " / " + ((semesterCalc / 10) + 1);
+        }
     }
 
     public static final class Timetable {

@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.database;
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
@@ -102,5 +103,19 @@ public class ExamResultDAO extends AbstractDAO<ExamResult> {
             Log.e(LOG_TAG, e.toString());
             return false;
         }
+    }
+
+    /**
+     * Liefert die Anzahl gespeicherter Prüfungsleistungen
+     *
+     * @return Anzahl gespeicherter Prüfungsleistungen
+     */
+    public long queryNumEntries() {
+        long result;
+        // Datenbank öffnen
+        SQLiteDatabase sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+        result = DatabaseUtils.queryNumEntries(sqLiteDatabase, getTableName());
+        sqLiteDatabase.close();
+        return result;
     }
 }
