@@ -24,6 +24,7 @@ public final class Const {
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
+        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
         public static final int HTTP_NOT_MODIFIED = 304;
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
@@ -33,6 +34,7 @@ public final class Const {
         public static final int HTTP_NETWORK_ERROR = 996;
         public static final int HTTP_DOWNLOAD_OK = 200;
         public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
+        public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
     }
 
     public static final class Timetable {
@@ -115,6 +117,18 @@ public final class Const {
 
         public static class RoomTimetableEntry extends TimetableEntry {
             public static final String TABLE_NAME = "TimetableRoom";
+        }
+
+        public static class ExamResults implements BaseColumns {
+            public static final String COLUMN_NAME_MODUL = "modul";
+            public static final String COLUMN_NAME_NOTE = "note";
+            public static final String COLUMN_NAME_VERMERK = "vermerk";
+            public static final String COLUMN_NAME_STATUS = "status";
+            public static final String COLUMN_NAME_CREDITS = "credits";
+            public static final String COLUMN_NAME_VERSUCH = "versuch";
+            public static final String COLUMN_NAME_SEMESTER = "semester";
+            public static final String COLUMN_NAME_KENNZEICHEN = "kennzeichen";
+            public static final String TABLE_NAME = "ExamResults";
         }
     }
 }
