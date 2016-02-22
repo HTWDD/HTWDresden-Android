@@ -61,10 +61,10 @@ public class MensaDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mLayout = inflater.inflate(R.layout.fragment_mensa_detail, container, false);
+        mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
 
         // Suche Views
-        ListView listView = (ListView) mLayout.findViewById(R.id.mensa_list);
+        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
         // Setze Swipe Refresh Layout
@@ -99,7 +99,7 @@ public class MensaDetailFragment extends Fragment {
      * Lädt die entsprechenden Plane je nach Modus
      */
     private void loadData() {
-        final TextView textView = (TextView) mLayout.findViewById(R.id.mensa_info);
+        final TextView textView = (TextView) mLayout.findViewById(R.id.message_info);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {

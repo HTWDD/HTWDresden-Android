@@ -78,7 +78,7 @@ public class ExamsListFragment extends Fragment {
         });
 
         // ListView zusammenbauen
-        ListView listView = (ListView) mLayout.findViewById(R.id.mensa_list);
+        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         footer = inflater.inflate(R.layout.fragment_exams_footer, listView, false);
         listView.setAdapter(adapter);
         listView.addFooterView(footer);
@@ -147,7 +147,7 @@ public class ExamsListFragment extends Fragment {
      */
     private void loadData() {
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-        final TextView info = (TextView) mLayout.findViewById(R.id.mensa_info);
+        final TextView info = (TextView) mLayout.findViewById(R.id.message_info);
         final Button localButton1 = (Button) mLayout.findViewById(R.id.Button1);
         final Button localButton2 = (Button) mLayout.findViewById(R.id.Button2);
         String url;
