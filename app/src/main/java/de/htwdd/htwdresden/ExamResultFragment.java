@@ -36,15 +36,17 @@ import de.htwdd.htwdresden.types.ExamResult;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment zur Anzeige der Prüfungsergebnisse
+ *
+ * @author Kay Förster
  */
-public class ExamsResultFragment extends Fragment {
-    private final static String LOG_TAG = "ExamsResultFragment";
+public class ExamResultFragment extends Fragment {
+    private final static String LOG_TAG = "ExamResultFragment";
     private HashMap<Integer, ArrayList<ExamResult>> listExamResults = new HashMap<>();
     private ExamResultListAdapter adapter;
     private View mLayout;
 
-    public ExamsResultFragment() {
+    public ExamResultFragment() {
         // Required empty public constructor
     }
 
@@ -71,7 +73,7 @@ public class ExamsResultFragment extends Fragment {
     }
 
     /**
-     * Zeigt / Aktuallisiert die Daten im View
+     * Zeigt bzw. Aktualisiert die Daten im View
      */
     private void showData() {
         final TextView message = (TextView) mLayout.findViewById(R.id.info_message);

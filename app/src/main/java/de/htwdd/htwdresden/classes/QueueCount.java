@@ -1,4 +1,4 @@
-package de.htwdd.htwdresden;
+package de.htwdd.htwdresden.classes;
 
 /**
  * Hilfsklasse um die Anzahl der laufendenen Requeste zu zählen

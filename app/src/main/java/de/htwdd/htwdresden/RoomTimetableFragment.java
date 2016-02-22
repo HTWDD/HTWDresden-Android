@@ -38,6 +38,7 @@ import java.util.GregorianCalendar;
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.QueueCount;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableRoomDAO;

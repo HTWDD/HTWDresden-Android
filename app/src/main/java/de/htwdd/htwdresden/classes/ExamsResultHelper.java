@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.htwdd.htwdresden.QueueCount;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.types.ExamResult;

@@ -32,7 +32,7 @@ public class ExamsFragment extends Fragment {
 
         mTabs.add(new TabItem(
                 getResources().getString(R.string.exams_grade),
-                ExamsResultFragment.class,
+                ExamResultFragment.class,
                 null
         ));
         mTabs.add(new TabItem(
