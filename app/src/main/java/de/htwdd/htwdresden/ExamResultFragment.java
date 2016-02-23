@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,10 +28,12 @@ import java.util.HashMap;
 
 import de.htwdd.htwdresden.adapter.ExamResultListAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsResultHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
+import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 
@@ -48,6 +51,18 @@ public class ExamResultFragment extends Fragment {
 
     public ExamResultFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getInstance().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(this);
     }
 
     @Override
@@ -70,6 +85,16 @@ public class ExamResultFragment extends Fragment {
         showData();
 
         return mLayout;
+    }
+
+    /**
+     * Behandelt die Benachrichtigung vom Eventbus das neue Prüfungsergebnisse zur Verfügung stehen
+     *
+     * @param updateExamResultsEvent Typ der Benachrichtigung
+     */
+    @Subscribe
+    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent){
+        showData();
     }
 
     /**
@@ -199,15 +224,13 @@ public class ExamResultFragment extends Fragment {
                             Toast.makeText(getActivity(), R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(getActivity(), R.string.exams_result_update_noNewGrades, Toast.LENGTH_SHORT).show();
+
+                        EventBus.getInstance().post(new UpdateExamResultsEvent());
                     } else {
                         Toast.makeText(getActivity(), R.string.info_error_save, Toast.LENGTH_LONG).show();
                         info_message.setText(R.string.info_error_save);
-                        return;
                     }
                 }
-
-                // geänderte Daten anzeigen
-                showData();
             }
         };
 

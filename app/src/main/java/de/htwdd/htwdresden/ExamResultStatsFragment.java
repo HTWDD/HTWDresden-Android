@@ -11,15 +11,19 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.adapter.ExamStatsAdapter;
+import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
+import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.types.ExamStats;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment zur Anzeige der Statistik der Prüfungsergebnisse
  */
 public class ExamResultStatsFragment extends Fragment {
     private View mLayout;
@@ -28,6 +32,18 @@ public class ExamResultStatsFragment extends Fragment {
 
     public ExamResultStatsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getInstance().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(this);
     }
 
     @Override
@@ -45,6 +61,16 @@ public class ExamResultStatsFragment extends Fragment {
         loadData();
 
         return mLayout;
+    }
+
+    /**
+     * Behandelt die Benachrichtigung vom Eventbus das neue Prüfungsergebnisse zur Verfügung stehen
+     *
+     * @param updateExamResultsEvent Typ der Benachrichtigung
+     */
+    @Subscribe
+    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent){
+        loadData();
     }
 
     private void loadData() {
