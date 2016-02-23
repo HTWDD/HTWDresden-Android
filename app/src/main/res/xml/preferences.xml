@@ -35,12 +35,14 @@
         android:summary="@string/settings_category_profs_summary"
         android:title="@string/settings_category_profs">
         <EditTextPreference
+            android:dialogMessage="@string/settings_prof_only"
             android:key="ProfName"
-            android:summary="@string/settungs_prof_name_summary"
-            android:title="@string/settungs_prof_name" />
+            android:summary="@string/settings_prof_name_summary"
+            android:title="@string/settings_prof_name" />
         <EditTextPreference
+            android:dialogMessage="@string/settings_prof_only"
             android:key="prof_kennung"
-            android:summary="@string/settungs_prof_id_summary"
-            android:title="@string/settungs_prof_id" />
+            android:summary="@string/settings_prof_id_summary"
+            android:title="@string/settings_prof_id" />
     </PreferenceCategory>
 </PreferenceScreen>
