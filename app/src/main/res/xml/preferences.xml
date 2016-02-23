@@ -38,5 +38,9 @@
             android:key="ProfName"
             android:summary="@string/settungs_prof_name_summary"
             android:title="@string/settungs_prof_name" />
+        <EditTextPreference
+            android:key="prof_kennung"
+            android:summary="@string/settungs_prof_id_summary"
+            android:title="@string/settungs_prof_id" />
     </PreferenceCategory>
 </PreferenceScreen>
