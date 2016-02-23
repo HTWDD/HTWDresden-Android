@@ -85,10 +85,12 @@ public class TimetableListAdapter extends BaseAdapter {
 
         final Lesson lesson = getItem(i);
         viewHolder.lesson_name.setText(context.getString(R.string.timetable_details_title, lesson.getTag(), lesson.getName()));
-        viewHolder.lesson_typ.setText(context.getString(R.string.timetable_details_subtitle, lesson_typ[lesson.getTypeInt()], lesson.getProfessor()));
+        if (lesson.getProfessor() != null && !lesson.getProfessor().isEmpty())
+            viewHolder.lesson_typ.setText(context.getString(R.string.timetable_details_subtitle, lesson_typ[lesson.getTypeInt()], lesson.getProfessor()));
+        else viewHolder.lesson_typ.setText(lesson_typ[lesson.getTypeInt()]);
         viewHolder.lesson_room.setText(lesson.getRooms());
         viewHolder.lesson_kw.setText(lesson_week[lesson.getWeek()]);
-        viewHolder.lesson_day.setText(nameOfDays[lesson.getDay() -1]);
+        viewHolder.lesson_day.setText(nameOfDays[lesson.getDay() - 1]);
         viewHolder.lesson_ds.setText(listOfDs[lesson.getDs() - 1]);
         viewHolder.lesson_weeksOnly.setText(lesson.getWeeksOnly());
 
