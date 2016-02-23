@@ -96,13 +96,15 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     private void selectFragment(final int position) {
+        final FragmentManager fragmentManager = getFragmentManager();
+        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Fragment fragment;
                 String tag = null;
-                FragmentManager fragmentManager = getFragmentManager();
 
                 switch (position) {
                     case R.id.navigation_overview:
@@ -135,11 +137,8 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                         break;
                 }
 
-                // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                 // Fragment ersetzen
-                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commit();
+                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
             }
         }, 250);
 
