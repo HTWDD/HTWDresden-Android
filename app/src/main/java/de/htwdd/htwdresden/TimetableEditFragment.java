@@ -178,6 +178,13 @@ public class TimetableEditFragment extends Fragment {
         lesson.setDs(lesson_ds.getSelectedItemPosition() + 1);
         lesson.setWeeksOnly(lesson_weeksOnly.getText().toString());
 
+        /**
+         * Wenn keine Kurzform gesetzt ist, diese automatisch erzeugen
+         */
+        if (lesson.getTag().isEmpty()) {
+            lesson.setTag(lesson.getName().substring(0, Math.min(lesson.getName().length(), 5)));
+        }
+
         DatabaseManager databaseManager = new DatabaseManager(getActivity());
         TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
 
