@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.ExamStats;
 
 /**
  * Datenbankzugriff für die Prüfungsergebnisse
@@ -103,6 +104,64 @@ public class ExamResultDAO extends AbstractDAO<ExamResult> {
             Log.e(LOG_TAG, e.toString());
             return false;
         }
+    }
+
+    public ArrayList<ExamStats> getStats() {
+        ArrayList<ExamStats> examStatses = new ArrayList<>();
+
+        // Datenbank öffnen
+        SQLiteDatabase sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+        // Datenbankabfrage
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT " +
+                Const.database.ExamResults.TABLE_NAME + "." + Const.database.ExamResults.COLUMN_NAME_SEMESTER + Const.database.COMMA_SEP +
+                "MAX(" + Const.database.ExamResults.COLUMN_NAME_NOTE + ")" + Const.database.COMMA_SEP +
+                "MIN(" + Const.database.ExamResults.COLUMN_NAME_NOTE + ")" + Const.database.COMMA_SEP +
+                "AnzahlNoten" + Const.database.COMMA_SEP +
+                "SUM(" + Const.database.ExamResults.COLUMN_NAME_CREDITS + ")" + Const.database.COMMA_SEP +
+                "SUM(" + Const.database.ExamResults.COLUMN_NAME_NOTE + "*" + Const.database.ExamResults.COLUMN_NAME_CREDITS + ")" +
+                " FROM " + Const.database.ExamResults.TABLE_NAME +
+                " JOIN (" +
+                "   SELECT " + Const.database.ExamResults.COLUMN_NAME_SEMESTER + ", COUNT(" + Const.database.ExamResults.COLUMN_NAME_CREDITS + ") AS AnzahlNoten" +
+                "   FROM " + Const.database.ExamResults.TABLE_NAME + "" +
+                "   WHERE Credits != 0.0 GROUP BY Semester) AS UA" +
+                " ON UA." + Const.database.ExamResults.COLUMN_NAME_SEMESTER + " == " + Const.database.ExamResults.TABLE_NAME + "." + Const.database.ExamResults.COLUMN_NAME_SEMESTER +
+                " WHERE " + Const.database.ExamResults.COLUMN_NAME_NOTE + " != 0" +
+                " GROUP BY " + Const.database.ExamResults.TABLE_NAME + "." + Const.database.ExamResults.COLUMN_NAME_SEMESTER +
+                " ORDER BY " + Const.database.ExamResults.TABLE_NAME + "." + Const.database.ExamResults.COLUMN_NAME_SEMESTER + " DESC", null);
+
+        if (cursor.moveToFirst()) {
+            ExamStats total = new ExamStats();
+            total.gradeBest = 5.0f;
+            total.gradeWorst = 1.0f;
+
+            do {
+                ExamStats examStats = new ExamStats();
+                examStats.semester = cursor.getInt(0);
+                examStats.gradeWorst = cursor.getFloat(1);
+                examStats.gradeBest = cursor.getFloat(2);
+                examStats.gradeCount = cursor.getInt(3);
+                examStats.credits = cursor.getFloat(4);
+                examStats.average = cursor.getFloat(5) / examStats.credits;
+
+                total.gradeBest = Math.min(total.gradeBest, cursor.getFloat(2));
+                total.gradeWorst = Math.max(total.gradeWorst, cursor.getFloat(1));
+                total.credits += cursor.getFloat(4);
+                total.gradeCount += cursor.getInt(3);
+                total.average += cursor.getFloat(5);
+                examStatses.add(examStats);
+
+            } while (cursor.moveToNext());
+
+            total.average = total.average / total.credits;
+
+            examStatses.add(0, total);
+        }
+
+        // Datenbank schließen
+        cursor.close();
+        sqLiteOpenHelper.close();
+
+        return examStatses;
     }
 
     /**

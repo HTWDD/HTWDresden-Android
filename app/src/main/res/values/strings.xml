@@ -131,6 +131,15 @@
     <string name="exams_result_not_allowed">Nicht zugelassen</string>
     <string name="exams_result_credits">Credits: %s</string>
     <string name="exams_result_grade">Note: %s</string>
+    <string name="exams_stats_study">Studium</string>
+    <string name="exams_stats_average">Durchschnitt: %s</string>
+    <plurals name="exams_stats_count_grade">
+        <item quantity="one">%s Note</item>
+        <item quantity="other">%d Noten</item>
+    </plurals>
+    <string name="exams_stats_count_credits">%s Credits</string>
+    <string name="exams_stats_gradeBest">beste Note: %s</string>
+    <string name="exams_stats_gradeWorst">schlechteste Note: %s</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>

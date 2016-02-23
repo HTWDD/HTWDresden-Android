@@ -30,7 +30,7 @@ public class ExamListAdapter extends AbstractBaseAdapter<Exam> {
             convertView = mLayoutInflater.inflate(R.layout.exam_list_item, parent, false);
             convertView.setTag(viewHolder);
 
-            viewHolder.exam_title = (TextView) convertView.findViewById(R.id.exam_title);
+            viewHolder.exam_title = (TextView) convertView.findViewById(R.id.stats_semester);
             viewHolder.exam_type = (TextView) convertView.findViewById(R.id.exam_type);
             viewHolder.exam_branch = (TextView) convertView.findViewById(R.id.exam_studyBranch);
             viewHolder.exam_day = (TextView) convertView.findViewById(R.id.exam_day);

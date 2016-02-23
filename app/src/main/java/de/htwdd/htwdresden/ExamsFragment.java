@@ -37,7 +37,7 @@ public class ExamsFragment extends Fragment {
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.exams_statistic),
-                Fragment.class,
+                ExamResultStatsFragment.class,
                 null
         ));
         mTabs.add(new TabItem(

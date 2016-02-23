@@ -19,7 +19,7 @@
             android:padding="@dimen/space_between_content">
 
             <TextView
-                android:id="@+id/exam_title"
+                android:id="@+id/stats_semester"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -31,7 +31,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/app_table_margin"
                 android:stretchColumns="2"
-                android:layout_below="@+id/exam_title">
+                android:layout_below="@+id/stats_semester">
 
                 <TableRow
                     android:layout_width="match_parent"
