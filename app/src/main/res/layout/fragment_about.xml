@@ -105,7 +105,7 @@
                             android:id="@+id/app_email"
                             android:padding="3dip"
                             android:text="@string/app_email"
-                            android:textColor="@android:color/holo_blue_light"
+                            android:textColor="@color/colorAccent"
                             android:textIsSelectable="true" />
                     </TableRow>
 
@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:padding="3dip"
                             android:text="@string/app_website"
-                            android:textColor="@android:color/holo_blue_light"
+                            android:textColor="@color/colorAccent"
                             android:textIsSelectable="true" />
                     </TableRow>
 
@@ -141,7 +141,7 @@
                             android:id="@+id/about_link_github"
                             android:padding="3dip"
                             android:text="@string/app_github"
-                            android:textColor="@android:color/holo_blue_light"
+                            android:textColor="@color/colorAccent"
                             android:textIsSelectable="true" />
 
                     </TableRow>
