@@ -6,6 +6,7 @@
     tools:context="de.htwdd.htwdresden.OverviewFragment">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/overview_timetable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_between_content"

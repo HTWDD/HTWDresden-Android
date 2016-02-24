@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -171,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 finish();
             else {
                 // Zur Übersichtsseite springen
-                NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-                onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
+                goToNavigationItem(R.id.navigation_overview);
             }
         else fragmentManager.popBackStack();
     }
@@ -229,5 +229,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     public void setNavigationItem(int item) {
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         setNavigationItem(mNavigationView.getMenu().findItem(item));
+    }
+
+    @Override
+    public void goToNavigationItem(@IdRes final int item) {
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(item));
     }
 }

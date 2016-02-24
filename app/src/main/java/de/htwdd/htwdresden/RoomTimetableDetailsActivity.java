@@ -59,4 +59,8 @@ public class RoomTimetableDetailsActivity extends AppCompatActivity implements I
     @Override
     public void setNavigationItem(int item) {
     }
+
+    @Override
+    public void goToNavigationItem(int item) {
+    }
 }

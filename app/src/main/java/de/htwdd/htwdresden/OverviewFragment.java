@@ -3,6 +3,7 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import de.htwdd.htwdresden.types.Lesson;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment für den Schnelleinstieg in die App
  */
 public class OverviewFragment extends Fragment {
     private View mLayout;
@@ -45,9 +46,17 @@ public class OverviewFragment extends Fragment {
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_overview));
 
+        // Onclick-Listener
+        CardView timetable = (CardView) mLayout.findViewById(R.id.overview_timetable);
+        timetable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable);
+            }
+        });
+
         // Stundenplan anzeigen
         showTimetable();
-
 
         return mLayout;
     }
