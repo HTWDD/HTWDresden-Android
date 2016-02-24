@@ -2,14 +2,28 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -22,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
@@ -32,6 +47,7 @@ import de.htwdd.htwdresden.types.Lesson;
  * Fragment für den Schnelleinstieg in die App
  */
 public class OverviewFragment extends Fragment {
+    private final static String LOG_TAG = "OverviewFragment";
     private View mLayout;
 
     public OverviewFragment() {
@@ -42,13 +58,27 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_overview, container, false);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final Context context = getActivity();
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_overview));
 
-        // Onclick-Listener
-        CardView timetable = (CardView) mLayout.findViewById(R.id.overview_timetable);
-        timetable.setOnClickListener(new View.OnClickListener() {
+        // Update verfügbar
+        CardView cardUpdate = (CardView) mLayout.findViewById(R.id.overview_app_update);
+        cardUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www2.htw-dresden.de/~app/android/HTWDDresden-latest.apk"));
+                startActivity(browserIntent);
+            }
+        });
+        if (sharedPreferences.getBoolean("appUpdate", false))
+            cardUpdate.setVisibility(View.VISIBLE);
+
+        // Stundenplan
+        CardView cardTimetable = (CardView) mLayout.findViewById(R.id.overview_timetable);
+        cardTimetable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable);
@@ -57,6 +87,35 @@ public class OverviewFragment extends Fragment {
 
         // Stundenplan anzeigen
         showTimetable();
+
+        // Auf Update überprüfen
+        if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
+                && VolleyDownloader.CheckInternet(getActivity()))) {
+            // Request mit Listener zur Abfrage der aktuellen Version erstellen
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://htwdd.github.io/version.json", new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+
+                        if (response.getInt("androidAPK") > packageInfo.versionCode) {
+                            editor.putBoolean("appUpdate", true);
+                            // Update-Kachel anzeigen
+                            CardView cardUpdate = (CardView) mLayout.findViewById(R.id.overview_app_update);
+                            cardUpdate.setVisibility(View.VISIBLE);
+                        } else editor.putBoolean("appUpdate", false);
+
+                        editor.putLong("appUpdateCheck", GregorianCalendar.getInstance().getTimeInMillis());
+                        editor.apply();
+                    } catch (PackageManager.NameNotFoundException | JSONException e) {
+                        Log.e(LOG_TAG, "[Fehler] beim Überprüfen der App-Version: Daten: " + response);
+                        Log.e(LOG_TAG, e.toString());
+                    }
+                }
+            }, null);
+            VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
+        }
 
         return mLayout;
     }

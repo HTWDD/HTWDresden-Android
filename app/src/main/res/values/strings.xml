@@ -156,6 +156,8 @@
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
     <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
 
+    <string name="overview_update_available">Update verfügbar!</string>
+    <string name="overview_update_available_message">Bitte Update auf die neuste Version! Zum Download einfach auf diese Kachel klicken.</string>
     <string name="overview_lessons_current">Aktuell</string>
     <string name="overview_lessons_noLesson">keine Veranstaltung</string>
     <string name="overview_lessons_next">Nächste</string>

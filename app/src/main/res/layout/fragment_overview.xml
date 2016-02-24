@@ -5,157 +5,197 @@
     android:layout_height="match_parent"
     tools:context="de.htwdd.htwdresden.OverviewFragment">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/overview_timetable"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_between_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/space_between_content"
-        card_view:cardCornerRadius="4dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/overview_app_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#D4E157"
-                android:padding="@dimen/space_between_content"
-                android:text="@string/navi_timetable"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:orientation="vertical">
 
-            <TableLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F44336"
+                    android:padding="@dimen/space_between_content"
+                    android:text="@string/overview_update_available"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_between_content"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:text="@string/overview_update_available_message"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/overview_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/space_between_content"
-                android:weightSum="3">
+                android:orientation="vertical">
 
-                <TableRow android:paddingBottom="@dimen/space_between_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#D4E157"
+                    android:padding="@dimen/space_between_content"
+                    android:text="@string/navi_timetable"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/overview_lessons_current"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        android:textStyle="bold" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_between_content"
+                    android:weightSum="3">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center|start"
-                        android:orientation="vertical">
+                    <TableRow android:paddingBottom="@dimen/space_between_content">
 
                         <TextView
-                            android:id="@+id/overview_lessons_current_tag"
+                            android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:singleLine="true"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:layout_weight="1"
+                            android:text="@string/overview_lessons_current"
+                            android:textAppearance="@android:style/TextAppearance.Medium"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/overview_lessons_current_tag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:singleLine="true"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/overview_lessons_current_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@+id/overview_lessons_current_tag"
+                                android:layout_alignBottom="@+id/overview_lessons_current_tag"
+                                android:layout_gravity="end"
+                                android:layout_marginStart="@dimen/app_table_margin"
+                                android:layout_toEndOf="@+id/overview_lessons_current_tag"
+                                android:singleLine="true"
+                                android:text="@string/overview_lessons_noLesson"
+                                android:textAppearance="@android:style/TextAppearance.Small" />
+
+                            <TextView
+                                android:id="@+id/overview_lessons_current_remaining"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@+id/overview_lessons_current_tag"
+                                android:layout_below="@+id/overview_lessons_current_tag"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textColor="@color/grey"
+                                android:textStyle="italic" />
+                        </RelativeLayout>
+                    </TableRow>
+
+                    <TableRow>
 
                         <TextView
-                            android:id="@+id/overview_lessons_current_type"
+                            android:id="@+id/overview_lessons_next"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBaseline="@+id/overview_lessons_current_tag"
-                            android:layout_alignBottom="@+id/overview_lessons_current_tag"
-                            android:layout_gravity="end"
-                            android:layout_marginStart="@dimen/app_table_margin"
-                            android:layout_toEndOf="@+id/overview_lessons_current_tag"
-                            android:singleLine="true"
-                            android:text="@string/overview_lessons_noLesson"
-                            android:textAppearance="@android:style/TextAppearance.Small" />
+                            android:layout_weight="1"
+                            android:text="@string/overview_lessons_next"
+                            android:textAppearance="@android:style/TextAppearance.Small"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/overview_lessons_next_tag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/overview_lessons_next_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@+id/overview_lessons_next_tag"
+                                android:layout_alignBottom="@+id/overview_lessons_next_tag"
+                                android:layout_gravity="end"
+                                android:layout_marginStart="@dimen/app_table_margin"
+                                android:layout_toEndOf="@+id/overview_lessons_next_tag"
+                                android:singleLine="true"
+                                android:textAppearance="@android:style/TextAppearance.Small" />
+
+                            <TextView
+                                android:id="@+id/overview_lessons_next_remaining"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@+id/overview_lessons_next_tag"
+                                android:layout_below="@+id/overview_lessons_next_tag"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textColor="@color/grey"
+                                android:textStyle="italic" />
+                        </RelativeLayout>
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/overview_lessons_busy_plan"
+                        android:paddingTop="@dimen/space_between_content">
 
                         <TextView
-                            android:id="@+id/overview_lessons_current_remaining"
+                            android:id="@+id/overview_lesson_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignStart="@+id/overview_lessons_current_tag"
-                            android:layout_below="@+id/overview_lessons_current_tag"
+                            android:layout_weight="1"
+                            android:text="@string/timetable_overview_today"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/grey"
-                            android:textStyle="italic" />
-                    </RelativeLayout>
-                </TableRow>
+                            android:textStyle="bold" />
 
-                <TableRow>
-
-                    <TextView
-                        android:id="@+id/overview_lessons_next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/overview_lessons_next"
-                        android:textAppearance="@android:style/TextAppearance.Small"
-                        android:textStyle="bold" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center|start"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/overview_lessons_next_tag"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/overview_lessons_list"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <TextView
-                            android:id="@+id/overview_lessons_next_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBaseline="@+id/overview_lessons_next_tag"
-                            android:layout_alignBottom="@+id/overview_lessons_next_tag"
-                            android:layout_gravity="end"
-                            android:layout_marginStart="@dimen/app_table_margin"
-                            android:layout_toEndOf="@+id/overview_lessons_next_tag"
-                            android:singleLine="true"
-                            android:textAppearance="@android:style/TextAppearance.Small" />
-
-                        <TextView
-                            android:id="@+id/overview_lessons_next_remaining"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@+id/overview_lessons_next_tag"
-                            android:layout_below="@+id/overview_lessons_next_tag"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/grey"
-                            android:textStyle="italic" />
-                    </RelativeLayout>
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/overview_lessons_busy_plan"
-                    android:paddingTop="@dimen/space_between_content">
-
-                    <TextView
-                        android:id="@+id/overview_lesson_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/timetable_overview_today"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:id="@+id/overview_lessons_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="2"
-                        android:orientation="vertical" />
-                </TableRow>
-            </TableLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="2"
+                            android:orientation="vertical" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 </ScrollView>
