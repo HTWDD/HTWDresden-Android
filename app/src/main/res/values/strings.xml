@@ -37,6 +37,7 @@
     <string name="settings_category_study">Studium</string>
     <string name="settings_category_profs">Professoren</string>
     <string name="settings_category_profs_summary">Einstellungen ausschließlich für Professoren</string>
+    <string name="settungs_category_app_intern">HTWDresden intern</string>
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
@@ -58,6 +59,9 @@
     <string name="settings_prof_name_summary">Verwendung: Prüfungen</string>
     <string name="settings_prof_id">Professoren-Kennung</string>
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
+    <string name="settings_acra">Bug-Reporting</string>
+    <string name="settings_acra_disabled">Eingeschaltet</string>
+    <string name="settings_acra_enabled">Ausgeschaltet</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
@@ -170,4 +174,9 @@
     <string name="overview_mensa_load">Lade Daten</string>
     <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
+    <string name="crash_dialog_ok_toast">Vielen Dank!</string>
+    <string name="crash_dialog_comment_prompt">Sie können eine Beschreibung des Problems hier hinzufügen:</string>
+    <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
+        Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
+        Klicken Sie bitte dazu auf OK.</string>
 </resources>

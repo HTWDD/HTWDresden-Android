@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="de.htwdd.htwdresden">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".HTWDresdenApplication">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -35,6 +38,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.htwdd.htwdresden.MainActivity" />
         </activity>
+
+        <activity android:name="org.acra.dialog.CrashReportDialog"
+            tools:replace="android:theme"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+            android:process=":error_report"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true" />
     </application>
 
 </manifest>

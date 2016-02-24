@@ -45,4 +45,12 @@
             android:summary="@string/settings_prof_id_summary"
             android:title="@string/settings_prof_id" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settungs_category_app_intern">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="acra.enable"
+            android:summaryOff="@string/settings_acra_enabled"
+            android:summaryOn="@string/settings_acra_disabled"
+            android:title="@string/settings_acra" />
+    </PreferenceCategory>
 </PreferenceScreen>
