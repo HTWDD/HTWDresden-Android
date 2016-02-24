@@ -64,11 +64,15 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // Actionbar Titel anpassen
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
+            private CharSequence title;
             public void onDrawerClosed(View view) {
+                actionBar.setTitle(title);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
+                title = actionBar.getTitle();
+                actionBar.setTitle(R.string.app_name);
                 // Schließe Tastatur
                 if (getCurrentFocus() != null && getCurrentFocus() instanceof EditText) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
