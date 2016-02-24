@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,11 +36,14 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
+import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
+import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
@@ -54,6 +58,18 @@ public class OverviewFragment extends Fragment {
 
     public OverviewFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getInstance().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(this);
     }
 
     @Override
@@ -137,6 +153,26 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        showTimetable();
+    }
+
+    /**
+     * Behandelt die Benachrichtigung vom Eventbus das neue Prüfungsergebnisse zur Verfügung stehen
+     *
+     * @param updateExamResultsEvent Typ der Benachrichtigung
+     */
+    @Subscribe
+    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent){
+        showExamResults();
+    }
+
+    /**
+     * Behandelt die Benachrichtigung vom Eventbus das ein neuer Stundenplan zur Verfügung steht
+     *
+     * @param updateTimetableEvent Typ der Benachrichtigung
+     */
+    @Subscribe
+    public void updateTimetable(UpdateTimetableEvent updateTimetableEvent){
         showTimetable();
     }
 
