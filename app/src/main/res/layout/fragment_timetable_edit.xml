@@ -249,7 +249,7 @@
 
             <Button
                 android:id="@+id/timetable_edit_LessonDelete"
-                style="?android:attr/buttonStyleSmall"
+                style="@style/ButtonHTWStyle"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
@@ -259,7 +259,7 @@
 
             <Button
                 android:id="@+id/timetable_edit_lessonSave"
-                style="?android:attr/buttonStyleSmall"
+                style="@style/ButtonHTWStyle"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_column="3"

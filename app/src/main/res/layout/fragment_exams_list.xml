@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/Button1"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/ButtonHTWStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
@@ -38,7 +38,7 @@
 
     <Button
         android:id="@+id/Button2"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/ButtonHTWStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
