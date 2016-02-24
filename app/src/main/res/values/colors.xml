@@ -14,4 +14,6 @@
     <color name="timetable_blue">#90CAF9</color>
 
     <color name="exam_results_green">#090</color>
+
+    <color name="overview_header">#8BC34A</color>
 </resources>

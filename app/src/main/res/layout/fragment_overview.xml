@@ -62,7 +62,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#D4E157"
+                    android:background="@color/overview_header"
                     android:padding="@dimen/space_between_content"
                     android:text="@string/navi_timetable"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -217,7 +217,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#D4E157"
+                    android:background="@color/overview_header"
                     android:padding="@dimen/space_between_content"
                     android:text="@string/navi_mensa"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -258,7 +258,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#D4E157"
+                    android:background="@color/overview_header"
                     android:padding="@dimen/space_between_content"
                     android:text="@string/exams_grade"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
