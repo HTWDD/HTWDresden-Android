@@ -20,7 +20,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -38,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.Meal;
+import de.htwdd.htwdresden.classes.Mensa;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
@@ -103,6 +107,15 @@ public class OverviewFragment extends Fragment {
             }
         });
 
+        // Mens
+        CardView cardMensa = (CardView) mLayout.findViewById(R.id.overview_mensa);
+        cardMensa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa);
+            }
+        });
+
         // Noten
         CardView cardExam = (CardView) mLayout.findViewById(R.id.overview_examResultStats);
         cardExam.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +130,9 @@ public class OverviewFragment extends Fragment {
 
         // Noten anzeigen
         showExamResults();
+
+        // Mensa laden
+        showMensa();
 
         // Auf Update überprüfen
         if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
@@ -162,7 +178,7 @@ public class OverviewFragment extends Fragment {
      * @param updateExamResultsEvent Typ der Benachrichtigung
      */
     @Subscribe
-    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent){
+    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent) {
         showExamResults();
     }
 
@@ -172,7 +188,7 @@ public class OverviewFragment extends Fragment {
      * @param updateTimetableEvent Typ der Benachrichtigung
      */
     @Subscribe
-    public void updateTimetable(UpdateTimetableEvent updateTimetableEvent){
+    public void updateTimetable(UpdateTimetableEvent updateTimetableEvent) {
         showTimetable();
     }
 
@@ -375,5 +391,62 @@ public class OverviewFragment extends Fragment {
             stats_gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.gradeBest));
             stats_gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.gradeWorst));
         }
+    }
+
+    private void showMensa() {
+        final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
+        final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
+        final Context context = getActivity();
+        final short mensaID = 9;
+
+        message.setVisibility(View.VISIBLE);
+        content.setVisibility(View.GONE);
+
+        if (!VolleyDownloader.CheckInternet(context)) {
+            message.setText(R.string.info_no_internet);
+        }
+
+        message.setText(R.string.overview_mensa_load);
+
+        StringRequest stringRequest = new StringRequest(
+                "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Mensa mensa = new Mensa(context, mensaID);
+                        ArrayList<Meal> meals = mensa.parseCurrentDay(response);
+
+                        int count = meals.size();
+                        if (count == 0) {
+                            message.setText(R.string.mensa_no_offer);
+                            message.setVisibility(View.VISIBLE);
+                            content.setVisibility(View.GONE);
+                            return;
+                        }
+
+                        // Anzeige zusammenbauen
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int i = 0; i < count - 2; i++) {
+                            stringBuilder.append(meals.get(i).getTitle());
+                            stringBuilder.append("\n\n");
+                        }
+                        stringBuilder.append(meals.get(count - 1).getTitle());
+
+                        // Inhalt anzeigen
+                        content.setText(stringBuilder);
+                        content.setVisibility(View.VISIBLE);
+                        message.setVisibility(View.GONE);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        message.setText(R.string.overview_mensa_error);
+                        message.setVisibility(View.VISIBLE);
+                        content.setVisibility(View.GONE);
+                    }
+                }
+        );
+        VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
     }
 }
