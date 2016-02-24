@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
             private CharSequence title;
             public void onDrawerClosed(View view) {
-                actionBar.setTitle(title);
+                if (actionBar.getTitle() != null && actionBar.getTitle().equals(getString(R.string.app_name)))
+                    actionBar.setTitle(title);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
