@@ -164,7 +164,8 @@
     <string name="overview_lessons_remaining_start">in %1$s Minuten</string>
     <string name="overview_lessons_remaining_end">noch %1$s Minuten</string>
     <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
-    <string name="overview_lessons_tomorrow">morgen %s</string>
+    <string name="overview_lessons_tomorrow_param">morgen %s</string>
+    <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future">%1$s %2$s</string>
     <string name="overview_mensa_load">Lade Daten</string>
     <string name="overview_mensa_error">Fehler beim Laden der Daten</string>

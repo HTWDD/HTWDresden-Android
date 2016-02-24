@@ -206,8 +206,10 @@ public class OverviewFragment extends Fragment {
         final TextView overview_lessons_next_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_next_remaining);
         final TableRow overview_lessons_busy_plan = (TableRow) mLayout.findViewById(R.id.overview_lessons_busy_plan);
         final LinearLayout overview_lessons_list = (LinearLayout) mLayout.findViewById(R.id.overview_lessons_list);
+        final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
         // TextViews zurücksetzen
+        overview_lessons_current_tag.setVisibility(View.GONE);
         overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
         overview_lessons_current_remaining.setVisibility(View.GONE);
         overview_lessons_busy_plan.setVisibility(View.VISIBLE);
@@ -222,6 +224,7 @@ public class OverviewFragment extends Fragment {
 
             if (lessons.size() > 0) {
                 overview_lessons_current_remaining.setVisibility(View.VISIBLE);
+                overview_lessons_current_tag.setVisibility(View.VISIBLE);
 
                 // Suche nach einer passenden Veranstaltung
                 LessonHelper lessonHelper = new LessonHelper();
@@ -297,7 +300,7 @@ public class OverviewFragment extends Fragment {
                     break;
                 case 1:
                     overview_lessons_next_remaining.setText(getString(
-                            R.string.overview_lessons_tomorrow,
+                            R.string.overview_lessons_tomorrow_param,
                             getString(R.string.timetable_ds_list_simple, format.format(Const.Timetable.beginDS[nextDS - 1]), format.format(Const.Timetable.endDS[nextDS - 1]))
                     ));
                     // DS nicht mehr anzeigen
@@ -357,6 +360,11 @@ public class OverviewFragment extends Fragment {
             }
             // Stundenplanvorschau erstellen
             LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
+
+            // Bezeichnung ändern
+            if (Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR)-calendar.get(Calendar.DAY_OF_YEAR)) == 0)
+                overview_lessons_day.setText(R.string.timetable_overview_today);
+            else overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
         }
     }
 
