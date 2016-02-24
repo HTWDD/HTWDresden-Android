@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
                 switch (position) {
                     case R.id.navigation_overview:
-                        fragment = new Fragment();
+                        fragment = new OverviewFragment();
                         tag = "overview";
                         break;
                     case R.id.navigation_mensa:

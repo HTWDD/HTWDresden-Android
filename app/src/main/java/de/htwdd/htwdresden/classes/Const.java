@@ -79,9 +79,7 @@ public final class Const {
         public static int getCurrentDS(@Nullable Long currentTime) {
             final long offset = TimeZone.getDefault().getOffset(new GregorianCalendar().getTimeInMillis());
             if (currentTime == null) {
-                Calendar gregorianCalendar = GregorianCalendar.getInstance();
-                currentTime = TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
-                        + TimeUnit.MILLISECONDS.convert(gregorianCalendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
+                currentTime = getMillisecondsWithoutDate(GregorianCalendar.getInstance());
             }
 
             if (currentTime >= endDS[6].getTime() + offset) {
@@ -102,6 +100,17 @@ public final class Const {
                 return 1;
 
             return 0;
+        }
+
+        /**
+         * Liefert die Millisekunden der übergebenen Uhrzeit
+         *
+         * @param calendar Uhrzeit welche umgewandelt werden soll
+         * @return Millisekunden des übergebenen Datums
+         */
+        public static long getMillisecondsWithoutDate(Calendar calendar) {
+            return TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
+                    + TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
         }
     }
 

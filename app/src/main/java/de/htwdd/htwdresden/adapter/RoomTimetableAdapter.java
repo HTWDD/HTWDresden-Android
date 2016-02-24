@@ -3,7 +3,6 @@ package de.htwdd.htwdresden.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,36 +120,7 @@ public class RoomTimetableAdapter extends BaseAdapter {
             }
         }
 
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.overview_lessons_list);
-        linearLayout.removeAllViews();
-
-        // Tagesüberblick anzeigen
-        int index = 0;
-        for (String lessonDs : listOfDs) {
-            View sub_view = mLayoutInflater.inflate(R.layout.fragment_timetable_mini_plan, viewGroup, false);
-
-            // Hintergrund einfärben
-            if (index == (current_ds - 1))
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.timetable_blue));
-            else if (index % 2 == 0)
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.app_background));
-            else
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-
-            // Zeiten anzeigen
-            TextView textDS = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_ds);
-            textDS.setText(lessonDs);
-
-            // Stunde anzeigen
-            TextView textLesson = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_lesson);
-            textLesson.setText(values[index]);
-
-            // View zum LinearLayout hinzufügen
-            linearLayout.addView(sub_view);
-
-            // Index erhöhen
-            index++;
-        }
+        LessonHelper.createSimpleDayOverviewLayout(context, (LinearLayout) view.findViewById(R.id.overview_lessons_list), viewGroup, values, current_ds);
 
         viewHolder.position = i;
 

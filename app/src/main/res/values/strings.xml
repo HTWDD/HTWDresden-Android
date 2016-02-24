@@ -155,4 +155,14 @@
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
     <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
+
+    <string name="overview_lessons_current">Aktuell</string>
+    <string name="overview_lessons_noLesson">keine Veranstaltung</string>
+    <string name="overview_lessons_next">Nächste</string>
+    <string name="overview_lessons_remaining_start">in %1$s Minuten</string>
+    <string name="overview_lessons_remaining_end">noch %1$s Minuten</string>
+    <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
+    <string name="overview_lessons_tomorrow">morgen %s</string>
+    <string name="overview_lessons_future">%1$s %2$s</string>
+
 </resources>
