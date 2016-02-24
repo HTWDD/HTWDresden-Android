@@ -38,8 +38,10 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
+import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 
 
@@ -85,8 +87,20 @@ public class OverviewFragment extends Fragment {
             }
         });
 
+        // Noten
+        CardView cardExam = (CardView) mLayout.findViewById(R.id.overview_examResultStats);
+        cardExam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_exams);
+            }
+        });
+
         // Stundenplan anzeigen
         showTimetable();
+
+        // Noten anzeigen
+        showExamResults();
 
         // Auf Update überprüfen
         if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
@@ -291,6 +305,39 @@ public class OverviewFragment extends Fragment {
             }
             // Stundenplanvorschau erstellen
             LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
+        }
+    }
+
+    private void showExamResults() {
+        final Context context = getActivity();
+        final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(context));
+        final ArrayList<ExamStats> examStatses = dao.getStats();
+        final ExamStats examStats;
+        TextView message = (TextView) mLayout.findViewById(R.id.overview_examResultStatsMessage);
+        LinearLayout content = (LinearLayout) mLayout.findViewById(R.id.overview_examResultStatsContent);
+
+        if (examStatses.size() == 0) {
+            message.setVisibility(View.VISIBLE);
+            content.setVisibility(View.GONE);
+        } else {
+            // Nachricht ausblenden
+            message.setVisibility(View.GONE);
+            content.setVisibility(View.VISIBLE);
+
+            examStats = examStatses.get(0);
+
+            // Views
+            TextView stats_average = (TextView) mLayout.findViewById(R.id.stats_average);
+            TextView stats_countGrade = (TextView) mLayout.findViewById(R.id.stats_countGrade);
+            TextView stats_countCredits = (TextView) mLayout.findViewById(R.id.stats_countCredits);
+            TextView stats_gradeBest = (TextView) mLayout.findViewById(R.id.stats_gradeBest);
+            TextView stats_gradeWorst = (TextView) mLayout.findViewById(R.id.stats_gradeWorst);
+
+            stats_average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.average)));
+            stats_countGrade.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, examStats.gradeCount, examStats.gradeCount));
+            stats_countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.credits));
+            stats_gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.gradeBest));
+            stats_gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.gradeWorst));
         }
     }
 }
