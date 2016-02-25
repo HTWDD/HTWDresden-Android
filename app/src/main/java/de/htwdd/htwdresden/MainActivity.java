@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
@@ -44,6 +45,13 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             return false;
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Einfache Nutzeranalyse
+        Tracking.makeRequest(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
