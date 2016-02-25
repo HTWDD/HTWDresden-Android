@@ -273,7 +273,7 @@ public class TimetableOverviewFragment extends Fragment {
                 url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
                 break;
             case 2:
-                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?prof_kennung=" + prof_kennung;
+                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?Prof=" + prof_kennung;
                 break;
         }
 
