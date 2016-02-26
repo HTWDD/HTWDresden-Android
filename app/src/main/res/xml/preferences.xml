@@ -45,7 +45,14 @@
             android:summary="@string/settings_prof_id_summary"
             android:title="@string/settings_prof_id" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/settungs_category_app_intern">
+    <PreferenceCategory android:title="@string/settings_category_other">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="autoStummSchalten"
+            android:summary="@string/settings_audio_summary"
+            android:title="@string/settings_audio" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_category_app_intern">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="acra.enable"

@@ -23,6 +23,11 @@ public final class Const {
         public static final String ROOM_TIMETABLE_ROOM = "ROOM_TIMETABLE_ROOM";
     }
 
+    public static final class preferencesKey {
+        public static final String PREFERENCES_AUTO_MUTE = "autoMute";
+        public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
+    }
+
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
@@ -118,7 +123,6 @@ public final class Const {
         public static final String TYPE_TEXT = " TEXT";
         public static final String TYPE_FLOAT = " REAL";
         public static final String TYPE_INT = " INTEGER";
-        public static final String TYPE_TIME = " TIME";
         public static final String COMMA_SEP = ",";
         public static final long RESULT_DB_ERROR = -1;
 
