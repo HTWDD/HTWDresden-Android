@@ -15,20 +15,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -133,6 +137,8 @@ public class OverviewFragment extends Fragment {
 
         // Mensa laden
         showMensa();
+
+        showNews();
 
         // Auf Update überprüfen
         if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
@@ -362,7 +368,7 @@ public class OverviewFragment extends Fragment {
             LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
 
             // Bezeichnung ändern
-            if (Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR)-calendar.get(Calendar.DAY_OF_YEAR)) == 0)
+            if (Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR)) == 0)
                 overview_lessons_day.setText(R.string.timetable_overview_today);
             else overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
         }
@@ -456,5 +462,68 @@ public class OverviewFragment extends Fragment {
                 }
         );
         VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    private void showNews() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetNews.php", new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                final CardView cardView = (CardView) mLayout.findViewById(R.id.overview_news);
+                final TextView title = (TextView) mLayout.findViewById(R.id.overview_news_title);
+                final WebView content = (WebView) mLayout.findViewById(R.id.overview_news_content);
+                final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+                final Calendar tmpCalendar = GregorianCalendar.getInstance();
+                final Calendar calendar = GregorianCalendar.getInstance();
+                int count = response.length();
+
+                for (int i = 0; i < count; i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+
+                        // News für Android-Plattform?
+                        if (jsonObject.optInt("plattform", 0) != 0)
+                            continue;
+
+                        // News noch aktuell?
+                        if (!jsonObject.isNull("endDay") && !jsonObject.getString("endDay").isEmpty()) {
+                            tmpCalendar.setTime(format.parse(jsonObject.getString("endDay")));
+                            if (calendar.after(tmpCalendar))
+                                continue;
+                        }
+
+                        // Darf News schon angezeigt werden?
+                        if (!jsonObject.isNull("beginDay") && !jsonObject.getString("beginDay").isEmpty()) {
+                            tmpCalendar.setTime(format.parse(jsonObject.getString("beginDay")));
+                            if (tmpCalendar.after(calendar))
+                                continue;
+                        }
+
+                        // Jetzt darf News angezeigt werden
+                        title.setText(jsonObject.getString("title"));
+                        content.loadDataWithBaseURL("", jsonObject.getString("content"), "text/html", "UTF-8", "");
+
+                        cardView.setVisibility(View.VISIBLE);
+                        if (!jsonObject.isNull("url") && !jsonObject.getString("url").isEmpty()) {
+                            final Uri url = Uri.parse(jsonObject.getString("url"));
+                            cardView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
+                                    startActivity(browserIntent);
+                                }
+                            });
+                        }
+
+                        // Es kann nur ein News gleichzeitig angeteigt werden, weitere werden nicht betrachtet
+                        break;
+
+                    } catch (JSONException | ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, null);
+
+        VolleyDownloader.getInstance(getActivity()).getRequestQueue().add(jsonArrayRequest);
     }
 }
