@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         setupDrawerContent(mNavigationView);
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         // Setze Start-Fragment
         if (savedInstanceState == null) {
