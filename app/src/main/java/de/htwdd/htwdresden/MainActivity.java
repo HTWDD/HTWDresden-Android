@@ -137,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                     case R.id.navigation_exams:
                         fragment = new ExamsFragment();
                         break;
+                    case R.id.navigation_campus_plan:
+                        fragment = new CampusPlanFragment();
+                        break;
                     case R.id.navigation_settings:
                         fragment = new SettingsFragment();
                         break;

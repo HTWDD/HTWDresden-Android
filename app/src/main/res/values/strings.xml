@@ -18,6 +18,7 @@
     <string name="navi_room_timetable">Belegungsplan</string>
     <string name="navi_exams">Noten / Prüfungen</string>
     <string name="navi_uni_administration">Verwaltung</string>
+    <string name="navi_campus">Campusplan</string>
     <string name="navi_settings">Einstellungen</string>
     <string name="navi_about">Über die App</string>
     <string name="navi_head_uni">Uni Alltag</string>
@@ -182,4 +183,7 @@
     <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
         Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
         Klicken Sie bitte dazu auf OK.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

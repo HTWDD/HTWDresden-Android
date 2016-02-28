@@ -27,6 +27,10 @@
                     android:id="@+id/navigation_uni_administration"
                     android:icon="@drawable/ic_supervisor_account_24dp"
                     android:title="@string/navi_uni_administration" />
+                <item
+                    android:id="@+id/navigation_campus_plan"
+                    android:icon="@drawable/ic_navigation_24dp"
+                    android:title="@string/navi_campus" />
             </menu>
         </item>
         <item android:title="@string/navi_head_settings">
