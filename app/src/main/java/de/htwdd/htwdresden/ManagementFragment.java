@@ -9,7 +9,16 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 
 
@@ -65,6 +74,46 @@ public class ManagementFragment extends Fragment {
                 getActivity().startActivity(browserIntent);
             }
         });
+
+
+        final TextView semesterplanType  = (TextView)view.findViewById(R.id.semesterplan_type);
+
+        Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                //semesterplanType.setText("Response: " + response.toString());
+                System.out.println("swag");
+                System.out.println(response.toString());
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Bestimme Fehlermeldung
+                int responseCode = VolleyDownloader.getResponseCode(error);
+
+                // Fehlermeldung anzeigen
+                String message;
+                switch (responseCode) {
+                    case Const.internet.HTTP_TIMEOUT:
+                        message = getString(R.string.info_internet_timeout);
+                        break;
+                    case Const.internet.HTTP_NO_CONNECTION:
+                    case Const.internet.HTTP_NOT_FOUND:
+                        message = getString(R.string.info_internet_no_connection);
+                        break;
+                    case Const.internet.HTTP_NETWORK_ERROR:
+                    default:
+                        message = getString(R.string.info_internet_error);
+                }
+
+            }
+        };
+
+        String url = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
+        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
 
         return view;
     }
