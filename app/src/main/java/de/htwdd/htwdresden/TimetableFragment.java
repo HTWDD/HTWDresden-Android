@@ -67,7 +67,7 @@ public class TimetableFragment extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         // Adapter für Tabs erstellen und an view hängen
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), mTabs);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
         viewPager.setAdapter(viewPagerAdapter);
 
         // TabLayout "stylen"
