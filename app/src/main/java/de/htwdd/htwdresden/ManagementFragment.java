@@ -6,19 +6,23 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.classes.semesterplan.SemesterPlan;
 import de.htwdd.htwdresden.interfaces.INavigation;
 
 
@@ -76,14 +80,25 @@ public class ManagementFragment extends Fragment {
         });
 
 
-        final TextView semesterplanType  = (TextView)view.findViewById(R.id.semesterplan_type);
+        final TextView semesterplanType  = (TextView)view.findViewById(R.id.semesterplan_lecturePeriod);
 
         Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                //semesterplanType.setText("Response: " + response.toString());
-                System.out.println("swag");
-                System.out.println(response.toString());
+                for (int i=0 ; i<response.length();  i++){
+                    try {
+                        JSONObject semestePlanJSON = response.getJSONObject(i);
+                        SemesterPlan s  = new SemesterPlan(semestePlanJSON);
+
+                        System.out.println(s.isThisSemester(2016,"w"));
+                        if(s.isThisSemester(2016,"w")){
+                            System.out.println(s);
+                        }
+                    } catch (JSONException e) {
+                        Log.e("JSON SEMESTERPLAN","JSON IS BROKEN");
+                        e.printStackTrace();
+                    }
+                }
             }
         };
 
