@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
                     android:text="WINTER/SOMMERSEMESTER"
-                    android:id="@+id/textView2" />
+                    android:id="@+id/semesterplan_Bezeichnung" />
                 <TextView
                     android:paddingTop="10sp"
                     android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                     android:text="Tag 1 ...\nTag 2\nTag 3"
-                    android:id="@+id/semesterplan_freeDays" />
+                    android:id="@+id/semesterplan_freieTage" />
                 <TextView
                     android:paddingTop="10sp"
                     android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                     android:text="von-bis"
-                    android:id="@+id/semesterplan_examsPeriod" />
+                    android:id="@+id/semesterplan_pruefPeriod" />
                 <TextView
                     android:paddingTop="10sp"
                     android:layout_width="wrap_content"

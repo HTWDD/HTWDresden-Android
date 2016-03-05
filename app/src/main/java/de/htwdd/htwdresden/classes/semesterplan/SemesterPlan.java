@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.classes.semesterplan;
 
+import android.content.ContentValues;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,9 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import de.htwdd.htwdresden.interfaces.IParseJSON;
 
-public class SemesterPlan implements IParseJSON{
+public class SemesterPlan implements IParseJSON, IGetContentValues {
+
+    private int year;
+    private String type;
+
+    private Period period;
+    private FreeDay freeDays[];
+    private Period lecturePeriod;
+    private Period examsPeriod;
+    private Period reregistration;
 
     public static final String END_DAY = "endDay";
     public static final String BEGIN_DAY = "beginDay";
@@ -31,28 +43,28 @@ public class SemesterPlan implements IParseJSON{
     }
 
     @Override
-    public void parseFromJSON(JSONObject semestePlan) throws JSONException {
-        year          = semestePlan.getInt(YEAR);
-        type       = semestePlan.getString(TYPE);
+    public void parseFromJSON(JSONObject semestePlanJSON) throws JSONException {
+        year = semestePlanJSON.getInt(YEAR);
+        type = semestePlanJSON.getString(TYPE);
 
-        JSONObject p = semestePlan.getJSONObject(PERIOD);
-        period = new Period(p.getString(BEGIN_DAY),p.getString(END_DAY));
+        JSONObject p = semestePlanJSON.getJSONObject(PERIOD);
+        period = new Period(p.getString(BEGIN_DAY), p.getString(END_DAY));
 
-        JSONObject l = semestePlan.getJSONObject(LECTURE_PERIOD);
-        lecturePeriod = new Period(l.getString(BEGIN_DAY),l.getString(END_DAY));
+        JSONObject l = semestePlanJSON.getJSONObject(LECTURE_PERIOD);
+        lecturePeriod = new Period(l.getString(BEGIN_DAY), l.getString(END_DAY));
 
-        JSONObject e = semestePlan.getJSONObject(EXAMS_PERIOD);
-        examsPeriod = new Period(e.getString(BEGIN_DAY),e.getString(END_DAY));
+        JSONObject e = semestePlanJSON.getJSONObject(EXAMS_PERIOD);
+        examsPeriod = new Period(e.getString(BEGIN_DAY), e.getString(END_DAY));
 
-        JSONObject r = semestePlan.getJSONObject(REREGISTRATION);
-        reregistration = new Period(r.getString(BEGIN_DAY),r.getString(END_DAY));
+        JSONObject r = semestePlanJSON.getJSONObject(REREGISTRATION);
+        reregistration = new Period(r.getString(BEGIN_DAY), r.getString(END_DAY));
 
 
-        List<FreeDay> freeDaysList = new ArrayList<FreeDay>();
-        JSONArray freeDaysJSON = semestePlan.getJSONArray(FREE_DAYS);
-        for (int i=0 ; i<freeDaysJSON.length();  i++){
+        List<FreeDay> freeDaysList = new ArrayList<>();
+        JSONArray freeDaysJSON = semestePlanJSON.getJSONArray(FREE_DAYS);
+        for (int i = 0; i < freeDaysJSON.length(); i++) {
             JSONObject day = freeDaysJSON.getJSONObject(i);
-            freeDaysList.add(new FreeDay(day.getString(NAME),day.getString(BEGIN_DAY),day.getString(END_DAY)));
+            freeDaysList.add(new FreeDay(day.getString(NAME), day.getString(BEGIN_DAY), day.getString(END_DAY)));
         }
 
         freeDays = freeDaysList.toArray(new FreeDay[freeDaysList.size()]);
@@ -68,14 +80,12 @@ public class SemesterPlan implements IParseJSON{
         this.reregistration = reregistration;
     }
 
-    private int year;
-    private String type;
+    @Override
+    public ContentValues getContentValues() {
+        ContentValues contentValues = new ContentValues();
+        return contentValues;
+    }
 
-    private Period period;
-    private FreeDay freeDays[];
-    private Period lecturePeriod;
-    private Period examsPeriod;
-    private Period reregistration;
 
     public int getYear() {
         return year;
@@ -116,19 +126,30 @@ public class SemesterPlan implements IParseJSON{
                 "examsPeriod=" + examsPeriod + ",\n" +
                 "reregistration=" + reregistration + "\n" +
                 '}';
+
     }
-    public boolean isThisSemester(int year,String type){
+
+    public String getBezeichnung() {
+        String semesterType;
+        if (getType().equalsIgnoreCase("w"))
+            semesterType = "Wintersemester";
+        else semesterType = "Sommersemester";
+        return semesterType + " " + getYear();
+    }
+
+    public boolean isThisSemester(int year, String type) {
         return this.year == year && this.type.equalsIgnoreCase(type);
     }
+
     public static void main(String[] args) {
         SemesterPlan sp = new SemesterPlan(
                 2015,
                 "w",
-                new Period("2015-09-01","2015-09-01"),
+                new Period("2015-09-01", "2015-09-01"),
                 new FreeDay[]{new FreeDay("Freeday 1", "2015-09-01", "2015-09-01"), new FreeDay("Freeday 2", "2015-09-01", "2015-09-01")},
-                new Period("2015-09-01","2015-09-01"),
-                new Period("2015-09-01","2015-09-01"),
-                new Period("2015-09-01","2015-09-01")
+                new Period("2015-09-01", "2015-09-01"),
+                new Period("2015-09-01", "2015-09-01"),
+                new Period("2015-09-01", "2015-09-01")
         );
         System.out.println(sp.toString());
     }

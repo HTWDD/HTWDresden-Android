@@ -3,14 +3,12 @@ package de.htwdd.htwdresden.classes.semesterplan;
 /**
  * Created by warik on 04.03.16.
  */
-public final class FreeDay extends  Period{
+public final class FreeDay extends Period {
     private String NAME;
 
     @Override
     public String toString() {
-        return "FreeDay{" +
-                "NAME='" + NAME + '\'' +
-                "} " + super.toString();
+        return NAME + ": " + super.toString() + "\n";
     }
 
     public String getNAME() {
@@ -26,7 +24,7 @@ public final class FreeDay extends  Period{
     }
 
     public FreeDay(String NAME, String BEGIN_DAY, String END_DAY) {
-        super(BEGIN_DAY,END_DAY);
+        super(BEGIN_DAY, END_DAY);
         this.NAME = NAME;
     }
 }
