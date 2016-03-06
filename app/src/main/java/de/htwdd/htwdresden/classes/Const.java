@@ -142,6 +142,7 @@ public final class Const {
 
     public static final class semesterPlanUpdater {
         public static final long UPDATE_INTERVAL = 3 * 7 * 24 * 60 * 60 * 1000;
+        public static final String SEMESTERPLAN_URL_JSON = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
     }
 
 }

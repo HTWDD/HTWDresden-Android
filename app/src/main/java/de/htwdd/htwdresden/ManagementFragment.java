@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -48,6 +49,7 @@ public class ManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_management, container, false);
+        final SwipeRefreshLayout swipeRefrSemPlan = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefr_SemPlan);
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
@@ -87,7 +89,6 @@ public class ManagementFragment extends Fragment {
                 getActivity().startActivity(browserIntent);
             }
         });
-
 
 
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -135,37 +136,37 @@ public class ManagementFragment extends Fragment {
                     default:
                         message = getString(R.string.info_internet_error);
                 }
+                Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                // Refresh ausschalten
+                swipeRefrSemPlan.setRefreshing(false);
+
             }
         };
 
-        final String url = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
-
         long currentTime = System.currentTimeMillis();
-
 
         long highScore = sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1);
         System.out.println("Long: " + highScore);
         if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE)) {
             //System.out.println("NO VALUE YET");
-            writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
+            writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
         } else {
             //System.out.println("VALUE exists");
             //wenn mehr als 3 Wochen dann mach Req wieder
             if ((currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL) {
-                writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
+                writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
             } else System.out.println("TAKEN FROM SCHARED_PREFS");
         }
 
         updateSemPlanView(view, sharedPref);
 
-        final SwipeRefreshLayout swipeRefrSemPlan= (SwipeRefreshLayout) view.findViewById(R.id.swipeRefr_SemPlan);
+
         swipeRefrSemPlan.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
                         Log.i("REFRESH CALLED", "onRefresh called from SwipeRefreshLayout");
-
-                        writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
+                        writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
                         updateSemPlanView(view, sharedPref);
                         swipeRefrSemPlan.setRefreshing(false);
                     }
@@ -178,7 +179,7 @@ public class ManagementFragment extends Fragment {
     private void updateSemPlanView(View view, SharedPreferences sharedPref) {
         try {
             String sJSON = sharedPref.getString(SHARED_PREFS_SEMESTER_PLAN_JSON, "LEEEEEEEEEEEERRRRRRRRR");
-            System.out.println(sJSON);
+            Log.i("UPDATEING VIEW", sJSON);
             JSONObject jsonObject = new JSONObject(sJSON);
             SemesterPlan semesterPlan = new SemesterPlan(jsonObject);
             setSemesterPlanView(semesterPlan, view);
@@ -208,16 +209,16 @@ public class ManagementFragment extends Fragment {
         semesterplanRegistration.setText(s.getReregistration().toString());
     }
 
-    private void writeToSharedPrefAndSendReq(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener, String url, SharedPreferences sharedPref) {
+    private void writeToSharedPrefAndSendReq(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener,SharedPreferences sharedPref) {
         long currentTime = System.currentTimeMillis();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong(SHARED_PREFS_CATCH_DATE, currentTime);
         editor.commit();
-        sendRequest(jsonArrayListener, errorListener, url);
+        sendRequest(jsonArrayListener, errorListener);
     }
 
-    private void sendRequest(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener, String url) {
-        JsonArrayRequest jsObjRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
+    private void sendRequest(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener) {
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest(Const.semesterPlanUpdater.SEMESTERPLAN_URL_JSON, jsonArrayListener, errorListener);
         VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
     }
 
