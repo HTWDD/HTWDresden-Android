@@ -80,4 +80,24 @@ public class MensaHelper {
 
         return meals;
     }
+
+    /**
+     * Liefert die Mensa URL zum jeweiligen Modus. Aktuell wird nur die Mensa Reichenbachstraße Unterstützt
+     *
+     * @param modus 0: aktuelles Angebot, 1: Angebot der aktuellen Woche, 2: Angebot der nächsten Woche
+     * @return URL des Speiseplans
+     */
+    public static String getMensaUrl(final int modus) {
+        switch (modus) {
+            // Angebot aktuelle Woche
+            case 1:
+                return "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
+            // Angebot nächste Woche
+            case 2:
+                return "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
+            // Angebot heute
+            default:
+                return "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + 9;
+        }
+    }
 }

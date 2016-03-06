@@ -153,21 +153,7 @@ public class MensaDetailFragment extends Fragment {
         });
 
         // Wähle URL aus
-        String url;
-        switch (modus) {
-            // Angebot aktuelle Woche
-            case 1:
-                url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
-                break;
-            // Angebot nächste Woche
-            case 2:
-                url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
-                break;
-            // Angebot heute
-            default:
-                url = "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID;
-                break;
-        }
+        String url = MensaHelper.getMensaUrl(modus);
 
         // Überprüfe Internetverbindung
         if (!VolleyDownloader.CheckInternet(getActivity())) {
