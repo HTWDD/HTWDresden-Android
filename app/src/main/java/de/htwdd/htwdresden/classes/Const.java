@@ -23,6 +23,10 @@ public final class Const {
         public static final String ROOM_TIMETABLE_ROOM = "ROOM_TIMETABLE_ROOM";
     }
 
+    public static final class IntentParams {
+        public static final String START_WITH_FRAGMENT = "START_FRAGMENT";
+    }
+
     public static final class preferencesKey {
         public static final String PREFERENCES_AUTO_MUTE = "autoMute";
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
