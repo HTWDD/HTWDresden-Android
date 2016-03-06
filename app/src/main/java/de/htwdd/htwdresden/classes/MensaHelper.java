@@ -15,11 +15,11 @@ import de.htwdd.htwdresden.R;
  *
  * @author Kay Förster
  */
-public class Mensa {
+public class MensaHelper {
     private Context context;
     private short mensaId;
 
-    public Mensa(Context context, short mensaId) {
+    public MensaHelper(Context context, short mensaId) {
         this.context = context;
         this.mensaId = mensaId;
     }

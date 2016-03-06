@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import de.htwdd.htwdresden.adapter.MensaArrayAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Meal;
-import de.htwdd.htwdresden.classes.Mensa;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 
 
@@ -44,7 +44,7 @@ public class MensaDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         meals = new ArrayList<>();
-        mensaArrayAdapter = new MensaArrayAdapter(getActivity(),meals);
+        mensaArrayAdapter = new MensaArrayAdapter(getActivity(), meals);
 
         // Überprüfe Bundle & setze Modus
         Bundle bundle = getArguments();
@@ -121,18 +121,18 @@ public class MensaDetailFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
                 meals.clear();
 
-                Mensa mensa = new Mensa(getActivity(), mensaID);
+                MensaHelper mensaHelper = new MensaHelper(getActivity(), mensaID);
                 switch (modus) {
                     case 1:
                     case 2:
                         // Ändere Encoding
                         response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                         // Parse Ergebniss
-                        meals.addAll(mensa.parseCompleteWeek(response));
+                        meals.addAll(mensaHelper.parseCompleteWeek(response));
                         break;
                     default:
                         // Parse Ergebniss
-                        meals.addAll(mensa.parseCurrentDay(response));
+                        meals.addAll(mensaHelper.parseCurrentDay(response));
                         break;
                 }
 
@@ -155,12 +155,15 @@ public class MensaDetailFragment extends Fragment {
         // Wähle URL aus
         String url;
         switch (modus) {
+            // Angebot aktuelle Woche
             case 1:
                 url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
                 break;
+            // Angebot nächste Woche
             case 2:
                 url = "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
                 break;
+            // Angebot heute
             default:
                 url = "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID;
                 break;

@@ -45,7 +45,7 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.Meal;
-import de.htwdd.htwdresden.classes.Mensa;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
@@ -427,8 +427,8 @@ public class OverviewFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Mensa mensa = new Mensa(context, mensaID);
-                        ArrayList<Meal> meals = mensa.parseCurrentDay(response);
+                        MensaHelper mensaHelper = new MensaHelper(context, mensaID);
+                        ArrayList<Meal> meals = mensaHelper.parseCurrentDay(response);
 
                         int count = meals.size();
                         if (count == 0) {
