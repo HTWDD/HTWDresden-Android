@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ public class ManagementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_management, container, false);
+        final View view = inflater.inflate(R.layout.fragment_management, container, false);
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
@@ -88,9 +89,10 @@ public class ManagementFragment extends Fragment {
         });
 
 
+
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 
-        Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
@@ -113,7 +115,7 @@ public class ManagementFragment extends Fragment {
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // Bestimme Fehlermeldung
@@ -136,7 +138,7 @@ public class ManagementFragment extends Fragment {
             }
         };
 
-        String url = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
+        final String url = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
 
         long currentTime = System.currentTimeMillis();
 
@@ -145,15 +147,35 @@ public class ManagementFragment extends Fragment {
         System.out.println("Long: " + highScore);
         if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE)) {
             //System.out.println("NO VALUE YET");
-            writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref, currentTime);
+            writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
         } else {
             //System.out.println("VALUE exists");
             //wenn mehr als 3 Wochen dann mach Req wieder
             if ((currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL) {
-                writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref, currentTime);
+                writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
             } else System.out.println("TAKEN FROM SCHARED_PREFS");
         }
 
+        updateSemPlanView(view, sharedPref);
+
+        final SwipeRefreshLayout swipeRefrSemPlan= (SwipeRefreshLayout) view.findViewById(R.id.swipeRefr_SemPlan);
+        swipeRefrSemPlan.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("REFRESH CALLED", "onRefresh called from SwipeRefreshLayout");
+
+                        writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, url, sharedPref);
+                        updateSemPlanView(view, sharedPref);
+                        swipeRefrSemPlan.setRefreshing(false);
+                    }
+                }
+        );
+
+        return view;
+    }
+
+    private void updateSemPlanView(View view, SharedPreferences sharedPref) {
         try {
             String sJSON = sharedPref.getString(SHARED_PREFS_SEMESTER_PLAN_JSON, "LEEEEEEEEEEEERRRRRRRRR");
             System.out.println(sJSON);
@@ -163,7 +185,6 @@ public class ManagementFragment extends Fragment {
         } catch (JSONException e) {
             System.out.println("StundenPlanJSON not ready yet");
         }
-        return view;
     }
 
     private int getYear() {
@@ -187,7 +208,8 @@ public class ManagementFragment extends Fragment {
         semesterplanRegistration.setText(s.getReregistration().toString());
     }
 
-    private void writeToSharedPrefAndSendReq(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener, String url, SharedPreferences sharedPref, long currentTime) {
+    private void writeToSharedPrefAndSendReq(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener, String url, SharedPreferences sharedPref) {
+        long currentTime = System.currentTimeMillis();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong(SHARED_PREFS_CATCH_DATE, currentTime);
         editor.commit();
