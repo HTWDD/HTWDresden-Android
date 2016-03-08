@@ -1,18 +1,19 @@
-package de.htwdd.htwdresden.classes.semesterplan;
+package de.htwdd.htwdresden.types.semesterplan;
 
 /**
- * Created by warik on 04.03.16.
+ * Class to store FreeDays
+ * Created by Vitali Drazdovich , Artyom Dyadechkin
  */
 public final class FreeDay extends Period {
     private String NAME;
 
     @Override
     public String toString() {
-        return NAME + ": " + super.toString() + "\n";
+        return super.toString() + "\n";
     }
 
     public String getNAME() {
-        return NAME;
+        return NAME + "\n";
     }
 
     public String getBEGIN_DAY() {

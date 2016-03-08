@@ -1,5 +1,8 @@
-package de.htwdd.htwdresden.classes.semesterplan;
-
+package de.htwdd.htwdresden.types.semesterplan;
+/**
+ * Manages Semesterplan
+ * Created by Vitali Drazdovich , Artyom Dyadechkin
+ */
 import android.content.ContentValues;
 
 import org.json.JSONArray;
@@ -8,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
@@ -141,7 +145,18 @@ public class SemesterPlan implements IParseJSON, IGetContentValues {
         return this.year == year && this.type.equalsIgnoreCase(type);
     }
 
-    public static void main(String[] args) {
+    public int getActualYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public String getActualSemester() {
+        int mounth = Calendar.getInstance().get(Calendar.MONTH);
+        mounth = mounth + 1;
+        if (mounth > 2 && mounth < 9) return "S";
+        return "W";
+    }
+
+   /* public static void main(String[] args) {
         SemesterPlan sp = new SemesterPlan(
                 2015,
                 "w",
@@ -152,6 +167,6 @@ public class SemesterPlan implements IParseJSON, IGetContentValues {
                 new Period("2015-09-01", "2015-09-01")
         );
         System.out.println(sp.toString());
-    }
+    }*/
 
 }

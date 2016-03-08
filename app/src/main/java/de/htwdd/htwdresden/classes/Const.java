@@ -52,6 +52,14 @@ public final class Const {
                 Time.valueOf("18:20:00"),
                 Time.valueOf("20:00:00")};
 
+        public static int getMinutsBeginDS(int i){
+            if(i>=beginDS.length || i<0 ) return 0;
+            return (int)beginDS[i].getTime()/1000/60 + 60;
+        }
+        public static int getMinutsEndDS(int i){
+            if(i>=endDS.length || i<0 ) return 0;
+            return (int) endDS[i].getTime()/1000/60 + 60;
+        }
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
         }
@@ -72,7 +80,8 @@ public final class Const {
 
             if (currentTime >= endDS[6].getTime() + offset) {
                 return 0;
-            } else if (currentTime >= beginDS[6].getTime() + offset)
+            }
+            else if (currentTime >= beginDS[6].getTime() + offset)
                 return 7;
             else if (currentTime >= beginDS[5].getTime() + offset)
                 return 6;
@@ -89,6 +98,7 @@ public final class Const {
 
             return 0;
         }
+
     }
 
     public static final class database {
@@ -144,5 +154,7 @@ public final class Const {
         public static final long UPDATE_INTERVAL = 3 * 7 * 24 * 60 * 60 * 1000;
         public static final String SEMESTERPLAN_URL_JSON = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
     }
-
+    public static final class VolumeController{
+        public static final String PREFERENCES_AUTO_STUMMSCHALTEN="autoStummSchalten";
+    }
 }

@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.semesterplan.FreeDay;
-import de.htwdd.htwdresden.classes.semesterplan.Period;
-import de.htwdd.htwdresden.classes.semesterplan.SemesterPlan;
+import de.htwdd.htwdresden.types.semesterplan.FreeDay;
+import de.htwdd.htwdresden.types.semesterplan.Period;
+import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
 
 public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
     public SemesterPlanDAO(SQLiteOpenHelper sqLiteOpenHelper) {

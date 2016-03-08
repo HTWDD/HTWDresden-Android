@@ -110,4 +110,8 @@
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
     <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
+
+    <string name="preference_title_stummschalten">Automatisches Stummschalten</string>
+    <string name="preference_summary_stummschalten">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
+
 </resources>

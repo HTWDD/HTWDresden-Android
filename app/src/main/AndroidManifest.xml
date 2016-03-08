@@ -35,6 +35,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.htwdd.htwdresden.MainActivity" />
         </activity>
+        <service
+            android:name="de.htwdd.htwdresden.VolumeControllerService"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -40,4 +40,12 @@
             android:key="StgGrp"
             android:summary="@string/settings_studiengruppe_summary"/>
     </PreferenceCategory>
+    <PreferenceCategory android:title="Audio">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="autoStummSchalten"
+            android:summary="@string/preference_summary_stummschalten"
+            android:title="@string/preference_title_stummschalten" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

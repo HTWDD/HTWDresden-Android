@@ -24,13 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
-
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
-import de.htwdd.htwdresden.classes.semesterplan.FreeDay;
-import de.htwdd.htwdresden.classes.semesterplan.SemesterPlan;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.semesterplan.FreeDay;
+import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
 
 
 /**
@@ -50,6 +48,7 @@ public class ManagementFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_management, container, false);
         final SwipeRefreshLayout swipeRefrSemPlan = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefr_SemPlan);
+        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
@@ -90,9 +89,7 @@ public class ManagementFragment extends Fragment {
             }
         });
 
-
-        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-
+        //Hole das JSON-Objekt aus Const.SEMESTERPLAN_URL_JSON und initialisiere das Objekt von SemesterPlan
         final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -100,12 +97,12 @@ public class ManagementFragment extends Fragment {
                     try {
                         JSONObject semesterPlanJSON = response.getJSONObject(i);
                         SemesterPlan s = new SemesterPlan(semesterPlanJSON);
-                        System.out.println(s.isThisSemester(getYear(), getSemester()));
-                        if (s.isThisSemester(getYear(), getSemester())) {
+                        //System.out.println(s.isThisSemester(getYear(), getSemester()));
+                        if (s.isThisSemester(s.getActualYear(), s.getActualSemester())) {
                             SharedPreferences.Editor editor = sharedPref.edit();
                             editor.putString(SHARED_PREFS_SEMESTER_PLAN_JSON, semesterPlanJSON.toString());
                             editor.commit();
-                            System.out.println(s);
+                            //System.out.println(s);
                             setSemesterPlanView(s, getView());
                         }
                     } catch (JSONException e) {
@@ -121,7 +118,6 @@ public class ManagementFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // Bestimme Fehlermeldung
                 int responseCode = VolleyDownloader.getResponseCode(error);
-
                 // Fehlermeldung anzeigen
                 String message;
                 switch (responseCode) {
@@ -139,33 +135,31 @@ public class ManagementFragment extends Fragment {
                 Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
                 // Refresh ausschalten
                 swipeRefrSemPlan.setRefreshing(false);
-
             }
         };
 
+        //die aktuelle Zeit für das ZeitStempel-Erstellen
         long currentTime = System.currentTimeMillis();
 
-        long highScore = sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1);
-        System.out.println("Long: " + highScore);
+        //long highScore = sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1);
+        //System.out.println("Long: " + highScore);
         if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE)) {
             //System.out.println("NO VALUE YET");
+            //wenn es keinen ZeitStempel gibt - die Daten werden zum ersten Mal geholt
             writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
         } else {
             //System.out.println("VALUE exists");
             //wenn mehr als 3 Wochen dann mach Req wieder
             if ((currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL) {
                 writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
-            } else System.out.println("TAKEN FROM SCHARED_PREFS");
+            } //else System.out.println("TAKEN FROM SCHARED_PREFS");
         }
-
-        updateSemPlanView(view, sharedPref);
-
 
         swipeRefrSemPlan.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.i("REFRESH CALLED", "onRefresh called from SwipeRefreshLayout");
+                        //Log.i("REFRESH CALLED", "onRefresh called from SwipeRefreshLayout");
                         writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
                         updateSemPlanView(view, sharedPref);
                         swipeRefrSemPlan.setRefreshing(false);
@@ -173,13 +167,15 @@ public class ManagementFragment extends Fragment {
                 }
         );
 
+        updateSemPlanView(view, sharedPref);
+
         return view;
     }
 
     private void updateSemPlanView(View view, SharedPreferences sharedPref) {
         try {
-            String sJSON = sharedPref.getString(SHARED_PREFS_SEMESTER_PLAN_JSON, "LEEEEEEEEEEEERRRRRRRRR");
-            Log.i("UPDATEING VIEW", sJSON);
+            String sJSON = sharedPref.getString(SHARED_PREFS_SEMESTER_PLAN_JSON, "LEER");
+            //Log.i("UPDATING VIEW", sJSON);
             JSONObject jsonObject = new JSONObject(sJSON);
             SemesterPlan semesterPlan = new SemesterPlan(jsonObject);
             setSemesterPlanView(semesterPlan, view);
@@ -188,21 +184,20 @@ public class ManagementFragment extends Fragment {
         }
     }
 
-    private int getYear() {
-        return Calendar.getInstance().get(Calendar.YEAR);
-    }
-
     private void setSemesterPlanView(SemesterPlan s, View view) {
         final TextView semesterplanBezeichnung = (TextView) view.findViewById(R.id.semesterplan_Bezeichnung);
         final TextView semesterplanLecturePeriod = (TextView) view.findViewById(R.id.semesterplan_lecturePeriod);
         final TextView semesterplanFreieTage = (TextView) view.findViewById(R.id.semesterplan_freieTage);
+        final TextView semesterplanFreieTageNamen = (TextView) view.findViewById(R.id.semesterplan_freieTageNamen);
         final TextView semesterplanPruefPeriod = (TextView) view.findViewById(R.id.semesterplan_pruefPeriod);
         final TextView semesterplanRegistration = (TextView) view.findViewById(R.id.semesterplan_reregistration);
 
         semesterplanBezeichnung.setText(s.getBezeichnung());
         semesterplanLecturePeriod.setText(s.getLecturePeriod().toString());
+        semesterplanFreieTageNamen.setText("");
         semesterplanFreieTage.setText("");
         for (FreeDay f : s.getFreeDays()) {
+            semesterplanFreieTageNamen.append(f.getNAME());
             semesterplanFreieTage.append(f.toString());
         }
         semesterplanPruefPeriod.setText(s.getExamsPeriod().toString());
@@ -213,19 +208,12 @@ public class ManagementFragment extends Fragment {
         long currentTime = System.currentTimeMillis();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong(SHARED_PREFS_CATCH_DATE, currentTime);
-        editor.commit();
+        editor.apply();
         sendRequest(jsonArrayListener, errorListener);
     }
 
     private void sendRequest(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener) {
         JsonArrayRequest jsObjRequest = new JsonArrayRequest(Const.semesterPlanUpdater.SEMESTERPLAN_URL_JSON, jsonArrayListener, errorListener);
         VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
-    }
-
-    private String getSemester() {
-        int mounth = Calendar.getInstance().get(Calendar.MONTH);
-        mounth = mounth + 1;
-        if (mounth > 2 && mounth < 9) return "S";
-        return "W";
     }
 }
