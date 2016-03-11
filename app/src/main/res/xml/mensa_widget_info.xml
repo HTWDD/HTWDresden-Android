@@ -4,7 +4,7 @@
     android:initialLayout="@layout/widget_mensa"
     android:minHeight="40dp"
     android:minWidth="250dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/preview_widget_mensa"
     android:resizeMode="vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"/>
