@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mensa_date">Speiseplan von %s</string>
+    <string name="mensa_date_today">heute</string>
+    <string name="mensa_wait_for_sync">Daten werden demnächst abgerufen!</string>
+</resources>

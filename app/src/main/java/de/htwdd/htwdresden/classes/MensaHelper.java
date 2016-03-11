@@ -82,7 +82,32 @@ public class MensaHelper {
     }
 
     /**
-     * Liefert die Mensa URL zum jeweiligen Modus. Aktuell wird nur die Mensa Reichenbachstraße Unterstützt
+     * Liefert eine Liste von Speisen für einen Tag aus der Wochenübersicht
+     *
+     * @param result HTML-Der Wochenübersicht
+     * @param day    Calendertag für welchen das Essen geliefert werden soll
+     * @return Liste der Essen
+     */
+    public ArrayList<Meal> parseDayFromWeek(final String result, int day) {
+        ArrayList<Meal> meals = new ArrayList<>();
+        Pattern pattern = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?>(\\d?\\d,\\d\\d|ausverkauft| )");
+
+        // Teile Speiseplan in einzelne Tage und übergebe entsprechenden Tag an Matcher
+        String token[] = result.split("class=\"speiseplan\"");
+        Matcher matcher = pattern.matcher(token[day - 1]);
+
+        while (matcher.find()) {
+            Meal meal = new Meal();
+            meal.setTitle(matcher.group(1));
+            meal.setPrice(matcher.group(2) + "€");
+            meals.add(meal);
+        }
+
+        return meals;
+    }
+
+    /**
+     * Liefert die Mensa URL zum jeweiligen Modus. Aktuell wird nur die Mensa Reichenbachstraße unterstützt
      *
      * @param modus 0: aktuelles Angebot, 1: Angebot der aktuellen Woche, 2: Angebot der nächsten Woche
      * @return URL des Speiseplans
