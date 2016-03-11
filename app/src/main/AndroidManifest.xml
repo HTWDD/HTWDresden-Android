@@ -47,7 +47,9 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
             tools:replace="android:theme" />
 
-        <receiver android:name=".MensaWidget">
+        <receiver
+            android:name=".MensaWidget"
+            android:label="@string/navi_mensa">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
