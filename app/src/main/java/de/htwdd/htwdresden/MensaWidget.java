@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -35,7 +37,9 @@ public class MensaWidget extends AppWidgetProvider {
 
     static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId) {
         // Construct the RemoteViews object
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_mensa);
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        final int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+        final RemoteViews views = getRemoteViews(context, minHeight);
 
         // Erstelle Intent zum Starten der App
         Intent intent = new Intent(context, MainActivity.class);
@@ -115,7 +119,8 @@ public class MensaWidget extends AppWidgetProvider {
                 // Anzeigen der Gerichte
                 Resources ressource = context.getResources();
                 String packageName = context.getPackageName();
-                for (int i = 1; i < 4 + 1; i++) {
+                int cells = minHeight <= 65 ? 4 : 8;
+                for (int i = 1; i < cells + 1; i++) {
                     int mealName = ressource.getIdentifier("widget_mensa_item_meal_" + i, "id", packageName);
                     int mealPrice = ressource.getIdentifier("widget_mensa_item_price_" + i, "id", packageName);
 
@@ -155,6 +160,27 @@ public class MensaWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId);
+
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    }
+
+
+    /**
+     * Determine appropriate view based on width provided.
+     *
+     * @param context aktueller App-Context
+     * @param height  aktuelle Größe des Widgets in dp
+     * @return RemoteView für die jeweilige Anzahl
+     */
+    private static RemoteViews getRemoteViews(@NonNull final Context context, int height) {
+        if (Const.widget.getCellsForSize(height) == 1)
+            return new RemoteViews(context.getPackageName(), R.layout.widget_mensa_list);
+        else return new RemoteViews(context.getPackageName(), R.layout.widget_mensa_grid);
     }
 }
 

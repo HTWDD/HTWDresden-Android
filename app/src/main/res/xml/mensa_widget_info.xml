@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialKeyguardLayout="@layout/widget_mensa"
-    android:initialLayout="@layout/widget_mensa"
+    android:initialKeyguardLayout="@layout/widget_mensa_list"
+    android:initialLayout="@layout/widget_mensa_list"
     android:minHeight="40dp"
     android:minWidth="250dp"
     android:previewImage="@drawable/preview_widget_mensa"

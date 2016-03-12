@@ -123,6 +123,19 @@ public final class Const {
         }
     }
 
+
+    public static final class widget {
+        /**
+         * Gibt die Anzahl der Zellen für eine gegebene Widgetgröße
+         *
+         * @param size Widget größe in dp.
+         * @return Anzahl der Zellen
+         */
+        public static int getCellsForSize(final int size) {
+            return ((size - 30) / 70) + 1;
+        }
+    }
+
     public static final class database {
         public static final String TYPE_TEXT = " TEXT";
         public static final String TYPE_FLOAT = " REAL";
