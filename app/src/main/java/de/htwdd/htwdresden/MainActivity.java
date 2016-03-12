@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                     case R.id.navigation_mensa:
                         fragment = new MensaFragment();
                         break;
+                    case R.id.navigation_htwEvents:
+                        fragment = new HTWDDEventsProfileFragment();
+                        break;
                     case R.id.navigation_timetable:
                         fragment = new TimetableFragment();
                         break;

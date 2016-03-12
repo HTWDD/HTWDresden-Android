@@ -186,4 +186,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="events_profile_user_name">Name:</string>
+    <string name="events_profile_user_id">ID</string>
+    <string name="navi_head_htwevents">HTWEvents BETA</string>
+    <string name="navi_htwevents">Meine Events</string>
 </resources>

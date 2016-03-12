@@ -33,6 +33,14 @@
                     android:title="@string/navi_campus" />
             </menu>
         </item>
+        <item android:title="@string/navi_head_htwevents">
+            <menu>
+                <item
+                    android:id="@+id/navigation_htwEvents"
+                    android:icon="@drawable/ic_settings_24dp"
+                    android:title="@string/navi_htwevents" />
+            </menu>
+        </item>
         <item android:title="@string/navi_head_settings">
             <menu>
                 <item
