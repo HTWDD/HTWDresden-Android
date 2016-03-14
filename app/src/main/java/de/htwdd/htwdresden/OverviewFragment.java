@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
-import de.htwdd.htwdresden.classes.Meal;
+import de.htwdd.htwdresden.types.Meal;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;

@@ -22,7 +22,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.Meal;
+import de.htwdd.htwdresden.types.Meal;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 

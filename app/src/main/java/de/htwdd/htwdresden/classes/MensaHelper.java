@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.types.Meal;
 
 /**
  * Stellt Funktionen zum Parsen der Mensa-Webseite bereit.

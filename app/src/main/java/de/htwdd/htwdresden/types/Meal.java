@@ -1,4 +1,4 @@
-package de.htwdd.htwdresden.classes;
+package de.htwdd.htwdresden.types;
 
 public class Meal {
     private int id;
