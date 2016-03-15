@@ -37,8 +37,6 @@ import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
  * Fragement zur Übersicht aller wichtigen Uni-Einrichtungen
  */
 public class ManagementFragment extends Fragment {
-
-    public static final String SHARED_PREFS_SEMESTER_PLAN_JSON = "de.htwdd.htwdresden.SemestePlanJSON";
     public static final String SHARED_PREFS_CATCH_DATE = "de.htwdd.htwdresden.catchDate";
 
     public ManagementFragment() {
@@ -71,7 +69,7 @@ public class ManagementFragment extends Fragment {
                             editor.apply();
                             setSemesterplanviewText(semesterPlan, getView());
 
-                            foundActualSemesterplan=true;
+                            foundActualSemesterplan = true;
                         }
                     } catch (JSONException e) {
                         Log.e("JSON SEMESTERPLAN", "JSON IS BROKEN");
@@ -79,7 +77,8 @@ public class ManagementFragment extends Fragment {
                         Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
                     }
                 }
-                if(!foundActualSemesterplan) Snackbar.make(view, R.string.info_error_semesterlan_outofdate, Snackbar.LENGTH_LONG).show();
+                if (!foundActualSemesterplan)
+                    Snackbar.make(view, R.string.info_error_semesterlan_outofdate, Snackbar.LENGTH_LONG).show();
             }
         };
 
@@ -175,7 +174,7 @@ public class ManagementFragment extends Fragment {
             SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(SemesterPlan.getActualYear(), SemesterPlan.getActualSemester());
             setSemesterplanviewText(semesterPlan, view);
         } catch (Exception e) {
-            Log.e("SEMESTERPLAN", "SQL ERROR");
+            Log.e("UPDATE SEMESTERPLAN", "SQLite ERROR");
             Log.e(e.getClass().getName(), e.getMessage() + " ", e);
             //TODO BEI EINEM FEHLER BEIM LESEN AUS DER LOKALEN DATENBANK DIE DATEN NOCHMAL AUS INTERNET HOLEN ?
             //TODO snackbar stürtzt mit NullPointerException ab ( view ? )
@@ -204,8 +203,6 @@ public class ManagementFragment extends Fragment {
             semesterplanFreieTageNamen.append(f.getName());
             semesterplanFreieTage.append(f.toString());
         }
-
-
     }
 
     private void sendRequestToGetSemesterplan(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener) {
