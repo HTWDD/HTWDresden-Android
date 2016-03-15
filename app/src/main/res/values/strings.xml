@@ -25,7 +25,8 @@
 
     <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
-    <string name="info_error_semesterlan_outofdate">Der Semesterplan auf dem Server ist nicht mehr aktuell</string>
+    <string name="info_error_semesterlan_outofdate">Der Semesterplan ist auf dem Server nicht mehr aktuell</string>
+    <string name="info_error_read_sqlite">Fehler beim Lesen aus der lokalen Datenbank</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
     <string name="info_error_error">Fehler beim Löschen</string>

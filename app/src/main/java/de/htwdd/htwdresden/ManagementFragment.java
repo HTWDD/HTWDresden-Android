@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -176,9 +177,7 @@ public class ManagementFragment extends Fragment {
         } catch (Exception e) {
             Log.e("UPDATE SEMESTERPLAN", "SQLite ERROR");
             Log.e(e.getClass().getName(), e.getMessage() + " ", e);
-            //TODO BEI EINEM FEHLER BEIM LESEN AUS DER LOKALEN DATENBANK DIE DATEN NOCHMAL AUS INTERNET HOLEN ?
-            //TODO snackbar stürtzt mit NullPointerException ab ( view ? )
-            //Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.info_error_read_sqlite, Toast.LENGTH_SHORT).show();
         }
     }
 
