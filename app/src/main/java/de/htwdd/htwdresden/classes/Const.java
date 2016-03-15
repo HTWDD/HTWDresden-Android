@@ -62,18 +62,18 @@ public final class Const {
                 Time.valueOf("07:30:00"),
                 Time.valueOf("09:20:00"),
                 Time.valueOf("11:10:00"),
-                Time.valueOf("13:10:00"),
-                Time.valueOf("15:00:00"),
-                Time.valueOf("16:50:00"),
-                Time.valueOf("18:30:00")};
+                Time.valueOf("13:20:00"),
+                Time.valueOf("15:10:00"),
+                Time.valueOf("17:00:00"),
+                Time.valueOf("18:40:00")};
         public static final Time[] endDS = {
                 Time.valueOf("09:00:00"),
                 Time.valueOf("10:50:00"),
                 Time.valueOf("12:40:00"),
-                Time.valueOf("14:40:00"),
-                Time.valueOf("16:30:00"),
-                Time.valueOf("18:20:00"),
-                Time.valueOf("20:00:00")};
+                Time.valueOf("14:50:00"),
+                Time.valueOf("16:40:00"),
+                Time.valueOf("18:30:00"),
+                Time.valueOf("20:10:00")};
 
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
