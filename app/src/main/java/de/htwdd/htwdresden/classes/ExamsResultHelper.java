@@ -67,6 +67,7 @@ public class ExamsResultHelper {
                 Const.internet.WEBSERVICE_URL_HISQIS + "getcourses" +
                         "?sNummer=s" + sharedPreferences.getString("sNummer", "") +
                         "&RZLogin=" + Uri.encode(sharedPreferences.getString("RZLogin", "")),
+                null,
                 getcoursesListener,
                 errorListener);
         arrayRequest.setTag(Const.internet.TAG_EXAM_RESULTS);
@@ -95,7 +96,7 @@ public class ExamsResultHelper {
                     "&POVersion=" + jsonObject.getString("POVersion");
 
             // Noten für den entsprechenden Studiengang laden
-            JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url, arrayListener, errorListener);
+            JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, arrayListener, errorListener);
             arrayRequest.setTag(Const.internet.TAG_EXAM_RESULTS);
             VolleyDownloader.getInstance(context).addToRequestQueue(arrayRequest);
             queueCount.countQueue++;
