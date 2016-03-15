@@ -2,33 +2,34 @@ package de.htwdd.htwdresden.types.semesterplan;
 
 /**
  * Class to store Periods
- * Created by Vitali Drazdovich , Artyom Dyadechkin
+ * Created by Vitali Drazdovich , Artyom Dyadichkin
  */
 public class Period {
 
-    private String BEGIN_DAY;
-    private String END_DAY;
-    private StringBuilder dateBild;
+    private String beginDay;
+    private String endDay;
 
-    public Period(String BEGIN_DAY, String END_DAY) {
-        this.BEGIN_DAY = BEGIN_DAY;
-        this.END_DAY = END_DAY;
+    public Period(String beginDay, String endDay) {
+        this.beginDay = beginDay;
+        this.endDay = endDay;
     }
 
     @Override
     public String toString() {
-        return formDate(BEGIN_DAY) + " - " + formDate(END_DAY);
+        if (beginDay.equals(endDay)) return formDate(beginDay);
+        else return formDate(beginDay) + " - " + formDate(endDay);
     }
 
-    public String getBEGIN_DAY() {
-        return BEGIN_DAY;
+    public String getBeginDay() {
+        return beginDay;
     }
 
-    public String getEND_DAY() {
-        return END_DAY;
+    public String getEndDay() {
+        return endDay;
     }
 
     public String formDate(String date) {
+        StringBuilder dateBild;
         dateBild = new StringBuilder();
         dateBild.append((String) date.subSequence(8,10));
         dateBild.append(".");

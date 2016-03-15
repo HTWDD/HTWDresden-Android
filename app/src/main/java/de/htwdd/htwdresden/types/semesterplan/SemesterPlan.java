@@ -133,11 +133,11 @@ public class SemesterPlan implements IParseJSON, IGetContentValues {
 
     }
 
-    public String getBezeichnung() {
+    public String getBezeichnung(String winterBez, String sommerBez) {
         String semesterType;
         if (getType().equalsIgnoreCase("w"))
-            semesterType = "Wintersemester";
-        else semesterType = "Sommersemester";
+            semesterType = winterBez;
+        else semesterType = sommerBez;
         return semesterType + " " + getYear();
     }
 
@@ -145,17 +145,18 @@ public class SemesterPlan implements IParseJSON, IGetContentValues {
         return this.year == year && this.type.equalsIgnoreCase(type);
     }
 
-    public int getActualYear() {
+    public static int getActualYear() {
         return Calendar.getInstance().get(Calendar.YEAR);
     }
 
-    public String getActualSemester() {
+    public static String getActualSemester() {
         int mounth = Calendar.getInstance().get(Calendar.MONTH);
         mounth = mounth + 1;
         if (mounth > 2 && mounth < 9) return "S";
         return "W";
     }
 
+    //als Beispiel für die Initialisierung.
    /* public static void main(String[] args) {
         SemesterPlan sp = new SemesterPlan(
                 2015,

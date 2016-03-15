@@ -25,9 +25,7 @@ public class VolumeControllerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         VolumeController volumeController = new VolumeController(getApplicationContext());
-
         if (intent.getStringExtra("Mode").equals("turnSoundOff"))
             volumeController.turnSoundOff();
         else if (intent.getStringExtra("Mode").equals("turnSoundOn"))

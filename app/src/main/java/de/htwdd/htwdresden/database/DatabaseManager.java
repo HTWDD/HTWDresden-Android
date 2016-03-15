@@ -13,7 +13,7 @@ import de.htwdd.htwdresden.classes.Const;
  */
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "HTWDresden.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 5;
 
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,33 +52,33 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Const.database.RoomTimetableEntry.COLUMN_NAME_PROFESSOR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.RoomTimetableEntry.COLUMN_NAME_WEEKSONLY + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.RoomTimetableEntry.COLUMN_NAME_ROOMS + Const.database.TYPE_TEXT + ")");
-        /*sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.SemesterPlanTable.TABLE_NAME + " (" +
-                Const.database.SemesterPlanTable._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +//1
-                Const.database.SemesterPlanTable.COLUMN_NAME_TYPE + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//2
-                Const.database.SemesterPlanTable.COLUMN_NAME_YEAR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//3
-                Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//4
-                Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//5
-                Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//6
-                Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//7
-                Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//8
-                Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP + //9
-                Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//10
-                Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_END + Const.database.TYPE_TEXT + ")");//11
+        sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.SemesterPlanTable.TABLE_NAME + " (" +
+                Const.database.SemesterPlanTable._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +//0
+                Const.database.SemesterPlanTable.COLUMN_NAME_TYPE + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//1
+                Const.database.SemesterPlanTable.COLUMN_NAME_YEAR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//2
+                Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//3
+                Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//4
+                Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//5
+                Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//6
+                Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//7
+                Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP + //8
+                Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +//9
+                Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_END + Const.database.TYPE_TEXT + ")");//10
         sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.FreeDaysTable.TABLE_NAME + " (" +
                 Const.database.FreeDaysTable._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +
-                "FOREIGN KEY(" + Const.database.FreeDaysTable.COLUMN_NAME_PARENT_ID + ") REFERENCES " +
-                Const.database.SemesterPlanTable.TABLE_NAME + "(" + Const.database.SemesterPlanTable._ID + ")" + Const.database.COMMA_SEP +
-                Const.database.FreeDaysTable.COLUMN_NAME_NAME + Const.database.TYPE_TEXT + Const.database.COMMA_SEP + //12
+                Const.database.FreeDaysTable.COLUMN_NAME_PARENT_ID + Const.database.TYPE_INT + Const.database.COMMA_SEP +
+                Const.database.FreeDaysTable.COLUMN_NAME_BEZ + Const.database.TYPE_TEXT + Const.database.COMMA_SEP + //12
                 Const.database.FreeDaysTable.COLUMN_NAME_FREE_BEGIN + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.FreeDaysTable.COLUMN_NAME_FREE_END + Const.database.TYPE_TEXT + ")");*/
+                Const.database.FreeDaysTable.COLUMN_NAME_FREE_END + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
+                " FOREIGN KEY(" + Const.database.FreeDaysTable.COLUMN_NAME_PARENT_ID + ") REFERENCES " + Const.database.SemesterPlanTable.TABLE_NAME + "(" + Const.database.SemesterPlanTable._ID + ")" +")");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.TimetableEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.RoomTimetableEntry.TABLE_NAME);
-        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.SemesterPlanTable.TABLE_NAME);
-        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.FreeDaysTable.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.SemesterPlanTable.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.FreeDaysTable.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

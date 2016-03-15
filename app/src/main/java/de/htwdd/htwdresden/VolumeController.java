@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +66,7 @@ public class VolumeController {
      * Wenn es aktuell eine Vorlesung gibt, wird das Handy stummgeschaltet
      */
     public void turnSoundOff() {
+        Log.e("VOLUME_CONTROLLER","TURNSOUND OFF");
         // Stunde bestimmen
         Calendar calendar = GregorianCalendar.getInstance();
         int current_time = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
@@ -114,6 +116,7 @@ public class VolumeController {
      * Schaltet das Handy wieder in den Normalen-Modus
      */
     public void turnSoundOn() {
+        Log.e("VOLUME_CONTROLLER","TURNSOUND ON");
         //Log.i("turnSoundOn","Entered");
         //LOAD, DID WE CHANGE VOLUME MODE OR NOT
         int mode = getVolumeChangedStatus();

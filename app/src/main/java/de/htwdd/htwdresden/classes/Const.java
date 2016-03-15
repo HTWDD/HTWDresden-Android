@@ -136,13 +136,13 @@ public final class Const {
             public static final String COLUMN_NAME_LECTURE_PERIOD_END = "lec_per_end";
             public static final String COLUMN_NAME_EXAM_PERIOD_BEGIN = "ex_per_begin";
             public static final String COLUMN_NAME_EXAM_PERIOD_END = "ex_per_end";
-            public static final String COLUMN_NAME_REG_PERIOD_BEGIN = "reg_per_end";
+            public static final String COLUMN_NAME_REG_PERIOD_BEGIN = "reg_per_begin";
             public static final String COLUMN_NAME_REG_PERIOD_END = "reg_per_end";
         }
 
         public static class FreeDaysTable implements BaseColumns {
             public static final String TABLE_NAME = "FreeDays";
-            public static final String COLUMN_NAME_NAME = "name";
+            public static final String COLUMN_NAME_BEZ = "days_bez";
             public static final String COLUMN_NAME_FREE_BEGIN = "free_begin";
             public static final String COLUMN_NAME_FREE_END = "free_end";
             public static final String COLUMN_NAME_PARENT_ID = "parent_id";

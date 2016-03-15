@@ -5,27 +5,27 @@ package de.htwdd.htwdresden.types.semesterplan;
  * Created by Vitali Drazdovich , Artyom Dyadechkin
  */
 public final class FreeDay extends Period {
-    private String NAME;
+    private String name;
 
     @Override
     public String toString() {
         return super.toString() + "\n";
     }
 
-    public String getNAME() {
-        return NAME + "\n";
+    public String getName() {
+        return name + "\n";
     }
 
-    public String getBEGIN_DAY() {
-        return super.getBEGIN_DAY();
+    public String getBeginDay() {
+        return super.getBeginDay();
     }
 
-    public String getEND_DAY() {
-        return super.getEND_DAY();
+    public String getEndDay() {
+        return super.getEndDay();
     }
 
-    public FreeDay(String NAME, String BEGIN_DAY, String END_DAY) {
-        super(BEGIN_DAY, END_DAY);
-        this.NAME = NAME;
+    public FreeDay(String name, String beginDay, String endDay) {
+        super(beginDay, endDay);
+        this.name = name;
     }
 }

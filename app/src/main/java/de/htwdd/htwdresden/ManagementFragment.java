@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.database.DatabaseManager;
+import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.semesterplan.FreeDay;
 import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
@@ -45,10 +47,75 @@ public class ManagementFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_management, container, false);
         final SwipeRefreshLayout swipeRefrSemPlan = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefr_SemPlan);
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        //Hole das JSON-Objekt aus Const.SEMESTERPLAN_URL_JSON und initialisiere das Objekt von SemesterPlan
+        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                boolean foundActualSemesterplan = false;
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject semesterPlanJSON = response.getJSONObject(i);
+                        SemesterPlan semesterPlan = new SemesterPlan(semesterPlanJSON);
+
+                        final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
+                        semesterPlanDAO.addSemesterPlan(semesterPlan);
+
+                        if (semesterPlan.isThisSemester(SemesterPlan.getActualYear(), SemesterPlan.getActualSemester())) {
+                            long currentTime = System.currentTimeMillis();
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putLong(SHARED_PREFS_CATCH_DATE, currentTime);
+                            editor.apply();
+                            setSemesterplanviewText(semesterPlan, getView());
+
+                            foundActualSemesterplan=true;
+                        }
+                    } catch (JSONException e) {
+                        Log.e("JSON SEMESTERPLAN", "JSON IS BROKEN");
+                        Log.e(e.getClass().getName(), e.getMessage() + " ", e);
+                        Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+                if(!foundActualSemesterplan) Snackbar.make(view, R.string.info_error_semesterlan_outofdate, Snackbar.LENGTH_LONG).show();
+            }
+        };
+
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Bestimme Fehlermeldung
+                int responseCode = VolleyDownloader.getResponseCode(error);
+                // Fehlermeldung anzeigen
+                String message;
+                switch (responseCode) {
+                    case Const.internet.HTTP_TIMEOUT:
+                        message = getString(R.string.info_internet_timeout);
+                        break;
+                    case Const.internet.HTTP_NO_CONNECTION:
+                    case Const.internet.HTTP_NOT_FOUND:
+                        message = getString(R.string.info_internet_no_connection);
+                        break;
+                    case Const.internet.HTTP_NETWORK_ERROR:
+                    default:
+                        message = getString(R.string.info_internet_error);
+                }
+                Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                swipeRefrSemPlan.setRefreshing(false);
+            }
+        };
+
+        swipeRefrSemPlan.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
+                        swipeRefrSemPlan.setRefreshing(false);
+                    }
+                }
+        );
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
@@ -89,102 +156,35 @@ public class ManagementFragment extends Fragment {
             }
         });
 
-        //Hole das JSON-Objekt aus Const.SEMESTERPLAN_URL_JSON und initialisiere das Objekt von SemesterPlan
-        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject semesterPlanJSON = response.getJSONObject(i);
-                        SemesterPlan s = new SemesterPlan(semesterPlanJSON);
-                        //System.out.println(s.isThisSemester(getYear(), getSemester()));
-                        if (s.isThisSemester(s.getActualYear(), s.getActualSemester())) {
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString(SHARED_PREFS_SEMESTER_PLAN_JSON, semesterPlanJSON.toString());
-                            editor.commit();
-                            //System.out.println(s);
-                            setSemesterPlanView(s, getView());
-                        }
-                    } catch (JSONException e) {
-                        Log.e("JSON SEMESTERPLAN", "JSON IS BROKEN");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Bestimme Fehlermeldung
-                int responseCode = VolleyDownloader.getResponseCode(error);
-                // Fehlermeldung anzeigen
-                String message;
-                switch (responseCode) {
-                    case Const.internet.HTTP_TIMEOUT:
-                        message = getString(R.string.info_internet_timeout);
-                        break;
-                    case Const.internet.HTTP_NO_CONNECTION:
-                    case Const.internet.HTTP_NOT_FOUND:
-                        message = getString(R.string.info_internet_no_connection);
-                        break;
-                    case Const.internet.HTTP_NETWORK_ERROR:
-                    default:
-                        message = getString(R.string.info_internet_error);
-                }
-                Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-                // Refresh ausschalten
-                swipeRefrSemPlan.setRefreshing(false);
-            }
-        };
-
-        //die aktuelle Zeit für das ZeitStempel-Erstellen
-        long currentTime = System.currentTimeMillis();
-
-        //long highScore = sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1);
-        //System.out.println("Long: " + highScore);
         if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE)) {
-            //System.out.println("NO VALUE YET");
-            //wenn es keinen ZeitStempel gibt - die Daten werden zum ersten Mal geholt
-            writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
+            sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
         } else {
-            //System.out.println("VALUE exists");
-            //wenn mehr als 3 Wochen dann mach Req wieder
+            long currentTime = System.currentTimeMillis();
             if ((currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL) {
-                writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
-            } //else System.out.println("TAKEN FROM SCHARED_PREFS");
+                sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
+            } else {
+                updateSemplanviewFromLocalsource(view);
+            }
         }
-
-        swipeRefrSemPlan.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        //Log.i("REFRESH CALLED", "onRefresh called from SwipeRefreshLayout");
-                        writeToSharedPrefAndSendReq(jsonArrayListener, errorListener, sharedPref);
-                        updateSemPlanView(view, sharedPref);
-                        swipeRefrSemPlan.setRefreshing(false);
-                    }
-                }
-        );
-
-        updateSemPlanView(view, sharedPref);
-
         return view;
     }
 
-    private void updateSemPlanView(View view, SharedPreferences sharedPref) {
+    private void updateSemplanviewFromLocalsource(View view) {
         try {
-            String sJSON = sharedPref.getString(SHARED_PREFS_SEMESTER_PLAN_JSON, "LEER");
-            //Log.i("UPDATING VIEW", sJSON);
-            JSONObject jsonObject = new JSONObject(sJSON);
-            SemesterPlan semesterPlan = new SemesterPlan(jsonObject);
-            setSemesterPlanView(semesterPlan, view);
-        } catch (JSONException e) {
-            System.out.println("StundenPlanJSON not ready yet");
+            final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
+            SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(SemesterPlan.getActualYear(), SemesterPlan.getActualSemester());
+            setSemesterplanviewText(semesterPlan, view);
+        } catch (Exception e) {
+            Log.e("SEMESTERPLAN", "SQL ERROR");
+            Log.e(e.getClass().getName(), e.getMessage() + " ", e);
+            //TODO BEI EINEM FEHLER BEIM LESEN AUS DER LOKALEN DATENBANK DIE DATEN NOCHMAL AUS INTERNET HOLEN ?
+            //TODO snackbar stürtzt mit NullPointerException ab ( view ? )
+            //Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
         }
     }
 
-    private void setSemesterPlanView(SemesterPlan s, View view) {
+    private void setSemesterplanviewText(SemesterPlan semesterPlan, View view) {
+        if (semesterPlan == null) return;
         final TextView semesterplanBezeichnung = (TextView) view.findViewById(R.id.semesterplan_Bezeichnung);
         final TextView semesterplanLecturePeriod = (TextView) view.findViewById(R.id.semesterplan_lecturePeriod);
         final TextView semesterplanFreieTage = (TextView) view.findViewById(R.id.semesterplan_freieTage);
@@ -192,28 +192,25 @@ public class ManagementFragment extends Fragment {
         final TextView semesterplanPruefPeriod = (TextView) view.findViewById(R.id.semesterplan_pruefPeriod);
         final TextView semesterplanRegistration = (TextView) view.findViewById(R.id.semesterplan_reregistration);
 
-        semesterplanBezeichnung.setText(s.getBezeichnung());
-        semesterplanLecturePeriod.setText(s.getLecturePeriod().toString());
+        semesterplanBezeichnung.setText(semesterPlan.getBezeichnung(getString(R.string.semesterplan_wintersemester), getString(R.string.semesterplan_sommersemester)));
+        semesterplanLecturePeriod.setText(semesterPlan.getLecturePeriod().toString());
+        semesterplanPruefPeriod.setText(semesterPlan.getExamsPeriod().toString());
+        semesterplanRegistration.setText(semesterPlan.getReregistration().toString());
+
         semesterplanFreieTageNamen.setText("");
         semesterplanFreieTage.setText("");
-        for (FreeDay f : s.getFreeDays()) {
-            semesterplanFreieTageNamen.append(f.getNAME());
+        if (semesterPlan.getFreeDays() == null) return;
+        for (FreeDay f : semesterPlan.getFreeDays()) {
+            semesterplanFreieTageNamen.append(f.getName());
             semesterplanFreieTage.append(f.toString());
         }
-        semesterplanPruefPeriod.setText(s.getExamsPeriod().toString());
-        semesterplanRegistration.setText(s.getReregistration().toString());
+
+
     }
 
-    private void writeToSharedPrefAndSendReq(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener,SharedPreferences sharedPref) {
-        long currentTime = System.currentTimeMillis();
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong(SHARED_PREFS_CATCH_DATE, currentTime);
-        editor.apply();
-        sendRequest(jsonArrayListener, errorListener);
-    }
-
-    private void sendRequest(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener) {
+    private void sendRequestToGetSemesterplan(Response.Listener<JSONArray> jsonArrayListener, Response.ErrorListener errorListener) {
         JsonArrayRequest jsObjRequest = new JsonArrayRequest(Const.semesterPlanUpdater.SEMESTERPLAN_URL_JSON, jsonArrayListener, errorListener);
         VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
     }
+
 }
