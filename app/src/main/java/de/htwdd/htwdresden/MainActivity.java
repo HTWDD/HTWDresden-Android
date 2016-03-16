@@ -1,11 +1,14 @@
 package de.htwdd.htwdresden;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -13,11 +16,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
 
@@ -29,7 +35,8 @@ import de.htwdd.htwdresden.interfaces.INavigation;
  * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
  */
 
-public class MainActivity extends AppCompatActivity implements INavigation {
+public class MainActivity extends AppCompatActivity implements INavigation,HTWDDEventsProfileFragment.OnFragmentInteractionListener {
+    private Activity mActivity;
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -57,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Toolbar einfügen
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
@@ -157,6 +163,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                         break;
                 }
 
+                if (!Const.HTWEvents.isUserSignedUp(MainActivity.this)) {
+                    if (position == R.id.navigation_htwEvents) {
+                        fragment = new HTWDDEventsSignUp();
+                    }
+                }
                 // Fragment ersetzen
                 fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
             }
@@ -254,5 +265,51 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     public void goToNavigationItem(@IdRes final int item) {
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(item));
+    }
+
+    public void onSignupButton(View view) {
+        EditText nicknameEText = (EditText) findViewById(R.id.htwddevents_profile_nickname);
+        EditText firstnameEText = (EditText) findViewById(R.id.htwddevents_profile_firstname);
+        EditText lastnameEText = (EditText) findViewById(R.id.htwddevents_profile_lastname);
+        EditText stgEText = (EditText) findViewById(R.id.htwddevents_profile_studiengang);
+        String nickname = nicknameEText.getText().toString();
+
+        if(nickname.length()< HTWDDEventsSignUp.NICKNAME_LENGTH){
+            Toast.makeText(MainActivity.this, "Nickname > 3", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(firstnameEText.length()< HTWDDEventsSignUp.FIRSTNAME_LENGTH){
+            Toast.makeText(MainActivity.this, "Bitte, den Vornamen eingeben oder auf Überspringen drücken.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(lastnameEText.length()< HTWDDEventsSignUp.LASTNAME_LENGTH){ 
+            Toast.makeText(MainActivity.this, "Bitte, den Namen eingeben oder auf Überspringen drücken.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(stgEText.length() < HTWDDEventsSignUp.STG_LENGTH){
+            Toast.makeText(MainActivity.this, "Studiengang eingeben.", Toast.LENGTH_SHORT).show();
+        }
+        Log.e("YOUT INTERED", nickname+";");
+        
+        
+        if(/*sendToPHPScript(daten)*/true){
+            //setSignedUpPref(this,true);
+            //Const.HTWEvents.goToFragment(this, new HTWDDEventsProfileFragment());
+        }
+        else{
+
+            //bleiben in diesem Fragement
+        }
+    }
+
+    private void setSignedUpPref(Activity activity, boolean is) {
+        SharedPreferences sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean("SignedUp",is);
+    }
+
+    @Override
+    public void onProfileFragmentInteraction(String string){
+
     }
 }

@@ -1,11 +1,8 @@
 package de.htwdd.htwdresden;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,14 +97,11 @@ public class HTWDDEventsProfileFragment extends Fragment {
             }
         };
 
-        if(true) {
-            Fragment newFragmentSignUp = new HTWDDEventsSignUp();
-            final FragmentManager fragmentManager = getFragmentManager();
-            String tag = "TEST STRING";
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, newFragmentSignUp, tag).commitAllowingStateLoss();
+        /*if(!Const.HTWEvents.isUserSignedUp(getActivity())) {
+            Const.HTWEvents.goToFragment(getActivity(), new HTWDDEventsSignUp());
             return view;
-        }
+        }*/
+
         sendRequest(jsonArrayListener, errorListener);
 
 
@@ -157,7 +151,6 @@ public class HTWDDEventsProfileFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onProfileFragmentInteraction(String string);
     }
 }

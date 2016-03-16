@@ -16,4 +16,7 @@
     <color name="exam_results_green">#090</color>
 
     <color name="overview_header">#8BC34A</color>
+    <color name="accent_material_dark">#ffffff</color>
+    <color name="colorBackground">#004faa</color>
+    <color name="primary_dark_material_dark">#0e4686</color>
 </resources>

@@ -1,5 +1,11 @@
 package de.htwdd.htwdresden.classes;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +15,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import de.htwdd.htwdresden.R;
 
 public final class Const {
 
@@ -154,5 +162,25 @@ public final class Const {
             public static final String COLUMN_NAME_KENNZEICHEN = "kennzeichen";
             public static final String TABLE_NAME = "ExamResults";
         }
+    }
+
+    public static final class HTWEvents{
+        static public boolean isUserSignedUp(Context context){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            return sharedPreferences.getBoolean("SignedUp",false);
+        }
+
+        static public void goToFragment(Activity activity, Fragment newFragmentSignUp){
+            final FragmentManager fragmentManager = activity.getFragmentManager();
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, newFragmentSignUp, "SIGN UP").commitAllowingStateLoss();
+        }
+
+        static public boolean isThereSNrAndPassw(Context context) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            return !(sharedPreferences.getString("sNummer", "").length() < 5 || sharedPreferences.getString("RZLogin", "").length() < 3);
+        }
+
+
     }
 }

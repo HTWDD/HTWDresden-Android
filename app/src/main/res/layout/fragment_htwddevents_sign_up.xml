@@ -1,96 +1,119 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:orientation="vertical"
+    android:theme="@style/Wizard"
     tools:context="de.htwdd.htwdresden.HTWDDEventsSignUp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_gravity="center">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:textColor="@color/timetable_blue"
-            android:text="Zusätzliche Daten über dich"
-            android:paddingBottom="16dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:fontFamily="sans_serf_thin"
-            android:textSize="20sp"
-            android:text="S72743"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="Nickname"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
+        android:layout_gravity="center"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:orientation="vertical">
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Vorname"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
-        <EditText
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:text="Zusätzliche Daten über dich"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nachname"
+            android:fontFamily="sans_serf_thin"
+            android:gravity="center"
+            android:text="S72743"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
-        <EditText
+            android:textSize="24sp"
+            android:layout_marginBottom="32dp"/>
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Studiengang"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
-        <View
+            android:labelFor="@+id/htwddevents_profile_nickname">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:gravity="center"
+                android:id="@+id/htwddevents_profile_nickname"
+                android:hint="Nickname"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="5dip"
-            android:layout_marginBottom="4dip"
-            android:layout_marginTop="4dip"
-            android:backgroundTint="@color/white"
-            android:background="?android:attr/dividerHorizontal"
-            />
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/htwddevents_profile_firstname">
+
+            <EditText
+                android:id="@+id/htwddevents_profile_firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:gravity="center"
+                android:hint="Vorname" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/htwddevents_profile_lastname">
+
+            <EditText
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/htwddevents_profile_lastname"
+                android:hint="Nachname" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/htwddevents_profile_studiengang">
+
+            <EditText
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/htwddevents_profile_studiengang"
+                android:hint="Studiengang" />
+        </android.support.design.widget.TextInputLayout>
+
         <LinearLayout
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/events_signup_button"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_width="match_parent"
-                android:text="Speichern"
                 android:layout_weight="0.5"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dip"
-                android:layout_marginBottom="4dip"
-                android:layout_marginTop="4dip"
-                android:backgroundTint="@color/white"
-                android:background="?android:attr/dividerHorizontal"
-                />
+                android:onClick="onSignupButton"
+                android:text="Speichern"
+                android:textColor="@color/white" />
 
             <Button
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Überspringen\nSpäter ausfüllen"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="?android:attr/selectableItemBackground"
-                />
+                android:text="Überspringen und später ausfüllen"
+                android:textAllCaps="true"
+                android:onClick="onSignupButton"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
