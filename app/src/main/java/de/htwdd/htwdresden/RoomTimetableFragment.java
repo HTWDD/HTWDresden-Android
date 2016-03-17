@@ -38,6 +38,7 @@ import java.util.GregorianCalendar;
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.QueueCount;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableRoomDAO;
@@ -370,6 +371,7 @@ public class RoomTimetableFragment extends Fragment {
         // Download der Informationen
         try {
             JsonArrayRequest stringRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetTimetable.php?Room=" + URLEncoder.encode(room, "utf-8"), jsonArrayListener, errorListener);
+            stringRequest.setTag(Const.internet.TAG_ROOM_TIMETABLE);
             VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
             // Anzahl der laufenden Requests zählen
             queueCount.countQueue++;
@@ -377,13 +379,5 @@ public class RoomTimetableFragment extends Fragment {
             e.printStackTrace();
             Toast.makeText(getActivity(), R.string.info_error, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * Hilfsklasse um die Anzahl der laufendenen Requeste zu zählen
-     */
-    public class QueueCount {
-        public long countQueue = 0;
-        public boolean update;
     }
 }

@@ -18,6 +18,7 @@
     <string name="navi_room_timetable">Belegungsplan</string>
     <string name="navi_exams">Noten / Prüfungen</string>
     <string name="navi_uni_administration">Verwaltung</string>
+    <string name="navi_campus">Campusplan</string>
     <string name="navi_settings">Einstellungen</string>
     <string name="navi_about">Über die App</string>
     <string name="navi_head_uni">Uni Alltag</string>
@@ -40,6 +41,10 @@
 
     <string name="settings_category_access_data">Zugangsdaten</string>
     <string name="settings_category_study">Studium</string>
+    <string name="settings_category_profs">Professoren</string>
+    <string name="settings_category_profs_summary">Einstellungen ausschließlich für Professoren</string>
+    <string name="settings_category_other">sonstige Einstellungen</string>
+    <string name="settings_category_app_intern">HTWDresden intern</string>
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
@@ -49,11 +54,23 @@
     <string name="settings_abschluss">Abschluss</string>
     <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
     <string name="settings_jahrgang">Jahrgang</string>
-    <string name="settings_jahrgang_summary">z.B. 16, 15, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
     <string name="settings_studiengang">Studiengang</string>
-    <string name="settings_studiengang_summary">z.B. 043\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studiengang_split">/</string>
+    <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
+    <string name="settings_studiengang_dialogMessage">Beispiel: 15/021/61</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
-    <string name="settings_studiengruppe_summary">z.B. 01, Kfz, 61, etc\n(Verwendung: Stundenplan, Prüfungen)</string>
+    <string name="settings_studienrichtung">Studienrichtung</string>
+    <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
+    <string name="settings_prof_only">Die Funktion steht ausschließlich für Professoren zur Verfügung!</string>
+    <string name="settings_prof_name">Prüfer-Name</string>
+    <string name="settings_prof_name_summary">Verwendung: Prüfungen</string>
+    <string name="settings_prof_id">Professoren-Kennung</string>
+    <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
+    <string name="settings_audio">Automatisches Stummschalten</string>
+    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
+    <string name="settings_acra">Bug-Reporting</string>
+    <string name="settings_acra_disabled">Eingeschaltet</string>
+    <string name="settings_acra_enabled">Ausgeschaltet</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
@@ -79,6 +96,8 @@
     <string name="timetable_edit_lessonTag">Kurzform</string>
     <string name="timetable_edit_lessonTag_hint">z.B. Ma</string>
     <string name="timetable_edit_lessonType">Art</string>
+    <string name="timetable_edit_lessonProf">Dozent</string>
+    <string name="timetable_edit_lessonProf_hint">Professor / Mitarbeiter</string>
     <string name="timetable_edit_lessonRoom">Raum</string>
     <string name="timetable_edit_lessonRoom_hint">z.B. S311</string>
     <string name="timetable_edit_label_time">Zeit</string>
@@ -106,6 +125,40 @@
     <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
     <string name="room_timetable_details_title">Belegungsplan %s</string>
 
+    <string name="exams_grade">Noten</string>
+    <string name="exams_statistic">Statistik</string>
+    <string name="exams_exams">Prüfungen</string>
+    <string name="exams_no_settings">Bitte Abschluss und Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
+    <string name="exams_type">Art</string>
+    <string name="exams_studyBranch">Richtung</string>
+    <string name="exams_day">Datum</string>
+    <string name="exams_time">Zeit</string>
+    <string name="exams_time_value">%1$s - %2$s</string>
+    <string name="exams_room">Raum</string>
+    <string name="exams_note">Hinweis</string>
+    <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
+    <string name="exams_from_Jhr">Jahrgang %s</string>
+    <string name="exams_result_no_results">Noch keine Noten vorhanden.</string>
+    <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
+    <string name="exams_result_update_newGrades">Neue Noten hinzugefügt</string>
+    <string name="exams_result_update_noNewGrades">Keine neuen Noten</string>
+    <string name="exams_result_wrong_auth">Fehler bei der Authentifikation! Bitte überprüfe deine Zugangsdaten.</string>
+    <string name="exams_result_sign_off">Abgemeldet</string>
+    <string name="exams_result_ill">Krankgeschrieben</string>
+    <string name="exams_result_not_allowed">Nicht zugelassen</string>
+    <string name="exams_result_credits">Credits: %s</string>
+    <string name="exams_result_grade">Note: %s</string>
+    <string name="exams_stats_study">Studium</string>
+    <string name="exams_stats_average">Durchschnitt: %s</string>
+    <plurals name="exams_stats_count_grade">
+        <item quantity="one">%s Note</item>
+        <item quantity="other">%d Noten</item>
+    </plurals>
+    <string name="exams_stats_count_credits">%s Credits</string>
+    <string name="exams_stats_gradeBest">beste Note: %s</string>
+    <string name="exams_stats_gradeWorst">schlechteste Note: %s</string>
+
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
     <string name="about_developer">Entwickler</string>
@@ -115,6 +168,31 @@
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
     <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
+
+    <string name="overview_update_available">Update verfügbar!</string>
+    <string name="overview_update_available_message">Bitte Update auf die neuste Version! Zum Download einfach auf diese Kachel klicken.</string>
+    <string name="overview_lessons_current">Aktuell</string>
+    <string name="overview_lessons_noLesson">keine Veranstaltung</string>
+    <string name="overview_lessons_next">Nächste</string>
+    <string name="overview_lessons_remaining_start">in %1$s Minuten</string>
+    <string name="overview_lessons_remaining_end">noch %1$s Minuten</string>
+    <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
+    <string name="overview_lessons_tomorrow_param">morgen %s</string>
+    <string name="overview_lessons_tomorrow">Morgen</string>
+    <string name="overview_lessons_future">%1$s %2$s</string>
+    <string name="overview_mensa_load">Lade Daten</string>
+    <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
+
+    <string name="crash_dialog_ok_toast">Vielen Dank!</string>
+    <string name="crash_dialog_comment_prompt">Sie können eine Beschreibung des Problems hier hinzufügen:</string>
+    <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
+        Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
+        Klicken Sie bitte dazu auf OK.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
     <string name="preference_title_stummschalten">Automatisches Stummschalten</string>
     <string name="preference_summary_stummschalten">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>

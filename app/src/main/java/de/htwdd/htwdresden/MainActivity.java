@@ -3,9 +3,11 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,6 +19,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
@@ -45,6 +49,13 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     };
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Einfache Nutzeranalyse
+        Tracking.makeRequest(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -63,11 +74,16 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // Actionbar Titel anpassen
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
+            private CharSequence title;
             public void onDrawerClosed(View view) {
+                if (actionBar.getTitle() != null && actionBar.getTitle().equals(getString(R.string.app_name)))
+                    actionBar.setTitle(title);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
+                title = actionBar.getTitle();
+                actionBar.setTitle(R.string.app_name);
                 // Schließe Tastatur
                 if (getCurrentFocus() != null && getCurrentFocus() instanceof EditText) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -80,10 +96,15 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         setupDrawerContent(mNavigationView);
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
+        // Beim App-Start ein spezielles Fragment öffnen?
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(Const.IntentParams.START_WITH_FRAGMENT)) {
+            goToNavigationItem(intent.getIntExtra(Const.IntentParams.START_WITH_FRAGMENT, R.id.navigation_overview));
+        }
         // Setze Start-Fragment
-        if (savedInstanceState == null) {
+        else if (savedInstanceState == null) {
             onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
             selectFragment(R.id.navigation_overview);
             mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
@@ -96,17 +117,19 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     private void selectFragment(final int position) {
+        final FragmentManager fragmentManager = getFragmentManager();
+        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Fragment fragment;
                 String tag = null;
-                FragmentManager fragmentManager = getFragmentManager();
 
                 switch (position) {
                     case R.id.navigation_overview:
-                        fragment = new Fragment();
+                        fragment = new OverviewFragment();
                         tag = "overview";
                         break;
                     case R.id.navigation_mensa:
@@ -117,6 +140,12 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                         break;
                     case R.id.navigation_room_timetable:
                         fragment = new RoomTimetableFragment();
+                        break;
+                    case R.id.navigation_exams:
+                        fragment = new ExamsFragment();
+                        break;
+                    case R.id.navigation_campus_plan:
+                        fragment = new CampusPlanFragment();
                         break;
                     case R.id.navigation_settings:
                         fragment = new SettingsFragment();
@@ -132,11 +161,8 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                         break;
                 }
 
-                // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                 // Fragment ersetzen
-                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commit();
+                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
             }
         }, 250);
 
@@ -169,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 finish();
             else {
                 // Zur Übersichtsseite springen
-                NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-                onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
+                goToNavigationItem(R.id.navigation_overview);
             }
         else fragmentManager.popBackStack();
     }
@@ -227,5 +252,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     public void setNavigationItem(int item) {
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         setNavigationItem(mNavigationView.getMenu().findItem(item));
+    }
+
+    @Override
+    public void goToNavigationItem(@IdRes final int item) {
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(item));
     }
 }

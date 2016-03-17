@@ -9,17 +9,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.types.Meal;
 
 /**
  * Stellt Funktionen zum Parsen der Mensa-Webseite bereit.
  *
  * @author Kay Förster
  */
-public class Mensa {
+public class MensaHelper {
     private Context context;
     private short mensaId;
 
-    public Mensa(Context context, short mensaId) {
+    public MensaHelper(Context context, short mensaId) {
         this.context = context;
         this.mensaId = mensaId;
     }
@@ -79,5 +80,50 @@ public class Mensa {
         }
 
         return meals;
+    }
+
+    /**
+     * Liefert eine Liste von Speisen für einen Tag aus der Wochenübersicht
+     *
+     * @param result HTML-Der Wochenübersicht
+     * @param day    Calendertag für welchen das Essen geliefert werden soll
+     * @return Liste der Essen
+     */
+    public ArrayList<Meal> parseDayFromWeek(final String result, int day) {
+        ArrayList<Meal> meals = new ArrayList<>();
+        Pattern pattern = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?>(\\d?\\d,\\d\\d|ausverkauft| )");
+
+        // Teile Speiseplan in einzelne Tage und übergebe entsprechenden Tag an Matcher
+        String token[] = result.split("class=\"speiseplan\"");
+        Matcher matcher = pattern.matcher(token[day - 1]);
+
+        while (matcher.find()) {
+            Meal meal = new Meal();
+            meal.setTitle(matcher.group(1));
+            meal.setPrice(matcher.group(2) + "€");
+            meals.add(meal);
+        }
+
+        return meals;
+    }
+
+    /**
+     * Liefert die Mensa URL zum jeweiligen Modus. Aktuell wird nur die Mensa Reichenbachstraße unterstützt
+     *
+     * @param modus 0: aktuelles Angebot, 1: Angebot der aktuellen Woche, 2: Angebot der nächsten Woche
+     * @return URL des Speiseplans
+     */
+    public static String getMensaUrl(final int modus) {
+        switch (modus) {
+            // Angebot aktuelle Woche
+            case 1:
+                return "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse.html?print=1";
+            // Angebot nächste Woche
+            case 2:
+                return "https://www.studentenwerk-dresden.de/mensen/speiseplan/mensa-reichenbachstrasse-w1.html?print=1";
+            // Angebot heute
+            default:
+                return "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + 9;
+        }
     }
 }

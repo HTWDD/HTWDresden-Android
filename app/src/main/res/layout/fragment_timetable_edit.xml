@@ -84,6 +84,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
+                android:text="@string/timetable_edit_lessonProf" />
+
+            <EditText
+                android:id="@+id/timetable_edit_lessonProf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginStart="@dimen/app_table_margin"
+                android:layout_span="2"
+                android:hint="@string/timetable_edit_lessonProf_hint"
+                android:singleLine="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:text="@string/timetable_edit_lessonType" />
 
             <Spinner
@@ -228,7 +249,7 @@
 
             <Button
                 android:id="@+id/timetable_edit_LessonDelete"
-                style="?android:attr/buttonStyleSmall"
+                style="@style/ButtonHTWStyle"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
@@ -238,7 +259,7 @@
 
             <Button
                 android:id="@+id/timetable_edit_lessonSave"
-                style="?android:attr/buttonStyleSmall"
+                style="@style/ButtonHTWStyle"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_column="3"

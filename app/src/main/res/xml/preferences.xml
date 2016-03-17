@@ -23,22 +23,42 @@
             android:key="abschluss"
             android:summary="@string/settings_abschluss_summary"
             android:title="@string/settings_abschluss" />
+        <de.htwdd.htwdresden.SettingsStudiengruppePreference
+            android:summary="@string/settings_studiengang_summary"
+            android:title="@string/settings_studiengruppe" />
         <EditTextPreference
-            android:inputType="number"
-            android:maxLength="2"
-            android:key="StgJhr"
-            android:summary="@string/settings_jahrgang_summary"
-            android:title="@string/settings_jahrgang" />
+            android:key="StgRi"
+            android:summary="@string/settings_studienrichtung_summary"
+            android:title="@string/settings_studienrichtung" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="@string/settings_category_profs_summary"
+        android:title="@string/settings_category_profs">
         <EditTextPreference
-            android:title="@string/settings_studiengang"
-            android:key="Stg"
-            android:numeric="integer"
-            android:maxLength="3"
-            android:summary="@string/settings_studiengang_summary"/>
+            android:dialogMessage="@string/settings_prof_only"
+            android:key="ProfName"
+            android:summary="@string/settings_prof_name_summary"
+            android:title="@string/settings_prof_name" />
         <EditTextPreference
-            android:title="@string/settings_studiengruppe"
-            android:key="StgGrp"
-            android:summary="@string/settings_studiengruppe_summary"/>
+            android:dialogMessage="@string/settings_prof_only"
+            android:key="prof_kennung"
+            android:summary="@string/settings_prof_id_summary"
+            android:title="@string/settings_prof_id" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_category_other">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="autoStummSchalten"
+            android:summary="@string/settings_audio_summary"
+            android:title="@string/settings_audio" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_category_app_intern">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="acra.enable"
+            android:summaryOff="@string/settings_acra_enabled"
+            android:summaryOn="@string/settings_acra_disabled"
+            android:title="@string/settings_acra" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Audio">
         <CheckBoxPreference

@@ -103,6 +103,13 @@ public class TimetableUserDAO extends AbstractDAO<Lesson> {
         return count;
     }
 
+    /**
+     * Liefert die Veranstaltungen anhand der übergebene Parameter
+     * @param week Woche im Kalenderjahr
+     * @param day Tag in der Woche
+     * @param ds Stunde der Verastaltung
+     * @return Liste aller Veranstaltungen
+     */
     public ArrayList<Lesson> getByDS(final int week, final int day, final int ds) {
         ArrayList<Lesson> lessons = new ArrayList<>();
         SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();

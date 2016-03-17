@@ -33,6 +33,7 @@ public class TimetableEditFragment extends Fragment {
     private static final String[] listOfDs = new String[Const.Timetable.beginDS.length];
     private EditText lesson_name;
     private EditText lesson_tag;
+    private EditText lesson_prof;
     private Spinner lesson_type;
     private EditText lesson_rooms;
     private Spinner lesson_week;
@@ -74,6 +75,7 @@ public class TimetableEditFragment extends Fragment {
         // Views finden;
         lesson_name = (EditText) view.findViewById(R.id.timetable_edit_lessonName);
         lesson_tag = (EditText) view.findViewById(R.id.timetable_edit_lessonTag);
+        lesson_prof = (EditText) view.findViewById(R.id.timetable_edit_lessonProf);
         lesson_type = (Spinner) view.findViewById(R.id.timetable_edit_lessonType);
         lesson_rooms = (EditText) view.findViewById(R.id.timetable_edit_lessonRooms);
         lesson_week = (Spinner) view.findViewById(R.id.timetable_edit_lessonWeek);
@@ -123,6 +125,7 @@ public class TimetableEditFragment extends Fragment {
         if (lesson != null) {
             lesson_name.setText(lesson.getName());
             lesson_tag.setText(lesson.getTag());
+            lesson_prof.setText(lesson.getProfessor());
             lesson_type.setSelection(lesson.getTypeInt());
             lesson_rooms.setText(lesson.getRooms());
             lesson_week.setSelection(lesson.getWeek());
@@ -171,12 +174,20 @@ public class TimetableEditFragment extends Fragment {
         Lesson lesson = new Lesson();
         lesson.setName(lesson_name.getText().toString());
         lesson.setTag(lesson_tag.getText().toString());
+        lesson.setProfessor(lesson_prof.getText().toString());
         lesson.setTypeInt(lesson_type.getSelectedItemPosition());
         lesson.setRooms(lesson_rooms.getText().toString());
         lesson.setWeek(lesson_week.getSelectedItemPosition());
         lesson.setDay(lesson_day.getSelectedItemPosition() + 1);
         lesson.setDs(lesson_ds.getSelectedItemPosition() + 1);
         lesson.setWeeksOnly(lesson_weeksOnly.getText().toString());
+
+        /**
+         * Wenn keine Kurzform gesetzt ist, diese automatisch erzeugen
+         */
+        if (lesson.getTag().isEmpty()) {
+            lesson.setTag(lesson.getName().substring(0, Math.min(lesson.getName().length(), 5)));
+        }
 
         DatabaseManager databaseManager = new DatabaseManager(getActivity());
         TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);

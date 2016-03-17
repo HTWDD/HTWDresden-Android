@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="de.htwdd.htwdresden">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <application
+        android:name=".HTWDresdenApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -35,6 +38,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.htwdd.htwdresden.MainActivity" />
         </activity>
+        <activity
+            android:name="org.acra.dialog.CrashReportDialog"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true"
+            android:launchMode="singleInstance"
+            android:process=":error_report"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+            tools:replace="android:theme" />
+
+        <receiver
+            android:name=".MensaWidget"
+            android:label="@string/navi_mensa">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/mensa_widget_info" />
+        </receiver>
         <service
             android:name="de.htwdd.htwdresden.VolumeControllerService"
             android:exported="false" />

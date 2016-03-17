@@ -11,7 +11,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.Meal;
+import de.htwdd.htwdresden.types.Meal;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 
 /**
