@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginLeft="@dimen/margin_wizard_sides"
+        android:layout_marginRight="@dimen/margin_wizard_sides"
         android:orientation="vertical">
 
         <TextView

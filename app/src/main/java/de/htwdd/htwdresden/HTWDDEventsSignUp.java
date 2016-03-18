@@ -31,7 +31,6 @@ public class HTWDDEventsSignUp extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
 
@@ -39,7 +38,7 @@ public class HTWDDEventsSignUp extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_htwddevents_sign_up, container, false);
-
+        getActivity().setTitle(R.string.navi_signup);
         //User.checkUserExistAPI(getActivity(), view,);
         User.checkUserExistAPI(
                 getActivity(),
@@ -51,9 +50,7 @@ public class HTWDDEventsSignUp extends Fragment {
                     }
                 }
         );
-
         //if(!(pass.gehoertZu(user))) dasPasswortIstFalschMeldung();startWizard(name,pass);
-
         return view;
     }
 

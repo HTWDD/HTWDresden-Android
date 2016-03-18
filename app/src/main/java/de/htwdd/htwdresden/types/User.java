@@ -82,37 +82,35 @@ public class User {
         final String password = sharedPreferences.getString("RZLogin", "");
 
 
-        final ProgressDialog pd = new ProgressDialog(context, ProgressDialog.STYLE_SPINNER);
-        pd.setTitle("LOGIN");
-        pd.setMessage("Deine Daten werden überprüft...");
-        pd.setIndeterminate(true);
-        pd.setButton(ProgressDialog.BUTTON_NEGATIVE, "Abbrechen", new DialogInterface.OnClickListener() {
+        final ProgressDialog progressDialog = new ProgressDialog(context, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("LOGIN");
+        progressDialog.setMessage("Deine Daten werden überprüft...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setButton(ProgressDialog.BUTTON_NEGATIVE, "Abbrechen", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pd.dismiss();
+                progressDialog.dismiss();
             }
         });
-        pd.show();
+        progressDialog.show();
 
         StringRequest sr = new StringRequest(Request.Method.POST, "http://htwevents.metropoldesign.de/testUser.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 //pd.dismiss();
                 //mPostCommentResponse.requestCompleted();
                 if (response.equalsIgnoreCase(RESPONSE_USER_SIGNED_UP)) {
                     Toast.makeText(context, "Du hast dich erfolgreich registriert.", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }else {
+                    progressDialog.setMessage("Die SNummer entspricht dem Passwort nicht. Bitte versuchen Sie nochmal.");
                 }
                 Log.e("SIGNUP", "On response " + response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(context, "On Error Resp " + error, Toast.LENGTH_SHORT).show();
                 Snackbar.make(view, "On Error Resp " + error, Snackbar.LENGTH_LONG);
                 Log.e("SIGNUP", "On Error Resp " + error);
