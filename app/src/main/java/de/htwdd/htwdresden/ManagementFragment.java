@@ -76,7 +76,7 @@ public class ManagementFragment extends Fragment {
                         Log.e("JSON SEMESTERPLAN", "JSON IS BROKEN");
                         Log.e(e.getClass().getName(), e.getMessage() + " ", e);
                         Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
-                    }finally {
+                    } finally {
                         swipeRefrSemPlan.setRefreshing(false);
                     }
                 }
@@ -157,16 +157,12 @@ public class ManagementFragment extends Fragment {
             }
         });
 
-        if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE)) {
+        long currentTime = System.currentTimeMillis();
+        if (!sharedPref.contains(SHARED_PREFS_CATCH_DATE) || (currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL)
             sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
-        } else {
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - sharedPref.getLong(SHARED_PREFS_CATCH_DATE, -1)) >= Const.semesterPlanUpdater.UPDATE_INTERVAL) {
-                sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
-            } else {
-                updateSemplanviewFromLocalsource(view);
-            }
-        }
+        else
+            updateSemplanviewFromLocalsource(view);
+
         return view;
     }
 
