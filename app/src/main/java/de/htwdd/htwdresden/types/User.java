@@ -123,7 +123,19 @@ public class User {
     }
     static public String getUserNameSP(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return "s"+sharedPreferences.getString("sNummer", "");
+        return "s"+sharedPreferences.getString(POST_SNUMMER, "");
+    }
+    static public void setUserNameSP(Context context,String snummer) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(POST_SNUMMER, snummer);
+        editor.apply();
+    }
+    static public void setUserPasswSP(Context context,String passw) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(POST_PASSWORD, passw);
+        editor.apply();
     }
 
     static public boolean isThereSNrAndPassw(Context context) {

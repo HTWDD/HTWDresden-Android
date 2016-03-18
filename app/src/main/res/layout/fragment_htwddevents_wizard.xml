@@ -15,7 +15,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="99dp"
+            android:layout_height="105dp"
             android:gravity="center_horizontal"
             android:longClickable="false"
             android:text="HTW"
@@ -39,16 +39,6 @@
             android:text="      "
             android:textSize="26sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans_serf_thin"
-            android:gravity="center_horizontal"
-            android:text="WELCOM TO OUR AWESOME APP"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            android:typeface="monospace" />
 
         <TextView
             android:layout_width="match_parent"
@@ -72,7 +62,7 @@
                 android:hint="SNummer"
                 android:gravity="center"
                 android:typeface="monospace"
-                android:inputType="textPersonName" />
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -83,7 +73,7 @@
             >
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/htwddevents_wizard_passw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -101,6 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Speichern"
+        android:onClick="onSaveWizard"
         />
     </LinearLayout>
 

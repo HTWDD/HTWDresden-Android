@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.classes.Const;
@@ -184,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
 
     private Fragment changeFragementIfNorSignedUp(Fragment fragment) {
         if (!User.isThereSNrAndPassw(getApplication())) {
-            //fragment = new Wizard();
             fragment = new HTWDDEventsWizard();
         }
         else if (!User.isUserSignedUp(MainActivity.this)) {
@@ -325,6 +325,19 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
 
     @Override
     public void onProfileFragmentInteraction(String string) {
+
+    }
+
+    public void onSaveWizard(View view) {
+        final FragmentManager fragmentManager = getFragmentManager();
+        TextView snummerTV = (TextView) findViewById(R.id.htwddevents_wizard_snummer);
+        TextView passwTV = (TextView) findViewById(R.id.htwddevents_wizard_passw);
+
+        User.setUserNameSP(getApplicationContext(), snummerTV.getText().toString());
+        User.setUserPasswSP(getApplicationContext(), passwTV.getText().toString());
+
+        Fragment fragment = new HTWDDEventsSignUp();
+        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, "SIGN UP").commitAllowingStateLoss();
 
     }
 }
