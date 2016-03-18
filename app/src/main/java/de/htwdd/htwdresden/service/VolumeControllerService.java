@@ -92,11 +92,12 @@ public class VolumeControllerService extends IntentService {
 
     public static Calendar setCalendar(@NonNull Time time) {
         Calendar calendar = GregorianCalendar.getInstance();
-        int hours = (int) TimeUnit.HOURS.convert(time.getTime(), TimeUnit.MILLISECONDS) + TimeZone.getDefault().getOffset(calendar.getTimeInMillis());
+        long timeWithOffset = Const.Timetable.getTimeWithOffset(time, calendar);
+        int hours = (int) TimeUnit.HOURS.convert(timeWithOffset, TimeUnit.MILLISECONDS) + TimeZone.getDefault().getOffset(calendar.getTimeInMillis());
 
         //Set Calender at time specified by timeInMinutes
         calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, (int) TimeUnit.MINUTES.convert(time.getTime() - TimeUnit.MILLISECONDS.convert(hours, TimeUnit.HOURS), TimeUnit.MILLISECONDS));
+        calendar.set(Calendar.MINUTE, (int) TimeUnit.MINUTES.convert(timeWithOffset - TimeUnit.MILLISECONDS.convert(hours, TimeUnit.HOURS), TimeUnit.MILLISECONDS));
         calendar.set(Calendar.SECOND, 0);
         return calendar;
     }

@@ -38,14 +38,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
-import de.htwdd.htwdresden.classes.Meal;
-import de.htwdd.htwdresden.classes.Mensa;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
@@ -55,6 +53,7 @@ import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.Meal;
 
 
 /**
@@ -144,7 +143,7 @@ public class OverviewFragment extends Fragment {
         if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
                 && VolleyDownloader.CheckInternet(getActivity()))) {
             // Request mit Listener zur Abfrage der aktuellen Version erstellen
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://htwdd.github.io/version.json", new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://htwdd.github.io/version.json", null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -203,7 +202,6 @@ public class OverviewFragment extends Fragment {
         TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(getActivity()));
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
         final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        final int offset = TimeZone.getDefault().getOffset(new GregorianCalendar().getTimeInMillis());
 
         // TextViews bestimmen
         final TextView overview_lessons_current_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_current_remaining);
@@ -245,11 +243,14 @@ public class OverviewFragment extends Fragment {
                     case 1:
                         // Genau eine passende Stunden gefunden
                         overview_lessons_current_tag.setText(lessonHelper.lesson.getTag());
-                        overview_lessons_current_type.setText(
-                                mLayout.getResources().getString(
-                                        R.string.timetable_ds_list_simple,
-                                        lessonType[lessonHelper.lesson.getTypeInt()],
-                                        lessonHelper.lesson.getRooms()));
+                        if (!lessonHelper.lesson.getRooms().isEmpty())
+                            overview_lessons_current_type.setText(
+                                    mLayout.getResources().getString(
+                                            R.string.timetable_ds_list_simple,
+                                            lessonType[lessonHelper.lesson.getTypeInt()],
+                                            lessonHelper.lesson.getRooms()));
+                        else
+                            overview_lessons_current_type.setText(lessonType[lessonHelper.lesson.getTypeInt()]);
                         break;
                     case 2:
                         // mehrere passende Stunden gefunden
@@ -258,7 +259,10 @@ public class OverviewFragment extends Fragment {
                 }
 
                 // Verbleibende Zeit anzeigen
-                long difference = TimeUnit.MINUTES.convert(Const.Timetable.getMillisecondsWithoutDate(calendar) - (Const.Timetable.endDS[currentDS - 1].getTime() + offset), TimeUnit.MILLISECONDS);
+                long difference = TimeUnit.MINUTES.convert(
+                        Const.Timetable.getMillisecondsWithoutDate(calendar) - Const.Timetable.getTimeWithOffset(Const.Timetable.endDS[currentDS - 1], calendar),
+                        TimeUnit.MILLISECONDS
+                );
                 if (difference < 0)
                     overview_lessons_current_remaining.setText(String.format(getResources().getString(R.string.overview_lessons_remaining_end), -difference));
                 else
@@ -280,7 +284,7 @@ public class OverviewFragment extends Fragment {
 
         do {
             // DS erhöhen
-            if ((++nextDS) % 7 == 0) {
+            if ((++nextDS) % 8 == 0) {
                 nextDS = 1;
                 calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
             }
@@ -301,7 +305,10 @@ public class OverviewFragment extends Fragment {
 
             switch (differenceDay) {
                 case 0:
-                    long minuten = TimeUnit.MINUTES.convert(Const.Timetable.beginDS[nextDS - 1].getTime() + offset - Const.Timetable.getMillisecondsWithoutDate(calendar), TimeUnit.MILLISECONDS);
+                    long minuten = TimeUnit.MINUTES.convert(
+                            Const.Timetable.getTimeWithOffset(Const.Timetable.beginDS[nextDS - 1], calendar) - Const.Timetable.getMillisecondsWithoutDate(calendar),
+                            TimeUnit.MILLISECONDS
+                    );
                     overview_lessons_next_remaining.setText(String.format(getResources().getString(R.string.overview_lessons_remaining_start), minuten));
                     break;
                 case 1:
@@ -427,8 +434,8 @@ public class OverviewFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Mensa mensa = new Mensa(context, mensaID);
-                        ArrayList<Meal> meals = mensa.parseCurrentDay(response);
+                        MensaHelper mensaHelper = new MensaHelper(context, mensaID);
+                        ArrayList<Meal> meals = mensaHelper.parseCurrentDay(response);
 
                         int count = meals.size();
                         if (count == 0) {

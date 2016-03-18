@@ -28,6 +28,10 @@ public final class Const {
         public static final String ROOM_TIMETABLE_ROOM = "ROOM_TIMETABLE_ROOM";
     }
 
+    public static final class IntentParams {
+        public static final String START_WITH_FRAGMENT = "START_FRAGMENT";
+    }
+
     public static final class preferencesKey {
         public static final String PREFERENCES_AUTO_MUTE = "autoMute";
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
@@ -63,18 +67,18 @@ public final class Const {
                 Time.valueOf("07:30:00"),
                 Time.valueOf("09:20:00"),
                 Time.valueOf("11:10:00"),
-                Time.valueOf("13:10:00"),
-                Time.valueOf("15:00:00"),
-                Time.valueOf("16:50:00"),
-                Time.valueOf("18:30:00")};
+                Time.valueOf("13:20:00"),
+                Time.valueOf("15:10:00"),
+                Time.valueOf("17:00:00"),
+                Time.valueOf("18:40:00")};
         public static final Time[] endDS = {
                 Time.valueOf("09:00:00"),
                 Time.valueOf("10:50:00"),
                 Time.valueOf("12:40:00"),
-                Time.valueOf("14:40:00"),
-                Time.valueOf("16:30:00"),
-                Time.valueOf("18:20:00"),
-                Time.valueOf("20:00:00")};
+                Time.valueOf("14:50:00"),
+                Time.valueOf("16:40:00"),
+                Time.valueOf("18:30:00"),
+                Time.valueOf("20:10:00")};
 
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
@@ -87,29 +91,42 @@ public final class Const {
          * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
          */
         public static int getCurrentDS(@Nullable Long currentTime) {
-            final long offset = TimeZone.getDefault().getOffset(new GregorianCalendar().getTimeInMillis());
+            final Calendar calendar = GregorianCalendar.getInstance();
             if (currentTime == null) {
-                currentTime = getMillisecondsWithoutDate(GregorianCalendar.getInstance());
+                currentTime = getMillisecondsWithoutDate(calendar);
             }
 
-            if (currentTime >= endDS[6].getTime() + offset) {
+            if (currentTime >= getTimeWithOffset(endDS[6], calendar)) {
                 return 0;
-            } else if (currentTime >= beginDS[6].getTime() + offset)
+            } else if (currentTime >= getTimeWithOffset(beginDS[6], calendar))
                 return 7;
-            else if (currentTime >= beginDS[5].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[5], calendar))
                 return 6;
-            else if (currentTime >= beginDS[4].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[4], calendar))
                 return 5;
-            else if (currentTime >= beginDS[3].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[3], calendar))
                 return 4;
-            else if (currentTime >= beginDS[2].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[2], calendar))
                 return 3;
-            else if (currentTime >= beginDS[1].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[1], calendar))
                 return 2;
-            else if (currentTime >= beginDS[0].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[0], calendar))
                 return 1;
 
             return 0;
+        }
+
+        /**
+         * Liefert das Datum in Millesekunden mit der aktuellen Zeitverschiebung
+         *
+         * @param time     Zeit von welcher der Zeitstempel ermittelt werden soll
+         * @param calendar Calender zur Bestimmung des Zeitunterschieds
+         * @return the number of milliseconds since Jan. 1, 1970, midnight GMT.
+         */
+        public static long getTimeWithOffset(@NonNull Time time, @Nullable Calendar calendar) {
+            if (calendar == null)
+                calendar = GregorianCalendar.getInstance();
+            return time.getTime() + TimeZone.getDefault().getOffset(calendar.getTimeInMillis());
         }
 
         /**
@@ -121,6 +138,19 @@ public final class Const {
         public static long getMillisecondsWithoutDate(Calendar calendar) {
             return TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
                     + TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
+        }
+    }
+
+
+    public static final class widget {
+        /**
+         * Gibt die Anzahl der Zellen für eine gegebene Widgetgröße
+         *
+         * @param size Widget größe in dp.
+         * @return Anzahl der Zellen
+         */
+        public static int getCellsForSize(final int size) {
+            return ((size - 30) / 70) + 1;
         }
     }
 

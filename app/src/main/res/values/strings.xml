@@ -185,7 +185,10 @@
         Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
         Klicken Sie bitte dazu auf OK.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
     <string name="events_profile_user_name">Name:</string>
     <string name="events_profile_user_id">ID</string>
     <string name="navi_head_htwevents">HTWEvents BETA</string>

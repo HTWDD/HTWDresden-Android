@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.User;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Toolbar einfügen
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
@@ -103,8 +106,13 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
+        // Beim App-Start ein spezielles Fragment öffnen?
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(Const.IntentParams.START_WITH_FRAGMENT)) {
+            goToNavigationItem(intent.getIntExtra(Const.IntentParams.START_WITH_FRAGMENT, R.id.navigation_overview));
+        }
         // Setze Start-Fragment
-        if (savedInstanceState == null) {
+        else if (savedInstanceState == null) {
             onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
             selectFragment(R.id.navigation_overview);
             mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
@@ -164,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
                         fragment = new Fragment();
                         break;
                 }
+
+                // Fragment ersetzen
                 fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
             }
         }, 250);
