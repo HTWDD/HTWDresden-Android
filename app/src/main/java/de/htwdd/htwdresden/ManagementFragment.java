@@ -76,6 +76,8 @@ public class ManagementFragment extends Fragment {
                         Log.e("JSON SEMESTERPLAN", "JSON IS BROKEN");
                         Log.e(e.getClass().getName(), e.getMessage() + " ", e);
                         Snackbar.make(view, R.string.info_error, Snackbar.LENGTH_LONG).show();
+                    }finally {
+                        swipeRefrSemPlan.setRefreshing(false);
                     }
                 }
                 if (!foundActualSemesterplan)
@@ -112,7 +114,6 @@ public class ManagementFragment extends Fragment {
                     @Override
                     public void onRefresh() {
                         sendRequestToGetSemesterplan(jsonArrayListener, errorListener);
-                        swipeRefrSemPlan.setRefreshing(false);
                     }
                 }
         );
