@@ -23,9 +23,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.User;
 
 /**
  * Hinweis zum Navigation Drawer:
@@ -35,7 +35,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
  * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
  */
 
-public class MainActivity extends AppCompatActivity implements INavigation,HTWDDEventsProfileFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements INavigation, HTWDDEventsProfileFragment.OnFragmentInteractionListener {
     private Activity mActivity;
     private DrawerLayout mDrawerLayout;
     private MenuItem mPreviousMenuItem;
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements INavigation,HTWDD
         // Actionbar Titel anpassen
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
             private CharSequence title;
+
             public void onDrawerClosed(View view) {
                 if (actionBar.getTitle() != null && actionBar.getTitle().equals(getString(R.string.app_name)))
                     actionBar.setTitle(title);
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements INavigation,HTWDD
                         break;
                     case R.id.navigation_htwEvents:
                         fragment = new HTWDDEventsProfileFragment();
+                        fragment = changeFragementIfNorSignedUp(fragment);
                         break;
                     case R.id.navigation_timetable:
                         fragment = new TimetableFragment();
@@ -162,19 +164,23 @@ public class MainActivity extends AppCompatActivity implements INavigation,HTWDD
                         fragment = new Fragment();
                         break;
                 }
-
-                if (!Const.HTWEvents.isUserSignedUp(MainActivity.this)) {
-                    if (position == R.id.navigation_htwEvents) {
-                        fragment = new HTWDDEventsSignUp();
-                    }
-                }
-                // Fragment ersetzen
                 fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
             }
         }, 250);
 
         // NavigationDrawer schliesen
         mDrawerLayout.closeDrawers();
+    }
+
+    private Fragment changeFragementIfNorSignedUp(Fragment fragment) {
+        if (!User.isThereSNrAndPassw(getApplication())) {
+            //fragment = new Wizard();
+            fragment = new HTWDDEventsSignUp();
+        }
+        else if (!User.isUserSignedUp(MainActivity.this)) {
+            fragment = new HTWDDEventsSignUp();
+        }
+        return fragment;
     }
 
     /**
@@ -274,42 +280,41 @@ public class MainActivity extends AppCompatActivity implements INavigation,HTWDD
         EditText stgEText = (EditText) findViewById(R.id.htwddevents_profile_studiengang);
         String nickname = nicknameEText.getText().toString();
 
-        if(nickname.length()< HTWDDEventsSignUp.NICKNAME_LENGTH){
+        if (nickname.length() < HTWDDEventsSignUp.NICKNAME_LENGTH) {
             Toast.makeText(MainActivity.this, "Nickname > 3", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(firstnameEText.length()< HTWDDEventsSignUp.FIRSTNAME_LENGTH){
+        if (firstnameEText.length() < HTWDDEventsSignUp.FIRSTNAME_LENGTH) {
             Toast.makeText(MainActivity.this, "Bitte, den Vornamen eingeben oder auf Überspringen drücken.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(lastnameEText.length()< HTWDDEventsSignUp.LASTNAME_LENGTH){ 
+        if (lastnameEText.length() < HTWDDEventsSignUp.LASTNAME_LENGTH) {
             Toast.makeText(MainActivity.this, "Bitte, den Namen eingeben oder auf Überspringen drücken.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(stgEText.length() < HTWDDEventsSignUp.STG_LENGTH){
+        if (stgEText.length() < HTWDDEventsSignUp.STG_LENGTH) {
             Toast.makeText(MainActivity.this, "Studiengang eingeben.", Toast.LENGTH_SHORT).show();
         }
-        Log.e("YOUT INTERED", nickname+";");
-        
-        
-        if(/*sendToPHPScript(daten)*/true){
+        Log.e("YOUT INTERED", nickname + ";");
+
+
+        if (/*sendToPHPScript(daten)*/true) {
             //setSignedUpPref(this,true);
             //Const.HTWEvents.goToFragment(this, new HTWDDEventsProfileFragment());
-        }
-        else{
+        } else {
 
             //bleiben in diesem Fragement
         }
     }
 
     private void setSignedUpPref(Activity activity, boolean is) {
-        SharedPreferences sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean("SignedUp",is);
+        sharedPreferencesEditor.putBoolean("SignedUp", is);
     }
 
     @Override
-    public void onProfileFragmentInteraction(String string){
+    public void onProfileFragmentInteraction(String string) {
 
     }
 }
