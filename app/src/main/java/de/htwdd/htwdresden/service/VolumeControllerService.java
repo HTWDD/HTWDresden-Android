@@ -19,7 +19,7 @@ import de.htwdd.htwdresden.classes.VolumeController;
 
 
 public class VolumeControllerService extends IntentService {
-    static final String EXTRA_TIME = "de.htwdd.EXTRA_TIME";
+    static final String EXTRA_TIME = "de.htwdd.htwdresden.EXTRA_TIME";
 
     public VolumeControllerService() {
         super("volumeControllerService");
