@@ -245,11 +245,14 @@ public class OverviewFragment extends Fragment {
                     case 1:
                         // Genau eine passende Stunden gefunden
                         overview_lessons_current_tag.setText(lessonHelper.lesson.getTag());
-                        overview_lessons_current_type.setText(
-                                mLayout.getResources().getString(
-                                        R.string.timetable_ds_list_simple,
-                                        lessonType[lessonHelper.lesson.getTypeInt()],
-                                        lessonHelper.lesson.getRooms()));
+                        if (!lessonHelper.lesson.getRooms().isEmpty())
+                            overview_lessons_current_type.setText(
+                                    mLayout.getResources().getString(
+                                            R.string.timetable_ds_list_simple,
+                                            lessonType[lessonHelper.lesson.getTypeInt()],
+                                            lessonHelper.lesson.getRooms()));
+                        else
+                            overview_lessons_current_type.setText(lessonType[lessonHelper.lesson.getTypeInt()]);
                         break;
                     case 2:
                         // mehrere passende Stunden gefunden
