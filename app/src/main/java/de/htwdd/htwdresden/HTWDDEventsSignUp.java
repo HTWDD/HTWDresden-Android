@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.types.User;
@@ -22,11 +23,6 @@ public class HTWDDEventsSignUp extends Fragment {
     public HTWDDEventsSignUp() {
     }
 
-    public static HTWDDEventsSignUp newInstance() {
-        HTWDDEventsSignUp fragment = new HTWDDEventsSignUp();
-        return fragment;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +35,9 @@ public class HTWDDEventsSignUp extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_htwddevents_sign_up, container, false);
         getActivity().setTitle(R.string.navi_signup);
+        TextView snumerTextview = (TextView) view.findViewById(R.id.htwddevents_signup_snummer);
+        snumerTextview.setText(User.getUserNameSP(getActivity()));
+
         //User.checkUserExistAPI(getActivity(), view,);
         User.checkUserExistAPI(
                 getActivity(),

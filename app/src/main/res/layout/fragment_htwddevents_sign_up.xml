@@ -21,6 +21,7 @@
             android:paddingBottom="4dp"
             android:text="Zusätzliche Daten über dich"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
         <TextView
@@ -28,21 +29,21 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans_serf_thin"
             android:gravity="center"
-            android:text="S72743"
-            android:textColor="@color/white"
+            android:text="SNummer"
+            android:id="@+id/htwddevents_signup_snummer"
             android:textSize="24sp"
             android:layout_marginBottom="32dp"/>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/htwddevents_profile_nickname">
+            android:labelFor="@+id/htwddevents_signup_nickname">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:gravity="center"
-                android:id="@+id/htwddevents_profile_nickname"
+                android:id="@+id/htwddevents_signup_nickname"
                 android:hint="Nickname"
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
@@ -50,10 +51,10 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/htwddevents_profile_firstname">
+            android:labelFor="@+id/htwddevents_signup_firstname">
 
             <EditText
-                android:id="@+id/htwddevents_profile_firstname"
+                android:id="@+id/htwddevents_signup_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -64,28 +65,28 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/htwddevents_profile_lastname">
+            android:labelFor="@+id/htwddevents_signup_lastname">
 
             <EditText
                 android:gravity="center"
                 android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/htwddevents_profile_lastname"
+                android:id="@+id/htwddevents_signup_lastname"
                 android:hint="Nachname" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/htwddevents_profile_studiengang">
+            android:labelFor="@+id/htwddevents_signup_studiengang">
 
             <EditText
                 android:gravity="center"
                 android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/htwddevents_profile_studiengang"
+                android:id="@+id/htwddevents_signup_studiengang"
                 android:hint="Studiengang" />
         </android.support.design.widget.TextInputLayout>
 
@@ -101,7 +102,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:onClick="onSignupButton"
-                android:text="Speichern"
+                android:text="SIGN UP"
                 android:textColor="@color/white" />
 
             <Button
@@ -109,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="Überspringen und später ausfüllen"
+                android:text="SIGNUP und später ausfüllen"
                 android:textAllCaps="true"
                 android:onClick="onSignupButton"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display4"

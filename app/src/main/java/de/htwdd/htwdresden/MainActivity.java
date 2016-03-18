@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
     private Fragment changeFragementIfNorSignedUp(Fragment fragment) {
         if (!User.isThereSNrAndPassw(getApplication())) {
             //fragment = new Wizard();
-            fragment = new HTWDDEventsSignUp();
+            fragment = new HTWDDEventsWizard();
         }
         else if (!User.isUserSignedUp(MainActivity.this)) {
             fragment = new HTWDDEventsSignUp();
@@ -274,10 +274,10 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
     }
 
     public void onSignupButton(View view) {
-        EditText nicknameEText = (EditText) findViewById(R.id.htwddevents_profile_nickname);
-        EditText firstnameEText = (EditText) findViewById(R.id.htwddevents_profile_firstname);
-        EditText lastnameEText = (EditText) findViewById(R.id.htwddevents_profile_lastname);
-        EditText stgEText = (EditText) findViewById(R.id.htwddevents_profile_studiengang);
+        EditText nicknameEText = (EditText) findViewById(R.id.htwddevents_signup_nickname);
+        EditText firstnameEText = (EditText) findViewById(R.id.htwddevents_signup_firstname);
+        EditText lastnameEText = (EditText) findViewById(R.id.htwddevents_signup_lastname);
+        EditText stgEText = (EditText) findViewById(R.id.htwddevents_signup_studiengang);
         String nickname = nicknameEText.getText().toString();
 
         if (nickname.length() < HTWDDEventsSignUp.NICKNAME_LENGTH) {

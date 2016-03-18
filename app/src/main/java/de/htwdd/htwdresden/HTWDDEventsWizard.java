@@ -3,6 +3,9 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 
 /**
@@ -25,9 +28,7 @@ public class HTWDDEventsWizard extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public HTWDDEventsWizard() {
-        // Required empty public constructor
-    }
+    public HTWDDEventsWizard() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -56,13 +57,13 @@ public class HTWDDEventsWizard extends Fragment {
         }
     }
 
-    /*@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_htwddevents_wizard, container, false);
     }
-
+    /*
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

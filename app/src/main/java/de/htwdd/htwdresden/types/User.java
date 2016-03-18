@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -26,11 +25,65 @@ public class User {
 
     public static final String RESPONSE_USER_SIGNED_UP = "signedup";
 
-    String sNummer;
-    String nickName;
-    String fisrtName;
-    String lastName;
-    String studiengang;
+    public static final String POST_SNUMMER = "sNummer";
+    public static final String POST_PASSWORD = "RZLogin";
+    public static final String POST_NICKNAME = "nickname";
+    public static final String POST_FISTNAME = "fisrtname";
+    public static final String POST_LASTNAME = "lastname";
+    public static final String POST_STUDIENGANG = "studiengang";
+
+    public static final String POST_ACTION = "action";
+    public static final String POST_ACTION_SIGNUP = "signup";
+
+    private String sNummer;
+    private String nickName;
+    private String fisrtName;
+    private String lastName;
+    private String abschluss;
+    private int    abschlNr;
+    private String studiengang;
+    private int    stgNr;
+    private int    poVersion;
+
+    public String getAbschluss() {
+        return abschluss;
+    }
+
+    public void setAbschluss(String abschluss) {
+        this.abschluss = abschluss;
+    }
+
+    public int getAbschlNr() {
+        return abschlNr;
+    }
+
+    public void setAbschlNr(int abschlNr) {
+        this.abschlNr = abschlNr;
+    }
+
+    public int getStgNr() {
+        return stgNr;
+    }
+
+    public void setStgNr(int stgNr) {
+        this.stgNr = stgNr;
+    }
+
+    public int getPoVersion() {
+        return poVersion;
+    }
+
+    public void setPoVersion(int poVersion) {
+        this.poVersion = poVersion;
+    }
+
+    public String getStudiengang() {
+        return studiengang;
+    }
+
+    public void setStudiengang(String studiengang) {
+        this.studiengang = studiengang;
+    }
 
     public String getLastName() {
         return lastName;
@@ -68,6 +121,10 @@ public class User {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPreferences.getBoolean("SignedUp", false);
     }
+    static public String getUserNameSP(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return "s"+sharedPreferences.getString("sNummer", "");
+    }
 
     static public boolean isThereSNrAndPassw(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -102,7 +159,7 @@ public class User {
                 if (response.equalsIgnoreCase(RESPONSE_USER_SIGNED_UP)) {
                     Toast.makeText(context, "Du hast dich erfolgreich registriert.", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
-                }else {
+                } else {
                     progressDialog.setMessage("Die SNummer entspricht dem Passwort nicht. Bitte versuchen Sie nochmal.");
                 }
                 Log.e("SIGNUP", "On response " + response);
@@ -112,17 +169,16 @@ public class User {
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
                 Toast.makeText(context, "On Error Resp " + error, Toast.LENGTH_SHORT).show();
-                Snackbar.make(view, "On Error Resp " + error, Snackbar.LENGTH_LONG);
                 Log.e("SIGNUP", "On Error Resp " + error);
                 //mPostCommentResponse.requestEndedWithError(error);
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("sNummer", Uri.encode(sNummer));
-                Log.e("SIGNUP", "SNummer:" + sNummer);
-                params.put("RZLogin", Uri.encode(password));
+                Map<String, String> params = new HashMap<>();
+                params.put(POST_ACTION, Uri.encode(POST_ACTION_SIGNUP));
+                params.put(POST_SNUMMER, Uri.encode(sNummer));
+                params.put(POST_PASSWORD, Uri.encode(password));
                 return params;
             }
 
