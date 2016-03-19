@@ -280,7 +280,7 @@ public class OverviewFragment extends Fragment {
 
         do {
             // DS erhöhen
-            if ((++nextDS) % 7 == 0) {
+            if ((++nextDS) % 8 == 0) {
                 nextDS = 1;
                 calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
             }
