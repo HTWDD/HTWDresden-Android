@@ -43,7 +43,6 @@ public class HTWDDEventsProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_htwddevents_profile, container, false);
 
-
         //Hole das JSON-Objekt aus Const.SEMESTERPLAN_URL_JSON und initialisiere das Objekt von SemesterPlan
         final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override

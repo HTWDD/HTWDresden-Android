@@ -148,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
                         fragment = new HTWDDEventsProfileFragment();
                         fragment = changeFragementIfNorSignedUp(fragment);
                         break;
+                    case R.id.navigation_htwEventsEventCreator:
+                        fragment = new HTWDDEventsEventCreator();
+                        break;
                     case R.id.navigation_timetable:
                         fragment = new TimetableFragment();
                         break;
