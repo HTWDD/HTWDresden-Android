@@ -69,6 +69,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/timetable_widget_info" />
         </receiver>
+
+        <service
+            android:name=".service.TimetableWidgetService"
+            android:enabled="true" />
+
     </application>
 
 </manifest>

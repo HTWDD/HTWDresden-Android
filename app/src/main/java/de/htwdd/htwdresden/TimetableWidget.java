@@ -1,49 +1,50 @@
 package de.htwdd.htwdresden;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
+import android.util.Log;
 
-import de.htwdd.htwdresden.classes.Const;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
+
+import de.htwdd.htwdresden.service.TimetableWidgetService;
 
 /**
- * Implementation of App Widget functionality.
+ * Stundenplan-Widget Provider
  */
 public class TimetableWidget extends AppWidgetProvider {
-
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, int appWidgetId) {
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_timetable);
-
-        // Erstelle Intent zum Starten der App
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.setAction(Const.IntentParams.START_ACTION_TIMETABLE);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0);
-        views.setOnClickPendingIntent(R.id.timetable_widget_layout, pendingIntent);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
+    private static PendingIntent pendingIntent = null;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
+        // Starte Service zum Updaten des Widget
+        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        final Intent intent = new Intent(context, TimetableWidgetService.class);
+        final Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+        if (pendingIntent == null)
+            pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES), pendingIntent);
     }
 
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+        if (pendingIntent != null) {
+            Log.d("TimetableWidget", "onDisabler");
+            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
     }
 }
 
