@@ -8,12 +8,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         // Actionbar Titel anpassen
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
             private CharSequence title;
+
             public void onDrawerClosed(View view) {
                 if (actionBar.getTitle() != null && actionBar.getTitle().equals(getString(R.string.app_name)))
                     actionBar.setTitle(title);
@@ -111,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             }
         // Setze Start-Fragment
         if (savedInstanceState == null) {
-            onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(R.id.navigation_overview));
+            onNavigationItemSelectedListener.onNavigationItemSelected(getMenu(mNavigationView).findItem(R.id.navigation_overview));
             selectFragment(R.id.navigation_overview);
-            mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
+            mPreviousMenuItem = getMenu(mNavigationView).findItem(R.id.navigation_overview);
             mPreviousMenuItem.setChecked(true);
         }
     }
@@ -177,11 +180,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     /**
-     * Markiert das übergebene MenuItem im NavigationDraver
+     * Markiert das übergebene MenuItem im NavigationDrawer
      *
      * @param item Item welches markiert werden soll oder null falls Markierung aufgehoben werden soll
      */
-    private void setNavigationItem(final MenuItem item) {
+    private void setNavigationItem(@Nullable final MenuItem item) {
         // Markiere aktuelles Feld
         if (mPreviousMenuItem != null) {
             mPreviousMenuItem.setChecked(false);
@@ -189,6 +192,22 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         mPreviousMenuItem = item;
         if (item != null)
             item.setChecked(true);
+    }
+
+    /**
+     * Liefert Menu für die Navigation
+     *
+     * @param mNavigationView View der Navigation
+     * @return Navigationsmenü
+     */
+    private Menu getMenu(@Nullable NavigationView mNavigationView) {
+        if (mNavigationView == null)
+            mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        // Wenn mNavigationView nicht gefunden wird Ausnahme werfen
+        assert mNavigationView != null;
+
+        return mNavigationView.getMenu();
     }
 
     @Override
@@ -239,10 +258,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
             if (savedInstanceState.containsKey("mPreviousMenuItem")) {
-                NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-                mPreviousMenuItem = mNavigationView.getMenu().findItem(R.id.navigation_overview);
+                Menu menu = getMenu(null);
+                mPreviousMenuItem = menu.findItem(R.id.navigation_overview);
                 mPreviousMenuItem.setChecked(false);
-                mPreviousMenuItem = mNavigationView.getMenu().findItem(savedInstanceState.getInt("mPreviousMenuItem"));
+                mPreviousMenuItem = menu.findItem(savedInstanceState.getInt("mPreviousMenuItem"));
                 mPreviousMenuItem.setChecked(true);
             }
     }
@@ -256,13 +275,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
     @Override
     public void setNavigationItem(int item) {
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        setNavigationItem(mNavigationView.getMenu().findItem(item));
+        setNavigationItem(getMenu(null).findItem(item));
     }
 
     @Override
     public void goToNavigationItem(@IdRes final int item) {
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        onNavigationItemSelectedListener.onNavigationItemSelected(mNavigationView.getMenu().findItem(item));
+        onNavigationItemSelectedListener.onNavigationItemSelected(getMenu(null).findItem(item));
     }
 }
