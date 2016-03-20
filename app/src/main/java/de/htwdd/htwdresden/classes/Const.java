@@ -24,7 +24,8 @@ public final class Const {
     }
 
     public static final class IntentParams {
-        public static final String START_WITH_FRAGMENT = "START_FRAGMENT";
+        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetabel";
+        public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
     }
 
     public static final class preferencesKey {

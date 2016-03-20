@@ -1,18 +1,28 @@
 package de.htwdd.htwdresden;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
+
+import de.htwdd.htwdresden.classes.Const;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class TimetableWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, int appWidgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_timetable);
+
+        // Erstelle Intent zum Starten der App
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setAction(Const.IntentParams.START_ACTION_TIMETABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0);
+        views.setOnClickPendingIntent(R.id.timetable_widget_layout, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
