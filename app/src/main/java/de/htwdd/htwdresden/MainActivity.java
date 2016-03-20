@@ -147,6 +147,12 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
                     case R.id.navigation_htwEvents:
                         fragment = new HTWDDEventsProfileFragment();
                         fragment = changeFragementIfNorSignedUp(fragment);
+                        /*HTWDDEventsEventCreator.setOnEventListener(new HTWDDEventsEventCreator.OnEventListener() {
+                            @Override
+                            public void hideToolbar() {
+                                getSupportActionBar().hide();
+                            }
+                        });*/
                         break;
                     case R.id.navigation_htwEventsEventCreator:
                         fragment = new HTWDDEventsEventCreator();
@@ -189,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
     private Fragment changeFragementIfNorSignedUp(Fragment fragment) {
         if (!User.isThereSNrAndPassw(getApplication())) {
             fragment = new HTWDDEventsWizard();
-        }
-        else if (!User.isUserSignedUp(MainActivity.this)) {
+        } else if (!User.isUserSignedUp(MainActivity.this)) {
             fragment = new HTWDDEventsSignUp();
         }
         return fragment;
