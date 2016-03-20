@@ -94,7 +94,7 @@ public class OverviewFragment extends Fragment {
         cardUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www2.htw-dresden.de/~app/android/HTWDDresden-latest.apk"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www2.htw-dresden.de/~app/android/HTWDresden-latest.apk"));
                 startActivity(browserIntent);
             }
         });
