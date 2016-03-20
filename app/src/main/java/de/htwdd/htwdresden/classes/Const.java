@@ -87,29 +87,42 @@ public final class Const {
          * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
          */
         public static int getCurrentDS(@Nullable Long currentTime) {
-            final long offset = TimeZone.getDefault().getOffset(new GregorianCalendar().getTimeInMillis());
+            final Calendar calendar = GregorianCalendar.getInstance();
             if (currentTime == null) {
-                currentTime = getMillisecondsWithoutDate(GregorianCalendar.getInstance());
+                currentTime = getMillisecondsWithoutDate(calendar);
             }
 
-            if (currentTime >= endDS[6].getTime() + offset) {
+            if (currentTime >= getTimeWithOffset(endDS[6], calendar)) {
                 return 0;
-            } else if (currentTime >= beginDS[6].getTime() + offset)
+            } else if (currentTime >= getTimeWithOffset(beginDS[6], calendar))
                 return 7;
-            else if (currentTime >= beginDS[5].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[5], calendar))
                 return 6;
-            else if (currentTime >= beginDS[4].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[4], calendar))
                 return 5;
-            else if (currentTime >= beginDS[3].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[3], calendar))
                 return 4;
-            else if (currentTime >= beginDS[2].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[2], calendar))
                 return 3;
-            else if (currentTime >= beginDS[1].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[1], calendar))
                 return 2;
-            else if (currentTime >= beginDS[0].getTime() + offset)
+            else if (currentTime >= getTimeWithOffset(beginDS[0], calendar))
                 return 1;
 
             return 0;
+        }
+
+        /**
+         * Liefert das Datum in Millesekunden mit der aktuellen Zeitverschiebung
+         *
+         * @param time     Zeit von welcher der Zeitstempel ermittelt werden soll
+         * @param calendar Calender zur Bestimmung des Zeitunterschieds
+         * @return the number of milliseconds since Jan. 1, 1970, midnight GMT.
+         */
+        public static long getTimeWithOffset(@NonNull Time time, @Nullable Calendar calendar) {
+            if (calendar == null)
+                calendar = GregorianCalendar.getInstance();
+            return time.getTime() + TimeZone.getDefault().getOffset(calendar.getTimeInMillis());
         }
 
         /**

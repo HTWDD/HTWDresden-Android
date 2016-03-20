@@ -47,6 +47,19 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
             tools:replace="android:theme" />
 
+        <!-- Services-->
+        <service
+            android:name=".service.VolumeControllerService"
+            android:exported="false" />
+
+        <!-- Receiver-->
+        <receiver
+            android:name=".service.VolumeControllerService$HtwddBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".MensaWidget"
             android:label="@string/navi_mensa">
