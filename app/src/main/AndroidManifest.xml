@@ -59,7 +59,7 @@
                 android:resource="@xml/mensa_widget_info" />
         </receiver>
         <service
-            android:name="de.htwdd.htwdresden.VolumeControllerService"
+            android:name="de.htwdd.htwdresden.service.VolumeControllerService"
             android:exported="false" />
     </application>
 
