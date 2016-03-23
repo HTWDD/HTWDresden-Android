@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements INavigation, HTWD
                     case R.id.navigation_htwEvents:
                         fragment = new HTWDDEventsProfileFragment();
                         fragment = changeFragementIfNorSignedUp(fragment);
+                        //----------------für das Toolbar-Ausblenden aber halt überall
                         /*HTWDDEventsEventCreator.setOnEventListener(new HTWDDEventsEventCreator.OnEventListener() {
                             @Override
                             public void hideToolbar() {

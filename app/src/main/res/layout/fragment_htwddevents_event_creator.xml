@@ -6,19 +6,18 @@
     tools:context="de.htwdd.htwdresden.HTWDDEventsEventCreator">
 
     <RelativeLayout
-        android:id="@+id/eventCreatorRelLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.3">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/htwddevents_event_creator_img"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="@color/primary" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/htwddevents_event_creator_fotoic"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
@@ -27,22 +26,28 @@
             android:layout_marginRight="10dp"
             android:clickable="true"
             android:src="@drawable/ic_htwddevents_camera_alt_24dp"
-            android:tint="@color/white" />
+            android:tint="@color/white"/>
 
-        <EditText
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignBottom="@+id/htwddevents_event_creator_img"
             android:layout_alignParentStart="true"
-            android:layout_margin="10dp"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="sans-serif-light"
             android:hint="Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="#ffffff"
-            android:textColorHint="@color/white" />
-
+            android:textColorHint="#ffffff"
+            >
+            <EditText
+                android:id="@+id/htwddevents_event_creator_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="sans-serif-light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="#ffffff"
+                android:background="@android:color/transparent"
+                />
+        </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
 
@@ -58,7 +63,6 @@
 
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -91,12 +95,11 @@
                         android:orientation="horizontal">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/htwddevents_event_creator_ort"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <EditText
-                                android:id="@+id/eventEditOrt"
+                                android:id="@+id/htwddevents_event_creator_ort"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -113,13 +116,12 @@
                         android:orientation="horizontal">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/htwddevents_event_creator_datum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
 
                             <EditText
-                                android:id="@+id/eventEditZeit"
+                                android:id="@+id/htwddevents_event_creator_datum"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
@@ -136,12 +138,11 @@
                         android:orientation="horizontal">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/htwddevents_event_creator_Art"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <EditText
-                                android:id="@+id/eventEditArt"
+                                android:id="@+id/htwddevents_event_creator_art"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
@@ -156,12 +157,11 @@
                         android:orientation="horizontal">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/htwddevents_event_creator_Fakul"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <EditText
-                                android:id="@+id/eventEditFakul"
+                                android:id="@+id/htwddevents_event_creator_fakul"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
@@ -173,20 +173,13 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="15dp"
-                android:text="BESCHREIBUNG" />
-
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
                 card_view:cardCornerRadius="4dp">
 
                 <LinearLayout
@@ -195,20 +188,31 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="24dp"
+                        android:text="BESCHREIBUNG"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#000" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <EditText
-                            android:id="@+id/edtInput"
+                            android:id="@+id/htwddevents_event_creator_beschreibung"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="top"
                             android:inputType="textCapSentences|textMultiLine"
                             android:maxLength="2000"
-                            android:minHeight="150dp" />
+                            android:minHeight="150dp"
+                            android:hint="Details"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -222,7 +226,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/eventSaveButton"
+                    android:id="@+id/htwddevents_event_creator_saveButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
