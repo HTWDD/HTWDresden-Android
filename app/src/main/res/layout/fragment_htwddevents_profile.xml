@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".HTWDDEventsProfileFragment"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/events_profile_avatar"
+        android:background="#afb8c0"
+        android:minHeight="500px"
+        android:scaleType="centerCrop"
+        android:src="@drawable/htw_navi_image"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:text="Meralium"
+        android:textColor="#ffffff"
+        android:id="@+id/textView2"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignBottom="@+id/events_profile_avatar"
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
+    >
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text = "@string/events_profile_user_name"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Jay and "
+        android:id="@+id/events_profile_user_name"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        />
+</LinearLayout>
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text = "@string/events_profile_user_id"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="s72743"
+        android:id="@+id/events_profile_user_id"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        />
+</LinearLayout>
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text = "Fakultät"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medieninformatik"
+        android:layout_width="0dip"
+        android:layout_weight="0.5"
+        android:id="@+id/events_fakul"
+        />
+</LinearLayout>
+
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="BEARBEITEN"
+    android:id="@+id/button"
+    android:textColor="@color/primary"
+    android:layout_gravity="right" />
+
+</LinearLayout>

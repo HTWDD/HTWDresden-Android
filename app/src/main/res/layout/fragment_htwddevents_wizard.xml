@@ -1,0 +1,98 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Wizard"
+    tools:context="de.htwdd.htwdresden.HTWDDEventsWizard">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin_wizard_sides"
+        android:layout_marginRight="@dimen/margin_wizard_sides"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="105dp"
+            android:gravity="center_horizontal"
+            android:longClickable="false"
+            android:text="HTW"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="120sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="D R E S D E N"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="26sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="26sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/htwddevents_wizard_snummer">
+
+            <EditText
+                android:id="@+id/htwddevents_wizard_snummer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="36dp"
+                android:layout_marginRight="36dp"
+                android:ems="10"
+                android:hint="SNummer"
+                android:gravity="center"
+                android:typeface="monospace"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/htwddevents_wizard_snummer"
+            android:layout_marginBottom="0dp"
+            >
+
+            <EditText
+                android:id="@+id/htwddevents_wizard_passw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="36dp"
+                android:layout_marginRight="36dp"
+                android:ems="10"
+                android:hint="Password"
+                android:typeface="monospace"
+                android:gravity="center"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speichern"
+        android:onClick="onSaveWizard"
+        />
+    </LinearLayout>
+
+</FrameLayout>

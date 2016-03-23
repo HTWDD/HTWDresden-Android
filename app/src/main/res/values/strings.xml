@@ -19,6 +19,7 @@
     <string name="navi_exams">Noten / Prüfungen</string>
     <string name="navi_uni_administration">Verwaltung</string>
     <string name="navi_campus">Campusplan</string>
+    <string name="navi_signup">Sign Up</string>
     <string name="navi_settings">Einstellungen</string>
     <string name="navi_about">Über die App</string>
     <string name="navi_head_uni">Uni Alltag</string>
@@ -188,4 +189,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="events_profile_user_name">Name:</string>
+    <string name="events_profile_user_id">ID</string>
+    <string name="navi_head_htwevents">HTWEvents BETA</string>
+    <string name="navi_htwevents">Meine Events</string>
+    <string name="navi_htwEventsEventErstellen">Event erstellen</string>
 </resources>
