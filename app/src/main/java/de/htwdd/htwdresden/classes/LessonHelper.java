@@ -33,8 +33,6 @@ import de.htwdd.htwdresden.types.LessonSearchResult;
  * @author Kay Förster
  */
 public class LessonHelper {
-    public Lesson lesson = null;
-
     /**
      * Liefert LessonSearchResult ob und welche Stunde aktuell gerade stattfindet
      *
@@ -45,7 +43,7 @@ public class LessonHelper {
     public static LessonSearchResult getCurrentUserLesson(@NonNull final Context context) {
         final Calendar calendar = GregorianCalendar.getInstance();
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
-        final LessonSearchResult lessonSearchResult = new LessonSearchResult();
+        LessonSearchResult lessonSearchResult = new LessonSearchResult();
 
         // Aktuelle Stunde bestimmen
         final int currentDS = Const.Timetable.getCurrentDS(null);
@@ -56,24 +54,7 @@ public class LessonHelper {
             ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.DAY_OF_WEEK) - 1, currentDS);
             if (lessons.size() > 0) {
                 // Suche nach einer passenden Veranstaltung
-                LessonHelper lessonHelper = new LessonHelper();
-                int single = lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
-
-                switch (single) {
-                    case 0:
-                        // keine passende Stunde gefunden
-                        lessonSearchResult.setCode(Const.Timetable.NO_LESSON_FOUND);
-                        return lessonSearchResult;
-                    case 1:
-                        // Genau eine passende Stunden gefunden
-                        lessonSearchResult.setCode(Const.Timetable.ONE_LESSON_FOUND);
-                        lessonSearchResult.setLesson(lessonHelper.lesson);
-                        break;
-                    default:
-                        // mehrere passende Stunden gefunden
-                        lessonSearchResult.setCode(Const.Timetable.MORE_LESSON_FOUND);
-                        break;
-                }
+                lessonSearchResult = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
 
                 // Verbleibende Zeit anzeigen
                 long difference = TimeUnit.MINUTES.convert(
@@ -104,8 +85,7 @@ public class LessonHelper {
         final Calendar calendarNextLesson = GregorianCalendar.getInstance();
         final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
-        final LessonSearchResult lessonSearchResult = new LessonSearchResult();
-        int single;
+        LessonSearchResult lessonSearchResult;
 
         // Aktuelle Stunde bestimmen
         int nextDS = Const.Timetable.getCurrentDS(null);
@@ -117,7 +97,6 @@ public class LessonHelper {
         }
 
         // Suche nach einer passenden Veranstaltung
-        LessonHelper lessonHelper = new LessonHelper();
         do {
             // DS erhöhen
             if ((++nextDS) % 8 == 0) {
@@ -129,18 +108,14 @@ public class LessonHelper {
             ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, nextDS);
 
             // Suche nach passender Stunde
-            single = lessonHelper.searchLesson(lessons, calendarNextLesson.get(Calendar.WEEK_OF_YEAR));
+            lessonSearchResult = LessonHelper.searchLesson(lessons, calendarNextLesson.get(Calendar.WEEK_OF_YEAR));
         }
         // Suche solange nach einer passenden Stunde bis eine Stunde gefunden wurde. Nach über zwei Tagen wird die Suche abgebrochen
-        while (single == 0 && (calendarNextLesson.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR)) < 2);
+        while (lessonSearchResult.getCode() == Const.Timetable.NO_LESSON_FOUND && (calendarNextLesson.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR)) < 2);
 
         // Wenn keine Stunde gefunden wurde kann hier abgebrochen werden, ansonsten Anzahl setzen
-        if (single == 0)
+        if (lessonSearchResult.getCode() == Const.Timetable.NO_LESSON_FOUND)
             return lessonSearchResult;
-        else if (single == 1) {
-            lessonSearchResult.setCode(Const.Timetable.ONE_LESSON_FOUND);
-            lessonSearchResult.setLesson(lessonHelper.lesson);
-        } else lessonSearchResult.setCode(Const.Timetable.MORE_LESSON_FOUND);
 
         //Zeit-Abstand berechen und Stunde anzeigen
         int differenceDay = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
@@ -182,20 +157,24 @@ public class LessonHelper {
      * @param week    KW in der die zu suchende Veranstaltung stattfindet
      * @return 0=keine passende Stunden gefunden, 1=eine Stunden gefunden, 2=mehrere Stunden gefunden
      */
-    public int searchLesson(@NonNull ArrayList<Lesson> lessons, int week) {
-        int single = 0;
+    @NonNull
+    public static LessonSearchResult searchLesson(@NonNull ArrayList<Lesson> lessons, int week) {
+        LessonSearchResult lessonSearchResult = new LessonSearchResult();
 
         // Suche nach einer passenden Veranstaltung
         for (Lesson tmp : lessons) {
             // Es ist keine spezielle KW gesetzt, d.h. die Veranstaltung ist immer
             if (tmp.getWeeksOnly().isEmpty()) {
-                single++;
+                lessonSearchResult.setCode(lessonSearchResult.getCode() + 1);
 
-                if (single == 1)
-                    lesson = tmp;
-                else
+                // Es sind spezielle KW gestzt, suche aktuelle zum anzeigen
+                if (lessonSearchResult.getCode() == Const.Timetable.ONE_LESSON_FOUND) {
+                    lessonSearchResult.setLesson(tmp);
+                } else {
                     // Zweite Veranstallung gefunden, die "immer" ist, weitersuchen sinnlos
+                    lessonSearchResult.setLesson(null);
                     break;
+                }
             }
 
             // Es sind spezielle KW gestzt, suche aktuelle zum anzeigen
@@ -203,17 +182,18 @@ public class LessonHelper {
 
             // Aktuelle Woche enthalten?
             if (Arrays.asList(lessonWeek).contains(String.valueOf(week))) {
-                single++;
+                lessonSearchResult.setCode(lessonSearchResult.getCode() + 1);
 
-                if (single == 1)
-                    lesson = tmp;
-                else
+                if (lessonSearchResult.getCode() == Const.Timetable.ONE_LESSON_FOUND) {
+                    lessonSearchResult.setLesson(tmp);
+                } else {
                     // Zweite Veranstallung gefunden, die "immer" ist
+                    lessonSearchResult.setLesson(null);
                     break;
+                }
             }
         }
-
-        return single;
+        return lessonSearchResult;
     }
 
     /**

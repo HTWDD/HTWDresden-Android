@@ -295,29 +295,31 @@ public class OverviewFragment extends Fragment {
                     // Bezeichnung ändern
                     overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
                     break;
-                default:return;
+                default:
+                    return;
             }
 
             // Übersicht anzeigen
             overview_lessons_busy_plan.setVisibility(View.VISIBLE);
 
             // Daten für Stundenplan-Vorschau
-            LessonHelper lessonHelper = new LessonHelper();
             String[] values = new String[7];
             for (int i = 1; i < 8; i++) {
                 ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, i);
 
                 // Suche nach passender Stunde
-                int single = lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
+                LessonSearchResult lessonSearchResult_vorschau = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
 
-                switch (single) {
-                    case 0:
+                switch (lessonSearchResult_vorschau.getCode()) {
+                    case Const.Timetable.NO_LESSON_FOUND:
                         values[i - 1] = "";
                         break;
-                    case 1:
-                        values[i - 1] = lessonHelper.lesson.getTag() + " (" + lessonHelper.lesson.getType() + ")";
+                    case Const.Timetable.ONE_LESSON_FOUND:
+                        Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
+                        assert lesson_vorschau != null;
+                        values[i - 1] = lesson_vorschau.getTag() + " (" + lesson_vorschau.getType() + ")";
                         break;
-                    case 2:
+                    case Const.Timetable.MORE_LESSON_FOUND:
                         values[i - 1] = getResources().getString(R.string.timetable_moreLessons);
                         break;
                 }
