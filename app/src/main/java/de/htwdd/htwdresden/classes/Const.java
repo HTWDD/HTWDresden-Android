@@ -24,7 +24,8 @@ public final class Const {
     }
 
     public static final class IntentParams {
-        public static final String START_WITH_FRAGMENT = "START_FRAGMENT";
+        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetabel";
+        public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
     }
 
     public static final class preferencesKey {
@@ -58,6 +59,10 @@ public final class Const {
     }
 
     public static final class Timetable {
+        public static final int NO_LESSON_FOUND = 0;
+        public static final int ONE_LESSON_FOUND = 1;
+        public static final int MORE_LESSON_FOUND = 2;
+
         public static final Time[] beginDS = {
                 Time.valueOf("07:30:00"),
                 Time.valueOf("09:20:00"),

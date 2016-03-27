@@ -22,6 +22,7 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.RoomTimetable;
 
 /**
@@ -105,16 +106,18 @@ public class RoomTimetableAdapter extends BaseAdapter {
                     lessons.add(lesson);
 
             // Suche nach passender Stunde
-            int single = ViewHolder.lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
+            LessonSearchResult lessonSearchResult = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
 
-            switch (single) {
-                case 0:
+            switch (lessonSearchResult.getCode()) {
+                case Const.Timetable.NO_LESSON_FOUND:
                     values[x - 1] = "";
                     break;
-                case 1:
-                    values[x - 1] = ViewHolder.lessonHelper.lesson.getTag() + " (" + ViewHolder.lessonHelper.lesson.getType() + ")";
+                case Const.Timetable.ONE_LESSON_FOUND:
+                    Lesson lesson = lessonSearchResult.getLesson();
+                    assert lesson != null;
+                    values[x - 1] = lesson.getTag() + " (" + lesson.getType() + ")";
                     break;
-                case 2:
+                case Const.Timetable.MORE_LESSON_FOUND:
                     values[x - 1] = view.getResources().getString(R.string.timetable_moreLessons);
                     break;
             }
@@ -131,6 +134,5 @@ public class RoomTimetableAdapter extends BaseAdapter {
         public int position;
         public TextView title;
         public TextView day;
-        public static LessonHelper lessonHelper = new LessonHelper();
     }
 }

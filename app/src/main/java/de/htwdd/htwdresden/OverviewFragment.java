@@ -31,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +52,7 @@ import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
 
 
@@ -198,186 +198,135 @@ public class OverviewFragment extends Fragment {
     }
 
     private void showTimetable() {
-        Calendar calendar = GregorianCalendar.getInstance();
+        final Context context = getActivity();
+        final Calendar calendar = GregorianCalendar.getInstance();
         TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(getActivity()));
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
         // TextViews bestimmen
         final TextView overview_lessons_current_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_current_remaining);
         final TextView overview_lessons_current_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_current_tag);
         final TextView overview_lessons_current_type = (TextView) mLayout.findViewById(R.id.overview_lessons_current_type);
         final TextView overview_lessons_next_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_next_remaining);
+        final TextView overview_lessons_next_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_next_tag);
+        final TextView overview_lessons_next_type = (TextView) mLayout.findViewById(R.id.overview_lessons_next_type);
         final TableRow overview_lessons_busy_plan = (TableRow) mLayout.findViewById(R.id.overview_lessons_busy_plan);
         final LinearLayout overview_lessons_list = (LinearLayout) mLayout.findViewById(R.id.overview_lessons_list);
         final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
-        // TextViews zurücksetzen
-        overview_lessons_current_tag.setVisibility(View.GONE);
-        overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
-        overview_lessons_current_remaining.setVisibility(View.GONE);
-        overview_lessons_busy_plan.setVisibility(View.VISIBLE);
+        // Aktuelle Stunde anzeigen
+        LessonSearchResult lessonSearchResult = LessonHelper.getCurrentUserLesson(context);
+        Lesson lesson;
+        switch (lessonSearchResult.getCode()) {
+            case Const.Timetable.NO_LESSON_FOUND:
+                overview_lessons_current_tag.setVisibility(View.GONE);
+                overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
+                overview_lessons_current_remaining.setVisibility(View.GONE);
+                break;
+            case Const.Timetable.ONE_LESSON_FOUND:
+                lesson = lessonSearchResult.getLesson();
+                assert lesson != null;
 
-        // Aktuelle Stunde bestimmen
-        int currentDS = Const.Timetable.getCurrentDS(null);
-
-        // Ist aktuell Vorlesungszeit?
-        if (currentDS != 0 && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            // Suche nach aktuell möglichen Stunden
-            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.DAY_OF_WEEK) - 1, currentDS);
-
-            if (lessons.size() > 0) {
-                overview_lessons_current_remaining.setVisibility(View.VISIBLE);
                 overview_lessons_current_tag.setVisibility(View.VISIBLE);
-
-                // Suche nach einer passenden Veranstaltung
-                LessonHelper lessonHelper = new LessonHelper();
-                int single = lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
-
-                switch (single) {
-                    case 0:
-                        // keine passende Stunde gefunden
-                        overview_lessons_current_tag.setText(null);
-                        overview_lessons_current_remaining.setVisibility(View.GONE);
-                        break;
-                    case 1:
-                        // Genau eine passende Stunden gefunden
-                        overview_lessons_current_tag.setText(lessonHelper.lesson.getTag());
-                        if (!lessonHelper.lesson.getRooms().isEmpty())
-                            overview_lessons_current_type.setText(
-                                    mLayout.getResources().getString(
-                                            R.string.timetable_ds_list_simple,
-                                            lessonType[lessonHelper.lesson.getTypeInt()],
-                                            lessonHelper.lesson.getRooms()));
-                        else
-                            overview_lessons_current_type.setText(lessonType[lessonHelper.lesson.getTypeInt()]);
-                        break;
-                    case 2:
-                        // mehrere passende Stunden gefunden
-                        overview_lessons_current_tag.setText(R.string.timetable_moreLessons);
-                        break;
-                }
-
-                // Verbleibende Zeit anzeigen
-                long difference = TimeUnit.MINUTES.convert(
-                        Const.Timetable.getMillisecondsWithoutDate(calendar) - Const.Timetable.getTimeWithOffset(Const.Timetable.endDS[currentDS - 1], calendar),
-                        TimeUnit.MILLISECONDS
-                );
-                if (difference < 0)
-                    overview_lessons_current_remaining.setText(String.format(getResources().getString(R.string.overview_lessons_remaining_end), -difference));
-                else
-                    overview_lessons_current_remaining.setText(String.format(getResources().getString(R.string.overview_lessons_remaining_final), difference));
-            }
+                overview_lessons_current_tag.setText(lesson.getTag());
+                overview_lessons_current_remaining.setVisibility(View.VISIBLE);
+                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
+                if (!lesson.getRooms().isEmpty())
+                    overview_lessons_current_type.setText(
+                            mLayout.getResources().getString(
+                                    R.string.timetable_ds_list_simple,
+                                    lessonType[lesson.getTypeInt()],
+                                    lesson.getRooms()));
+                else overview_lessons_current_type.setText(lessonType[lesson.getTypeInt()]);
+                break;
+            case Const.Timetable.MORE_LESSON_FOUND:
+                overview_lessons_current_type.setText(null);
+                overview_lessons_current_tag.setVisibility(View.VISIBLE);
+                overview_lessons_current_tag.setText(R.string.timetable_moreLessons);
+                overview_lessons_current_remaining.setVisibility(View.VISIBLE);
+                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
+                break;
         }
 
-        // Suche nach nächster Veranstaltung
-        Calendar calendarNextLesson = GregorianCalendar.getInstance();
-        LessonHelper lessonHelper = new LessonHelper();
-        int nextDS = currentDS;
-        int single;
+        // Nächste Stunde anzeigen lassen
+        lessonSearchResult = LessonHelper.getNextUserLesson(context);
+        switch (lessonSearchResult.getCode()) {
+            case Const.Timetable.NO_LESSON_FOUND:
+                overview_lessons_next_remaining.setText(null);
+                overview_lessons_next_tag.setText(null);
+                overview_lessons_next_type.setText(null);
+                break;
+            case Const.Timetable.ONE_LESSON_FOUND:
+                lesson = lessonSearchResult.getLesson();
+                assert lesson != null;
 
-        // Vorlesungszeit vorbei? Dann auf nächsten Tag springen
-        if (Const.Timetable.getMillisecondsWithoutDate(calendar) > Const.Timetable.endDS[7 - 1].getTime()) {
-            nextDS = 0;
-            calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
-        }
-
-        do {
-            // DS erhöhen
-            if ((++nextDS) % 8 == 0) {
-                nextDS = 1;
-                calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
-            }
-
-            // Lade Stunde aus DB
-            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, nextDS);
-
-            // Suche nach passender Stunde
-            single = lessonHelper.searchLesson(lessons, calendarNextLesson.get(Calendar.WEEK_OF_YEAR));
-        }
-        // Suche solange nach einer passenden Stunde bis eine Stunde gefunden wurde. Nach über zwei Tagen wird die Suche abgebrochen
-        while (single == 0 && (calendarNextLesson.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR)) < 2);
-
-        // Wurde eine nächste Stunde gefunden?
-        if (single > 0) {
-            //Zeit-Abstand berechen und Stunde anzeigen
-            int differenceDay = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
-
-            switch (differenceDay) {
-                case 0:
-                    long minuten = TimeUnit.MINUTES.convert(
-                            Const.Timetable.getTimeWithOffset(Const.Timetable.beginDS[nextDS - 1], calendar) - Const.Timetable.getMillisecondsWithoutDate(calendar),
-                            TimeUnit.MILLISECONDS
-                    );
-                    overview_lessons_next_remaining.setText(String.format(getResources().getString(R.string.overview_lessons_remaining_start), minuten));
-                    break;
-                case 1:
-                    overview_lessons_next_remaining.setText(getString(
-                            R.string.overview_lessons_tomorrow_param,
-                            getString(R.string.timetable_ds_list_simple, format.format(Const.Timetable.beginDS[nextDS - 1]), format.format(Const.Timetable.endDS[nextDS - 1]))
-                    ));
-                    // DS nicht mehr anzeigen
-                    currentDS = 0;
-                    break;
-                default:
-                    final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
-                    overview_lessons_next_remaining.setText(getString(
-                            R.string.overview_lessons_future,
-                            nameOfDays[calendarNextLesson.get(Calendar.DAY_OF_WEEK)],
-                            getString(R.string.timetable_ds_list_simple, format.format(Const.Timetable.beginDS[nextDS - 1]), format.format(Const.Timetable.endDS[nextDS - 1]))
-                    ));
-
-                    // Vorschau ausblenden
-                    overview_lessons_busy_plan.setVisibility(View.GONE);
-                    break;
-            }
-
-            // Art und Name anzeigen
-            if (single == 1) {
-                TextView overview_lessons_next_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_next_tag);
-                TextView overview_lessons_next_type = (TextView) mLayout.findViewById(R.id.overview_lessons_next_type);
-
-                overview_lessons_next_tag.setText(lessonHelper.lesson.getTag());
-                overview_lessons_next_type.setText(
-                        mLayout.getResources().getString(
-                                R.string.timetable_ds_list_simple,
-                                lessonType[lessonHelper.lesson.getTypeInt()],
-                                lessonHelper.lesson.getRooms()));
-            } else {
-                TextView overview_lessons_next_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_next_tag);
+                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
+                overview_lessons_next_tag.setText(lesson.getTag());
+                if (!lesson.getRooms().isEmpty()) {
+                    overview_lessons_next_type.setText(
+                            mLayout.getResources().getString(
+                                    R.string.timetable_ds_list_simple,
+                                    lessonType[lesson.getTypeInt()],
+                                    lesson.getRooms()));
+                } else overview_lessons_next_type.setText(lessonType[lesson.getTypeInt()]);
+                break;
+            case Const.Timetable.MORE_LESSON_FOUND:
+                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
                 overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
-            }
+                overview_lessons_next_type.setText(null);
+                break;
         }
 
         // Stundenplanvorschau
-        if (overview_lessons_busy_plan.getVisibility() == View.VISIBLE) {
+        overview_lessons_busy_plan.setVisibility(View.GONE);
+        Calendar calendarNextLesson = lessonSearchResult.getCalendar();
+        if (lessonSearchResult.getCode() != Const.Timetable.NO_LESSON_FOUND && calendarNextLesson != null) {
+            int timeDifference = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+            int currentDS = 0;
+
+            switch (timeDifference) {
+                case 0:
+                    // Bezeichnung ändern
+                    overview_lessons_day.setText(R.string.timetable_overview_today);
+                    // Wenn Plan von heute, aktuelle Stunde hervorheben
+                    currentDS = Const.Timetable.getCurrentDS(null);
+                    break;
+                case 1:
+                    // Bezeichnung ändern
+                    overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
+                    break;
+                default:
+                    return;
+            }
+
+            // Übersicht anzeigen
+            overview_lessons_busy_plan.setVisibility(View.VISIBLE);
+
             // Daten für Stundenplan-Vorschau
             String[] values = new String[7];
             for (int i = 1; i < 8; i++) {
                 ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, i);
 
                 // Suche nach passender Stunde
-                single = lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
+                LessonSearchResult lessonSearchResult_vorschau = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
 
-                switch (single) {
-                    case 0:
+                switch (lessonSearchResult_vorschau.getCode()) {
+                    case Const.Timetable.NO_LESSON_FOUND:
                         values[i - 1] = "";
                         break;
-                    case 1:
-                        values[i - 1] = lessonHelper.lesson.getTag() + " (" + lessonHelper.lesson.getType() + ")";
+                    case Const.Timetable.ONE_LESSON_FOUND:
+                        Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
+                        assert lesson_vorschau != null;
+                        values[i - 1] = lesson_vorschau.getTag() + " (" + lesson_vorschau.getType() + ")";
                         break;
-                    case 2:
+                    case Const.Timetable.MORE_LESSON_FOUND:
                         values[i - 1] = getResources().getString(R.string.timetable_moreLessons);
                         break;
                 }
             }
+
             // Stundenplanvorschau erstellen
             LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
-
-            // Bezeichnung ändern
-            if (Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR)) == 0)
-                overview_lessons_day.setText(R.string.timetable_overview_today);
-            else overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
         }
     }
 

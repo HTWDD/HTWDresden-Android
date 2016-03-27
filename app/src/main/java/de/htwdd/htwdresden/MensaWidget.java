@@ -43,7 +43,7 @@ public class MensaWidget extends AppWidgetProvider {
 
         // Erstelle Intent zum Starten der App
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(Const.IntentParams.START_WITH_FRAGMENT, R.id.navigation_mensa);
+        intent.setAction(Const.IntentParams.START_ACTION_MENSA);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0);
         views.setOnClickPendingIntent(R.id.mensa_widget_layout, pendingIntent);
 

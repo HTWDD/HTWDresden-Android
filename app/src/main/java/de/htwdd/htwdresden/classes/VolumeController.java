@@ -72,9 +72,8 @@ public class VolumeController {
         if (lessons.size() == 0)
             return;
 
-        // Überprüfe Lehrveranstalltungen genenuer
-        LessonHelper lessonHelper = new LessonHelper();
-        if (lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR)) == 0)
+        // Überprüfe Lehrveranstaltungen genenuer
+        if (LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR)).getCode() == Const.Timetable.NO_LESSON_FOUND)
             return;
 
         // Setze Audio-Ausgabe auf Silent
