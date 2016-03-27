@@ -14,19 +14,168 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.database.DatabaseManager;
+import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.LessonSearchResult;
 
 /**
  * @author Kay Förster
  */
 public class LessonHelper {
     public Lesson lesson = null;
+
+    /**
+     * Liefert LessonSearchResult ob und welche Stunde aktuell gerade stattfindet
+     *
+     * @param context App-Context
+     * @return LessonSearchResult mit Beschreibung zur aktuellen Stunde
+     */
+    @NonNull
+    public static LessonSearchResult getCurrentUserLesson(@NonNull final Context context) {
+        final Calendar calendar = GregorianCalendar.getInstance();
+        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
+        final LessonSearchResult lessonSearchResult = new LessonSearchResult();
+
+        // Aktuelle Stunde bestimmen
+        final int currentDS = Const.Timetable.getCurrentDS(null);
+
+        // Ist aktuell Vorlesungszeit?
+        if (currentDS != 0 && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            // Suche nach aktuell möglichen Stunden
+            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.DAY_OF_WEEK) - 1, currentDS);
+            if (lessons.size() > 0) {
+                // Suche nach einer passenden Veranstaltung
+                LessonHelper lessonHelper = new LessonHelper();
+                int single = lessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
+
+                switch (single) {
+                    case 0:
+                        // keine passende Stunde gefunden
+                        lessonSearchResult.setCode(Const.Timetable.NO_LESSON_FOUND);
+                        return lessonSearchResult;
+                    case 1:
+                        // Genau eine passende Stunden gefunden
+                        lessonSearchResult.setCode(Const.Timetable.ONE_LESSON_FOUND);
+                        lessonSearchResult.setLesson(lessonHelper.lesson);
+                        break;
+                    default:
+                        // mehrere passende Stunden gefunden
+                        lessonSearchResult.setCode(Const.Timetable.MORE_LESSON_FOUND);
+                        break;
+                }
+
+                // Verbleibende Zeit anzeigen
+                long difference = TimeUnit.MINUTES.convert(
+                        Const.Timetable.getMillisecondsWithoutDate(calendar) - Const.Timetable.getTimeWithOffset(Const.Timetable.endDS[currentDS - 1], calendar),
+                        TimeUnit.MILLISECONDS);
+
+                if (difference < 0)
+                    lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_end), -difference));
+                else
+                    lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_final), difference));
+
+                lessonSearchResult.setCalendar(calendar);
+            }
+        }
+
+        return lessonSearchResult;
+    }
+
+    /**
+     * Liefert die nächste Stunde(n)
+     *
+     * @param context App-Context
+     * @return LessonSearchResult mit Beschreibung zur nächste Stunde
+     */
+    @NonNull
+    public static LessonSearchResult getNextUserLesson(@NonNull final Context context) {
+        final Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendarNextLesson = GregorianCalendar.getInstance();
+        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
+        final LessonSearchResult lessonSearchResult = new LessonSearchResult();
+        int single;
+
+        // Aktuelle Stunde bestimmen
+        int nextDS = Const.Timetable.getCurrentDS(null);
+
+        // Vorlesungszeit vorbei? Dann auf nächsten Tag springen
+        if (Const.Timetable.getMillisecondsWithoutDate(calendar) > Const.Timetable.endDS[7 - 1].getTime()) {
+            nextDS = 0;
+            calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        // Suche nach einer passenden Veranstaltung
+        LessonHelper lessonHelper = new LessonHelper();
+        do {
+            // DS erhöhen
+            if ((++nextDS) % 8 == 0) {
+                nextDS = 1;
+                calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            // Lade Stunde aus DB
+            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, nextDS);
+
+            // Suche nach passender Stunde
+            single = lessonHelper.searchLesson(lessons, calendarNextLesson.get(Calendar.WEEK_OF_YEAR));
+        }
+        // Suche solange nach einer passenden Stunde bis eine Stunde gefunden wurde. Nach über zwei Tagen wird die Suche abgebrochen
+        while (single == 0 && (calendarNextLesson.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR)) < 2);
+
+        // Wenn keine Stunde gefunden wurde kann hier abgebrochen werden, ansonsten Anzahl setzen
+        if (single == 0)
+            return lessonSearchResult;
+        else if (single == 1) {
+            lessonSearchResult.setCode(Const.Timetable.ONE_LESSON_FOUND);
+            lessonSearchResult.setLesson(lessonHelper.lesson);
+        } else lessonSearchResult.setCode(Const.Timetable.MORE_LESSON_FOUND);
+
+        //Zeit-Abstand berechen und Stunde anzeigen
+        int differenceDay = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+        switch (differenceDay) {
+            case 0:
+                long minuten = TimeUnit.MINUTES.convert(
+                        Const.Timetable.getTimeWithOffset(Const.Timetable.beginDS[nextDS - 1], calendar) - Const.Timetable.getMillisecondsWithoutDate(calendar),
+                        TimeUnit.MILLISECONDS
+                );
+                lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_start), minuten));
+                break;
+            case 1:
+                lessonSearchResult.setTimeRemaining(context.getString(
+                        R.string.overview_lessons_tomorrow_param,
+                        context.getString(
+                                R.string.timetable_ds_list_simple,
+                                format.format(Const.Timetable.beginDS[nextDS - 1]),
+                                format.format(Const.Timetable.endDS[nextDS - 1]))
+                ));
+                break;
+            default:
+                final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
+                lessonSearchResult.setTimeRemaining(context.getString(
+                        R.string.overview_lessons_future,
+                        nameOfDays[calendarNextLesson.get(Calendar.DAY_OF_WEEK)],
+                        context.getString(
+                                R.string.timetable_ds_list_simple,
+                                format.format(Const.Timetable.beginDS[nextDS - 1]),
+                                format.format(Const.Timetable.endDS[nextDS - 1]))
+                ));
+                break;
+        }
+        lessonSearchResult.setCalendar(calendarNextLesson);
+        return lessonSearchResult;
+    }
 
     /**
      * @param lessons Liste der zu überprüfenden Stunden
@@ -156,7 +305,6 @@ public class LessonHelper {
         int index = 0;
         for (String lessonDs : listOfDs) {
             View sub_view = mLayoutInflater.inflate(R.layout.fragment_timetable_mini_plan, viewGroup, false);
-
 
             // Hintergrund einfärben
             if (index == (current_ds - 1))

@@ -59,6 +59,10 @@ public final class Const {
     }
 
     public static final class Timetable {
+        public static final int NO_LESSON_FOUND = 0;
+        public static final int ONE_LESSON_FOUND = 1;
+        public static final int MORE_LESSON_FOUND = 2;
+
         public static final Time[] beginDS = {
                 Time.valueOf("07:30:00"),
                 Time.valueOf("09:20:00"),
