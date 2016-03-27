@@ -26,6 +26,8 @@
 
     <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
+    <string name="info_error_semesterlan_outofdate">Der Semesterplan ist auf dem Server nicht mehr aktuell</string>
+    <string name="info_error_read_sqlite">Fehler beim Lesen aus der lokalen Datenbank</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
     <string name="info_error_error">Fehler beim Löschen</string>
@@ -33,6 +35,9 @@
     <string name="info_internet_timeout">Zeitüberschreitung bei der Anfrage!</string>
     <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
     <string name="info_internet_error">Unbekannter Netzwerkfehler</string>
+
+    <string name="semesterplan_wintersemester">Wintersemester</string>
+    <string name="semesterplan_sommersemester">Sommersemester</string>
 
     <string name="settings_category_access_data">Zugangsdaten</string>
     <string name="settings_category_study">Studium</string>
@@ -188,4 +193,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="preference_title_stummschalten">Automatisches Stummschalten</string>
+    <string name="preference_summary_stummschalten">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
+    <string name="managment_semesterplan">Semesterplan</string>
+    <string name="managment_semesterplan_lecturePeriod">Lehrveranstaltungen</string>
+    <string name="managment_semesterplan_freeDays">Freie Tage</string>
+    <string name="managment_semesterplan_examsPeriod">Prüfungsabschnitt</string>
+    <string name="managment_semesterplan_reregistration">Rückmeldung</string>
+
+
 </resources>

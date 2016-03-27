@@ -18,7 +18,7 @@ import de.htwdd.htwdresden.types.Lesson;
 
 
 public class VolumeController {
-    public static final String PREFERENCE_FILE_VOLUME_CTRL = "de.htwdd.PREFERENCE_FILE_VOLUME_CTRL";
+    public static final String PREFERENCE_FILE_VOLUME_CTRL = "de.htwdd.htwdresden.PREFERENCE_FILE_VOLUME_CTRL";
     private AudioManager amanager;
     private Context context;
 

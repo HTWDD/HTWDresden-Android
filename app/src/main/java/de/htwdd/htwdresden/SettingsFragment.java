@@ -23,6 +23,7 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+
     public SettingsFragment() {
         // Required empty public constructor
     }

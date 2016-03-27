@@ -60,4 +60,5 @@
             android:summaryOn="@string/settings_acra_disabled"
             android:title="@string/settings_acra" />
     </PreferenceCategory>
+
 </PreferenceScreen>

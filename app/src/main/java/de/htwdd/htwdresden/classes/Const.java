@@ -80,6 +80,14 @@ public final class Const {
                 Time.valueOf("18:30:00"),
                 Time.valueOf("20:10:00")};
 
+        public static int getMinutsBeginDS(int i){
+            if(i>=beginDS.length || i<0 ) return 0;
+            return (int)beginDS[i].getTime()/1000/60 + 60;
+        }
+        public static int getMinutsEndDS(int i){
+            if(i>=endDS.length || i<0 ) return 0;
+            return (int) endDS[i].getTime()/1000/60 + 60;
+        }
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
         }
@@ -189,5 +197,36 @@ public final class Const {
             public static final String COLUMN_NAME_KENNZEICHEN = "kennzeichen";
             public static final String TABLE_NAME = "ExamResults";
         }
+
+        public static class SemesterPlanTable implements BaseColumns {
+            public static final String TABLE_NAME = "SemesterPlan";
+            public static final String COLUMN_NAME_TYPE = "type";
+            public static final String COLUMN_NAME_YEAR = "year";
+            public static final String COLUMN_NAME_PERIOD_BEGIN = "per_begin";
+            public static final String COLUMN_NAME_PERIOD_END = "per_end";
+            public static final String COLUMN_NAME_LECTURE_PERIOD_BEGIN = "lec_per_begin";
+            public static final String COLUMN_NAME_LECTURE_PERIOD_END = "lec_per_end";
+            public static final String COLUMN_NAME_EXAM_PERIOD_BEGIN = "ex_per_begin";
+            public static final String COLUMN_NAME_EXAM_PERIOD_END = "ex_per_end";
+            public static final String COLUMN_NAME_REG_PERIOD_BEGIN = "reg_per_begin";
+            public static final String COLUMN_NAME_REG_PERIOD_END = "reg_per_end";
+        }
+
+        public static class FreeDaysTable implements BaseColumns {
+            public static final String TABLE_NAME = "FreeDays";
+            public static final String COLUMN_NAME_BEZ = "days_bez";
+            public static final String COLUMN_NAME_FREE_BEGIN = "free_begin";
+            public static final String COLUMN_NAME_FREE_END = "free_end";
+            public static final String COLUMN_NAME_PARENT_ID = "parent_id";
+        }
+
+    }
+
+    public static final class semesterPlanUpdater {
+        public static final long UPDATE_INTERVAL = 3 * 7 * 24 * 60 * 60 * 1000;
+        public static final String SEMESTERPLAN_URL_JSON = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
+    }
+    public static final class VolumeController{
+        public static final String PREFERENCES_AUTO_STUMMSCHALTEN="autoStummSchalten";
     }
 }
