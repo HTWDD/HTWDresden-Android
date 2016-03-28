@@ -36,14 +36,12 @@ public final class Const {
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
-        public static final int HTTP_NOT_MODIFIED = 304;
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
         public static final int HTTP_DOWNLOAD_ERROR = 999;
         public static final int HTTP_TIMEOUT = 998;
         public static final int HTTP_NO_CONNECTION = 997;
         public static final int HTTP_NETWORK_ERROR = 996;
-        public static final int HTTP_DOWNLOAD_OK = 200;
         public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
         public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
     }
@@ -80,14 +78,6 @@ public final class Const {
                 Time.valueOf("18:30:00"),
                 Time.valueOf("20:10:00")};
 
-        public static int getMinutsBeginDS(int i){
-            if(i>=beginDS.length || i<0 ) return 0;
-            return (int)beginDS[i].getTime()/1000/60 + 60;
-        }
-        public static int getMinutsEndDS(int i){
-            if(i>=endDS.length || i<0 ) return 0;
-            return (int) endDS[i].getTime()/1000/60 + 60;
-        }
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
         }
@@ -225,8 +215,5 @@ public final class Const {
     public static final class semesterPlanUpdater {
         public static final long UPDATE_INTERVAL = 3 * 7 * 24 * 60 * 60 * 1000;
         public static final String SEMESTERPLAN_URL_JSON = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
-    }
-    public static final class VolumeController{
-        public static final String PREFERENCES_AUTO_STUMMSCHALTEN="autoStummSchalten";
     }
 }
