@@ -1,468 +1,475 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefr_SemPlan"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ManagementFragment">
-    <ScrollView
+    android:layout_height="match_parent">
+
+    <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <GridLayout
+        android:layout_height="wrap_content"
+        android:columnCount="1">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/management_semesterplan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="1">
-            <android.support.v7.widget.CardView
-                android:id="@+id/management_semesterplan"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            android:clickable="true"
+            card_view:cardCornerRadius="4dp"
+            android:visibility="visible">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_between_content"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/space_between_content"
-                android:clickable="true"
-                card_view:cardCornerRadius="4dp">
+                android:layout_margin="@dimen/space_between_content"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <TextView
+                    android:id="@+id/semesterplan_Bezeichnung"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10sp"
-                    >
+                    android:text="@string/managment_semesterplan"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_between_content"
+                    android:text="@string/managment_semesterplan_lecturePeriod"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
+
+                <TextView
+                    android:id="@+id/semesterplan_lecturePeriod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_between_content"
+                    android:text="@string/managment_semesterplan_freeDays"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                        android:text="@string/managment_semesterplan"
-                        android:id="@+id/semesterplan_Bezeichnung" />
-                    <TextView
-                        android:paddingTop="10sp"
+                        android:id="@+id/semesterplan_freieTageNamen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-                        android:text="@string/managment_semesterplan_lecturePeriod" />
+                        android:paddingEnd="@dimen/space_between_content"
+                        android:paddingStart="@dimen/intent_enumeration"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+
                     <TextView
-                        android:paddingStart="10sp"
+                        android:id="@+id/semesterplan_freieTage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:text=""
-                        android:id="@+id/semesterplan_lecturePeriod" />
-                    <TextView
-                        android:paddingTop="10sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-                        android:text="@string/managment_semesterplan_freeDays" />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="@dimen/space_between_content"
+                        android:layout_marginStart="40sp"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_between_content"
+                    android:text="@string/managment_semesterplan_examsPeriod"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/semesterplan_pruefPeriod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_between_content"
+                    android:text="@string/managment_semesterplan_reregistration"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
+
+                <TextView
+                    android:id="@+id/semesterplan_reregistration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/management_office"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            android:clickable="true"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/intent_enumeration"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/management_office" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/management_office_room" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_services" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:text="@string/management_office_services" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_opening_hours" />
+
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TableRow>
+
                         <TextView
-                            android:paddingStart="10sp"
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                            android:text=""
-                            android:id="@+id/semesterplan_freieTageNamen" />
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_services_office_services1" />
+
                         <TextView
-                            android:layout_marginLeft="40sp"
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                            android:text=""
-                            android:id="@+id/semesterplan_freieTage" />
-                    </LinearLayout>
-                    <TextView
-                        android:paddingTop="5sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-                        android:text="@string/managment_semesterplan_examsPeriod" />
-                    <TextView
-                        android:paddingStart="10sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:text=""
-                        android:id="@+id/semesterplan_pruefPeriod" />
-                    <TextView
-                        android:paddingTop="10sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-                        android:text="@string/managment_semesterplan_reregistration" />
-                    <TextView
-                        android:paddingStart="10sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:text=""
-                        android:id="@+id/semesterplan_reregistration" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/management_office"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_services_office_services2" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_services_office_services3" />
+
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_services_office_services4" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/management_printing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_between_content"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/space_between_content"
-                android:clickable="true"
-                card_view:cardCornerRadius="4dp">
+                android:layout_margin="@dimen/intent_enumeration"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Large"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10sp"
-                    android:orientation="vertical">
+                    android:text="@string/management_printing" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_office" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/management_printing_room" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_services" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:text="@string/management_printing_services" />
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_opening_hours" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/management_office_room" />
-
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_services" />
+                        android:paddingEnd="@dimen/space_between_content"
+                        android:paddingStart="@dimen/intent_enumeration"
+                        android:text="@string/management_printing_office_services1" />
 
                     <TextView
                         style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingEnd="5sp"
-                        android:paddingStart="10sp"
-                        android:text="@string/management_office_services" />
+                        android:paddingEnd="@dimen/space_between_content"
+                        android:paddingStart="@dimen/intent_enumeration"
+                        android:text="@string/management_printing_office_services2" />
+                </TableRow>
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_opening_hours" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-                    <TableLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+        <android.support.v7.widget.CardView
+            android:id="@+id/management_examination_office"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp">
 
-                        <TableRow>
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_services_office_services1" />
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_services_office_services2" />
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_services_office_services3" />
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_services_office_services4" />
-                        </TableRow>
-                    </TableLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/management_printing"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_between_content"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/space_between_content"
-                card_view:cardCornerRadius="4dp">
+                android:layout_margin="@dimen/intent_enumeration"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Large"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10sp"
-                    android:orientation="vertical">
+                    android:text="@string/management_examination_office" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_printing" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/management_examination_office_room" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_printing_room" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_services" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_services" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:text="@string/management_examination_office_services" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="5sp"
-                        android:paddingStart="10sp"
-                        android:text="@string/management_printing_services" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_opening_hours" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_opening_hours" />
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
 
-                    <TableLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+                    <TableRow>
 
-                        <TableRow>
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_examination_services_office_services1" />
 
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_printing_office_services1" />
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_examination_services_office_services2" />
+                    </TableRow>
 
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_printing_office_services2" />
-                        </TableRow>
-                    </TableLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/management_examination_office"
+                    <TableRow>
+
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_examination_services_office_services3" />
+
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_examination_services_office_services4" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/management_stura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_between_content"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/space_between_content"
-                card_view:cardCornerRadius="4dp">
+                android:layout_margin="@dimen/intent_enumeration"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Large"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10sp"
-                    android:orientation="vertical">
+                    android:text="@string/management_stura" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_examination_office" />
-
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_examination_office_room" />
-
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_services" />
-
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="5sp"
-                        android:paddingStart="10sp"
-                        android:text="@string/management_examination_office_services" />
-
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_opening_hours" />
-
-                    <TableLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
-
-                        <TableRow>
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_examination_services_office_services1" />
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_examination_services_office_services2" />
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_examination_services_office_services3" />
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_examination_services_office_services4" />
-                        </TableRow>
-                    </TableLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/management_stura"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_between_content"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/space_between_content"
-                card_view:cardCornerRadius="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10sp"
-                    android:orientation="vertical">
+                    android:text="@string/management_stura_room" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_stura" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_services" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/management_stura_room" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_between_content"
+                    android:paddingStart="@dimen/intent_enumeration"
+                    android:text="@string/management_stura_services" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_services" />
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/intent_enumeration"
+                    android:text="@string/management_opening_hours" />
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="5sp"
-                        android:paddingStart="10sp"
-                        android:text="@string/management_stura_services" />
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
 
-                    <TextView
-                        style="@android:style/TextAppearance.DeviceDefault"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10sp"
-                        android:text="@string/management_opening_hours" />
+                    <TableRow>
 
-                    <TableLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_stura_office_services1" />
 
-                        <TableRow>
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_stura_office_services2" />
+                    </TableRow>
 
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_stura_office_services1" />
+                    <TableRow>
 
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_stura_office_services2" />
-                        </TableRow>
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_stura_office_services3" />
 
-                        <TableRow>
+                        <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/space_between_content"
+                            android:paddingStart="@dimen/intent_enumeration"
+                            android:text="@string/management_stura_office_services4" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
 
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_stura_office_services3" />
-
-                            <TextView
-                                style="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="5sp"
-                                android:paddingStart="10sp"
-                                android:text="@string/management_stura_office_services4" />
-                        </TableRow>
-                    </TableLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-        </GridLayout>
-    </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v7.widget.CardView>
+    </GridLayout>
+</ScrollView>

@@ -31,11 +31,13 @@ public final class Const {
     public static final class preferencesKey {
         public static final String PREFERENCES_AUTO_MUTE = "autoMute";
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
+        public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
     }
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
+        public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
         public static final int HTTP_DOWNLOAD_ERROR = 999;
@@ -213,7 +215,6 @@ public final class Const {
     }
 
     public static final class semesterPlanUpdater {
-        public static final long UPDATE_INTERVAL = 3 * 7 * 24 * 60 * 60 * 1000;
-        public static final String SEMESTERPLAN_URL_JSON = "https://www2.htw-dresden.de/~app/API/semesterplan.json";
+
     }
 }

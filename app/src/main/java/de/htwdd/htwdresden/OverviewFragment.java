@@ -46,6 +46,7 @@ import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
+import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
@@ -54,6 +55,7 @@ import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
 
 
 /**
@@ -142,7 +144,7 @@ public class OverviewFragment extends Fragment {
         // Auf Update überprüfen
         if ((GregorianCalendar.getInstance().getTimeInMillis() - sharedPreferences.getLong("appUpdateCheck", 0) >= TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
                 && VolleyDownloader.CheckInternet(getActivity()))) {
-            // Request mit Listener zur Abfrage der aktuellen Version erstellen
+            // Request mit Listener zur Abfrage der aktuellen Versionen erstellen
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://htwdd.github.io/version.json", null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -150,12 +152,17 @@ public class OverviewFragment extends Fragment {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 
+                        // Überprüfe APK-Version
                         if (response.getInt("androidAPK") > packageInfo.versionCode) {
                             editor.putBoolean("appUpdate", true);
                             // Update-Kachel anzeigen
                             CardView cardUpdate = (CardView) mLayout.findViewById(R.id.overview_app_update);
                             cardUpdate.setVisibility(View.VISIBLE);
                         } else editor.putBoolean("appUpdate", false);
+
+                        // Überprüfe Semesterplan
+                        if (response.optLong("semesterplan_update", 0) > sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, -1))
+                            sendRequestToGetSemesterplan();
 
                         editor.putLong("appUpdateCheck", GregorianCalendar.getInstance().getTimeInMillis());
                         editor.apply();
@@ -481,5 +488,36 @@ public class OverviewFragment extends Fragment {
         }, null);
 
         VolleyDownloader.getInstance(getActivity()).getRequestQueue().add(jsonArrayRequest);
+    }
+
+    /**
+     * Lädt den Semesterplan herunter
+     */
+    private void sendRequestToGetSemesterplan() {
+        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject semesterPlanJSON = response.getJSONObject(i);
+                        SemesterPlan semesterPlan = new SemesterPlan(semesterPlanJSON);
+
+                        final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
+                        semesterPlanDAO.addSemesterPlan(semesterPlan);
+                    }
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "[Fehler beim Parsen des Semesterplans]");
+                    Log.e(LOG_TAG, e.getMessage());
+                    return;
+                }
+
+                final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                editor.putLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, System.currentTimeMillis());
+                editor.apply();
+            }
+        };
+
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL_SEMESTERPLAN, jsonArrayListener, null);
+        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(jsObjRequest);
     }
 }

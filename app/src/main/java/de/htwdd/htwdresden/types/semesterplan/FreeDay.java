@@ -7,13 +7,8 @@ package de.htwdd.htwdresden.types.semesterplan;
 public final class FreeDay extends Period {
     private String name;
 
-    @Override
-    public String toString() {
-        return super.toString() + "\n";
-    }
-
     public String getName() {
-        return name + "\n";
+        return name;
     }
 
     public String getBeginDay() {
