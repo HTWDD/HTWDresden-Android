@@ -503,7 +503,7 @@ public class OverviewFragment extends Fragment {
                         SemesterPlan semesterPlan = new SemesterPlan(semesterPlanJSON);
 
                         final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
-                        semesterPlanDAO.addSemesterPlan(semesterPlan);
+                        semesterPlanDAO.save(semesterPlan);
                     }
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "[Fehler beim Parsen des Semesterplans]");

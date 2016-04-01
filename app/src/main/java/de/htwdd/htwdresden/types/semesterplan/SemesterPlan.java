@@ -3,6 +3,7 @@ package de.htwdd.htwdresden.types.semesterplan;
  * Manages Semesterplan
  * Created by Vitali Drazdovich , Artyom Dyadechkin
  */
+
 import android.content.ContentValues;
 
 import org.json.JSONArray;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import de.htwdd.htwdresden.interfaces.IParseJSON;
 
@@ -87,6 +89,16 @@ public class SemesterPlan implements IParseJSON, IGetContentValues {
     @Override
     public ContentValues getContentValues() {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_YEAR, year);
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_TYPE, type);
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_BEGIN, lecturePeriod.getBeginDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_LECTURE_PERIOD_END, lecturePeriod.getEndDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_BEGIN, examsPeriod.getBeginDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_EXAM_PERIOD_END, examsPeriod.getEndDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_BEGIN, period.getBeginDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_PERIOD_END, period.getEndDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_BEGIN, reregistration.getBeginDay());
+        contentValues.put(Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_END, reregistration.getEndDay());
         return contentValues;
     }
 
