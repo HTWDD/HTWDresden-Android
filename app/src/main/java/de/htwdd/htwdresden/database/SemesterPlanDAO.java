@@ -134,4 +134,13 @@ public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
 
         return semesterplanID;
     }
+
+    /**
+     * Löscht alle Einträge in der Tabelle
+     */
+    public void clearDatabase() {
+        SQLiteDatabase database = sqLiteOpenHelper.getWritableDatabase();
+        database.delete(Const.database.FreeDaysTable.TABLE_NAME, null, null);
+        database.delete(getTableName(), null, null);
+    }
 }

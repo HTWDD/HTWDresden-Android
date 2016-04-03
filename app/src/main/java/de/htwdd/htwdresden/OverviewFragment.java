@@ -498,11 +498,15 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onResponse(JSONArray response) {
                 try {
+                    // Datenbankzugriff
+                    final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
+                    // Alle Einträge löschen
+                    semesterPlanDAO.clearDatabase();
+
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject semesterPlanJSON = response.getJSONObject(i);
                         SemesterPlan semesterPlan = new SemesterPlan(semesterPlanJSON);
-
-                        final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
+                        // Semesterplan speichern
                         semesterPlanDAO.save(semesterPlan);
                     }
                 } catch (JSONException e) {
