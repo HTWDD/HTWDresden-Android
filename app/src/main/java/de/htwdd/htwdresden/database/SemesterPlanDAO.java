@@ -11,9 +11,9 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.semesterplan.FreeDay;
-import de.htwdd.htwdresden.types.semesterplan.Period;
-import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
+import de.htwdd.htwdresden.types.FreeDay;
+import de.htwdd.htwdresden.classes.Period;
+import de.htwdd.htwdresden.types.SemesterPlan;
 
 /**
  * Datenbankzugriff für Semesterpläne
@@ -38,7 +38,7 @@ public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
     }
 
     @Nullable
-    public SemesterPlan getSemsterplan(final int year, @NonNull final String semesterBez) {
+    public SemesterPlan getSemsterplan(final int year, @NonNull final String type) {
         SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();
         Cursor cursor = database.query(
                 getTableName(),
@@ -56,7 +56,7 @@ public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
                         Const.database.SemesterPlanTable.COLUMN_NAME_REG_PERIOD_END
                 },
                 Const.database.SemesterPlanTable.COLUMN_NAME_YEAR + "= ? AND " + "UPPER (" + Const.database.SemesterPlanTable.COLUMN_NAME_TYPE + ")" + " = " + "UPPER(?)",
-                new String[]{String.valueOf(year), semesterBez},
+                new String[]{String.valueOf(year), type},
                 null,
                 null,
                 null);
@@ -69,7 +69,7 @@ public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
         Period examPeriod = new Period(cursor.getString(7), cursor.getString(8));
         Period regPeriod = new Period(cursor.getString(9), cursor.getString(10));
         FreeDay freeDay[] = getFreeDays(cursor.getLong(0));
-        SemesterPlan semesterPlan = new SemesterPlan(year, semesterBez, period, freeDay, lecturePeriod, examPeriod, regPeriod);
+        SemesterPlan semesterPlan = new SemesterPlan(year, type, period, freeDay, lecturePeriod, examPeriod, regPeriod);
 
         cursor.close();
         database.close();

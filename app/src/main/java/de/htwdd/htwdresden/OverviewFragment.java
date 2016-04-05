@@ -55,7 +55,7 @@ import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
-import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
+import de.htwdd.htwdresden.types.SemesterPlan;
 
 
 /**

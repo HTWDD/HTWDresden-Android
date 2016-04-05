@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.semesterplan.FreeDay;
-import de.htwdd.htwdresden.types.semesterplan.SemesterPlan;
+import de.htwdd.htwdresden.types.FreeDay;
+import de.htwdd.htwdresden.types.SemesterPlan;
 
 
 /**
@@ -79,7 +82,7 @@ public class ManagementFragment extends Fragment {
 
     private void getSemesterplan() {
         final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
-        final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(SemesterPlan.getActualYear(), SemesterPlan.getActualSemester());
+        final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(Calendar.getInstance().get(Calendar.YEAR), Const.Semester.getActualSemester());
         final CardView cardView = (CardView) mLayout.findViewById(R.id.management_semesterplan);
 
         if (semesterPlan == null) {
@@ -94,7 +97,8 @@ public class ManagementFragment extends Fragment {
         final TextView semesterplanPruefPeriod = (TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod);
         final TextView semesterplanRegistration = (TextView) mLayout.findViewById(R.id.semesterplan_reregistration);
 
-        semesterplanBezeichnung.setText(semesterPlan.getBezeichnung(getString(R.string.semesterplan_wintersemester), getString(R.string.semesterplan_sommersemester)));
+        String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
+        semesterplanBezeichnung.setText(bezeichnung);
         semesterplanLecturePeriod.setText(semesterPlan.getLecturePeriod().toString());
         semesterplanPruefPeriod.setText(semesterPlan.getExamsPeriod().toString());
         semesterplanRegistration.setText(semesterPlan.getReregistration().toString());

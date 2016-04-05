@@ -56,6 +56,19 @@ public final class Const {
             else
                 return semesterNames[1] + " " + semesterCalc / 10 + " / " + ((semesterCalc / 10) + 1);
         }
+
+        public static String getSemesterName(final @NonNull String[] semesterNames, final @NonNull String semester) {
+            if (semester.equals("S"))
+                return semesterNames[0];
+            else return semesterNames[1];
+        }
+
+        public static String getActualSemester() {
+            int mounth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+            if (mounth > 2 && mounth < 9)
+                return "S";
+            return "W";
+        }
     }
 
     public static final class Timetable {
