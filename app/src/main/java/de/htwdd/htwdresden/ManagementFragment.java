@@ -11,7 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.database.DatabaseManager;
@@ -25,6 +29,7 @@ import de.htwdd.htwdresden.types.SemesterPlan;
  * Fragement zur Übersicht aller wichtigen Uni-Einrichtungen
  */
 public class ManagementFragment extends Fragment {
+    private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private View mLayout;
 
     public ManagementFragment() {
@@ -84,38 +89,58 @@ public class ManagementFragment extends Fragment {
         final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
         final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(Calendar.getInstance().get(Calendar.YEAR), Const.Semester.getActualSemester());
         final CardView cardView = (CardView) mLayout.findViewById(R.id.management_semesterplan);
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
         if (semesterPlan == null) {
             cardView.setVisibility(View.GONE);
             return;
         } else cardView.setVisibility(View.VISIBLE);
 
-        final TextView semesterplanBezeichnung = (TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung);
-        final TextView semesterplanLecturePeriod = (TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod);
-        final TextView semesterplanFreieTage = (TextView) mLayout.findViewById(R.id.semesterplan_freieTage);
-        final TextView semesterplanFreieTageNamen = (TextView) mLayout.findViewById(R.id.semesterplan_freieTageNamen);
-        final TextView semesterplanPruefPeriod = (TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod);
-        final TextView semesterplanRegistration = (TextView) mLayout.findViewById(R.id.semesterplan_reregistration);
+        try {
+            final TextView semesterplanBezeichnung = (TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung);
+            final TextView semesterplanLecturePeriod = (TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod);
+            final TextView semesterplanFreieTage = (TextView) mLayout.findViewById(R.id.semesterplan_freieTage);
+            final TextView semesterplanFreieTageNamen = (TextView) mLayout.findViewById(R.id.semesterplan_freieTageNamen);
+            final TextView semesterplanPruefPeriod = (TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod);
+            final TextView semesterplanRegistration = (TextView) mLayout.findViewById(R.id.semesterplan_reregistration);
 
-        String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
-        semesterplanBezeichnung.setText(bezeichnung);
-        semesterplanLecturePeriod.setText(semesterPlan.getLecturePeriod().toString());
-        semesterplanPruefPeriod.setText(semesterPlan.getExamsPeriod().toString());
-        semesterplanRegistration.setText(semesterPlan.getReregistration().toString());
+            String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
+            semesterplanBezeichnung.setText(bezeichnung);
+            semesterplanLecturePeriod.setText(getString(
+                    R.string.timetable_ds_list_simple,
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getLecturePeriod().getBeginDay())),
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getLecturePeriod().getEndDay()))
+            ));
+            semesterplanPruefPeriod.setText(getString(
+                    R.string.timetable_ds_list_simple,
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getExamsPeriod().getBeginDay())),
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getExamsPeriod().getEndDay()))
+            ));
+            semesterplanRegistration.setText(getString(
+                    R.string.timetable_ds_list_simple,
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getReregistration().getBeginDay())),
+                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getReregistration().getEndDay()))
+            ));
 
-        semesterplanFreieTageNamen.setText(null);
-        semesterplanFreieTage.setText(null);
+            semesterplanFreieTageNamen.setText(null);
+            semesterplanFreieTage.setText(null);
 
-        if (semesterPlan.getFreeDays() == null)
-            return;
+            if (semesterPlan.getFreeDays() == null)
+                return;
 
-        for (FreeDay freeDay : semesterPlan.getFreeDays()) {
-            if (semesterplanFreieTage.getText().length() != 0) {
-                semesterplanFreieTageNamen.append("\n");
-                semesterplanFreieTage.append("\n");
+            for (FreeDay freeDay : semesterPlan.getFreeDays()) {
+                if (semesterplanFreieTage.getText().length() != 0) {
+                    semesterplanFreieTageNamen.append("\n");
+                    semesterplanFreieTage.append("\n");
+                }
+                semesterplanFreieTageNamen.append(freeDay.getName());
+                semesterplanFreieTage.append(getString(
+                        R.string.timetable_ds_list_simple,
+                        dateFormat.format(SIMPLE_DATE_FORMAT.parse(freeDay.getBeginDay())),
+                        dateFormat.format(SIMPLE_DATE_FORMAT.parse(freeDay.getEndDay()))));
             }
-            semesterplanFreieTageNamen.append(freeDay.getName());
-            semesterplanFreieTage.append(freeDay.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }
