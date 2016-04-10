@@ -4,8 +4,8 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -76,25 +76,39 @@ public final class Const {
         public static final int ONE_LESSON_FOUND = 1;
         public static final int MORE_LESSON_FOUND = 2;
 
-        public static final Time[] beginDS = {
-                Time.valueOf("07:30:00"),
-                Time.valueOf("09:20:00"),
-                Time.valueOf("11:10:00"),
-                Time.valueOf("13:20:00"),
-                Time.valueOf("15:10:00"),
-                Time.valueOf("17:00:00"),
-                Time.valueOf("18:40:00")};
-        public static final Time[] endDS = {
-                Time.valueOf("09:00:00"),
-                Time.valueOf("10:50:00"),
-                Time.valueOf("12:40:00"),
-                Time.valueOf("14:50:00"),
-                Time.valueOf("16:40:00"),
-                Time.valueOf("18:30:00"),
-                Time.valueOf("20:10:00")};
+        public static final int[] beginDS = {
+                (int) TimeUnit.MINUTES.convert(7, TimeUnit.HOURS) + 30,
+                (int) TimeUnit.MINUTES.convert(9, TimeUnit.HOURS) + 20,
+                (int) TimeUnit.MINUTES.convert(11, TimeUnit.HOURS) + 10,
+                (int) TimeUnit.MINUTES.convert(13, TimeUnit.HOURS) + 20,
+                (int) TimeUnit.MINUTES.convert(15, TimeUnit.HOURS) + 10,
+                (int) TimeUnit.MINUTES.convert(17, TimeUnit.HOURS),
+                (int) TimeUnit.MINUTES.convert(18, TimeUnit.HOURS) + 40};
+
+        public static final int[] endDS = {
+                (int) TimeUnit.MINUTES.convert(9, TimeUnit.HOURS),
+                (int) TimeUnit.MINUTES.convert(10, TimeUnit.HOURS) + 50,
+                (int) TimeUnit.MINUTES.convert(12, TimeUnit.HOURS) + 40,
+                (int) TimeUnit.MINUTES.convert(14, TimeUnit.HOURS) + 50,
+                (int) TimeUnit.MINUTES.convert(16, TimeUnit.HOURS) + 40,
+                (int) TimeUnit.MINUTES.convert(18, TimeUnit.HOURS) + 30,
+                (int) TimeUnit.MINUTES.convert(20, TimeUnit.HOURS) + 10};
 
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
+        }
+
+        public static Calendar getCalendar(final long minutesSinceMidnight) {
+            final int hour = (int) TimeUnit.HOURS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, (int) (minutesSinceMidnight - TimeUnit.MINUTES.convert(hour, TimeUnit.HOURS)));
+            return calendar;
+        }
+
+        public static Date getDate(final long minutesSinceMidnight) {
+            final long millis = TimeUnit.MILLISECONDS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
+            return new Date(millis - TimeZone.getDefault().getOffset(millis));
         }
 
         /**
@@ -104,53 +118,29 @@ public final class Const {
          * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
          */
         public static int getCurrentDS(@Nullable Long currentTime) {
-            final Calendar calendar = GregorianCalendar.getInstance();
             if (currentTime == null) {
-                currentTime = getMillisecondsWithoutDate(calendar);
+                final Calendar calendar = GregorianCalendar.getInstance();
+                currentTime = TimeUnit.MINUTES.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS) + calendar.get(Calendar.MINUTE);
             }
 
-            if (currentTime >= getTimeWithOffset(endDS[6], calendar)) {
+            if (currentTime >= endDS[6]) {
                 return 0;
-            } else if (currentTime >= getTimeWithOffset(beginDS[6], calendar))
+            } else if (currentTime >= beginDS[6])
                 return 7;
-            else if (currentTime >= getTimeWithOffset(beginDS[5], calendar))
+            else if (currentTime >= beginDS[5])
                 return 6;
-            else if (currentTime >= getTimeWithOffset(beginDS[4], calendar))
+            else if (currentTime >= beginDS[4])
                 return 5;
-            else if (currentTime >= getTimeWithOffset(beginDS[3], calendar))
+            else if (currentTime >= beginDS[3])
                 return 4;
-            else if (currentTime >= getTimeWithOffset(beginDS[2], calendar))
+            else if (currentTime >= beginDS[2])
                 return 3;
-            else if (currentTime >= getTimeWithOffset(beginDS[1], calendar))
+            else if (currentTime >= beginDS[1])
                 return 2;
-            else if (currentTime >= getTimeWithOffset(beginDS[0], calendar))
+            else if (currentTime >= beginDS[0])
                 return 1;
 
             return 0;
-        }
-
-        /**
-         * Liefert das Datum in Millesekunden mit der aktuellen Zeitverschiebung
-         *
-         * @param time     Zeit von welcher der Zeitstempel ermittelt werden soll
-         * @param calendar Calender zur Bestimmung des Zeitunterschieds
-         * @return the number of milliseconds since Jan. 1, 1970, midnight GMT.
-         */
-        public static long getTimeWithOffset(@NonNull Time time, @Nullable Calendar calendar) {
-            if (calendar == null)
-                calendar = GregorianCalendar.getInstance();
-            return time.getTime() + TimeZone.getDefault().getOffset(calendar.getTimeInMillis());
-        }
-
-        /**
-         * Liefert die Millisekunden der übergebenen Uhrzeit
-         *
-         * @param calendar Uhrzeit welche umgewandelt werden soll
-         * @return Millisekunden des übergebenen Datums
-         */
-        public static long getMillisecondsWithoutDate(Calendar calendar) {
-            return TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS)
-                    + TimeUnit.MILLISECONDS.convert(calendar.get(Calendar.MINUTE), TimeUnit.MINUTES);
         }
     }
 
@@ -224,10 +214,5 @@ public final class Const {
             public static final String COLUMN_NAME_FREE_END = "free_end";
             public static final String COLUMN_NAME_PARENT_ID = "parent_id";
         }
-
-    }
-
-    public static final class semesterPlanUpdater {
-
     }
 }

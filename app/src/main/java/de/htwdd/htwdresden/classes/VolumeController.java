@@ -53,8 +53,8 @@ public class VolumeController {
      */
     public void turnSoundOff() {
         // Stunde bestimmen
-        Calendar calendar = GregorianCalendar.getInstance();
-        int current_ds = Const.Timetable.getCurrentDS(Const.Timetable.getMillisecondsWithoutDate(calendar));
+        final Calendar calendar = GregorianCalendar.getInstance();
+        final int current_ds = Const.Timetable.getCurrentDS(null);
 
         // Aktuell Vorlesungszeit?, wenn nein return
         if (current_ds == 0 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)

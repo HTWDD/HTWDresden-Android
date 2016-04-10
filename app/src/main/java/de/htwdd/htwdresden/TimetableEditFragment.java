@@ -13,11 +13,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
@@ -50,13 +49,18 @@ public class TimetableEditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 
         // DS-Spinner mit Daten füllen
         int count = listOfDs.length;
         Resources resources = getResources();
         for (int i = 0; i < count; i++)
-            listOfDs[i] = resources.getString(R.string.timetable_ds_list, i + 1, format.format(Const.Timetable.beginDS[i]), format.format(Const.Timetable.endDS[i]));
+            listOfDs[i] = resources.getString(
+                    R.string.timetable_ds_list,
+                    i + 1,
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.beginDS[i])),
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.endDS[i]))
+            );
     }
 
     @Override

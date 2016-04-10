@@ -10,11 +10,10 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
@@ -32,7 +31,7 @@ public class TimetableGridAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private static String[] lessonType;
     private static final String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
-    private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
 
     public TimetableGridAdapter(Context context, ArrayList<Lesson> lessons_week, int week) {
         this.context = context;
@@ -116,7 +115,11 @@ public class TimetableGridAdapter extends BaseAdapter {
             case 35:
             case 42:
             case 49:
-                viewHolder.type.setText(context.getResources().getString(R.string.timetable_ds_grid, format.format(Const.Timetable.beginDS[(i / 7) - 1]), format.format(Const.Timetable.endDS[(i / 7) - 1])));
+                viewHolder.type.setText(context.getResources().getString(
+                        R.string.timetable_ds_grid,
+                        DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[(i / 7) - 1])),
+                        DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[(i / 7) - 1]))
+                ));
                 viewHolder.type.setHeight(180);
                 viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                 break;

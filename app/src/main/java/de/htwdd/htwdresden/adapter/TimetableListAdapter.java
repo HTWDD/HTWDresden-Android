@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
@@ -37,13 +36,18 @@ public class TimetableListAdapter extends BaseAdapter {
         this.lessons = lessons;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 
         // DS-Spinner mit Daten füllen
         int count = listOfDs.length;
         Resources resources = context.getResources();
         for (int i = 0; i < count; i++)
-            listOfDs[i] = resources.getString(R.string.timetable_ds_list, i + 1, format.format(Const.Timetable.beginDS[i]), format.format(Const.Timetable.endDS[i]));
+            listOfDs[i] = resources.getString(
+                    R.string.timetable_ds_list,
+                    i + 1,
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.beginDS[i])),
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.endDS[i]))
+            );
 
         lesson_week = resources.getStringArray(R.array.lesson_week);
         lesson_typ = resources.getStringArray(R.array.lesson_type);

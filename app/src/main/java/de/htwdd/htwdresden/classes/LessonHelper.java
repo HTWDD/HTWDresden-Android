@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ import de.htwdd.htwdresden.types.LessonSearchResult;
  * @author Kay Förster
  */
 public class LessonHelper {
+    private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
+
     /**
      * Liefert LessonSearchResult ob und welche Stunde aktuell gerade stattfindet
      *
@@ -58,7 +61,7 @@ public class LessonHelper {
 
                 // Verbleibende Zeit anzeigen
                 long difference = TimeUnit.MINUTES.convert(
-                        Const.Timetable.getMillisecondsWithoutDate(calendar) - Const.Timetable.getTimeWithOffset(Const.Timetable.endDS[currentDS - 1], calendar),
+                        GregorianCalendar.getInstance().getTimeInMillis() - Const.Timetable.getCalendar(Const.Timetable.endDS[currentDS - 1]).getTimeInMillis(),
                         TimeUnit.MILLISECONDS);
 
                 if (difference < 0)
@@ -91,7 +94,7 @@ public class LessonHelper {
         int nextDS = Const.Timetable.getCurrentDS(null);
 
         // Vorlesungszeit vorbei? Dann auf nächsten Tag springen
-        if (Const.Timetable.getMillisecondsWithoutDate(calendar) > Const.Timetable.endDS[7 - 1].getTime()) {
+        if (calendar.getTimeInMillis() > Const.Timetable.getCalendar(Const.Timetable.endDS[7 - 1]).getTimeInMillis()) {
             nextDS = 0;
             calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
         }
@@ -122,7 +125,7 @@ public class LessonHelper {
         switch (differenceDay) {
             case 0:
                 long minuten = TimeUnit.MINUTES.convert(
-                        Const.Timetable.getTimeWithOffset(Const.Timetable.beginDS[nextDS - 1], calendar) - Const.Timetable.getMillisecondsWithoutDate(calendar),
+                        Const.Timetable.getCalendar(Const.Timetable.beginDS[nextDS - 1]).getTimeInMillis() - calendar.getTimeInMillis(),
                         TimeUnit.MILLISECONDS
                 );
                 lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_start), minuten));
@@ -132,8 +135,8 @@ public class LessonHelper {
                         R.string.overview_lessons_tomorrow_param,
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                format.format(Const.Timetable.beginDS[nextDS - 1]),
-                                format.format(Const.Timetable.endDS[nextDS - 1]))
+                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
+                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1])))
                 ));
                 break;
             default:
@@ -212,41 +215,42 @@ public class LessonHelper {
             Lesson lesson = new Lesson();
             lesson.parseFromJSON(response.getJSONObject(i));
             lessons.add(lesson);
+            long endTime = lesson.getEndTime();
 
             // Bestimme End DS und ggf neu eintragen
             switch (lesson.getDs()) {
                 case 1:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[1]))
+                    if (endTime <= Const.Timetable.beginDS[1])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(2);
                     lessons.add(lesson);
                 case 2:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[2]))
+                    if (endTime <= Const.Timetable.beginDS[2])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(3);
                     lessons.add(lesson);
                 case 3:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[3]))
+                    if (endTime <= Const.Timetable.beginDS[3])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(4);
                     lessons.add(lesson);
                 case 4:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[4]))
+                    if (endTime <= Const.Timetable.beginDS[4])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(5);
                     lessons.add(lesson);
                 case 5:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[5]))
+                    if (endTime <= Const.Timetable.beginDS[5])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(6);
                     lessons.add(lesson);
                 case 6:
-                    if (lesson.getEndTime().before(Const.Timetable.beginDS[6]))
+                    if (endTime <= Const.Timetable.beginDS[6])
                         break;
                     lesson = lesson.clone();
                     lesson.setDs(7);
@@ -271,12 +275,15 @@ public class LessonHelper {
                                                      @NonNull final String[] timetable,
                                                      int current_ds) {
         final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
         final String[] listOfDs = new String[Const.Timetable.beginDS.length];
         int count = listOfDs.length;
         Resources resources = context.getResources();
         for (int i = 0; i < count; i++)
-            listOfDs[i] = resources.getString(R.string.timetable_ds_list_simple, format.format(Const.Timetable.beginDS[i]), format.format(Const.Timetable.endDS[i]));
+            listOfDs[i] = resources.getString(
+                    R.string.timetable_ds_list_simple,
+                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[i])),
+                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[i]))
+            );
 
         // Alle vorhanden Views entfernen
         linearLayout.removeAllViews();

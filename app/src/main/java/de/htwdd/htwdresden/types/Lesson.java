@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Time;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
@@ -25,7 +27,7 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
     private int week;
     private int day;
     private int ds;
-    private Time endTime;
+    private long endTime;
     private String professor;
     private String weeksOnly;
     private String rooms;
@@ -113,7 +115,7 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         return ds;
     }
 
-    public Time getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
@@ -153,8 +155,8 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         type = jsonObject.getString("type");
         week = jsonObject.getInt("week");
         day = jsonObject.getInt("day");
-        Time beginTime = Time.valueOf(jsonObject.getString("beginTime"));
-        endTime = Time.valueOf(jsonObject.getString("endTime"));
+        long time = Time.valueOf(jsonObject.getString("endTime")).getTime();
+        endTime = TimeUnit.MINUTES.convert(time + GregorianCalendar.getInstance().getTimeZone().getOffset(time), TimeUnit.MILLISECONDS);
         professor = jsonObject.getString("professor");
         weeksOnly = jsonObject.getString("WeeksOnly");
 
@@ -166,19 +168,21 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
             rooms += roomArray.getString(i).replaceAll(" ", "") + " ";
 
         // Bestimme DS
-        if (beginTime.before(Const.Timetable.endDS[0]))
+        time = Time.valueOf(jsonObject.getString("beginTime")).getTime();
+        final long beginTime = TimeUnit.MINUTES.convert(time + GregorianCalendar.getInstance().getTimeZone().getOffset(time), TimeUnit.MILLISECONDS);
+        if (beginTime <= Const.Timetable.endDS[0])
             ds = 1;
-        else if (beginTime.before(Const.Timetable.endDS[1]))
+        else if (beginTime <= Const.Timetable.endDS[1])
             ds = 2;
-        else if (beginTime.before(Const.Timetable.endDS[2]))
+        else if (beginTime <= Const.Timetable.endDS[2])
             ds = 3;
-        else if (beginTime.before(Const.Timetable.endDS[3]))
+        else if (beginTime <= Const.Timetable.endDS[3])
             ds = 4;
-        else if (beginTime.before(Const.Timetable.endDS[4]))
+        else if (beginTime <= Const.Timetable.endDS[4])
             ds = 5;
-        else if (beginTime.before(Const.Timetable.endDS[5]))
+        else if (beginTime <= Const.Timetable.endDS[5])
             ds = 6;
-        else if (beginTime.before(Const.Timetable.endDS[6]))
+        else if (beginTime <= Const.Timetable.endDS[6])
             ds = 7;
     }
 
