@@ -11,8 +11,8 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.FreeDay;
 import de.htwdd.htwdresden.classes.Period;
+import de.htwdd.htwdresden.types.FreeDay;
 import de.htwdd.htwdresden.types.SemesterPlan;
 
 /**
@@ -142,5 +142,6 @@ public class SemesterPlanDAO extends AbstractDAO<SemesterPlan> {
         SQLiteDatabase database = sqLiteOpenHelper.getWritableDatabase();
         database.delete(Const.database.FreeDaysTable.TABLE_NAME, null, null);
         database.delete(getTableName(), null, null);
+        database.close();
     }
 }

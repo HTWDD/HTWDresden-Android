@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // Beim App-Start ein spezielles Fragment öffnen?
         Intent intent = getIntent();
-        if (intent != null)
+        if (intent != null) {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
                     goToNavigationItem(R.id.navigation_timetable);
@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                     goToNavigationItem(R.id.navigation_mensa);
                     return;
             }
+        }
         // Setze Start-Fragment
         if (savedInstanceState == null) {
             onNavigationItemSelectedListener.onNavigationItemSelected(getMenu(mNavigationView).findItem(R.id.navigation_overview));
-            selectFragment(R.id.navigation_overview);
             mPreviousMenuItem = getMenu(mNavigationView).findItem(R.id.navigation_overview);
             mPreviousMenuItem.setChecked(true);
         }
