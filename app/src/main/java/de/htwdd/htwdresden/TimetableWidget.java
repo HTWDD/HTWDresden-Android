@@ -6,7 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,7 +21,7 @@ public class TimetableWidget extends AppWidgetProvider {
     private static PendingIntent pendingIntent = null;
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(@NonNull final Context context, @NonNull final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // Starte Service zum Updaten des Widget
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent intent = new Intent(context, TimetableWidgetService.class);
@@ -37,10 +37,9 @@ public class TimetableWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onDisabled(Context context) {
+    public void onDisabled(@NonNull final Context context) {
         // Enter relevant functionality for when the last widget is disabled
         if (pendingIntent != null) {
-            Log.d("TimetableWidget", "onDisabler");
             final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();

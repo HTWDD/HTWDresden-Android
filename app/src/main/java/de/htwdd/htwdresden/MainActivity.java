@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         setContentView(R.layout.activity_main);
 
         // Toolbar einfügen
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
         actionBar = getSupportActionBar();
@@ -72,7 +72,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // Hole Views
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        final NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        // Wenn Views nicht gefunden, sofort abrechen
+        assert mNavigationView != null && mDrawerLayout != null;
 
         // Actionbar Titel anpassen
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
@@ -97,12 +100,11 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             }
         };
 
-        setupDrawerContent(mNavigationView);
-
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mNavigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         // Beim App-Start ein spezielles Fragment öffnen?
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent != null) {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
@@ -119,10 +121,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             mPreviousMenuItem = getMenu(mNavigationView).findItem(R.id.navigation_overview);
             mPreviousMenuItem.setChecked(true);
         }
-    }
-
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
     }
 
     private void selectFragment(final int position) {
@@ -212,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getFragmentManager();
+        final FragmentManager fragmentManager = getFragmentManager();
 
         if (fragmentManager.getBackStackEntryCount() == 0)
             // Wenn das Übersichtsfragment das aktuelle ist, die App beenden
@@ -254,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
             if (savedInstanceState.containsKey("mPreviousMenuItem")) {
@@ -267,14 +265,14 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     @Override
-    public void setTitle(final String title) {
+    public void setTitle(@Nullable final String title) {
         if (title == null || title.isEmpty())
             actionBar.setTitle(R.string.app_name);
         else actionBar.setTitle(title);
     }
 
     @Override
-    public void setNavigationItem(int item) {
+    public void setNavigationItem(final int item) {
         setNavigationItem(getMenu(null).findItem(item));
     }
 

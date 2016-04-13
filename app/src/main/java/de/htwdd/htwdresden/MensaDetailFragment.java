@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 import de.htwdd.htwdresden.adapter.MensaArrayAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.Meal;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.types.Meal;
 
 
 /**
@@ -64,8 +64,8 @@ public class MensaDetailFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
 
         // Suche Views
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
         // Setze Swipe Refresh Layout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -81,7 +81,7 @@ public class MensaDetailFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Meal meal = meals.get(i);
+                final Meal meal = meals.get(i);
                 if (meal.getId() != 0) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.studentenwerk-dresden.de/mensen/speiseplan/details-" + meal.getId() + ".html?pni=1"));
                     getActivity().startActivity(browserIntent);
@@ -121,7 +121,7 @@ public class MensaDetailFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
                 meals.clear();
 
-                MensaHelper mensaHelper = new MensaHelper(getActivity(), mensaID);
+                final MensaHelper mensaHelper = new MensaHelper(getActivity(), mensaID);
                 switch (modus) {
                     case 1:
                     case 2:
@@ -153,7 +153,7 @@ public class MensaDetailFragment extends Fragment {
         });
 
         // Wähle URL aus
-        String url = MensaHelper.getMensaUrl(modus);
+        final String url = MensaHelper.getMensaUrl(modus);
 
         // Überprüfe Internetverbindung
         if (!VolleyDownloader.CheckInternet(getActivity())) {
@@ -172,7 +172,7 @@ public class MensaDetailFragment extends Fragment {
         }
 
         // Download der Informationen
-        StringRequest stringRequest = new StringRequest(url, stringListener, errorListener);
+        final StringRequest stringRequest = new StringRequest(url, stringListener, errorListener);
         VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 }

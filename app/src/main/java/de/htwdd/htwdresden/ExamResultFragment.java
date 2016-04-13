@@ -71,7 +71,7 @@ public class ExamResultFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
         adapter = new ExamResultListAdapter(getActivity(), listExamResults);
 
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -79,7 +79,7 @@ public class ExamResultFragment extends Fragment {
             }
         });
 
-        ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
+        final ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
         expandableListView.setAdapter(adapter);
 
         showData();
@@ -104,8 +104,8 @@ public class ExamResultFragment extends Fragment {
         final TextView message = (TextView) mLayout.findViewById(R.id.info_message);
 
         // Lade Daten aus Datenbank
-        ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
-        ArrayList<ExamResult> examResults = dao.getAll();
+        final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
+        final ArrayList<ExamResult> examResults = dao.getAll();
 
         // Daten in HashMap umwandeln
         listExamResults.clear();
@@ -144,7 +144,7 @@ public class ExamResultFragment extends Fragment {
                 VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
 
                 // Fehlermeldung anzeigen
-                String message;
+                final String message;
                 switch (responseCode) {
                     case Const.internet.HTTP_TIMEOUT:
                         message = getString(R.string.info_internet_timeout);
@@ -206,9 +206,9 @@ public class ExamResultFragment extends Fragment {
 
                 // Ergebnisse speichern
                 if (examsResultHelper.getQueueCount().countQueue == 0) {
-                    ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
-                    long count = dao.queryNumEntries();
-                    boolean result = examsResultHelper.saveExamResults();
+                    final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
+                    final long count = dao.queryNumEntries();
+                    final boolean result = examsResultHelper.saveExamResults();
 
                     // Refresh ausschalten
                     swipeRefreshLayout.post(new Runnable() {
@@ -237,7 +237,7 @@ public class ExamResultFragment extends Fragment {
         /**
          * Response Listener für die Studiengänge
          */
-        Response.Listener<JSONArray> getcoursesListener = new Response.Listener<JSONArray>() {
+        final Response.Listener<JSONArray> getcoursesListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
                 // Download der Informationen

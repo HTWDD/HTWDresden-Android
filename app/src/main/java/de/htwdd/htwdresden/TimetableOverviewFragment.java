@@ -71,13 +71,13 @@ public class TimetableOverviewFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
 
         // Arguments überprüfen
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         if (bundle != null)
             week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar().get(Calendar.WEEK_OF_YEAR));
         else week = new GregorianCalendar().get(Calendar.WEEK_OF_YEAR);
 
         // SwipeRefreshLayout Listener
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -92,7 +92,7 @@ public class TimetableOverviewFragment extends Fragment {
         gridAdapter = new TimetableGridAdapter(getActivity(), lessons_week, week);
 
         // GridView
-        GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
+        final GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -142,8 +142,8 @@ public class TimetableOverviewFragment extends Fragment {
      * Liste {@see lesson_week}
      */
     void loadLessons() {
-        DatabaseManager databaseManager = new DatabaseManager(getActivity());
-        TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
+        final DatabaseManager databaseManager = new DatabaseManager(getActivity());
+        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
         lessons_week.clear();
         lessons_week.addAll(timetableUserDAO.getWeekShort(week));
     }
@@ -153,8 +153,7 @@ public class TimetableOverviewFragment extends Fragment {
      */
     private void loadData() {
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // Bestimme Fehlermeldung
@@ -185,8 +184,7 @@ public class TimetableOverviewFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         };
-
-        Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 ArrayList<Lesson> lessons;
@@ -229,11 +227,11 @@ public class TimetableOverviewFragment extends Fragment {
         });
 
         // Hole Einstellungen
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String stgJhr = sharedPreferences.getString("StgJhr", "");
-        String stg = sharedPreferences.getString("Stg", "");
-        String stgGrp = sharedPreferences.getString("StgGrp", "");
-        String prof_kennung = sharedPreferences.getString("prof_kennung", "");
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final String stgJhr = sharedPreferences.getString("StgJhr", "");
+        final String stg = sharedPreferences.getString("Stg", "");
+        final String stgGrp = sharedPreferences.getString("StgGrp", "");
+        final String prof_kennung = sharedPreferences.getString("prof_kennung", "");
 
         // Überprüfe Einstellunen, ansonsten
         if ((stgJhr.length() < 2 || stg.length() != 3 || stgGrp.length() == 0) && (prof_kennung.length() == 0)) {
@@ -260,13 +258,13 @@ public class TimetableOverviewFragment extends Fragment {
         }
 
         // Auswahl was geladen werden soll
-        int modus;
+        final int modus;
         if (!(stgJhr.length() < 2 || stg.length() != 3 || stgGrp.length() == 0))
             modus = 1;
         else modus = 2;
 
         // Wähle URL aus
-        String url;
+        final String url;
         switch (modus) {
             default:
             case 1:
@@ -293,7 +291,7 @@ public class TimetableOverviewFragment extends Fragment {
         }
 
         // Download der Informationen
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
+        final JsonArrayRequest arrayRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
         VolleyDownloader.getInstance(getActivity()).addToRequestQueue(arrayRequest);
     }
 }
