@@ -244,8 +244,8 @@ public class TimetableOverviewFragment extends Fragment {
                             // Navigation ändern
                             ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
                             // Einstellungsfragment anzeigen
-                            FragmentManager fragmentManager = getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).commit();
+                            final FragmentManager fragmentManager = getActivity().getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
                         }
                     })
                     .show();
