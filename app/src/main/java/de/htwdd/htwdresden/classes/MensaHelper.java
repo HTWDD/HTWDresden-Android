@@ -1,10 +1,12 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,28 +19,35 @@ import de.htwdd.htwdresden.types.Meal;
  * @author Kay Förster
  */
 public class MensaHelper {
-    private Context context;
-    private short mensaId;
+    final private Context context;
+    final private short mensaId;
 
-    public MensaHelper(Context context, short mensaId) {
+    public MensaHelper(@NonNull final Context context, final short mensaId) {
         this.context = context;
         this.mensaId = mensaId;
     }
 
-    public ArrayList<Meal> parseCurrentDay(String result) {
-        Calendar calendar = Calendar.getInstance();
-        ArrayList<Meal> meals = new ArrayList<>();
-        Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
+    public ArrayList<Meal> parseCurrentDay(@NonNull final String result) {
+        final Calendar calendar = Calendar.getInstance();
+        final ArrayList<Meal> meals = new ArrayList<>();
+        final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
-        Matcher matcher = pattern.matcher(result);
+        final Matcher matcher = pattern.matcher(result);
         while (matcher.find()) {
-            Meal meal = new Meal();
+            final Meal meal = new Meal();
 
             try {
                 meal.setTitle(matcher.group(1));
                 meal.setPrice(matcher.group(3));
                 meal.setId(Integer.parseInt(matcher.group(4)));
-                meal.setImageUrl("https://bilderspeiseplan.studentenwerk-dresden.de/m" + mensaId + "/" + calendar.get(Calendar.YEAR) + String.format("%02d", calendar.get(Calendar.MONTH) + 1) + "/thumbs/" + meal.getId() + ".jpg");
+                meal.setImageUrl(String.format(
+                        Locale.getDefault(),
+                        "https://bilderspeiseplan.studentenwerk-dresden.de/m%d/%d%02d/thumbs/%d.jpg",
+                        mensaId,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH) + 1,
+                        meal.getId()
+                ));
             } catch (Exception e) {
                 meal.setTitle(context.getString(R.string.info_error_parse));
             }
@@ -47,16 +56,16 @@ public class MensaHelper {
         return meals;
     }
 
-    public ArrayList<Meal> parseCompleteWeek(String result) {
-        ArrayList<Meal> meals = new ArrayList<>();
-        Pattern title = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?");
-        String[] token = result.split("class=\"speiseplan\"");
-        String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
+    public ArrayList<Meal> parseCompleteWeek(@NonNull final String result) {
+        final ArrayList<Meal> meals = new ArrayList<>();
+        final Pattern title = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?");
+        final String[] token = result.split("class=\"speiseplan\"");
+        final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
         Matcher matcher;
 
         // Gehe Montag bis Freitag durch
         for (int i = 0; i < 5; i++) {
-            Meal meal = new Meal();
+            final Meal meal = new Meal();
             meal.setTitle(nameOfDays[i + 2]);
 
             // Extrahiere die benötigten Informationen
@@ -89,16 +98,16 @@ public class MensaHelper {
      * @param day    Calendertag für welchen das Essen geliefert werden soll
      * @return Liste der Essen
      */
-    public ArrayList<Meal> parseDayFromWeek(final String result, int day) {
-        ArrayList<Meal> meals = new ArrayList<>();
-        Pattern pattern = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?>(\\d?\\d,\\d\\d|ausverkauft| )");
+    public ArrayList<Meal> parseDayFromWeek(@NonNull final String result, int day) {
+        final ArrayList<Meal> meals = new ArrayList<>();
+        final Pattern pattern = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?>(\\d?\\d,\\d\\d|ausverkauft| )");
 
         // Teile Speiseplan in einzelne Tage und übergebe entsprechenden Tag an Matcher
-        String token[] = result.split("class=\"speiseplan\"");
-        Matcher matcher = pattern.matcher(token[day - 1]);
+        final String token[] = result.split("class=\"speiseplan\"");
+        final Matcher matcher = pattern.matcher(token[day - 1]);
 
         while (matcher.find()) {
-            Meal meal = new Meal();
+            final Meal meal = new Meal();
             meal.setTitle(matcher.group(1));
             meal.setPrice(matcher.group(2) + "€");
             meals.add(meal);
