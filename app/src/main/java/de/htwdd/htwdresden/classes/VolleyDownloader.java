@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.util.LruCache;
 
 import com.android.volley.NetworkError;
@@ -23,24 +24,20 @@ import com.android.volley.toolbox.Volley;
  */
 public class VolleyDownloader {
     private static VolleyDownloader ourInstance;
-    private static Context mcontext;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    private VolleyDownloader(Context context) {
-        mcontext = context;
-        mRequestQueue = getRequestQueue();
+    private VolleyDownloader(@NonNull final Context context) {
+        mRequestQueue = Volley.newRequestQueue(context);
     }
 
-    public static synchronized VolleyDownloader getInstance(Context context) {
+    public static synchronized VolleyDownloader getInstance(@NonNull final Context context) {
         if (ourInstance == null)
-            ourInstance = new VolleyDownloader(context);
+            ourInstance = new VolleyDownloader(context.getApplicationContext());
         return ourInstance;
     }
 
     public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null)
-            mRequestQueue = Volley.newRequestQueue(mcontext.getApplicationContext());
         return mRequestQueue;
     }
 
@@ -62,7 +59,7 @@ public class VolleyDownloader {
         return mImageLoader;
     }
 
-    public <T> void addToRequestQueue(Request<T> request) {
+    public <T> void addToRequestQueue(@NonNull final Request<T> request) {
         getRequestQueue().add(request);
     }
 
@@ -74,8 +71,8 @@ public class VolleyDownloader {
      * @return true=Internet verbindung vorhanden, sonst false
      */
     public static boolean CheckInternet(Context context) {
-        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Network[] networks = connec.getAllNetworks();
+        final ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final Network[] networks = connec.getAllNetworks();
 
         for (Network network : networks) {
             NetworkInfo networkInfo = connec.getNetworkInfo(network);
@@ -85,7 +82,7 @@ public class VolleyDownloader {
         return false;
     }
 
-    public static int getResponseCode(VolleyError error) {
+    public static int getResponseCode(@NonNull final VolleyError error) {
         if (error.networkResponse != null)
             return error.networkResponse.statusCode;
         else
