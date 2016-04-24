@@ -4,6 +4,18 @@ package de.htwdd.htwdresden.classes;
  * Hilfsklasse um die Anzahl der laufendenen Requeste zu zählen
  */
 public class QueueCount {
-    public long countQueue = 0;
+    private long countQueue = 0;
     public boolean update;
+
+    public synchronized void incrementCountQueue(){
+        countQueue++;
+    }
+
+    public synchronized void decrementCountQueue(){
+        countQueue--;
+    }
+
+    public synchronized long getCountQueue() {
+        return countQueue;
+    }
 }

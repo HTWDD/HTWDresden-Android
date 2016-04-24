@@ -99,7 +99,7 @@ public class ExamsResultHelper {
             JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, arrayListener, errorListener);
             arrayRequest.setTag(Const.internet.TAG_EXAM_RESULTS);
             VolleyDownloader.getInstance(context).addToRequestQueue(arrayRequest);
-            queueCount.countQueue++;
+            queueCount.incrementCountQueue();
         }
     }
 
@@ -117,7 +117,7 @@ public class ExamsResultHelper {
             examResult.parseFromJSON(response.getJSONObject(i));
             examResults.add(examResult);
         }
-        queueCount.countQueue--;
+        queueCount.decrementCountQueue();
     }
 
     /**

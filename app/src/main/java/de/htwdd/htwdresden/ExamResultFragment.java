@@ -138,7 +138,7 @@ public class ExamResultFragment extends Fragment {
                 int responseCode = VolleyDownloader.getResponseCode(error);
 
                 // Anzahl laufender Requests reduzieren
-                examsResultHelper.getQueueCount().countQueue--;
+                examsResultHelper.getQueueCount().decrementCountQueue();
 
                 // Downloads abbrechen
                 VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
@@ -205,7 +205,7 @@ public class ExamResultFragment extends Fragment {
                 }
 
                 // Ergebnisse speichern
-                if (examsResultHelper.getQueueCount().countQueue == 0) {
+                if (examsResultHelper.getQueueCount().getCountQueue() == 0) {
                     final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
                     final long count = dao.queryNumEntries();
                     final boolean result = examsResultHelper.saveExamResults();

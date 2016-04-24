@@ -239,15 +239,14 @@ public class RoomTimetableFragment extends Fragment {
      */
     private void loadRoom(@NonNull final String room, @NonNull final QueueCount queueCount) {
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // Bestimme Fehlermeldung
                 int responseCode = VolleyDownloader.getResponseCode(error);
 
                 // aktuell laufende Requests reduzieren
-                queueCount.countQueue--;
+                queueCount.decrementCountQueue();
 
                 // weitere Download abbrechen
                 VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
@@ -281,14 +280,13 @@ public class RoomTimetableFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         };
-
-        Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 ArrayList<Lesson> lessons;
 
                 // Aktuell laufende Requests minimieren
-                queueCount.countQueue--;
+                queueCount.decrementCountQueue();
 
                 // Ergebnis verarbeiten
                 try {
@@ -309,7 +307,7 @@ public class RoomTimetableFragment extends Fragment {
                 }
 
                 // Refresh ausschalten
-                if (queueCount.countQueue == 0)
+                if (queueCount.getCountQueue() == 0)
                     swipeRefreshLayout.setRefreshing(false);
 
                 // Anzahl der Stunden überprüfen
@@ -330,7 +328,7 @@ public class RoomTimetableFragment extends Fragment {
                     VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
                     // Lade neue Daten aus der Datenbank
                     loadData();
-                } else if (queueCount.countQueue == 0) {
+                } else if (queueCount.getCountQueue() == 0) {
                     if (queueCount.update)
                         Snackbar.make(mLayout, R.string.room_timetable_update_success, Snackbar.LENGTH_SHORT).show();
                     else
@@ -374,7 +372,7 @@ public class RoomTimetableFragment extends Fragment {
             stringRequest.setTag(Const.internet.TAG_ROOM_TIMETABLE);
             VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
             // Anzahl der laufenden Requests zählen
-            queueCount.countQueue++;
+            queueCount.incrementCountQueue();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             Toast.makeText(getActivity(), R.string.info_error, Toast.LENGTH_SHORT).show();
