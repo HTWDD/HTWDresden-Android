@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +22,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -42,13 +41,14 @@ import java.util.concurrent.TimeUnit;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
-import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
+import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
+import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamStats;
@@ -112,14 +112,17 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        // Mens
-        CardView cardMensa = (CardView) mLayout.findViewById(R.id.overview_mensa);
+        // Navigation zur Mensa
+        final CardView cardMensa = (CardView) mLayout.findViewById(R.id.overview_mensa);
         cardMensa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa);
             }
         });
+
+        // Mensa anzeigen
+        updateMensa(null);
 
         // Noten
         CardView cardExam = (CardView) mLayout.findViewById(R.id.overview_examResultStats);
@@ -135,9 +138,6 @@ public class OverviewFragment extends Fragment {
 
         // Noten anzeigen
         showExamResults();
-
-        // Mensa laden
-        showMensa();
 
         showNews();
 
@@ -202,6 +202,45 @@ public class OverviewFragment extends Fragment {
     @Subscribe
     public void updateTimetable(UpdateTimetableEvent updateTimetableEvent) {
         showTimetable();
+    }
+
+    /**
+     * Behandelt die Benachrichtigung vom EventBus für neue Mensa-Informationen / zeigt diese an
+     *
+     * @param updateMensaEvent Type der Benachrichtigung
+     */
+    @Subscribe
+    public void updateMensa(@Nullable final UpdateMensaEvent updateMensaEvent) {
+        Log.d(LOG_TAG, "Empfange Event");
+        // Wenn Event vorhanden und der Modus nicht stimmen dieses Event ignorieren
+        if (updateMensaEvent != null && updateMensaEvent.getForModus() != 0)
+            return;
+
+        final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
+        final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
+        final ArrayList<Meal> meals = MensaDAO.getMealsByDate(GregorianCalendar.getInstance());
+        final int countMeals = meals.size();
+
+        // Aktuell kein Angebot vorhanden
+        if (countMeals == 0) {
+            message.setText(R.string.mensa_no_offer);
+            message.setVisibility(View.VISIBLE);
+            content.setVisibility(View.GONE);
+            return;
+        }
+
+        // Anzeige zusammenbauen
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < countMeals - 1; i++) {
+            stringBuilder.append(meals.get(i).getTitle());
+            stringBuilder.append("\n\n");
+        }
+        stringBuilder.append(meals.get(countMeals - 1).getTitle());
+
+        // Inhalt anzeigen
+        content.setText(stringBuilder);
+        message.setVisibility(View.GONE);
+        content.setVisibility(View.VISIBLE);
     }
 
     private void showTimetable() {
@@ -362,69 +401,12 @@ public class OverviewFragment extends Fragment {
             TextView stats_gradeBest = (TextView) mLayout.findViewById(R.id.stats_gradeBest);
             TextView stats_gradeWorst = (TextView) mLayout.findViewById(R.id.stats_gradeWorst);
 
-            stats_average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.average)));
+            stats_average.setText(context.getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.average)));
             stats_countGrade.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, examStats.gradeCount, examStats.gradeCount));
             stats_countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.credits));
             stats_gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.gradeBest));
             stats_gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.gradeWorst));
         }
-    }
-
-    private void showMensa() {
-        final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
-        final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
-        final Context context = getActivity();
-        final short mensaID = 9;
-
-        message.setVisibility(View.VISIBLE);
-        content.setVisibility(View.GONE);
-
-        if (!VolleyDownloader.CheckInternet(context)) {
-            message.setText(R.string.info_no_internet);
-        }
-
-        message.setText(R.string.overview_mensa_load);
-
-        StringRequest stringRequest = new StringRequest(
-                "https://www.studentenwerk-dresden.de/feeds/speiseplan.rss?mid=" + mensaID,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        MensaHelper mensaHelper = new MensaHelper(context, mensaID);
-                        ArrayList<Meal> meals = mensaHelper.parseCurrentDay(response);
-
-                        int count = meals.size();
-                        if (count == 0) {
-                            message.setText(R.string.mensa_no_offer);
-                            message.setVisibility(View.VISIBLE);
-                            content.setVisibility(View.GONE);
-                            return;
-                        }
-
-                        // Anzeige zusammenbauen
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (int i = 0; i < count - 2; i++) {
-                            stringBuilder.append(meals.get(i).getTitle());
-                            stringBuilder.append("\n\n");
-                        }
-                        stringBuilder.append(meals.get(count - 1).getTitle());
-
-                        // Inhalt anzeigen
-                        content.setText(stringBuilder);
-                        content.setVisibility(View.VISIBLE);
-                        message.setVisibility(View.GONE);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        message.setText(R.string.overview_mensa_error);
-                        message.setVisibility(View.VISIBLE);
-                        content.setVisibility(View.GONE);
-                    }
-                }
-        );
-        VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     private void showNews() {

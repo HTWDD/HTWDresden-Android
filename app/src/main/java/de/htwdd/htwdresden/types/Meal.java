@@ -1,40 +1,76 @@
 package de.htwdd.htwdresden.types;
 
-public class Meal {
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import de.htwdd.htwdresden.database.MensaDAO;
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
+
+public class Meal extends RealmObject {
+    @PrimaryKey
     private int id;
     private String title = "";
     private String price = "";
-    private String imageUrl = "";
+    @Index
+    private short mensaId;
+    @Index
+    private Date date;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
+    @Nullable
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@Nullable final String title) {
         this.title = title;
     }
 
+    @Nullable
     public String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(@Nullable final String price) {
         this.price = price;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public void setDate(@NonNull final Calendar date) {
+        this.date = MensaDAO.getDate(date);
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setMensaId(final short mensaId) {
+        this.mensaId = mensaId;
+    }
+
+    @NonNull
+    public String getImageUrl() {
+        if (date == null || id == 0)
+            return "";
+
+        final Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        return String.format(
+                Locale.getDefault(),
+                "https://bilderspeiseplan.studentenwerk-dresden.de/m%d/%d%02d/thumbs/%d.jpg",
+                mensaId,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                id
+        );
     }
 }

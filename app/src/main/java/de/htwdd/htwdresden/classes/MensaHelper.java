@@ -2,15 +2,21 @@ package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import java.text.DateFormatSymbols;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.database.MensaDAO;
+import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.Meal;
 
 /**
@@ -19,6 +25,7 @@ import de.htwdd.htwdresden.types.Meal;
  * @author Kay Förster
  */
 public class MensaHelper {
+    final private static String LOG_TAG = "MensaHelper";
     final private Context context;
     final private short mensaId;
 
@@ -27,8 +34,57 @@ public class MensaHelper {
         this.mensaId = mensaId;
     }
 
+    /**
+     * Aktualisiert den Speisplan
+     *
+     * @param modus 0: aktuelles Angebot, 1: Angebot der aktuellen Woche, 2: Angebot der nächsten Woche
+     */
+    public void loadAndSaveMeals(final int modus) {
+        final Response.Listener<String> stringListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                final Calendar calendar = GregorianCalendar.getInstance();
+                final ArrayList<Meal> meals;
+                switch (modus) {
+                    case 1:
+                        // Ändere Encoding
+                        response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
+                        // Parse Ergebnis
+                        meals = parseCompleteWeek(response, GregorianCalendar.getInstance());
+                        // Speichern
+                        MensaDAO.updateMealsByWeek(calendar, meals);
+                        break;
+                    case 2:
+                        // Ändere Encoding
+                        response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
+                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                        // Parse Ergebniss
+                        meals = parseCompleteWeek(response, calendar);
+                        // Speichern
+                        MensaDAO.updateMealsByWeek(calendar, meals);
+                        break;
+                    default:
+                        // Parse und speichere Ergebnis
+                        MensaDAO.updateMealsByDay(GregorianCalendar.getInstance(), parseCurrentDay(response));
+                        break;
+                }
+
+                EventBus.getInstance().post(new UpdateMensaEvent(modus));
+            }
+        };
+        // Download der Informationen
+        final StringRequest stringRequest = new StringRequest(getMensaUrl(modus), stringListener, null);
+        VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    /**
+     * Extrahiert den Speiseplan des aktuellen Tages aus der RSS-Übersicht
+     *
+     * @param result RSS-Struktur
+     * @return Liste von Speisen
+     */
     public ArrayList<Meal> parseCurrentDay(@NonNull final String result) {
-        final Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance();
         final ArrayList<Meal> meals = new ArrayList<>();
         final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
@@ -37,80 +93,56 @@ public class MensaHelper {
             final Meal meal = new Meal();
 
             try {
+                meal.setMensaId(mensaId);
                 meal.setTitle(matcher.group(1));
                 meal.setPrice(matcher.group(3));
                 meal.setId(Integer.parseInt(matcher.group(4)));
-                meal.setImageUrl(String.format(
-                        Locale.getDefault(),
-                        "https://bilderspeiseplan.studentenwerk-dresden.de/m%d/%d%02d/thumbs/%d.jpg",
-                        mensaId,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH) + 1,
-                        meal.getId()
-                ));
+                meal.setDate(calendar);
             } catch (Exception e) {
                 meal.setTitle(context.getString(R.string.info_error_parse));
             }
             meals.add(meal);
         }
-        return meals;
-    }
-
-    public ArrayList<Meal> parseCompleteWeek(@NonNull final String result) {
-        final ArrayList<Meal> meals = new ArrayList<>();
-        final Pattern title = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?");
-        final String[] token = result.split("class=\"speiseplan\"");
-        final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
-        Matcher matcher;
-
-        // Gehe Montag bis Freitag durch
-        for (int i = 0; i < 5; i++) {
-            final Meal meal = new Meal();
-            meal.setTitle(nameOfDays[i + 2]);
-
-            // Extrahiere die benötigten Informationen
-            try {
-                // Tag als Titel setzen
-                matcher = title.matcher(token[i + 1]);
-                // Einzelne Essen als "Preis" speichern
-                while (matcher.find()) {
-                    if (!meal.getPrice().isEmpty())
-                        meal.setPrice(meal.getPrice() + "\n\n" + matcher.group(1));
-                    else
-                        meal.setPrice(matcher.group(1));
-                }
-                if (meal.getPrice().isEmpty())
-                    meal.setPrice(context.getString(R.string.mensa_no_offer));
-
-            } catch (Exception e) {
-                meal.setTitle(context.getString(R.string.info_error_parse));
-            }
-            meals.add(meal);
-        }
-
         return meals;
     }
 
     /**
-     * Liefert eine Liste von Speisen für einen Tag aus der Wochenübersicht
+     * Extrahiert den Speiseplan einer Woche aus der HTML-Übersicht
      *
-     * @param result HTML-Der Wochenübersicht
-     * @param day    Calendertag für welchen das Essen geliefert werden soll
-     * @return Liste der Essen
+     * @param result   HTML-Seite des Speiseplans
+     * @param calendar Tag mit welchem die Woche beginnt
+     * @return Liste aller Speisen in der Woche
      */
-    public ArrayList<Meal> parseDayFromWeek(@NonNull final String result, int day) {
+    private ArrayList<Meal> parseCompleteWeek(@NonNull final String result, @NonNull final Calendar calendar) {
         final ArrayList<Meal> meals = new ArrayList<>();
-        final Pattern pattern = Pattern.compile(".*?<td class=\"text\">(.*?)</td>.*?>(\\d?\\d,\\d\\d|ausverkauft| )");
+        final Pattern title = Pattern.compile("<td class=\"text\">(.*?)</td>.*?details-(\\d*).*?>(\\d?\\d,\\d\\d|ausverkauft| )");
+        final String[] token = result.split("class=\"speiseplan\"");
+        Matcher matcher;
 
-        // Teile Speiseplan in einzelne Tage und übergebe entsprechenden Tag an Matcher
-        final String token[] = result.split("class=\"speiseplan\"");
-        final Matcher matcher = pattern.matcher(token[day - 1]);
+        // Gehe Montag bis Freitag durch
+        for (int i = 0; i < 5; i++) {
+            // Extrahiere die benötigten Informationen
+            try {
+                matcher = title.matcher(token[i + 1]);
+                calendar.set(Calendar.DAY_OF_WEEK, i + 2);
 
-        while (matcher.find()) {
-            final Meal meal = new Meal();
-            meal.setTitle(matcher.group(1));
-            meal.setPrice(matcher.group(2) + "€");
-            meals.add(meal);
+                while (matcher.find()) {
+                    final Meal meal = new Meal();
+                    meal.setId(Integer.parseInt(matcher.group(2)));
+                    meal.setTitle(matcher.group(1));
+                    meal.setMensaId(mensaId);
+                    meal.setDate(calendar);
+                    meal.setPrice(matcher.group(3));
+                    meals.add(meal);
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Fehler beim Matchen der Mensa");
+                Log.e(LOG_TAG, e.getMessage());
+                // Hinweis für User einfügen
+                final Meal meal = new Meal();
+                meal.setTitle(context.getString(R.string.info_error_parse));
+                meals.add(meal);
+            }
         }
 
         return meals;

@@ -32,6 +32,7 @@ public final class Const {
         public static final String PREFERENCES_AUTO_MUTE = "autoMute";
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
+        public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
     }
 
     public static final class internet {
@@ -143,7 +144,6 @@ public final class Const {
             return 0;
         }
     }
-
 
     public static final class widget {
         /**
