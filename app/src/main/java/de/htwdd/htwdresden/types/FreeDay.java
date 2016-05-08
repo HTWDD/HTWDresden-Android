@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.Period;
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
 
 /**

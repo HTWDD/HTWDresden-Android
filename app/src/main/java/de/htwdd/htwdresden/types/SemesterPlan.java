@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.Period;
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import de.htwdd.htwdresden.interfaces.IParseJSON;
 

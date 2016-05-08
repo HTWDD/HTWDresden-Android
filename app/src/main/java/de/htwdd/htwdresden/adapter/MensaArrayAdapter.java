@@ -25,7 +25,7 @@ public class MensaArrayAdapter extends AbstractBaseAdapter<Meal> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.fragment_mensa_detail_item, parent, false);
 
@@ -36,7 +36,7 @@ public class MensaArrayAdapter extends AbstractBaseAdapter<Meal> {
             convertView.setTag(viewHolder);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        Meal meal = getItem(position);
+        final Meal meal = getItem(position);
 
         if (meal.getTitle() != null)
             viewHolder.title.setText(meal.getTitle());

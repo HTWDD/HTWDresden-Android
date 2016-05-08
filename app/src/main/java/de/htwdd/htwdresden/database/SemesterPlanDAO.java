@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.Period;
+import de.htwdd.htwdresden.types.Period;
 import de.htwdd.htwdresden.types.FreeDay;
 import de.htwdd.htwdresden.types.SemesterPlan;
 

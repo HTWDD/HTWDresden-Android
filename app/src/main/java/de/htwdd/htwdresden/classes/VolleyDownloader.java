@@ -47,22 +47,27 @@ public class VolleyDownloader {
                 private final LruCache<String, Bitmap> mCache = new LruCache<>(10);
 
                 @Override
-                public Bitmap getBitmap(String url) {
+                public Bitmap getBitmap(@NonNull final String url) {
                     return mCache.get(url);
                 }
 
                 @Override
-                public void putBitmap(String url, Bitmap bitmap) {
+                public void putBitmap(@NonNull final String url, @NonNull final Bitmap bitmap) {
                     mCache.put(url, bitmap);
                 }
             });
         return mImageLoader;
     }
 
+    /**
+     * Fügt einen Request zur Abarbeitungswarteschlange hinzu
+     *
+     * @param request Request welcher hinzugefügt werden soll
+     * @param <T>     Typ des Requests
+     */
     public <T> void addToRequestQueue(@NonNull final Request<T> request) {
-        getRequestQueue().add(request);
+        mRequestQueue.add(request);
     }
-
 
     /**
      * Überprüft ob aktuell eine Internetverbindung besteht.
@@ -70,12 +75,12 @@ public class VolleyDownloader {
      * @param context Referenz auf die aktuelle Activity
      * @return true=Internet verbindung vorhanden, sonst false
      */
-    public static boolean CheckInternet(Context context) {
-        final ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        final Network[] networks = connec.getAllNetworks();
+    public static boolean CheckInternet(@NonNull final Context context) {
+        final ConnectivityManager systemService = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final Network[] networks = systemService.getAllNetworks();
 
-        for (Network network : networks) {
-            NetworkInfo networkInfo = connec.getNetworkInfo(network);
+        for (final Network network : networks) {
+            final NetworkInfo networkInfo = systemService.getNetworkInfo(network);
             if (networkInfo.isConnected())
                 return true;
         }
