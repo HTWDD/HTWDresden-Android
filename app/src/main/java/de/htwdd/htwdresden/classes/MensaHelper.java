@@ -43,12 +43,12 @@ public class MensaHelper {
         final Response.Listener<String> stringListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                 final Calendar calendar = GregorianCalendar.getInstance();
                 final ArrayList<Meal> meals;
                 switch (modus) {
                     case 1:
                         // Ändere Encoding
-                        response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                         // Parse Ergebnis
                         meals = parseCompleteWeek(response, GregorianCalendar.getInstance());
                         // Speichern
@@ -56,7 +56,6 @@ public class MensaHelper {
                         break;
                     case 2:
                         // Ändere Encoding
-                        response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                         calendar.add(Calendar.WEEK_OF_YEAR, 1);
                         // Parse Ergebniss
                         meals = parseCompleteWeek(response, calendar);
@@ -86,7 +85,7 @@ public class MensaHelper {
     public ArrayList<Meal> parseCurrentDay(@NonNull final String result) {
         final Calendar calendar = GregorianCalendar.getInstance();
         final ArrayList<Meal> meals = new ArrayList<>();
-        final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((.*?)\\))?</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
+        final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((\\d.\\d\\d|ausverkauft ).*?\\))</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
         final Matcher matcher = pattern.matcher(result);
         while (matcher.find()) {
