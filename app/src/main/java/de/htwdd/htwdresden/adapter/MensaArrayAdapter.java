@@ -19,7 +19,7 @@ import de.htwdd.htwdresden.classes.VolleyDownloader;
  */
 public class MensaArrayAdapter extends AbstractBaseAdapter<Meal> {
 
-    public MensaArrayAdapter(Context context, ArrayList<Meal> data) {
+    public MensaArrayAdapter(final Context context, final ArrayList<Meal> data) {
         super(context, data);
     }
 
@@ -37,17 +37,20 @@ public class MensaArrayAdapter extends AbstractBaseAdapter<Meal> {
         } else viewHolder = (ViewHolder) convertView.getTag();
 
         final Meal meal = getItem(position);
+        final String price = meal.getPrice();
 
         if (meal.getTitle() != null)
             viewHolder.title.setText(meal.getTitle());
-        if (meal.getPrice() != null)
-            viewHolder.price.setText(meal.getPrice());
+        if (price != null) {
+            if (price.matches("\\d+(?:\\.\\d+)?"))
+                viewHolder.price.setText(context.getString(R.string.mensa_price, price));
+            else viewHolder.price.setText(meal.getPrice());
+        }
         if (!meal.getImageUrl().isEmpty()) {
-            ImageLoader imageLoader = VolleyDownloader.getInstance(context).getImageLoader();
+            final ImageLoader imageLoader = VolleyDownloader.getInstance(context).getImageLoader();
             viewHolder.imageView.setImageUrl(meal.getImageUrl(), imageLoader);
             viewHolder.imageView.setVisibility(View.VISIBLE);
-        }
-        else viewHolder.imageView.setVisibility(View.GONE);
+        } else viewHolder.imageView.setVisibility(View.GONE);
 
         return convertView;
     }

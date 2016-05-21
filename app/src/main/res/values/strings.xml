@@ -76,6 +76,7 @@
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
+    <string name="mensa_price">%s €</string>
 
     <string name="timetable_overview_today">Heute</string>
     <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>

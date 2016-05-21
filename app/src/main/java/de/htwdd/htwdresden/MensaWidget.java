@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
-import java.nio.charset.Charset;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,9 +20,12 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.database.MensaDAO;
+import de.htwdd.htwdresden.events.UpdateMensaEvent;
+import de.htwdd.htwdresden.types.Meal;
 
 /**
  * Mensa-Widget Provider
@@ -32,120 +33,102 @@ import de.htwdd.htwdresden.classes.VolleyDownloader;
  * @author Kay Förster
  */
 public class MensaWidget extends AppWidgetProvider {
-    private static final String LOG_TAG = "MensaWidgetProvider";
     private static final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
 
     static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId) {
         // Construct the RemoteViews object
-        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        final Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         final int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         final RemoteViews views = getRemoteViews(context, minHeight);
+        final Calendar calendar = GregorianCalendar.getInstance();
 
         // Erstelle Intent zum Starten der App
-        Intent intent = new Intent(context, MainActivity.class);
+        final Intent intent = new Intent(context, MainActivity.class);
         intent.setAction(Const.IntentParams.START_ACTION_MENSA);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0);
         views.setOnClickPendingIntent(R.id.mensa_widget_layout, pendingIntent);
 
-        // Außerhalb der Geschäftszeiten wird nichts aktualisiert
-        Calendar calendar = GregorianCalendar.getInstance();
-        int hour_of_Day = calendar.get(Calendar.HOUR_OF_DAY);
-        if ((hour_of_Day > 1 && hour_of_Day <= 10) || hour_of_Day >= 16 || calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.SATURDAY) {
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-            return;
-        }
-        views.setTextViewText(R.id.info_message, null);
+        // Bestimme Tag, welcher angezeigt werden soll
+        views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, context.getString(R.string.mensa_date_today)));
 
-        // Nur noch Informationen für den nächsten Tag anzeigen
-        final int modus;
-        final int day;
         if (calendar.get(Calendar.HOUR_OF_DAY) > 15) {
-            if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
-                modus = 2;
-                day = Calendar.MONDAY;
-                views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, nameOfDays[2]));
-            } else {
-                modus = 1;
-                day = calendar.get(Calendar.DAY_OF_WEEK);
-                views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, nameOfDays[calendar.get(Calendar.DAY_OF_WEEK)]));
-            }
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, nameOfDays[calendar.get(Calendar.DAY_OF_WEEK)]));
         }
-        // Speiseplan von heute anzeigen
-        else {
-            modus = 0;
-            day = 2;
-            views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, context.getString(R.string.mensa_date_today)));
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            // Ersten Tag in der Woche berechnen
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+            views.setTextViewText(R.id.widget_mensa_date, context.getString(R.string.mensa_date, nameOfDays[2]));
         }
 
-        StringRequest stringRequest = new StringRequest(MensaHelper.getMensaUrl(modus), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                ArrayList<Meal> meals;
-                MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
-                try {
-                    switch (modus) {
-                        case 0:
-                            meals = mensaHelper.parseCurrentDay(response);
-                            break;
-                        default:
-                            response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
-                            meals = mensaHelper.parseDayFromWeek(response, day);
-                            break;
-                    }
-                } catch (Exception e) {
-                    Log.d(LOG_TAG, e.toString());
-                    views.setTextViewText(R.id.info_message, context.getString(R.string.info_error_parse));
-                    return;
-                }
+        // Lade Daten aus der Datenbank
+        final ArrayList<Meal> meals = MensaDAO.getMealsByDate(calendar);
 
-                // Daten bereinigen und aufarbeiten
-                for (Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {
-                    Meal meal = iterator.next();
-                    if (meal.getPrice().equals("ausverkauft") || meal.getTitle().matches(".*kombinierBAR:.*")) {
-                        iterator.remove();
-                        continue;
-                    }
-
-                    // Nur Preis für Studenten brücksichtigen
-                    String price = meal.getPrice();
-                    if (price.contains("/")) {
-                        price = price.substring(0, price.lastIndexOf("/"));
-                        price = price.replace("EUR", "€").trim();
-                        meal.setPrice(price);
-                    }
-                }
-
-                // Anzeigen der Gerichte
-                Resources ressource = context.getResources();
-                String packageName = context.getPackageName();
-                int cells = minHeight <= 65 ? 4 : 8;
-                for (int i = 1; i < cells + 1; i++) {
-                    int mealName = ressource.getIdentifier("widget_mensa_item_meal_" + i, "id", packageName);
-                    int mealPrice = ressource.getIdentifier("widget_mensa_item_price_" + i, "id", packageName);
-
-                    if (meals.size() <= i) {
-                        views.setTextViewText(mealName, null);
-                        views.setTextViewText(mealPrice, null);
-                        continue;
-                    }
-
-                    Meal meal = meals.get(i - 1);
-                    views.setTextViewText(mealName, meal.getTitle());
-                    views.setTextViewText(mealPrice, meal.getPrice());
-                }
-
-                // Instruct the widget manager to update the widget
-                appWidgetManager.updateAppWidget(appWidgetId, views);
+        // Daten bereinigen und aufarbeiten
+        for (Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {
+            final Meal meal = iterator.next();
+            // Ausverkaufte und KombinierBar entfernen
+            if (meal.getTitle() == null || meal.getTitle().matches(".*kombinierBAR:.*") || (meal.getPrice() != null && meal.getPrice().equals("ausverkauft"))) {
+                iterator.remove();
             }
-        }, null);
+        }
 
-        // Request abfeuern
-        VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
+        // Anzeigen der Gerichte
+        final Resources ressource = context.getResources();
+        final String packageName = context.getPackageName();
+        final int cells = minHeight <= 65 ? 4 : 8;
+
+        for (int i = 1; i < cells + 1; i++) {
+            final int mealName = ressource.getIdentifier("widget_mensa_item_meal_" + i, "id", packageName);
+            final int mealPrice = ressource.getIdentifier("widget_mensa_item_price_" + i, "id", packageName);
+
+            if (meals.size() < i) {
+                views.setTextViewText(mealName, null);
+                views.setTextViewText(mealPrice, null);
+                continue;
+            }
+
+            final Meal meal = meals.get(i - 1);
+            views.setTextViewText(mealName, meal.getTitle());
+            views.setTextViewText(mealPrice, context.getString(R.string.mensa_price, meal.getPrice()));
+        }
+
+        if (meals.size() != 0)
+            views.setTextViewText(R.id.info_message, null);
+        else views.setTextViewText(R.id.info_message, ressource.getText(R.string.mensa_no_offer));
+
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+        final Calendar calendar = GregorianCalendar.getInstance();
+        final int hour_of_Day = calendar.get(Calendar.HOUR_OF_DAY);
+
+        // Während der Mensa Öffnungszeiten, Speisepläne vorher aktualisieren
+        if (hour_of_Day >= 10 && hour_of_Day <= 15 && calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.MONDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
+            final Response.Listener<String> stringListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
+                    // Parse und speichere Ergebnis
+                    MensaDAO.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
+                    // Anwendung über neue Daten informieren
+                    EventBus.getInstance().post(new UpdateMensaEvent(0));
+                    // Widgets updaten
+                    for (int appWidgetId : appWidgetIds) {
+                        updateAppWidget(context, appWidgetManager, appWidgetId);
+                    }
+                }
+            };
+            // Download der Informationen
+            final StringRequest stringRequest = new StringRequest(MensaHelper.getMensaUrl(0), stringListener, null);
+            VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
+            return;
+        }
+
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -153,22 +136,20 @@ public class MensaWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(final Context context) {
         // Enter relevant functionality for when the first widget is created
     }
 
     @Override
-    public void onDisabled(Context context) {
+    public void onDisabled(final Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
 
     @Override
-    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+    public void onAppWidgetOptionsChanged(final Context context,final AppWidgetManager appWidgetManager, int appWidgetId,final Bundle newOptions) {
         updateAppWidget(context, appWidgetManager, appWidgetId);
-
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
-
 
     /**
      * Determine appropriate view based on width provided.
