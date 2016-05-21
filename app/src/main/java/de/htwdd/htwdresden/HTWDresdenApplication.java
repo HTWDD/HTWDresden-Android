@@ -9,6 +9,9 @@ import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 @ReportsCrashes(
         mode = ReportingInteractionMode.DIALOG,
         mailTo = "htwcampusapp@htw-dresden.de",
@@ -33,8 +36,8 @@ public class HTWDresdenApplication extends Application {
         super.onCreate();
 
         // Setze Einstellungen beim ersten Starten der App
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("FIRST_RUN", true)){
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences.getBoolean("FIRST_RUN", true)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("FIRST_RUN", false);
             editor.putBoolean("acra.enable", true);
@@ -43,5 +46,17 @@ public class HTWDresdenApplication extends Application {
 
         // Arca starten
         ACRA.init(this);
+
+        // Realm initialisieren
+        final RealmConfiguration config = new RealmConfiguration.Builder(this)
+                .name("htwdresden.realm")
+                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(1)
+                .build();
+        Realm.setDefaultConfiguration(config);
+
+        final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
+        thread.setPriority(Thread.MIN_PRIORITY);
+        thread.start();
     }
 }
