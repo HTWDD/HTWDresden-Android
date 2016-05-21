@@ -99,24 +99,36 @@ public final class Const {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
         }
 
+        /**
+         * Liefert einen {@link Calendar} mit dem heutigen Datum und der übergebenen Uhrzeit
+         *
+         * @param minutesSinceMidnight Minuten seit Mitternacht (Uhrzeit)
+         * @return {@link Calendar} mit der übergebenen Uhrzeit und dem heutigen Datum
+         */
         public static Calendar getCalendar(final long minutesSinceMidnight) {
             final int hour = (int) TimeUnit.HOURS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
-            Calendar calendar = GregorianCalendar.getInstance();
+            final Calendar calendar = GregorianCalendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, (int) (minutesSinceMidnight - TimeUnit.MINUTES.convert(hour, TimeUnit.HOURS)));
             return calendar;
         }
 
+        /**
+         * Wandelt die übergebenen Minuten seit Mitternacht in ein {@link Date}-Objekt um
+         *
+         * @param minutesSinceMidnight Minuten seit Mitternacht
+         * @return {@link Date}-Objekt mit der übergebenen Zeit
+         */
         public static Date getDate(final long minutesSinceMidnight) {
             final long millis = TimeUnit.MILLISECONDS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
             return new Date(millis - TimeZone.getDefault().getOffset(millis));
         }
 
         /**
-         * Liefert die DS zur übergebene Zeit
+         * Liefert die DS zur übergebenen / aktuellen Zeit
          *
-         * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht
-         * @return Aktuelle Stunde oder 0 falls auserhalb der Unterrichtszeiten
+         * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht oder null für aktuelle Zeit
+         * @return Aktuelle Stunde oder 0 falls außerhalb der Unterrichtszeiten
          */
         public static int getCurrentDS(@Nullable Long currentTime) {
             if (currentTime == null) {
@@ -124,9 +136,9 @@ public final class Const {
                 currentTime = TimeUnit.MINUTES.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS) + calendar.get(Calendar.MINUTE);
             }
 
-            if (currentTime >= endDS[6]) {
+            if (currentTime >= endDS[6])
                 return 0;
-            } else if (currentTime >= beginDS[6])
+            else if (currentTime >= beginDS[6])
                 return 7;
             else if (currentTime >= beginDS[5])
                 return 6;

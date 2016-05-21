@@ -35,10 +35,10 @@ public class LessonHelper {
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
 
     /**
-     * Liefert LessonSearchResult ob und welche Stunde aktuell gerade stattfindet
+     * Liefert Lehrveranstaltungen die zum aktuellen Zeitpunkt stattfinden
      *
      * @param context App-Context
-     * @return LessonSearchResult mit Beschreibung zur aktuellen Stunde
+     * @return {@link LessonSearchResult} mit Beschreibung zur aktuellen Stunde
      */
     @NonNull
     public static LessonSearchResult getCurrentUserLesson(@NonNull final Context context) {
