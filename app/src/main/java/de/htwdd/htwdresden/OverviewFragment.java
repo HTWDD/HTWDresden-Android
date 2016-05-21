@@ -304,7 +304,7 @@ public class OverviewFragment extends Fragment {
                         values[i - 1] = "";
                         break;
                     case Const.Timetable.ONE_LESSON_FOUND:
-                        Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
+                        final Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
                         assert lesson_vorschau != null;
                         values[i - 1] = lesson_vorschau.getTag() + " (" + lesson_vorschau.getType() + ")";
                         break;

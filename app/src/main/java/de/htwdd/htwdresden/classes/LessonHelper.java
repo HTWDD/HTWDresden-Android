@@ -16,12 +16,10 @@ import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
@@ -86,7 +84,6 @@ public class LessonHelper {
     public static LessonSearchResult getNextUserLesson(@NonNull final Context context) {
         final Calendar calendar = GregorianCalendar.getInstance();
         final Calendar calendarNextLesson = GregorianCalendar.getInstance();
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
         LessonSearchResult lessonSearchResult;
 
@@ -146,8 +143,8 @@ public class LessonHelper {
                         nameOfDays[calendarNextLesson.get(Calendar.DAY_OF_WEEK)],
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                format.format(Const.Timetable.beginDS[nextDS - 1]),
-                                format.format(Const.Timetable.endDS[nextDS - 1]))
+                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
+                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1])))
                 ));
                 break;
         }
