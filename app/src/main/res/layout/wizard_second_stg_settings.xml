@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:theme="@style/Wizard"
+    android:paddingRight="60dp"
+    android:paddingLeft="60dp"
+    android:gravity="center_vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abschluss"
+        android:textColor="@color/white" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/abschluss_list"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Schnellauswahl"
+        android:textColor="@color/white" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/abschluss_list" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Title"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:labelFor="@+id/pref_StgJhr"
+            android:nextFocusForward="@+id/pref_Stg">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/pref_StgJhr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_jahrgang"
+                android:inputType="number"
+                android:maxLength="4"
+                android:nextFocusDown="@+id/pref_Stg"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_studiengang_split"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:labelFor="@+id/pref_Stg">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/pref_Stg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_studiengang"
+                android:imeOptions="actionGo"
+                android:inputType="number"
+                android:maxLength="3"
+                android:nextFocusDown="@+id/pref_StgGrp"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_studiengang_split"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:labelFor="@+id/pref_StgGrp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/pref_StgGrp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_studiengruppe"
+                android:inputType="text"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_between_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:text="@string/settings_studiengang_dialogMessage"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+
+</LinearLayout>

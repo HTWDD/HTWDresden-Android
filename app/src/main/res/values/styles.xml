@@ -5,4 +5,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Wizard" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:colorBackground">@color/primary</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:windowBackground">@color/primary</item>
+        <!--<item name="android:colorButtonNormal">@color/primary_dark</item>-->
+        <item name="android:colorButtonNormal">#1f7ce6</item>
+        <item name="android:background">@color/primary</item>
+        <item name="colorControlNormal">#174887</item>
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="colorControlHighlight">#ffffff</item>
+    </style>
 </resources>

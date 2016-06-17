@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="60dp"
+    android:paddingRight="60dp"
+    android:gravity="center_vertical"
+    android:theme="@style/Wizard" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/htw_logo"
+        android:padding="-5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textColor="@color/white"
+        android:text="Willkommen!"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:text="Der Konfigurationsassistent wird dich nun durch die Einrichtung der App führen. Du kannst jederzeit einzelne Felder überspringen und später in den Optionen nachtragen.\n\nZu keinem Zeitpunkt werden deine persönlichen Daten an Dritte weitergegeben!"
+        android:layout_marginTop="10dp"/>
+
+
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context="de.htwdd.htwdresden.WizardActivity">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container_wizard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
+    <LinearLayout
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:background="?android:selectableItemBackground"
+            android:id="@+id/wizard_button_backwards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/progress_circle_1"
+            android:src="@drawable/ic_brightness_1_black_24dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            android:id="@+id/progress_circle_2"
+            android:src="@drawable/ic_brightness_1_black_24dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            android:id="@+id/progress_circle_3"
+            android:src="@drawable/ic_brightness_1_black_24dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            android:id="@+id/progress_circle_4"
+            android:src="@drawable/ic_brightness_1_black_24dp" />
+
+        <ImageButton
+            android:background="?android:selectableItemBackground"
+            android:id="@+id/wizard_button_forwards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_forward_black_24dp" />
+    </LinearLayout>
+
+</FrameLayout>
