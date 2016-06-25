@@ -27,7 +27,7 @@ public class SettingsStudiengruppePreference extends DialogPreference {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        jahrgang = (TextView) view.findViewById(R.id.pref_StgJhr);
+        jahrgang = (TextView) view.findViewById(R.id.pref_bibNummer);
         studiengang = (TextView) view.findViewById(R.id.pref_Stg);
         studiengruppe = (TextView) view.findViewById(R.id.pref_StgGrp);
 

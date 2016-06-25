@@ -9,12 +9,12 @@
             android:summary="@string/settings_bibNummer_summary"
             android:title="@string/settings_bibNummer" />
         <EditTextPreference
-            android:dialogMessage="@string/settings_rzLogin_dialogMessage"
+            android:dialogMessage="@string/settings_rzPassword_dialogMessage"
             android:inputType="textPassword"
             android:key="RZLogin"
             android:password="true"
-            android:summary="@string/settings_rzLogin_summary"
-            android:title="@string/settings_rzLogin" />
+            android:summary="@string/settings_rzPassword_summary"
+            android:title="@string/settings_rzPassword" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_study">
         <ListPreference

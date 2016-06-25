@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.htwdd.htwdresden">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="de.htwdd.htwdresden">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <application
         android:name=".HTWDresdenApplication"
@@ -17,9 +17,9 @@
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -32,7 +32,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
+                android:value="de.htwdd.htwdresden.MainActivity"/>
         </activity>
         <activity
             android:name=".RoomTimetableDetailsActivity"
@@ -40,7 +40,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
+                android:value="de.htwdd.htwdresden.MainActivity"/>
         </activity>
         <activity
             android:name="org.acra.dialog.CrashReportDialog"
@@ -49,48 +49,47 @@
             android:launchMode="singleInstance"
             android:process=":error_report"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
-            tools:replace="android:theme" />
+            tools:replace="android:theme"/>
 
-        <!-- Services-->
+        <!-- Services -->
         <service
             android:name=".service.VolumeControllerService"
-            android:exported="false" />
+            android:exported="false"/>
 
-        <!-- Receiver-->
+        <!-- Receiver -->
         <receiver
             android:name=".service.VolumeControllerService$HtwddBootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name=".MensaWidget"
             android:label="@string/navi_mensa">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/mensa_widget_info" />
+                android:resource="@xml/mensa_widget_info"/>
         </receiver>
         <receiver
             android:name=".TimetableWidget"
             android:label="@string/navi_timetable">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/timetable_widget_info" />
+                android:resource="@xml/timetable_widget_info"/>
         </receiver>
 
         <service
             android:name=".service.TimetableWidgetService"
-            android:enabled="true" />
+            android:enabled="true"/>
 
     </application>
-
 </manifest>

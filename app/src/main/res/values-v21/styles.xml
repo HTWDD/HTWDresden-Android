@@ -9,5 +9,6 @@
     <style name="ButtonHTWStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
     </style>
 </resources>

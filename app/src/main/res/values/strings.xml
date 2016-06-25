@@ -48,9 +48,9 @@
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
-    <string name="settings_rzLogin">RZLogin</string>
-    <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
+    <string name="settings_rzPassword">RZPasswort</string>
+    <string name="settings_rzPassword_summary">Wird zur Notenabfrage benötigt</string>
+    <string name="settings_rzPassword_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
     <string name="settings_abschluss">Abschluss</string>
     <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
     <string name="settings_jahrgang">Jahrgang</string>
@@ -198,11 +198,13 @@
     <string name="managment_semesterplan_examsPeriod">Prüfungsabschnitt</string>
     <string name="managment_semesterplan_reregistration">Rückmeldung</string>
 
-
-    <string name="section_format">Hello World from section: %1$d</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
+    <string name="wizard_welcome_title">Willkommen!</string>
+    <string name="wizard_welcome_message">Der Konfigurationsassistent wird dich nun durch die Einrichtung der App führen. Du kannst jederzeit einzelne Felder überspringen und
+        später in den Optionen nachtragen.\n\nZu keinen Zeitpunkt werden deine persönlichen Daten an Dritte weitergegeben!</string>
+    <string name="wizard_welcome_logo">HTWDresden Logo</string>
+    <string name="wizard_exams_message">Mit der App kannst Du ganz einfach deine offiziellen Prüfungsergebnisse abfragen und anzeigen lassen.\nFür diese Abfrage wird deine Bibliotheks-\nnummer (ohne führendem s) und dein Unix-Passwort benötigt.</string>
+    <string name="wizard_finish_title">Konfiguration abgeschlossen!</string>
+    <string name="wizard_finish_message">Die Konfiguration ist jetzt abgeschlossen. Änderungen kannst du jederzeit über den Menüpunkt Einstellungen vornehmen.
+        \n\nWir wünschen dir viel Spaß mit der HTWDresden App. Für Fragen oder Anregungen schreibe uns eine E-Mail an app@htw-dresden.de</string>
+    <string name="wizard_finish_start">HTWDresden starten</string>
 </resources>
