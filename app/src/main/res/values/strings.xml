@@ -2,7 +2,7 @@
     <string name="app_name">HTWDresden</string>
     <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
     <string name="app_developer_name">Kay Förster</string>
-    <string name="app_email">htwcampusapp@htw-dresden.de</string>
+    <string name="app_email">app@htw-dresden.de</string>
     <string name="app_website">www.htwdd.github.io</string>
     <string name="app_github">github.com/HTWDD/HTWDresden</string>
 

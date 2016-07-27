@@ -17,32 +17,32 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
  * Fragment zur Anzeige der App-Infos
+ *
+ * @author Kay Förster
  */
 public class AboutFragment extends Fragment {
-
 
     public AboutFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        final View view = inflater.inflate(R.layout.fragment_about, container, false);
 
         // Setze Toolbartitle
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_about));
 
         // Hole Views
-        TextView viewVersion = (TextView) view.findViewById(R.id.app_version);
-        TextView textGitHub = (TextView) view.findViewById(R.id.about_link_github);
-        TextView textMail = (TextView) view.findViewById(R.id.app_email);
-        TextView textPage = (TextView) view.findViewById(R.id.app_website);
+        final TextView viewVersion = (TextView) view.findViewById(R.id.app_version);
+        final TextView textGitHub = (TextView) view.findViewById(R.id.about_link_github);
+        final TextView textMail = (TextView) view.findViewById(R.id.app_email);
+        final TextView textPage = (TextView) view.findViewById(R.id.app_website);
 
         // Zeige die aktuelle Versionsnummer an
         try {
-            PackageManager manager = this.getActivity().getPackageManager();
+            final PackageManager manager = this.getActivity().getPackageManager();
             viewVersion.setText(manager.getPackageInfo(this.getActivity().getPackageName(), 0).versionName);
         } catch (Exception e) {
             viewVersion.setText(getText(R.string.info_error));
@@ -51,7 +51,7 @@ public class AboutFragment extends Fragment {
         // Setze OnClickListener für Button zum Öffnen der Projektwebseite
         textGitHub.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/HTWDD/HTWDD"));
+                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/HTWDD/HTWDresden"));
                 startActivity(browserIntent);
             }
         });
@@ -68,7 +68,7 @@ public class AboutFragment extends Fragment {
         textPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://htwdd.github.io"));
+                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://htwdd.github.io"));
                 startActivity(browserIntent);
             }
         });
@@ -77,7 +77,7 @@ public class AboutFragment extends Fragment {
     }
 
     private static void sendEmail(Context context, String[] recipientList, String title, String subject, String body) {
-        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipientList);
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
