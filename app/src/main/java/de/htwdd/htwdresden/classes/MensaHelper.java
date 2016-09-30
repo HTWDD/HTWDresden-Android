@@ -85,7 +85,7 @@ public class MensaHelper {
     public ArrayList<Meal> parseCurrentDay(@NonNull final String result) {
         final Calendar calendar = GregorianCalendar.getInstance();
         final ArrayList<Meal> meals = new ArrayList<>();
-        final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((\\d.\\d\\d|ausverkauft ).*?\\))</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
+        final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((\\d.\\d\\d|ausverkauft).*?\\))</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
         final Matcher matcher = pattern.matcher(result);
         while (matcher.find()) {
