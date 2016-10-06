@@ -55,6 +55,7 @@ public class HTWDresdenApplication extends Application {
                 .build();
         Realm.setDefaultConfiguration(config);
 
+        // Updates laden
         final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();

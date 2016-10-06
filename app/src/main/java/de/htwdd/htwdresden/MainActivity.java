@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private ActionBar actionBar;
     private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             // Makriere im NavigationDrawer
             setNavigationItem(item);
             // Ändere Inhalt
