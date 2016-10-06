@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import java.nio.charset.Charset;
@@ -28,6 +29,12 @@ public class MensaHelper {
     final private static String LOG_TAG = "MensaHelper";
     final private Context context;
     final private short mensaId;
+    final private Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.d(LOG_TAG, "[Fehler] Beim Laden der Mensa", error);
+        }
+    };
 
     public MensaHelper(@NonNull final Context context, final short mensaId) {
         this.context = context;
@@ -48,16 +55,14 @@ public class MensaHelper {
                 final ArrayList<Meal> meals;
                 switch (modus) {
                     case 1:
-                        // Ändere Encoding
                         // Parse Ergebnis
                         meals = parseCompleteWeek(response, GregorianCalendar.getInstance());
                         // Speichern
                         MensaDAO.updateMealsByWeek(calendar, meals);
                         break;
                     case 2:
-                        // Ändere Encoding
                         calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                        // Parse Ergebniss
+                        // Parse Ergebnis
                         meals = parseCompleteWeek(response, calendar);
                         // Speichern
                         MensaDAO.updateMealsByWeek(calendar, meals);
@@ -72,7 +77,7 @@ public class MensaHelper {
             }
         };
         // Download der Informationen
-        final StringRequest stringRequest = new StringRequest(getMensaUrl(modus), stringListener, null);
+        final StringRequest stringRequest = new StringRequest(getMensaUrl(modus), stringListener, errorListener);
         VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
     }
 
