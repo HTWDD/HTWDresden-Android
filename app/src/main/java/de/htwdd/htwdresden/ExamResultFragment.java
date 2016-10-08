@@ -167,7 +167,9 @@ public class ExamResultFragment extends Fragment {
                     }
                 }).show();
 
-                info_message.setText(message);
+                // Wenn bereits Daten angezeigt werden keine Info-Message zeigen
+                if (listExamResults.size() == 0)
+                    info_message.setText(message);
 
                 // Refresh ausschalten
                 swipeRefreshLayout.post(new Runnable() {
