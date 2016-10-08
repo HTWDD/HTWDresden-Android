@@ -55,7 +55,7 @@ class CheckUpdates implements Runnable {
         // Einstellungen holen
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
+        final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
 
         // Auf EventBus registrieren um fertigstellung der Requests zu erleben
         EventBus.getInstance().register(this);
