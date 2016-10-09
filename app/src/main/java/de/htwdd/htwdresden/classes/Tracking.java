@@ -3,6 +3,7 @@ package de.htwdd.htwdresden.classes;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -18,34 +19,31 @@ import org.json.JSONObject;
 public class Tracking {
     private static final String LOG_TAG = "Tracking";
     private static Tracking tracking;
-    private static Context mcontext;
 
-    private Tracking(Context context) {
-        mcontext = context;
+    private Tracking() {
     }
 
-    public static void makeRequest(Context context) {
+    public static void makeRequest(@NonNull final Context context) {
         if (tracking == null) {
-            tracking = new Tracking(context);
-            tracking.makeRequest(0);
-        } else tracking.makeRequest(1);
+            tracking = new Tracking();
+            tracking.makeRequest(context, 0);
+        } else tracking.makeRequest(context, 1);
     }
 
-    private void makeRequest(int type) {
+    private void makeRequest(@NonNull final Context context, final int type) {
         try {
-            JSONObject jsonObject = new JSONObject();
+            final JSONObject jsonObject = new JSONObject();
             jsonObject.put("plattform", 0);
             jsonObject.put("api", Build.VERSION.RELEASE);
-            jsonObject.put("version", mcontext.getPackageManager().getPackageInfo(mcontext.getPackageName(), 0).versionName);
-            jsonObject.put("unique", Settings.Secure.getString(mcontext.getContentResolver(), Settings.Secure.ANDROID_ID));
+            jsonObject.put("version", context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName);
+            jsonObject.put("unique", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
             jsonObject.put("type", type);
 
             // Sende Request an Webservice
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://track.benchr.de/track", jsonObject, null, null);
-            VolleyDownloader.getInstance(mcontext).getRequestQueue().add(jsonObjectRequest);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "[Fehler] Beim Tracking-Aufruf");
-            Log.e(LOG_TAG, e.toString());
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://track.benchr.de/track", jsonObject, null, null);
+            VolleyDownloader.getInstance(context).getRequestQueue().add(jsonObjectRequest);
+        } catch (final Exception e) {
+            Log.e(LOG_TAG, "[Fehler] Beim Tracking-Aufruf", e);
         }
     }
 }
