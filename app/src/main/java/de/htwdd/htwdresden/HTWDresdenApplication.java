@@ -13,7 +13,7 @@ import io.realm.Realm;
 
 @ReportsCrashes(
         mode = ReportingInteractionMode.DIALOG,
-        mailTo = "htwcampusapp@htw-dresden.de",
+        mailTo = "app@htw-dresden.de",
         resDialogTitle = R.string.app_name,
         resDialogIcon = R.drawable.ic_warning_24dp,
         resDialogText = R.string.crash_dialog_text,
