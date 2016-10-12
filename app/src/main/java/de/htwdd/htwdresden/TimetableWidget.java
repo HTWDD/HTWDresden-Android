@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.service.TimetableWidgetService;
@@ -25,7 +26,7 @@ public class TimetableWidget extends AppWidgetProvider {
         // Starte Service zum Updaten des Widget
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent intent = new Intent(context, TimetableWidgetService.class);
-        final Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);

@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
@@ -73,8 +74,8 @@ public class TimetableOverviewFragment extends Fragment {
         // Arguments überprüfen
         final Bundle bundle = getArguments();
         if (bundle != null)
-            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar().get(Calendar.WEEK_OF_YEAR));
-        else week = new GregorianCalendar().get(Calendar.WEEK_OF_YEAR);
+            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
+        else week = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);

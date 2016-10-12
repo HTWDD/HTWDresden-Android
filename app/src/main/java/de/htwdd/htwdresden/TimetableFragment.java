@@ -35,7 +35,7 @@ public class TimetableFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Calendar calendar = GregorianCalendar.getInstance(Locale.getDefault());
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
         calendar.add(Calendar.WEEK_OF_YEAR, 1);
         int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);

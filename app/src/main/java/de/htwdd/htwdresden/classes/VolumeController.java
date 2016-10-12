@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
@@ -53,7 +54,7 @@ public class VolumeController {
      */
     public void turnSoundOff() {
         // Stunde bestimmen
-        final Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final int current_ds = Const.Timetable.getCurrentDS(null);
 
         // Aktuell Vorlesungszeit?, wenn nein return
