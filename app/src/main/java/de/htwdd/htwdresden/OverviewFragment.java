@@ -188,7 +188,7 @@ public class OverviewFragment extends Fragment {
     @Subscribe
     public void updateTimetable(@Nullable UpdateTimetableEvent updateTimetableEvent) {
         final Context context = getActivity();
-        final Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(getActivity()));
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
