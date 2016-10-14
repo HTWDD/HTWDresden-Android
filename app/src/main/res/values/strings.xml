@@ -47,7 +47,7 @@
     <string name="settings_category_app_intern">HTWDresden intern</string>
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
+    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
     <string name="settings_rzLogin">RZLogin</string>
     <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
@@ -80,11 +80,11 @@
 
     <string name="timetable_overview_today">Heute</string>
     <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>
-    <string name="timetable_save_error">Fehler beim Speichern des Stundeplans!</string>
+    <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>
     <string name="timetable_add">Stunde hinzufügen</string>
     <string name="timetable_details">Stunden-Details</string>
-    <string name="timetable_current_week">Aktuelle Woche (%s)</string>
-    <string name="timetable_next_week">Nächste Woche (%s)</string>
+    <string name="timetable_current_week">Aktuelle Woche (%d)</string>
+    <string name="timetable_next_week">Nächste Woche (%d)</string>
     <string name="timetable_moreLessons">mehrere Stunden</string>
     <string name="timetable_moreLessonsPoints">***</string>
     <string name="timetable_only_KW">einige KW</string>
@@ -110,7 +110,7 @@
     <string name="timetable_edit_lessonWeeks_hint">z.B. 20;22</string>
     <string name="timetable_edit_save">Speichern</string>
     <string name="timetable_edit_delete">Löschen</string>
-    <string name="timetable_edit_lessonSaveSuccess">Stunde erfolgreich gepeichert!</string>
+    <string name="timetable_edit_lessonSaveSuccess">Stunde erfolgreich gespeichert!</string>
     <string name="timetable_edit_lessonDeleteSuccess">Stunde erfolgreich gelöscht!</string>
     <string name="timetable_details_title">(%1$s) %2$s</string>
     <string name="timetable_details_subtitle">%1$s von %2$s</string>
@@ -122,7 +122,7 @@
     <string name="room_timetable_add_no_Lessons">Raum nicht gefunden!</string>
     <string name="room_timetable_addDialog_message">Bitte gib die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer ein.</string>
     <string name="room_timetable_addDialog_hint">z.B. S 531</string>
-    <string name="room_timetable_update_success">Ausgewählte Räume erfolgreich aktuallisiert!</string>
+    <string name="room_timetable_update_success">Ausgewählte Räume erfolgreich aktualisiert!</string>
     <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
     <string name="room_timetable_details_title">Belegungsplan %s</string>
 
@@ -148,17 +148,17 @@
     <string name="exams_result_sign_off">Abgemeldet</string>
     <string name="exams_result_ill">Krankgeschrieben</string>
     <string name="exams_result_not_allowed">Nicht zugelassen</string>
-    <string name="exams_result_credits">Credits: %s</string>
-    <string name="exams_result_grade">Note: %s</string>
+    <string name="exams_result_credits">Credits: %.0f</string>
+    <string name="exams_result_grade">Note: %.1f</string>
     <string name="exams_stats_study">Studium</string>
     <string name="exams_stats_average">Durchschnitt: %s</string>
     <plurals name="exams_stats_count_grade">
         <item quantity="one">%s Note</item>
         <item quantity="other">%d Noten</item>
     </plurals>
-    <string name="exams_stats_count_credits">%s Credits</string>
-    <string name="exams_stats_gradeBest">beste Note: %s</string>
-    <string name="exams_stats_gradeWorst">schlechteste Note: %s</string>
+    <string name="exams_stats_count_credits">%.0f Credits</string>
+    <string name="exams_stats_gradeBest">beste Note: %.1f</string>
+    <string name="exams_stats_gradeWorst">schlechteste Note: %.1f</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
@@ -171,12 +171,12 @@
     <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
 
     <string name="overview_update_available">Update verfügbar!</string>
-    <string name="overview_update_available_message">Bitte Update auf die neuste Version! Zum Download einfach auf diese Kachel klicken.</string>
+    <string name="overview_update_available_message">Bitte Update auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
     <string name="overview_lessons_current">Aktuell</string>
     <string name="overview_lessons_noLesson">keine Veranstaltung</string>
     <string name="overview_lessons_next">Nächste</string>
-    <string name="overview_lessons_remaining_start">in %1$s Minuten</string>
-    <string name="overview_lessons_remaining_end">noch %1$s Minuten</string>
+    <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
+    <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
     <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
     <string name="overview_lessons_tomorrow">Morgen</string>
@@ -197,6 +197,4 @@
     <string name="managment_semesterplan_freeDays">Freie Tage</string>
     <string name="managment_semesterplan_examsPeriod">Prüfungsabschnitt</string>
     <string name="managment_semesterplan_reregistration">Rückmeldung</string>
-
-
 </resources>
