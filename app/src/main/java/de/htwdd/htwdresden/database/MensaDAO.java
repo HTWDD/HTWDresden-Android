@@ -37,18 +37,17 @@ public class MensaDAO {
      * @param meals    neue Mahlzeiten
      */
     public static void updateMealsByWeek(@NonNull final Calendar calendar, @NonNull final ArrayList<Meal> meals) {
-        // Ersten Tag in der Woche berechen
+        // Ersten Tag in der Woche berechnen
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         final Date firstDay = getDate(calendar);
-        // Letzten Tag in der Woche berechen
+        // Letzten Tag in der Woche berechnen
         calendar.add(Calendar.DAY_OF_WEEK, 6);
-        // Datenbank Instanz holen
         final Date lastDay = calendar.getTime();
+        // Datenbank Instanz holen
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         // Alte Einträge löschen
-        final RealmResults realmResults = realm.where(Meal.class).between("date", firstDay, lastDay).findAll();
-        realmResults.clear();
+        realm.where(Meal.class).between("date", firstDay, lastDay).findAll().deleteAllFromRealm();
         // Neue Einträge hinzufügen
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
@@ -57,15 +56,14 @@ public class MensaDAO {
     /**
      * Aktualisiert die Mahlzeiten eines Tages
      *
-     * @param calendar Tag welcher aktuallisert werden soll
+     * @param calendar Tag welcher aktualisiert werden soll
      * @param meals    Liste der Mahlzeiten
      */
     public static void updateMealsByDay(@NonNull final Calendar calendar, @NonNull final ArrayList<Meal> meals) {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         // Alte Einträge löschen
-        final RealmResults realmResults = realm.where(Meal.class).equalTo("date", getDate(calendar)).findAll();
-        realmResults.clear();
+        realm.where(Meal.class).equalTo("date", getDate(calendar)).findAll().deleteAllFromRealm();
         // Neue Einträge hinzufügen
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
@@ -78,7 +76,7 @@ public class MensaDAO {
      * @return Date-Objekt aus dem Kalender ohne Zeit
      */
     public static Date getDate(@NonNull final Calendar calendar) {
-        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
