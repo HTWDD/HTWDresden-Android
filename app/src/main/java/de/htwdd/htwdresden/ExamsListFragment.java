@@ -63,13 +63,13 @@ public class ExamsListFragment extends Fragment {
         if (savedInstanceState != null)
             stgJhr = savedInstanceState.getInt("stgJhr", GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
         else {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String value = sharedPreferences.getString("StgJhr", "");
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            final String value = sharedPreferences.getString("StgJhr", "");
             stgJhr = value.isEmpty() ? GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000 : Integer.valueOf(sharedPreferences.getString("StgJhr", ""));
         }
 
         // Handler für SwipeRefresh
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -78,7 +78,7 @@ public class ExamsListFragment extends Fragment {
         });
 
         // ListView zusammenbauen
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         footer = inflater.inflate(R.layout.fragment_exams_footer, listView, false);
         listView.setAdapter(adapter);
         listView.addFooterView(footer);

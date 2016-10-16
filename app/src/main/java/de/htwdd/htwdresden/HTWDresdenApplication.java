@@ -10,11 +10,10 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 @ReportsCrashes(
         mode = ReportingInteractionMode.DIALOG,
-        mailTo = "htwcampusapp@htw-dresden.de",
+        mailTo = "app@htw-dresden.de",
         resDialogTitle = R.string.app_name,
         resDialogIcon = R.drawable.ic_warning_24dp,
         resDialogText = R.string.crash_dialog_text,
@@ -48,13 +47,9 @@ public class HTWDresdenApplication extends Application {
         ACRA.init(this);
 
         // Realm initialisieren
-        final RealmConfiguration config = new RealmConfiguration.Builder(this)
-                .name("htwdresden.realm")
-                .deleteRealmIfMigrationNeeded()
-                .schemaVersion(1)
-                .build();
-        Realm.setDefaultConfiguration(config);
+        Realm.init(this);
 
+        // Updates laden
         final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();

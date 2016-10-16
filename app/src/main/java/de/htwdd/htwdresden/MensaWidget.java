@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
+import java.nio.charset.Charset;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +67,7 @@ public class MensaWidget extends AppWidgetProvider {
         final ArrayList<Meal> meals = MensaDAO.getMealsByDate(calendar);
 
         // Daten bereinigen und aufarbeiten
-        for (Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {
+        for (final Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {
             final Meal meal = iterator.next();
             // Ausverkaufte und KombinierBar entfernen
             if (meal.getTitle() == null || meal.getTitle().matches(".*kombinierBAR:.*") || (meal.getPrice() != null && meal.getPrice().equals("ausverkauft"))) {
@@ -114,11 +115,12 @@ public class MensaWidget extends AppWidgetProvider {
                 public void onResponse(String response) {
                     final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
                     // Parse und speichere Ergebnis
+                    response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                     MensaDAO.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
                     // Anwendung über neue Daten informieren
                     EventBus.getInstance().post(new UpdateMensaEvent(0));
                     // Widgets updaten
-                    for (int appWidgetId : appWidgetIds) {
+                    for (final int appWidgetId : appWidgetIds) {
                         updateAppWidget(context, appWidgetManager, appWidgetId);
                     }
                 }
@@ -130,7 +132,7 @@ public class MensaWidget extends AppWidgetProvider {
         }
 
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
+        for (final int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }

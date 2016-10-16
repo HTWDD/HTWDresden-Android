@@ -35,12 +35,12 @@ import de.htwdd.htwdresden.types.SemesterPlan;
 /**
  *
  */
-public class CheckUpdates implements Runnable {
+class CheckUpdates implements Runnable {
     private final static String LOG_TAG = "CheckUpdateTask";
     private final Context context;
     private final QueueCount queueCount;
 
-    public CheckUpdates(@NonNull final Context context) {
+    CheckUpdates(@NonNull final Context context) {
         this.context = context;
         queueCount = new QueueCount();
     }
@@ -55,13 +55,13 @@ public class CheckUpdates implements Runnable {
         // Einstellungen holen
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
+        final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
 
         // Auf EventBus registrieren um fertigstellung der Requests zu erleben
         EventBus.getInstance().register(this);
 
         // Aktualisiere Mensa
-        if ((calendar.getTimeInMillis() - mensaLastUpdate) < TimeUnit.MILLISECONDS.convert(2, TimeUnit.DAYS)) {
+        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)) {
             Log.d(LOG_TAG, "Lade Mensa");
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
             mensaHelper.loadAndSaveMeals(1);
@@ -71,7 +71,7 @@ public class CheckUpdates implements Runnable {
             queueCount.update = true;
         }
 
-        // Überprüfe Versionsdatei
+        // Überprüfe Version
         checkForUpdates();
 
         // Wenn alle Mensa-Request abgeschlossen, Updatezeitpunkt speichern. Maximal 2 Minuten warten

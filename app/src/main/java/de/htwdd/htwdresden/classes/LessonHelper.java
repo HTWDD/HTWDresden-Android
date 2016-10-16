@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
@@ -42,7 +43,7 @@ public class LessonHelper {
      */
     @NonNull
     public static LessonSearchResult getCurrentUserLesson(@NonNull final Context context) {
-        final Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
         LessonSearchResult lessonSearchResult = new LessonSearchResult();
 
@@ -59,7 +60,7 @@ public class LessonHelper {
 
                 // Verbleibende Zeit anzeigen
                 long difference = TimeUnit.MINUTES.convert(
-                        GregorianCalendar.getInstance().getTimeInMillis() - Const.Timetable.getCalendar(Const.Timetable.endDS[currentDS - 1]).getTimeInMillis(),
+                        GregorianCalendar.getInstance(Locale.GERMANY).getTimeInMillis() - Const.Timetable.getCalendar(Const.Timetable.endDS[currentDS - 1]).getTimeInMillis(),
                         TimeUnit.MILLISECONDS);
 
                 if (difference < 0)
@@ -82,8 +83,8 @@ public class LessonHelper {
      */
     @NonNull
     public static LessonSearchResult getNextUserLesson(@NonNull final Context context) {
-        final Calendar calendar = GregorianCalendar.getInstance();
-        final Calendar calendarNextLesson = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        final Calendar calendarNextLesson = GregorianCalendar.getInstance(Locale.GERMANY);
         final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
         LessonSearchResult lessonSearchResult;
 

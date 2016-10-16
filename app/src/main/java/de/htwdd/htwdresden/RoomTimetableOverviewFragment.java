@@ -12,6 +12,7 @@ import android.widget.GridView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
@@ -36,7 +37,7 @@ public class RoomTimetableOverviewFragment extends Fragment {
         int week;
         String room;
         if (bundle != null) {
-            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar().get(Calendar.WEEK_OF_YEAR));
+            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
             room = bundle.getString(Const.BundleParams.ROOM_TIMETABLE_ROOM, "");
         } else return mLayout;
 

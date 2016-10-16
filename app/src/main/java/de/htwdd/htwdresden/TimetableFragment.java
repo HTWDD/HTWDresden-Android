@@ -35,14 +35,14 @@ public class TimetableFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Calendar calendar = GregorianCalendar.getInstance(Locale.getDefault());
-        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        final int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
         calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        final int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);
 
-        Bundle bundle_1 = new Bundle();
+        final Bundle bundle_1 = new Bundle();
+        final Bundle bundle_2 = new Bundle();
         bundle_1.putInt(Const.BundleParams.TIMETABLE_WEEK, currentWeek);
-        Bundle bundle_2 = new Bundle();
         bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
         mTabs.add(new TabItem(
                 getResources().getString(R.string.timetable_current_week, currentWeek),
@@ -59,19 +59,19 @@ public class TimetableFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tabs, container, false);
+        final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
 
         // Setze Toolbartitle
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         // Adapter für Tabs erstellen und an view hängen
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
+        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
         viewPager.setAdapter(viewPagerAdapter);
 
         // TabLayout "stylen"
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         // Stetze feste Anzahl an Tabs (Tabs wirken nciht angeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // Tabs nehemen immer die ganze Breite ein

@@ -56,25 +56,28 @@
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/semesterplan_freieTageNamen"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:paddingEnd="@dimen/space_between_content"
                         android:paddingStart="@dimen/intent_enumeration"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_weight="1"/>
 
                     <TextView
                         android:id="@+id/semesterplan_freieTage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/space_between_content"
-                        android:layout_marginStart="40sp"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
+                        android:layout_marginStart="@dimen/space_between_content"
+                        android:layout_weight="1"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:paddingStart="@dimen/space_between_content"
+                        android:paddingEnd="@dimen/space_between_content"/>
                 </LinearLayout>
 
                 <TextView

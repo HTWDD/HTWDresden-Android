@@ -154,10 +154,10 @@ public class MensaDetailFragment extends Fragment {
         }
 
         // Wenn keine Essen gespeichert, Meldung ausgeben
+        final TextView messageView = (TextView) mLayout.findViewById(R.id.message_info);
         if (meals.size() == 0) {
-            final TextView messageView = (TextView) mLayout.findViewById(R.id.message_info);
             messageView.setText(R.string.mensa_no_offer);
-        }
+        } else messageView.setText(null);
 
         // Adapter über neue Daten informieren
         mensaArrayAdapter.notifyDataSetChanged();

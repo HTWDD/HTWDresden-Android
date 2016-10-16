@@ -3,8 +3,8 @@ Die neue App von Studenten für Studenten der HTW Dresden
 
 HTWDresden ist ein eigenständiges, inoffizielles Projekt und nicht durch die HTW Dresden selbst vertreten. Das Benutzen erfolgt auf eigene Verantwortung.
 * Ansprechpartner: Frau Prof. Dr.-Ing. Kühn.
-* Entwickler: M.Sc. Kay Förster
-* Kontakt: htwcampusapp@htw-dresden.de
+* Entwickler: Kay Förster M.Sc.
+* Kontakt: app@htw-dresden.de
 
 
 ## Installation
