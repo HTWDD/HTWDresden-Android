@@ -202,9 +202,14 @@
     <string name="wizard_welcome_message">Der Konfigurationsassistent wird dich nun durch die Einrichtung der App führen. Du kannst jederzeit einzelne Felder überspringen und
         später in den Optionen nachtragen.\n\nZu keinen Zeitpunkt werden deine persönlichen Daten an Dritte weitergegeben!</string>
     <string name="wizard_welcome_logo">HTWDresden Logo</string>
-    <string name="wizard_exams_message">Mit der App kannst Du ganz einfach deine offiziellen Prüfungsergebnisse abfragen und anzeigen lassen.\nFür diese Abfrage wird deine Bibliotheks-\nnummer (ohne führendem s) und dein Unix-Passwort benötigt.</string>
+    <string name="wizard_exams_stats_title">Notenabfrage</string>
+    <string name="wizard_exams_stats_message">Mit der App kannst Du ganz einfach deine offiziellen Prüfungsergebnisse abfragen und anzeigen lassen.\nFür diese Abfrage wird deine Bibliotheks-\nnummer (ohne führendem s) und dein Unix-Passwort benötigt.</string>
+    <string name="wizard_exams_lesson_title">Stunden- / Prüfungsplan</string>
+    <string name="wizard_exams_lesson_message">Deinen offiziellen Stunden- / Prüfungsplan kannst du direkt aus der App heraus abrufen. Den Stundenplan kannst du anschließend weiter anpassen!</string>
     <string name="wizard_finish_title">Konfiguration abgeschlossen!</string>
     <string name="wizard_finish_message">Die Konfiguration ist jetzt abgeschlossen. Änderungen kannst du jederzeit über den Menüpunkt Einstellungen vornehmen.
         \n\nWir wünschen dir viel Spaß mit der HTWDresden App. Für Fragen oder Anregungen schreibe uns eine E-Mail an app@htw-dresden.de</string>
-    <string name="wizard_finish_start">HTWDresden starten</string>
+    <string name="wizard_finish">Wizard schließen</string>
+    <string name="wizard_navi_next">Weiter</string>
+    <string name="wizard_navi_back">Zurück</string>
 </resources>

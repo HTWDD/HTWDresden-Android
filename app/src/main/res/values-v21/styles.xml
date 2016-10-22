@@ -6,6 +6,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppThemeWizard" parent="AppTheme">
+        <item name="android:background">@color/primary_dark</item>
+        <item name="android:popupBackground">@color/colorAccent</item>
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="colorControlActivated">@color/htw_orange</item>
+        <item name="colorControlHighlight">@color/htw_orange</item>
+    </style>
+
     <style name="ButtonHTWStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary</item>

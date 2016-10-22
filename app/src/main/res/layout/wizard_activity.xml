@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primary"
-    tools:context="de.htwdd.htwdresden.WizardActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/main_content"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/primary_dark"
+             tools:context="de.htwdd.htwdresden.WizardActivity">
 
 
     <android.support.v4.view.ViewPager
@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <LinearLayout
         android:paddingLeft="60dp"
@@ -34,13 +33,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.5"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
+            android:contentDescription="@string/wizard_navi_back"
+            android:src="@drawable/ic_arrow_back_white_24dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/progress_circle_1"
+            android:contentDescription="@string/wizard_welcome_title"
             android:src="@drawable/ic_brightness_1_black_24dp" />
 
         <ImageView
@@ -49,6 +50,7 @@
             android:layout_weight="1"
             android:alpha="0.5"
             android:id="@+id/progress_circle_2"
+            android:contentDescription="@string/wizard_exams_lesson_title"
             android:src="@drawable/ic_brightness_1_black_24dp" />
 
         <ImageView
@@ -56,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:alpha="0.5"
+            android:contentDescription="@string/wizard_exams_stats_title"
             android:id="@+id/progress_circle_3"
             android:src="@drawable/ic_brightness_1_black_24dp" />
 
@@ -64,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:alpha="0.5"
+            android:contentDescription="@string/wizard_finish_title"
             android:id="@+id/progress_circle_4"
             android:src="@drawable/ic_brightness_1_black_24dp" />
 
@@ -72,7 +76,8 @@
             android:id="@+id/wizard_button_forwards"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_forward_black_24dp" />
+            android:contentDescription="@string/wizard_navi_next"
+            android:src="@drawable/ic_arrow_forward_white_24dp" />
     </LinearLayout>
 
 </FrameLayout>
