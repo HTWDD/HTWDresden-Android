@@ -33,6 +33,12 @@ public final class Const {
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
+        public static final String PREFERENCES_S_NUMMER = "sNummer";
+        public static final String PREFERENCES_RZ_LOGIN = "RZLogin";
+        public static final String PREFERENCES_STUDIENJAHRGANG = "StgJhr";
+        public static final String PREFERENCES_STUDIENGANG = "Stg";
+        public static final String PREFERENCES_STUDIENGRUPPE = "StgGrp";
+        public static final String PREFERENCES_STUDIENABSCHLUSS = "abschluss";
     }
 
     public static final class internet {
