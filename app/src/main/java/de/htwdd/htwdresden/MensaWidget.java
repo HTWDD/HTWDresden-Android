@@ -15,7 +15,6 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.nio.charset.Charset;
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -27,6 +26,7 @@ import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.Meal;
+import io.realm.RealmResults;
 
 /**
  * Mensa-Widget Provider
@@ -64,7 +64,7 @@ public class MensaWidget extends AppWidgetProvider {
         }
 
         // Lade Daten aus der Datenbank
-        final ArrayList<Meal> meals = MensaDAO.getMealsByDate(calendar);
+        final RealmResults<Meal> meals = MensaDAO.getMealsByDate(calendar);
 
         // Daten bereinigen und aufarbeiten
         for (final Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {

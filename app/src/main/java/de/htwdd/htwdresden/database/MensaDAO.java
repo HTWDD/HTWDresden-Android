@@ -23,11 +23,11 @@ public class MensaDAO {
      * @param calendar Tag für welchen das Essen ausgeben werden soll
      * @return Liste von {@link Meal}
      */
+    @Deprecated
     @NonNull
-    public static ArrayList<Meal> getMealsByDate(@NonNull final Calendar calendar) {
+    public static RealmResults<Meal> getMealsByDate(@NonNull final Calendar calendar) {
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaDAO.getDate(calendar)).findAll();
-        return new ArrayList<>(meals.subList(0, meals.size()));
+        return realm.where(Meal.class).equalTo("date", MensaDAO.getDate(calendar)).findAll();
     }
 
     /**

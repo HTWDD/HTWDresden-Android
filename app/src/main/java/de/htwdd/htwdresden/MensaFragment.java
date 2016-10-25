@@ -32,25 +32,25 @@ public class MensaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle_1 = new Bundle();
+        final Bundle bundle_1 = new Bundle();
         bundle_1.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 0);
-        Bundle bundle_2 = new Bundle();
+        final Bundle bundle_2 = new Bundle();
         bundle_2.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
-        Bundle bundle_3 = new Bundle();
+        final Bundle bundle_3 = new Bundle();
         bundle_3.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 2);
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_today),
-                MensaDetailFragment.class,
+                MensaDetailDayFragment.class,
                 bundle_1
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_this_week),
-                MensaDetailFragment.class,
+                MensaDetailWeekFragment.class,
                 bundle_2
         ));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_next_week),
-                MensaDetailFragment.class,
+                MensaDetailWeekFragment.class,
                 bundle_3
         ));
     }

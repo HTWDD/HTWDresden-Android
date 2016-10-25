@@ -49,6 +49,7 @@ import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
+import io.realm.RealmResults;
 
 
 /**
@@ -332,7 +333,7 @@ public class OverviewFragment extends Fragment {
 
         final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
         final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
-        final ArrayList<Meal> meals = MensaDAO.getMealsByDate(GregorianCalendar.getInstance());
+        final RealmResults<Meal> meals = MensaDAO.getMealsByDate(GregorianCalendar.getInstance());
         final int countMeals = meals.size();
 
         // Aktuell kein Angebot vorhanden
