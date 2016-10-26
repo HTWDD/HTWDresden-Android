@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -42,13 +43,14 @@ import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
-import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 
@@ -116,8 +118,17 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        // Mensa anzeigen
-        updateMensa(null);
+        // Daten für Mensa laden und anzeigen
+        final Realm realm = Realm.getDefaultInstance();
+        final Calendar calendar = GregorianCalendar.getInstance();
+        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaDAO.getDate(calendar)).findAll();
+        meals.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
+            @Override
+            public void onChange(final RealmResults<Meal> element) {
+                showMensaInfo(meals);
+            }
+        });
+        showMensaInfo(meals);
 
         // Stundenplan anzeigen
         updateTimetable(null);
@@ -321,19 +332,12 @@ public class OverviewFragment extends Fragment {
     }
 
     /**
-     * Behandelt die Benachrichtigung vom EventBus für neue Mensa-Informationen / zeigt diese an
-     *
-     * @param updateMensaEvent Typ der Benachrichtigung
+     * Zeigt die Mahlzeiten als einfache Liste an
+     * @param meals Liste der Mahlzeiten
      */
-    @Subscribe
-    public void updateMensa(@Nullable final UpdateMensaEvent updateMensaEvent) {
-        // Wenn Event vorhanden und der Modus nicht stimmen dieses Event ignorieren
-        if (updateMensaEvent != null && updateMensaEvent.getForModus() != 0)
-            return;
-
+    private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
         final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
         final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
-        final RealmResults<Meal> meals = MensaDAO.getMealsByDate(GregorianCalendar.getInstance());
         final int countMeals = meals.size();
 
         // Aktuell kein Angebot vorhanden
