@@ -8,7 +8,6 @@ import java.util.Date;
 
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Zugriff auf die Mensa Datenbank
@@ -16,19 +15,6 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class MensaDAO {
-
-    /**
-     * Liefert die Mahlzeiten für einen Tag
-     *
-     * @param calendar Tag für welchen das Essen ausgeben werden soll
-     * @return Liste von {@link Meal}
-     */
-    @Deprecated
-    @NonNull
-    public static RealmResults<Meal> getMealsByDate(@NonNull final Calendar calendar) {
-        final Realm realm = Realm.getDefaultInstance();
-        return realm.where(Meal.class).equalTo("date", MensaDAO.getDate(calendar)).findAll();
-    }
 
     /**
      * Aktualisiert die Mahlzeiten einer Woche
