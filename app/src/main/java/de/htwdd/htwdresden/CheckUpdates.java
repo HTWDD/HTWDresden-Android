@@ -11,7 +11,6 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,6 @@ import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.events.UpdateAppEvent;
-import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.SemesterPlan;
 
 /**
@@ -57,13 +55,10 @@ class CheckUpdates implements Runnable {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
 
-        // Auf EventBus registrieren um fertigstellung der Requests zu erleben
-        EventBus.getInstance().register(this);
-
         // Aktualisiere Mensa
         if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)) {
             Log.d(LOG_TAG, "Lade Mensa");
-            final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
+            final MensaHelper mensaHelper = new MensaHelper(context, queueCount, (short) 9);
             mensaHelper.loadAndSaveMeals(1);
             queueCount.incrementCountQueue();
             mensaHelper.loadAndSaveMeals(2);
@@ -81,19 +76,19 @@ class CheckUpdates implements Runnable {
             while (queueCount.getCountQueue() > 0 && count <= 240) {
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     Log.e(LOG_TAG, "Fehler beim versuch zu schlafen", e);
                 }
                 count++;
             }
 
-            final SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
-            editor.apply();
+            // Update-Datum nur bei erfolgreichen Download speichern
+            if (queueCount.getCountQueue() == 0) {
+                final SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
+                editor.apply();
+            }
         }
-
-        // Vom EventBus wieder abmelden
-        EventBus.getInstance().unregister(this);
     }
 
     /**
@@ -168,18 +163,5 @@ class CheckUpdates implements Runnable {
                 },
                 null);
         VolleyDownloader.getInstance(context).addToRequestQueue(jsonArrayRequest);
-    }
-
-    /**
-     * Behandelt Benachrichtigungen vom EventBus für die Mensa
-     *
-     * @param updateMensaEvent Typ der Benachrichtigung
-     */
-    @Subscribe
-    public void updateMensa(@NonNull final UpdateMensaEvent updateMensaEvent) {
-        // Wenn Event vorhanden und der Modus nicht stimmen dieses Event ignorieren
-        if (updateMensaEvent.getForModus() == 0)
-            return;
-        queueCount.decrementCountQueue();
     }
 }

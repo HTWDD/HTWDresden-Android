@@ -2,6 +2,7 @@ package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -17,7 +18,6 @@ import java.util.regex.Pattern;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.database.MensaDAO;
-import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.Meal;
 
 /**
@@ -29,6 +29,8 @@ public class MensaHelper {
     final private static String LOG_TAG = "MensaHelper";
     final private Context context;
     final private short mensaId;
+    @Nullable
+    private QueueCount queueCount = null;
     final private Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
@@ -39,6 +41,11 @@ public class MensaHelper {
     public MensaHelper(@NonNull final Context context, final short mensaId) {
         this.context = context;
         this.mensaId = mensaId;
+    }
+
+    public MensaHelper(@NonNull final Context context, @NonNull final QueueCount queueCount, final short mensaId) {
+        this(context, mensaId);
+        this.queueCount = queueCount;
     }
 
     /**
@@ -73,7 +80,8 @@ public class MensaHelper {
                         break;
                 }
 
-                EventBus.getInstance().post(new UpdateMensaEvent(modus));
+                if (queueCount != null)
+                    queueCount.decrementCountQueue();
             }
         };
         // Download der Informationen
