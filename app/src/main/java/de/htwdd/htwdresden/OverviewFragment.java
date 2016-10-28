@@ -37,10 +37,10 @@ import java.util.Locale;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
-import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
@@ -121,7 +121,7 @@ public class OverviewFragment extends Fragment {
         // Daten für Mensa laden und anzeigen
         final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
-        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaDAO.getDate(calendar)).findAll();
+        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
         meals.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
             @Override
             public void onChange(final RealmResults<Meal> element) {

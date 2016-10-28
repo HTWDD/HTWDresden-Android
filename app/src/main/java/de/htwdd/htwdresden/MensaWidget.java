@@ -21,7 +21,6 @@ import java.util.GregorianCalendar;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
-import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -64,7 +63,7 @@ public class MensaWidget extends AppWidgetProvider {
         // Lade Daten aus der Datenbank
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Meal> meals = realm.where(Meal.class)
-                .equalTo("date", MensaDAO.getDate(calendar))
+                .equalTo("date", MensaHelper.getDate(calendar))
                 .notEqualTo("title", ".*kombinierBAR:.*").or()
                 .notEqualTo("price", "ausverkauft").or()
                 .isNotNull("price").findAll();
@@ -110,7 +109,7 @@ public class MensaWidget extends AppWidgetProvider {
                     final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
                     // Parse und speichere Ergebnis
                     response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
-                    MensaDAO.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
+                    MensaHelper.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
                     // Widgets updaten
                     for (final int appWidgetId : appWidgetIds) {
                         updateAppWidget(context, appWidgetManager, appWidgetId);

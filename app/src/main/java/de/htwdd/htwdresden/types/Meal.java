@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.database.MensaDAO;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -50,7 +50,7 @@ public class Meal extends RealmObject {
     }
 
     public void setDate(@NonNull final Calendar date) {
-        this.date = MensaDAO.getDate(date);
+        this.date = MensaHelper.getDate(date);
     }
 
     public void setMensaId(final short mensaId) {

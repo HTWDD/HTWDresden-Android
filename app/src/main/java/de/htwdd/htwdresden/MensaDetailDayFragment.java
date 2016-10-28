@@ -21,7 +21,6 @@ import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
-import de.htwdd.htwdresden.database.MensaDAO;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -81,7 +80,7 @@ public class MensaDetailDayFragment extends Fragment {
 
         // Hole Daten aus DB
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo("date", MensaDAO.getDate(GregorianCalendar.getInstance())).findAll();
+        final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
         // Bei Änderungen an der Datenbasis Hinweismeldung überprüfen
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
             @Override

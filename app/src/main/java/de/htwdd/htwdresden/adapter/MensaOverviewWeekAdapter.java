@@ -14,7 +14,7 @@ import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.database.MensaDAO;
+import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -61,7 +61,7 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
         if (adapterData == null)
             return view;
 
-        final RealmResults<Meal> realmResults = adapterData.where().equalTo("date", MensaDAO.getDate(calendar)).findAll();
+        final RealmResults<Meal> realmResults = adapterData.where().equalTo("date", MensaHelper.getDate(calendar)).findAll();
         final StringBuilder stringBuilder = new StringBuilder();
         final int realmResultsCount = realmResults.size();
         for (int index = 0; index < realmResultsCount - 1; index++) {
