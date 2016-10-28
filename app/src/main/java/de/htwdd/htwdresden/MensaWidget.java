@@ -17,15 +17,13 @@ import java.nio.charset.Charset;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.VolleyDownloader;
 import de.htwdd.htwdresden.database.MensaDAO;
-import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.Meal;
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -64,16 +62,12 @@ public class MensaWidget extends AppWidgetProvider {
         }
 
         // Lade Daten aus der Datenbank
-        final RealmResults<Meal> meals = MensaDAO.getMealsByDate(calendar);
-
-        // Daten bereinigen und aufarbeiten
-        for (final Iterator<Meal> iterator = meals.iterator(); iterator.hasNext(); ) {
-            final Meal meal = iterator.next();
-            // Ausverkaufte und KombinierBar entfernen
-            if (meal.getTitle() == null || meal.getTitle().matches(".*kombinierBAR:.*") || (meal.getPrice() != null && meal.getPrice().equals("ausverkauft"))) {
-                iterator.remove();
-            }
-        }
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmResults<Meal> meals = realm.where(Meal.class)
+                .equalTo("date", MensaDAO.getDate(calendar))
+                .notEqualTo("title", ".*kombinierBAR:.*").or()
+                .notEqualTo("price", "ausverkauft").or()
+                .isNotNull("price").findAll();
 
         // Anzeigen der Gerichte
         final Resources ressource = context.getResources();
@@ -117,8 +111,6 @@ public class MensaWidget extends AppWidgetProvider {
                     // Parse und speichere Ergebnis
                     response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
                     MensaDAO.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
-                    // Anwendung über neue Daten informieren
-                    EventBus.getInstance().post(new UpdateMensaEvent(0));
                     // Widgets updaten
                     for (final int appWidgetId : appWidgetIds) {
                         updateAppWidget(context, appWidgetManager, appWidgetId);
