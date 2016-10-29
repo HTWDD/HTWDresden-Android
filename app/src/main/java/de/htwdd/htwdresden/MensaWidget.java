@@ -64,8 +64,8 @@ public class MensaWidget extends AppWidgetProvider {
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Meal> meals = realm.where(Meal.class)
                 .equalTo("date", MensaHelper.getDate(calendar))
-                .notEqualTo("title", ".*kombinierBAR:.*").or()
-                .notEqualTo("price", "ausverkauft").or()
+                .notEqualTo("title", ".*kombinierBAR:.*")
+                .notEqualTo("price", "ausverkauft")
                 .isNotNull("price").findAll();
 
         // Anzeigen der Gerichte
