@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/primary">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="@dimen/widget_space_between_content"
         android:paddingEnd="@dimen/widget_space_between_content"
         android:paddingStart="@dimen/widget_space_between_content">
 
@@ -23,27 +23,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="@dimen/widget_space_between_content"
                 android:paddingStart="0dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_meal_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:singleLine="false"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
         </LinearLayout>
 
         <LinearLayout
@@ -56,9 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_price_2"
@@ -67,9 +58,7 @@
                 android:layout_weight="1"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
         </LinearLayout>
 
         <LinearLayout
@@ -82,26 +71,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="@dimen/widget_space_between_content"
                 android:paddingStart="0dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_meal_4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
         </LinearLayout>
 
@@ -115,9 +98,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_price_4"
@@ -126,9 +107,7 @@
                 android:layout_weight="1"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
         </LinearLayout>
 
         <LinearLayout
@@ -141,27 +120,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="@dimen/widget_space_between_content"
                 android:paddingStart="0dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_meal_6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
-
+                style="@style/Widget.Mensa.Meal"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,9 +146,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_price_6"
@@ -185,9 +155,7 @@
                 android:layout_weight="1"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
         </LinearLayout>
 
         <LinearLayout
@@ -200,26 +168,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingEnd="@dimen/widget_space_between_content"
                 android:paddingStart="0dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_meal_8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Meal"/>
 
         </LinearLayout>
 
@@ -233,9 +195,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
 
             <TextView
                 android:id="@+id/widget_mensa_item_price_8"
@@ -244,12 +204,9 @@
                 android:layout_weight="1"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/widget_space_between_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/htw_orange"
-                android:textSize="12sp" />
+                style="@style/Widget.Mensa.Price"/>
         </LinearLayout>
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/widget_mensa_date"
