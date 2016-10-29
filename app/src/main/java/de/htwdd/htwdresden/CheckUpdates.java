@@ -96,7 +96,7 @@ class CheckUpdates implements Runnable {
      */
     private void checkForUpdates() {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                "https://htwdd.github.io/version.json",
+                "https://www2.htw-dresden.de/~app/API/version.json",
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
