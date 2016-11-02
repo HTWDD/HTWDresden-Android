@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         style="@style/ButtonHTWStyle"
         android:text="@string/wizard_finish"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:id="@+id/wizard_finish"/>
 
 </LinearLayout>

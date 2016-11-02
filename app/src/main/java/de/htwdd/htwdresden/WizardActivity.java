@@ -1,26 +1,32 @@
 package de.htwdd.htwdresden;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import de.htwdd.htwdresden.adapter.WizardSectionsPagerAdapter;
+import de.htwdd.htwdresden.interfaces.IWizardSaveSettings;
 
 /**
  * Created by Meralium on 24.05.16.
  */
 public class WizardActivity extends AppCompatActivity {
 
-    private ImageView circles[];
+    private final ImageView circles[] = new ImageView[4];
     private ImageButton forwards;
     private ImageButton backwards;
+    // The {@link ViewPager} that will host the section contents.
+    private ViewPager mViewPager;
+    // Bundle in welchem die Einstellungen gespeichert werden
+    private final Bundle bundle = new Bundle();
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -28,21 +34,7 @@ public class WizardActivity extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    private boolean mVisible;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private WizardSectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -74,37 +66,66 @@ public class WizardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wizard_activity);
 
+        // Initialisiere Kreise
+        circles[0] = (ImageView) findViewById(R.id.progress_circle_1);
+        circles[1] = (ImageView) findViewById(R.id.progress_circle_2);
+        circles[2] = (ImageView) findViewById(R.id.progress_circle_3);
+        circles[3] = (ImageView) findViewById(R.id.progress_circle_4);
+
         // Initialize navigation elements and listeners for them
         forwards = (ImageButton) findViewById(R.id.wizard_button_forwards);
         backwards = (ImageButton) findViewById(R.id.wizard_button_backwards);
         initListeners();
-        initCircles();
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getSupportFragmentManager());
+        // Create the adapter that will return a fragment for each of the three primary sections of the activity.
+        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getFragmentManager(), bundle);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container_wizard);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 setCirclesAlpha(position);
                 setArrowsAlpha(position);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onPageScrollStateChanged(final int state) {
+                Log.d("Activity", "onPageScrollStateChanged" + state);
             }
         });
     }
+
+    @Override
+    public void finishActivity(final int requestCode) {
+        super.finish();
+
+        // Alle sollen ihre Status speichern
+        final int pageCounter = mSectionsPagerAdapter.getCount();
+        bundle.putString("Test", "Testss");
+        for (int index = 0; index < pageCounter; index++) {
+            final Fragment fragment = mSectionsPagerAdapter.getItem(index);
+            if (fragment instanceof IWizardSaveSettings) {
+                Log.d("Activity", "Speicher Fragment: " + fragment);
+                ((IWizardSaveSettings)fragment).saveSettings(bundle);
+            }
+        }
+
+        Log.d("Activity", "JETZT");
+        //        final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        for (final String key : bundle.keySet()) {
+//            editor.putString(key, bundle.getString(key));
+            Log.d("Activity", "Key: " + key + " - " + bundle.get(key));
+        }
+//        editor.apply();
+
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -126,7 +147,6 @@ public class WizardActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mVisible = false;
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
 
@@ -152,16 +172,7 @@ public class WizardActivity extends AppCompatActivity {
         });
     }
 
-    private void initCircles() {
-        circles = new ImageView[4];
-        circles[0] = (ImageView) findViewById(R.id.progress_circle_1);
-        circles[1] = (ImageView) findViewById(R.id.progress_circle_2);
-        circles[2] = (ImageView) findViewById(R.id.progress_circle_3);
-        circles[3] = (ImageView) findViewById(R.id.progress_circle_4);
-    }
-
     private void setCirclesAlpha(int pageNumber) {
-        if (circles == null) return;
         for (int i = 0; i < circles.length; i++) {
             circles[i].setAlpha(.5f);
             if (i == pageNumber)
@@ -180,5 +191,4 @@ public class WizardActivity extends AppCompatActivity {
             forwards.setAlpha(0.5f);
         }
     }
-
 }

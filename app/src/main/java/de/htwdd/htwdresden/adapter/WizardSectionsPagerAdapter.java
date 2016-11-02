@@ -1,8 +1,10 @@
 package de.htwdd.htwdresden.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v13.app.FragmentPagerAdapter;
 
 import de.htwdd.htwdresden.WizardFinalStateFragment;
 import de.htwdd.htwdresden.WizardStgSettingsFragment;
@@ -14,37 +16,36 @@ import de.htwdd.htwdresden.WizardWelcomeFragment;
  * one of the sections/tabs/pages.
  */
 public class WizardSectionsPagerAdapter extends FragmentPagerAdapter {
+    private final Bundle bundle;
 
-    public WizardSectionsPagerAdapter(FragmentManager fm) {
+    public WizardSectionsPagerAdapter(@NonNull final FragmentManager fm, @NonNull final Bundle bundle) {
         super(fm);
+        this.bundle = bundle;
     }
 
     @Override
-    public Fragment getItem(int position) {
-        Fragment fragment = null;
-        // TODO: 25.05.16 save data in bundels on stop  and read on fragmentStart
+    public Fragment getItem(final int position) {
+        Fragment fragment;
         switch (position) {
-            case 0:
-                fragment = WizardWelcomeFragment.newInstance(position + 1);
-                break;
             case 1:
-                fragment = new WizardStgSettingsFragment();
+                fragment = WizardStgSettingsFragment.newInstance(bundle);
                 break;
             case 2:
-                fragment = new WizardUserDataSettingsFragment();
+                fragment = WizardUserDataSettingsFragment.newInstance(bundle);
                 break;
             case 3:
                 fragment = new WizardFinalStateFragment();
                 break;
+            case 0:
             default:
-                fragment = WizardWelcomeFragment.newInstance(position + 1);
+                fragment = WizardWelcomeFragment.newInstance();
+                break;
         }
         return fragment;
     }
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
         return 4;
     }
 }
