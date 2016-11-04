@@ -2,7 +2,6 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -262,11 +261,7 @@ public class ExamsListFragment extends Fragment {
                     .setAction(R.string.navi_settings, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // Navigation ändern
-                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
-                            // Einstellungsfragment anzeigen
-                            FragmentManager fragmentManager = getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).commit();
+                            ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_settings);
                         }
                     })
                     .show();
