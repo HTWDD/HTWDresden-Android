@@ -24,14 +24,16 @@ import de.htwdd.htwdresden.interfaces.IWizardSaveSettings;
 public class WizardUserDataSettingsFragment extends Fragment implements IWizardSaveSettings {
     private TextInputEditText s_nummer;
     private TextInputEditText rzPasswort;
+    private DataAccesser dataAccesser;
 
     public WizardUserDataSettingsFragment() {
         // Required empty public constructor
     }
 
-    public static WizardUserDataSettingsFragment newInstance(@NonNull final Bundle bundle) {
+    public static WizardUserDataSettingsFragment newInstance(@NonNull final Bundle bundle, DataAccesser dataAccesser) {
         final WizardUserDataSettingsFragment fragment = new WizardUserDataSettingsFragment();
         fragment.setArguments(bundle);
+        fragment.dataAccesser = dataAccesser;
         return fragment;
     }
 
@@ -57,6 +59,8 @@ public class WizardUserDataSettingsFragment extends Fragment implements IWizardS
     @Override
     public void saveSettings(@NonNull final Bundle bundle) {
         Log.d("UserData 2", "saveSettings");
+        dataAccesser.getDataContainer().s_nummer = s_nummer.getText().toString();
+        dataAccesser.getDataContainer().rzPasswort = rzPasswort.getText().toString();
         bundle.putString(Const.preferencesKey.PREFERENCES_S_NUMMER, s_nummer.getText().toString());
         bundle.putString(Const.preferencesKey.PREFERENCES_RZ_LOGIN, rzPasswort.getText().toString());
         Log.d("UserData 2", s_nummer.getText().toString());

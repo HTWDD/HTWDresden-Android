@@ -28,14 +28,16 @@ public class WizardStgSettingsFragment extends Fragment implements IWizardSaveSe
     private TextInputEditText studiengang;
     private TextInputEditText studiengruppe;
     private Spinner spinnerAbschluss;
+    private DataAccesser dataAccesser;
 
     public WizardStgSettingsFragment() {
         // Required empty public constructor
     }
 
-    public static WizardStgSettingsFragment newInstance(@NonNull final Bundle bundle) {
+    public static WizardStgSettingsFragment newInstance(@NonNull final Bundle bundle, DataAccesser dataAccesser) {
         WizardStgSettingsFragment fragment = new WizardStgSettingsFragment();
         fragment.setArguments(bundle);
+        fragment.dataAccesser = dataAccesser;
         return fragment;
     }
 
@@ -74,6 +76,11 @@ public class WizardStgSettingsFragment extends Fragment implements IWizardSaveSe
     @Override
     public void saveSettings(@NonNull final Bundle bundle) {
         Log.d("UserData 1", "saveSettings");
+        dataAccesser.getDataContainer().studienJahrgang = studienJahrgang.getText().toString();
+        dataAccesser.getDataContainer().studiengang = studiengang.getText().toString();
+        dataAccesser.getDataContainer().studiengruppe = studiengruppe.getText().toString();
+        dataAccesser.getDataContainer().abschlussValue = abschlussValues[spinnerAbschluss.getSelectedItemPosition()];
+
         bundle.putString(Const.preferencesKey.PREFERENCES_STUDIENJAHRGANG, studienJahrgang.getText().toString());
         bundle.putString(Const.preferencesKey.PREFERENCES_STUDIENGANG, studiengang.getText().toString());
         bundle.putString(Const.preferencesKey.PREFERENCES_STUDIENGRUPPE, studiengruppe.getText().toString());

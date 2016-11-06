@@ -18,7 +18,7 @@ import de.htwdd.htwdresden.interfaces.IWizardSaveSettings;
 /**
  * Created by Meralium on 24.05.16.
  */
-public class WizardActivity extends AppCompatActivity {
+public class WizardActivity extends AppCompatActivity implements DataAccesser{
 
     private final ImageView circles[] = new ImageView[4];
     private ImageButton forwards;
@@ -27,6 +27,7 @@ public class WizardActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     // Bundle in welchem die Einstellungen gespeichert werden
     private final Bundle bundle = new Bundle();
+    DataContainer dataContainer;
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -76,9 +77,9 @@ public class WizardActivity extends AppCompatActivity {
         forwards = (ImageButton) findViewById(R.id.wizard_button_forwards);
         backwards = (ImageButton) findViewById(R.id.wizard_button_backwards);
         initListeners();
-
+        dataContainer = new DataContainer();
         // Create the adapter that will return a fragment for each of the three primary sections of the activity.
-        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getFragmentManager(), bundle);
+        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getFragmentManager(), bundle, this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container_wizard);
@@ -190,5 +191,10 @@ public class WizardActivity extends AppCompatActivity {
         if (pageNumber == mSectionsPagerAdapter.getCount() - 1) {
             forwards.setAlpha(0.5f);
         }
+    }
+
+    @Override
+    public DataContainer getDataContainer() {
+        return dataContainer;
     }
 }
