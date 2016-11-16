@@ -4,6 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:padding="@dimen/wizard_margin"
+              android:background="@color/primary_dark"
               android:theme="@style/AppThemeWizard">
 
     <TextView
@@ -21,111 +22,95 @@
         android:text="@string/wizard_exams_lesson_message"
         android:textAppearance="?android:attr/textAppearanceInverse"/>
 
-    <TextView
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_studiengruppe"
-        android:textAppearance="?android:attr/textAppearanceInverse"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:labelFor="@+id/pref_StgJhr"
-            android:nextFocusForward="@+id/pref_Stg">
+            android:paddingBottom="@dimen/space_between_content"
+            android:paddingTop="@dimen/space_between_content">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/pref_StgJhr"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/settings_jahrgang"
-                android:inputType="number"
-                android:maxLength="4"
-                android:nextFocusDown="@+id/pref_Stg"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="0.5"
+                android:text="@string/settings_jahrgang"
+                android:textAppearance="@android:style/TextAppearance.Material"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_studiengang_split"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:labelFor="@+id/pref_Stg">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/pref_Stg"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spinner_studyYear"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/settings_studiengang"
-                android:imeOptions="actionGo"
-                android:inputType="number"
-                android:maxLength="3"
-                android:nextFocusDown="@+id/pref_StgGrp"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="0.5"
+                android:popupBackground="@color/primary"/>
+        </TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_studiengang_split"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+            android:paddingBottom="@dimen/space_between_content"
+            android:paddingTop="@dimen/space_between_content">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:labelFor="@+id/pref_StgGrp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/pref_StgGrp"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/settings_studiengruppe"
-                android:inputType="text"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
+                android:layout_weight="0.5"
+                android:text="@string/settings_studiengang"
+                android:textAppearance="@android:style/TextAppearance.Material"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_between_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:text="@string/settings_studiengang_dialogMessage"
-        android:textAppearance="?android:attr/textAppearanceSmallInverse"/>
+            <Spinner
+                android:id="@+id/spinner_studyCourse"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"/>
+        </TableRow>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_abschluss"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/space_between_content"
+            android:paddingTop="@dimen/space_between_content">
 
-    <Spinner
-        android:id="@+id/wizard_abschluss"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_between_content"
-        android:popupBackground="@color/primary_dark"
-        android:entries="@array/abschluss_list"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/settings_studiengruppe"
+                android:textAppearance="@android:style/TextAppearance.Material"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/pref_bibNummer"
-        android:nextFocusForward="@+id/pref_Stg">
-    </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/spinner_studyGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/space_between_content"
+            android:paddingTop="@dimen/space_between_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/settings_abschluss"
+                android:textAppearance="@android:style/TextAppearance.Material"/>
+
+            <Spinner
+                android:id="@+id/wizard_abschluss"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:entries="@array/abschluss_list"
+                android:popupBackground="@color/primary"/>
+        </TableRow>
+
+    </TableLayout>
 
 
 </LinearLayout>

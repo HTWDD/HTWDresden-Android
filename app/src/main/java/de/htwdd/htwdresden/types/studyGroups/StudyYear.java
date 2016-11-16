@@ -1,5 +1,8 @@
 package de.htwdd.htwdresden.types.studyGroups;
 
+import android.support.annotation.NonNull;
+
+import de.htwdd.htwdresden.interfaces.ISpinnerName;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -8,7 +11,13 @@ import io.realm.RealmObject;
  *
  * @author Kay Förster
  */
-public class StudyYear extends RealmObject {
+public class StudyYear extends RealmObject implements ISpinnerName {
     public int studyYear;
-    public RealmList<StudyGroup> studyCourses;
+    public RealmList<StudyCourse> studyCourses;
+
+    @NonNull
+    @Override
+    public String getSpinnerSelect() {
+        return String.valueOf(studyYear);
+    }
 }

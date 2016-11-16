@@ -11,6 +11,7 @@
     <string name="general_add">Hinzufügen</string>
     <string name="general_update">Aktualisieren</string>
     <string name="general_delete">Löschen</string>
+    <string name="general_please_select">Bitte wählen:</string>
 
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>
@@ -27,6 +28,7 @@
     <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_semesterlan_outofdate">Der Semesterplan ist auf dem Server nicht mehr aktuell</string>
+    <string name="info_error_no_current_data">Aktuell liegen keine Daten vor! Bitte versuche es später erneut</string>
     <string name="info_error_read_sqlite">Fehler beim Lesen aus der lokalen Datenbank</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>

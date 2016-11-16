@@ -45,6 +45,7 @@ public final class Const {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
+        public static final String WEBSERVICE_URL_STUDY_GROUPS = WEBSERVICE_URL + "GetStudyGroups.php";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
         public static final int HTTP_DOWNLOAD_ERROR = 999;
@@ -231,6 +232,12 @@ public final class Const {
             public static final String COLUMN_NAME_FREE_BEGIN = "free_begin";
             public static final String COLUMN_NAME_FREE_END = "free_end";
             public static final String COLUMN_NAME_PARENT_ID = "parent_id";
+        }
+
+        public static class StudyGroups {
+            public static final String STUDY_YEAR = "studyYear";
+            public static final String STUDY_COURSE = "studyCourse";
+            public static final String STUDY_GROUP = "studyGroup";
         }
     }
 }

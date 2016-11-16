@@ -42,11 +42,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            // Makriere im NavigationDrawer
+            // Markiere im NavigationDrawer
             setNavigationItem(item);
             // Ändere Inhalt
             selectFragment(item.getItemId());
-
             return false;
         }
     };
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         final NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-        // Wenn Views nicht gefunden, sofort abrechen
+        // Wenn Views nicht gefunden, sofort abbrechen
         assert mNavigationView != null && mDrawerLayout != null;
 
         // Actionbar Titel anpassen

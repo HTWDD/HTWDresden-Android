@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.squareup.otto.Subscribe;
@@ -31,6 +32,10 @@ import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.events.UpdateAppEvent;
 import de.htwdd.htwdresden.events.UpdateMensaEvent;
 import de.htwdd.htwdresden.types.SemesterPlan;
+import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
+import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
+import de.htwdd.htwdresden.types.studyGroups.StudyYear;
+import io.realm.Realm;
 
 /**
  *
@@ -71,7 +76,10 @@ class CheckUpdates implements Runnable {
             queueCount.update = true;
         }
 
-        // Überprüfe Version
+        // Studiengruppen aktualisieren
+        updateStudyGroups();
+
+        // Überprüfe Versionen
         checkForUpdates();
 
         // Wenn alle Mensa-Request abgeschlossen, Updatezeitpunkt speichern. Maximal 2 Minuten warten
@@ -105,7 +113,7 @@ class CheckUpdates implements Runnable {
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(final JSONObject response) {
                         try {
                             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                             final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -123,9 +131,8 @@ class CheckUpdates implements Runnable {
 
                             editor.putLong("appUpdateCheck", GregorianCalendar.getInstance().getTimeInMillis());
                             editor.apply();
-                        } catch (PackageManager.NameNotFoundException | JSONException e) {
-                            Log.e(LOG_TAG, "[Fehler] beim Überprüfen der App-Version: Daten: " + response);
-                            Log.e(LOG_TAG, e.toString());
+                        } catch (final PackageManager.NameNotFoundException | JSONException e) {
+                            Log.e(LOG_TAG, "[Fehler] beim Überprüfen der App-Version: Daten: " + response, e);
                         }
                     }
                 },
@@ -141,7 +148,7 @@ class CheckUpdates implements Runnable {
                 Const.internet.WEBSERVICE_URL_SEMESTERPLAN,
                 new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(final JSONArray response) {
                         // Datenbankzugriff
                         try {
                             // Datenbankzugriff
@@ -155,9 +162,8 @@ class CheckUpdates implements Runnable {
                                 // Eintrag durchgehen speichern
                                 semesterPlanDAO.save(semesterPlan);
                             }
-                        } catch (JSONException e) {
-                            Log.e(LOG_TAG, "[Fehler beim Parsen des Semesterplans]");
-                            Log.e(LOG_TAG, e.getMessage());
+                        } catch (final JSONException e) {
+                            Log.e(LOG_TAG, "[Fehler beim Parsen des Semesterplans]", e);
                             return;
                         }
 
@@ -181,5 +187,37 @@ class CheckUpdates implements Runnable {
         if (updateMensaEvent.getForModus() == 0)
             return;
         queueCount.decrementCountQueue();
+    }
+
+    /**
+     * Aktualisiert alle möglichen Studiengruppen
+     */
+    void updateStudyGroups() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Const.internet.WEBSERVICE_URL_STUDY_GROUPS,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(final JSONArray response) {
+                        final Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(final Realm realm) {
+                                realm.delete(StudyYear.class);
+                                realm.delete(StudyCourse.class);
+                                realm.delete(StudyGroup.class);
+                                realm.createAllFromJson(StudyYear.class, response);
+                            }
+                        });
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(final VolleyError error) {
+                        Log.e(LOG_TAG, "[Fehler] Beim Laden Studiengruppen", error);
+                    }
+                }
+        );
+
+        VolleyDownloader.getInstance(context).addToRequestQueue(jsonArrayRequest);
     }
 }
