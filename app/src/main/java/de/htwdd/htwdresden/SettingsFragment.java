@@ -7,7 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -35,14 +35,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_settings));
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        if (view != null) {
-            view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-        }
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -58,35 +54,25 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onSharedPreferenceChanged(@NonNull final SharedPreferences sharedPreferences, final String s) {
         if (s.equals(Const.preferencesKey.PREFERENCES_AUTO_MUTE)) {
-            Context context = getActivity();
-            boolean value = sharedPreferences.getBoolean(s, false);
+            final Context context = getActivity();
+            final VolumeControllerService volumeControllerService = new VolumeControllerService();
+            final ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
+            final PackageManager packageManager = context.getPackageManager();
 
-            if (value) {
+            if (sharedPreferences.getBoolean(s, false)) {
                 // Starte Hintergrundservice
-                VolumeControllerService volumeControllerService = new VolumeControllerService();
                 volumeControllerService.startMultiAlarmVolumeController(context);
-
                 //enable a receiver -> starts alarms on reboot
-                ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
-                PackageManager pm = context.getPackageManager();
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-
+                packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
             } else {
                 // Beende Hintergrundservice
-                VolumeControllerService volumeControllerService = new VolumeControllerService();
                 volumeControllerService.cancelMultiAlarmVolumeController(context);
                 volumeControllerService.resetSettingsFile(context);
-
                 //disable a receiver, alarms will not be set on reboot
-                ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
                 PackageManager pm = context.getPackageManager();
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
             }
         }
     }
