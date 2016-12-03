@@ -1,22 +1,22 @@
 package de.htwdd.htwdresden;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import de.htwdd.htwdresden.adapter.WizardSectionsPagerAdapter;
-import de.htwdd.htwdresden.interfaces.IWizardSaveSettings;
+import de.htwdd.htwdresden.types.dataBinding.WizardDataBindingObject;
 
 /**
- * Created by Meralium on 24.05.16.
+ *
+ * @author Meralium, Kay Förster
  */
 public class WizardActivity extends AppCompatActivity {
 
@@ -25,8 +25,6 @@ public class WizardActivity extends AppCompatActivity {
     private ImageButton backwards;
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
-    // Bundle in welchem die Einstellungen gespeichert werden
-    private final Bundle bundle = new Bundle();
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -62,7 +60,7 @@ public class WizardActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wizard_activity);
 
@@ -78,7 +76,7 @@ public class WizardActivity extends AppCompatActivity {
         initListeners();
 
         // Create the adapter that will return a fragment for each of the three primary sections of the activity.
-        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getFragmentManager(), bundle);
+        mSectionsPagerAdapter = new WizardSectionsPagerAdapter(getFragmentManager(), new WizardDataBindingObject(this));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container_wizard);
@@ -96,34 +94,8 @@ public class WizardActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(final int state) {
-                Log.d("Activity", "onPageScrollStateChanged" + state);
             }
         });
-    }
-
-    @Override
-    public void finishActivity(final int requestCode) {
-        super.finish();
-
-        // Alle sollen ihre Status speichern
-        final int pageCounter = mSectionsPagerAdapter.getCount();
-        bundle.putString("Test", "Testss");
-        for (int index = 0; index < pageCounter; index++) {
-            final Fragment fragment = mSectionsPagerAdapter.getItem(index);
-            if (fragment instanceof IWizardSaveSettings) {
-                Log.d("Activity", "Speicher Fragment: " + fragment);
-                ((IWizardSaveSettings)fragment).saveSettings(bundle);
-            }
-        }
-
-        Log.d("Activity", "JETZT");
-        //        final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        for (final String key : bundle.keySet()) {
-//            editor.putString(key, bundle.getString(key));
-            Log.d("Activity", "Key: " + key + " - " + bundle.get(key));
-        }
-//        editor.apply();
-
     }
 
     @Override
@@ -137,13 +109,13 @@ public class WizardActivity extends AppCompatActivity {
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
+    private void delayedHide(final int delayMillis) {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
     private void hide() {
         // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
@@ -155,7 +127,7 @@ public class WizardActivity extends AppCompatActivity {
         forwards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newPageNumber = mViewPager.getCurrentItem() + 1;
+                final int newPageNumber = mViewPager.getCurrentItem() + 1;
                 if (newPageNumber < mSectionsPagerAdapter.getCount()) {
                     mViewPager.setCurrentItem(newPageNumber, true);
                 }
@@ -164,7 +136,7 @@ public class WizardActivity extends AppCompatActivity {
         backwards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newPageNumber = mViewPager.getCurrentItem() - 1;
+                final int newPageNumber = mViewPager.getCurrentItem() - 1;
                 if (newPageNumber >= 0) {
                     mViewPager.setCurrentItem(newPageNumber, true);
                 }
@@ -172,7 +144,7 @@ public class WizardActivity extends AppCompatActivity {
         });
     }
 
-    private void setCirclesAlpha(int pageNumber) {
+    private void setCirclesAlpha(final int pageNumber) {
         for (int i = 0; i < circles.length; i++) {
             circles[i].setAlpha(.5f);
             if (i == pageNumber)
@@ -180,7 +152,7 @@ public class WizardActivity extends AppCompatActivity {
         }
     }
 
-    private void setArrowsAlpha(int pageNumber) {
+    private void setArrowsAlpha(final int pageNumber) {
         backwards.setAlpha(1f);
         forwards.setAlpha(1f);
 

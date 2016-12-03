@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/primary_dark"
               android:orientation="vertical"
               android:padding="@dimen/wizard_margin"
-              android:background="@color/primary_dark"
               android:theme="@style/AppThemeWizard">
 
     <TextView
@@ -107,10 +107,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:entries="@array/abschluss_list"
+                android:entryValues="@array/abschluss_values"
                 android:popupBackground="@color/primary"/>
         </TableRow>
 
     </TableLayout>
-
-
 </LinearLayout>
