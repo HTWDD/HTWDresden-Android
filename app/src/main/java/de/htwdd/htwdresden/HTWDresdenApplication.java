@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -34,24 +36,37 @@ public class HTWDresdenApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Setze Einstellungen beim ersten Starten der App
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("FIRST_RUN", true)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("FIRST_RUN", false);
-            editor.putBoolean("acra.enable", true);
-            editor.apply();
-        }
+        final Context context = getApplicationContext();
 
-        // Arca starten
+        // ARCA starten
         ACRA.init(this);
 
         // Realm initialisieren
         Realm.init(this);
 
         // Updates laden
-        final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
+        final Thread thread = new Thread(new CheckUpdates(context));
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
+
+        /**
+         * Funktionen welche nur beim ersten Start der App ausgeführt werden:
+         * <ul>
+         *     <li>Wizard starten</li>
+         *     <li>Einstellungen initial setzen</li>
+         * </ul>
+         * Wichtig ist, dass die erst am Ende ausführt wird um vorher Abhängigkeiten (Datenbank, Studiengänge) auflösen zu können
+         */
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean("FIRST_RUN", true)) {
+            final Intent intent = new Intent(context, WizardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            final SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("FIRST_RUN", false);
+            editor.putBoolean("acra.enable", true);
+            editor.apply();
+        }
     }
 }

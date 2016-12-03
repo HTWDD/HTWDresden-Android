@@ -51,6 +51,11 @@
             android:key="autoMute"
             android:summary="@string/settings_audio_summary"
             android:title="@string/settings_audio" />
+        <Preference
+            android:key="startWizard"
+            android:summary="@string/settings_wizard_summary"
+            android:title="@string/settings_wizard">
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_app_intern">
         <CheckBoxPreference

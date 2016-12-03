@@ -73,6 +73,8 @@
     <string name="settings_acra">Bug-Reporting</string>
     <string name="settings_acra_disabled">Eingeschaltet</string>
     <string name="settings_acra_enabled">Ausgeschaltet</string>
+    <string name="settings_wizard">Einrichtungsassistenten ausführen</string>
+    <string name="settings_wizard_summary">Startet einen Assistenten welcher durch die Einrichtung der App führt.</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>

@@ -163,11 +163,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                     case R.id.navigation_uni_administration:
                         fragment = new ManagementFragment();
                         break;
-                    case R.id.navigation_wizard_activity:
-                        fragment = new Fragment();
-                        Intent intent = new Intent(MainActivity.this, WizardActivity.class);
-                        startActivity(intent);
-                        break;
                     default:
                         fragment = new Fragment();
                         break;
@@ -178,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             }
         }, 250);
 
-        // NavigationDrawer schliesen
+        // NavigationDrawer schließen
         mDrawerLayout.closeDrawers();
     }
 

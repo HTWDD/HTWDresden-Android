@@ -3,9 +3,11 @@ package de.htwdd.htwdresden;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +40,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_settings));
+        // Möglichkeit den Wizard erneut zu starten
+        final Preference preferenceWizard = findPreference("startWizard");
+        preferenceWizard.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(final Preference preference) {
+                startActivity(new Intent(preference.getContext(), WizardActivity.class));
+                return true;
+            }
+        });
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
