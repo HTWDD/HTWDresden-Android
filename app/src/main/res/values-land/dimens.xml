@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wizard -->
+    <dimen name="wizard_margin_top">0dp</dimen>
+    <dimen name="wizard_navi_bottom">16dp</dimen>
+</resources>

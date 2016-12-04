@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@color/primary_dark"
-              android:padding="@dimen/wizard_margin">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    >
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/wizard_welcome_logo"
-        android:src="@drawable/htw_logo_white"/>
+        android:orientation="vertical"
+        android:paddingTop="@dimen/wizard_margin_top"
+        android:paddingStart="@dimen/wizard_margin_side"
+        android:paddingEnd="@dimen/wizard_margin_side">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/app_table_margin"
-        android:text="@string/wizard_welcome_title"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/wizard_welcome_logo"
+            android:src="@drawable/htw_logo_white"
+            android:maxWidth="300dp"
+            android:adjustViewBounds="true"/>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wizard_welcome_message"
-        android:textAppearance="?android:attr/textAppearanceInverse"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/app_table_margin"
+            android:text="@string/wizard_welcome_title"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wizard_welcome_message"
+            android:textAppearance="?android:attr/textAppearanceInverse"/>
+    </LinearLayout>
+
+</ScrollView>

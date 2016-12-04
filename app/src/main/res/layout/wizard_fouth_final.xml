@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@color/primary_dark"
-              android:padding="@dimen/wizard_margin">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark">
 
-    <TextView
-
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/app_table_margin"
-        android:text="@string/wizard_finish_title"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+        android:orientation="vertical"
+        android:paddingStart="@dimen/wizard_margin_side"
+        android:paddingEnd="@dimen/wizard_margin_side"
+        android:paddingTop="@dimen/wizard_margin_top">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wizard_finish_message"
-        android:textAppearance="?android:attr/textAppearanceInverse"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/app_table_margin"
+            android:text="@string/wizard_finish_title"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
 
-    <Button
-        android:layout_marginTop="@dimen/wizard_margin"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/ButtonHTWStyle"
-        android:text="@string/wizard_finish"
-        android:textColor="@color/white"
-        android:id="@+id/wizard_finish"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wizard_finish_message"
+            android:textAppearance="?android:attr/textAppearanceInverse"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/wizard_finish"
+            style="@style/ButtonHTWStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/wizard_margin_side"
+            android:text="@string/wizard_finish"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+</ScrollView>

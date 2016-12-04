@@ -1,115 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/primary_dark"
-              android:orientation="vertical"
-              android:padding="@dimen/wizard_margin"
-              android:theme="@style/AppThemeWizard">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    android:theme="@style/AppThemeWizard">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/space_between_content"
-        android:text="@string/wizard_exams_lesson_title"
-        android:textAppearance="@android:style/TextAppearance.Material.Large.Inverse"/>
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/wizard_margin_side"
+        android:paddingStart="@dimen/wizard_margin_side"
+        android:paddingTop="@dimen/wizard_margin_top">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
-        android:text="@string/wizard_exams_lesson_message"
-        android:textAppearance="?android:attr/textAppearanceInverse"/>
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TableRow
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/space_between_content"
-            android:paddingTop="@dimen/space_between_content">
+            android:text="@string/wizard_exams_lesson_title"
+            android:textAppearance="@android:style/TextAppearance.Material.Large.Inverse"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/settings_jahrgang"
-                android:textAppearance="@android:style/TextAppearance.Material"/>
-
-            <Spinner
-                android:id="@+id/spinner_studyYear"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:popupBackground="@color/primary"/>
-        </TableRow>
-
-        <TableRow
+        <TextView
+            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/space_between_content"
-            android:paddingTop="@dimen/space_between_content">
+            android:paddingBottom="20dp"
+            android:text="@string/wizard_exams_lesson_message"
+            android:textAppearance="?android:attr/textAppearanceInverse"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/settings_studiengang"
-                android:textAppearance="@android:style/TextAppearance.Material"/>
-
-            <Spinner
-                android:id="@+id/spinner_studyCourse"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
-        </TableRow>
-
-        <TableRow
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/space_between_content"
-            android:paddingTop="@dimen/space_between_content">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="0dp"
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/settings_studiengruppe"
-                android:textAppearance="@android:style/TextAppearance.Material"/>
+                android:paddingBottom="@dimen/space_between_content"
+                android:paddingTop="@dimen/space_between_content">
 
-            <Spinner
-                android:id="@+id/spinner_studyGroup"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/settings_jahrgang"
+                    android:textAppearance="@android:style/TextAppearance.Material"/>
+
+                <Spinner
+                    android:id="@+id/spinner_studyYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:popupBackground="@color/primary"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
+                android:paddingBottom="@dimen/space_between_content"
+                android:paddingTop="@dimen/space_between_content">
 
-        </TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/settings_studiengang"
+                    android:textAppearance="@android:style/TextAppearance.Material"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/space_between_content"
-            android:paddingTop="@dimen/space_between_content">
+                <Spinner
+                    android:id="@+id/spinner_studyCourse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"/>
+            </TableRow>
 
-            <TextView
-                android:layout_width="0dp"
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/settings_abschluss"
-                android:textAppearance="@android:style/TextAppearance.Material"/>
+                android:paddingBottom="@dimen/space_between_content"
+                android:paddingTop="@dimen/space_between_content">
 
-            <Spinner
-                android:id="@+id/wizard_abschluss"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:entries="@array/abschluss_list"
-                android:entryValues="@array/abschluss_values"
-                android:popupBackground="@color/primary"/>
-        </TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/settings_studiengruppe"
+                    android:textAppearance="@android:style/TextAppearance.Material"/>
 
-    </TableLayout>
-</LinearLayout>
+                <Spinner
+                    android:id="@+id/spinner_studyGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/space_between_content"
+                android:paddingTop="@dimen/space_between_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/settings_abschluss"
+                    android:textAppearance="@android:style/TextAppearance.Material"/>
+
+                <Spinner
+                    android:id="@+id/wizard_abschluss"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:entries="@array/abschluss_list"
+                    android:entryValues="@array/abschluss_values"
+                    android:popupBackground="@color/primary"/>
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>
