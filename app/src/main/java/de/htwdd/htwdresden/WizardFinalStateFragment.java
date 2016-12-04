@@ -59,3 +59,4 @@ public class WizardFinalStateFragment extends Fragment implements IWizardSaveSet
         WizardFinalStateFragment.dataBindingObject = dataBindingObject;
     }
 }
+
