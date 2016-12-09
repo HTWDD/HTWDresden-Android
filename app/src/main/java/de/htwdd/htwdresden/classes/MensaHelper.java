@@ -126,18 +126,25 @@ public class MensaHelper {
      * @param calendar Tag mit welchem die Woche beginnt
      * @return Liste aller Speisen in der Woche
      */
+    @NonNull
     private ArrayList<Meal> parseCompleteWeek(@NonNull final String result, @NonNull final Calendar calendar) {
         final ArrayList<Meal> meals = new ArrayList<>();
         final Pattern title = Pattern.compile("<td class=\"text\">(.*?)</td>.*?details-(\\d*).*?>(\\d?\\d,\\d\\d|ausverkauft| )");
-        final String[] token = result.split("class=\"speiseplan\"");
+        final String[] tokens = result.split("class=\"speiseplan\"");
         Matcher matcher;
 
         // Gehe Montag bis Freitag durch
-        for (int i = 0; i < 5; i++) {
+        int day = 2;
+        for (final String token : tokens) {
+            // Überspringe mögliche Aktionen in der Woche oder HTML-Body
+            if (token.contains("id=\"aktionen\"") || token.startsWith("<!DOCTYPE html PUBLIC")) {
+                continue;
+            }
+
             // Extrahiere die benötigten Informationen
             try {
-                matcher = title.matcher(token[i + 1]);
-                calendar.set(Calendar.DAY_OF_WEEK, i + 2);
+                matcher = title.matcher(token);
+                calendar.set(Calendar.DAY_OF_WEEK, day);
 
                 while (matcher.find()) {
                     final Meal meal = new Meal();
@@ -148,13 +155,14 @@ public class MensaHelper {
                     meal.setPrice(matcher.group(3));
                     meals.add(meal);
                 }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Fehler beim Matchen der Mensa");
-                Log.e(LOG_TAG, e.getMessage());
+            } catch (final Exception e) {
+                Log.e(LOG_TAG, "Fehler beim Extrahieren der Gerichte für Tag: " + day, e);
                 // Hinweis für User einfügen
                 final Meal meal = new Meal();
                 meal.setTitle(context.getString(R.string.info_error_parse));
                 meals.add(meal);
+            } finally {
+                day++;
             }
         }
 
@@ -167,6 +175,7 @@ public class MensaHelper {
      * @param modus 0: aktuelles Angebot, 1: Angebot der aktuellen Woche, 2: Angebot der nächsten Woche
      * @return URL des Speiseplans
      */
+    @NonNull
     public static String getMensaUrl(final int modus) {
         switch (modus) {
             // Angebot aktuelle Woche
