@@ -3,6 +3,7 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import de.htwdd.htwdresden.types.TabItem;
 
 /**
  * Hauptfragment für Noten & Prüfungen welches die verschiedenen Sub-Fragmente enthält
+ * @author Kay Förster
  */
 public class ExamsFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
@@ -27,7 +29,7 @@ public class ExamsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mTabs.add(new TabItem(
@@ -48,24 +50,22 @@ public class ExamsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tabs, container, false);
+        final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
 
-        // Setze Toolbartitle
+        // Setze Title der Toolbar
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_exams));
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-
         // Adapter für Tabs erstellen und an view hängen
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
-        viewPager.setAdapter(viewPagerAdapter);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mTabs));
 
         // TabLayout "stylen"
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
-        // Stetze feste Anzahl an Tabs (Tabs wirken nciht angeklatscht)
+        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        // Setze feste Anzahl an Tabs (Tabs wirken nicht angeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        // Tabs nehemen immer die ganze Breite ein
+        // Tabs nehmen immer die ganze Breite ein
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
