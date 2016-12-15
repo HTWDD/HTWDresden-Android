@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.types.ExamResult;
@@ -62,7 +62,7 @@ public class ExamsResultHelper {
      * @param errorListener      Callback-Interface zum behandeln von Fehlern
      */
     public void makeCoursesRequest(@Nullable Response.Listener<JSONArray> getcoursesListener, @Nullable Response.ErrorListener errorListener) {
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+        final JsonArrayRequestWithBasicAuth arrayRequest = new JsonArrayRequestWithBasicAuth(
                 Request.Method.POST,
                 Const.internet.WEBSERVICE_URL_HISQIS + "getcourses" +
                         "?sNummer=s" + sharedPreferences.getString("sNummer", "") +
@@ -83,12 +83,15 @@ public class ExamsResultHelper {
      * @throws JSONException
      */
     public void makeGradeRequests(@NonNull final JSONArray response, @Nullable Response.Listener<JSONArray> arrayListener, @Nullable Response.ErrorListener errorListener) throws JSONException {
-        int count = response.length();
+        final int count = response.length();
+        JSONObject jsonObject;
+        JsonArrayRequestWithBasicAuth jsonArrayRequest;
+
         // Einzelne Studiengänge durchgehen
         for (int i = 0; i < count; i++) {
-            JSONObject jsonObject = response.getJSONObject(i);
+            jsonObject = response.getJSONObject(i);
 
-            String url = Const.internet.WEBSERVICE_URL_HISQIS + "getgrades" +
+            final String url = Const.internet.WEBSERVICE_URL_HISQIS + "getgrades" +
                     "?sNummer=s" + sharedPreferences.getString("sNummer", "") +
                     "&RZLogin=" + Uri.encode(sharedPreferences.getString("RZLogin", "")) +
                     "&AbschlNr=" + jsonObject.getString("AbschlNr") +
@@ -96,9 +99,9 @@ public class ExamsResultHelper {
                     "&POVersion=" + jsonObject.getString("POVersion");
 
             // Noten für den entsprechenden Studiengang laden
-            JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, arrayListener, errorListener);
-            arrayRequest.setTag(Const.internet.TAG_EXAM_RESULTS);
-            VolleyDownloader.getInstance(context).addToRequestQueue(arrayRequest);
+            jsonArrayRequest = new JsonArrayRequestWithBasicAuth(Request.Method.POST, url, null, arrayListener, errorListener);
+            jsonArrayRequest.setTag(Const.internet.TAG_EXAM_RESULTS);
+            VolleyDownloader.getInstance(context).addToRequestQueue(jsonArrayRequest);
             queueCount.incrementCountQueue();
         }
     }
