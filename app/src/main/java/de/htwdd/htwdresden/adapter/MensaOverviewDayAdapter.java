@@ -12,7 +12,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;

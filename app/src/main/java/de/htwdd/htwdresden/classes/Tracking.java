@@ -11,6 +11,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
+
 /**
  * Sendet anonymisierte Daten zur Nutzung der App an die Entwickler
  *

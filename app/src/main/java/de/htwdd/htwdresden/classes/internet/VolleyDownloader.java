@@ -1,10 +1,9 @@
-package de.htwdd.htwdresden.classes;
+package de.htwdd.htwdresden.classes.internet;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.util.LruCache;
 
@@ -16,6 +15,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+
+import de.htwdd.htwdresden.classes.Const;
 
 /**
  * asynchroner HTTP-Download über Projekt Volley
@@ -80,8 +81,7 @@ public class VolleyDownloader {
         final Network[] networks = systemService.getAllNetworks();
 
         for (final Network network : networks) {
-            final NetworkInfo networkInfo = systemService.getNetworkInfo(network);
-            if (networkInfo.isConnected())
+            if (systemService.getNetworkInfo(network).isConnected())
                 return true;
         }
         return false;

@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.ExamListAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Exam;
 

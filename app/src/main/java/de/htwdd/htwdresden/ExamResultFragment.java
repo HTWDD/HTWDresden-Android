@@ -30,7 +30,7 @@ import de.htwdd.htwdresden.adapter.ExamResultListAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsResultHelper;
-import de.htwdd.htwdresden.classes.VolleyDownloader;
+import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
