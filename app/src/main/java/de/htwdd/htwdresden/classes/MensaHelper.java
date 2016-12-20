@@ -103,12 +103,13 @@ public class MensaHelper {
         final Pattern pattern = Pattern.compile(".*?<item>.*?<title>(.*?)( \\((\\d.\\d\\d|ausverkauft).*?\\))</title>.*?details-(\\d*).html</link>.*?</item>", Pattern.DOTALL);
 
         final Matcher matcher = pattern.matcher(result);
+        Meal meal;
         while (matcher.find()) {
-            final Meal meal = new Meal();
+            meal = new Meal();
 
             try {
                 meal.setMensaId(mensaId);
-                meal.setTitle(matcher.group(1));
+                meal.setTitle(matcher.group(1).replace("&quot;", "\""));
                 meal.setPrice(matcher.group(3));
                 meal.setId(Integer.parseInt(matcher.group(4)));
                 meal.setDate(calendar);
