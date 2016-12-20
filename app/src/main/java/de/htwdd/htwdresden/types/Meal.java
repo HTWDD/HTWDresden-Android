@@ -11,10 +11,9 @@ import java.util.Locale;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
-import io.realm.annotations.PrimaryKey;
 
 public class Meal extends RealmObject {
-    @PrimaryKey
+    // ID kann nicht Primärschlüssel sein, da diese in einer Woche mehrmals vorkommen kann
     private int id;
     private String title = "";
     private String price = "";

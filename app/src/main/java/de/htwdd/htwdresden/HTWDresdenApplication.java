@@ -10,6 +10,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 @ReportsCrashes(
         mode = ReportingInteractionMode.DIALOG,
@@ -48,6 +49,11 @@ public class HTWDresdenApplication extends Application {
 
         // Realm initialisieren
         Realm.init(this);
+        final RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(2)
+                .build();
+        Realm.setDefaultConfiguration(configuration);
 
         // Updates laden
         final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
