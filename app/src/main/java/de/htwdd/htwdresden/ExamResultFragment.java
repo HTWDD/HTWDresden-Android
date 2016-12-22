@@ -133,15 +133,20 @@ public class ExamResultFragment extends Fragment {
         final ExamsResultHelper examsResultHelper = new ExamsResultHelper(getActivity());
         final Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(final VolleyError error) {
                 // Bestimme Fehlermeldung
-                int responseCode = VolleyDownloader.getResponseCode(error);
+                final int responseCode = VolleyDownloader.getResponseCode(error);
 
                 // Anzahl laufender Requests reduzieren
                 examsResultHelper.getQueueCount().decrementCountQueue();
 
                 // Downloads abbrechen
                 VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
+
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                if (!isAdded()) {
+                    return;
+                }
 
                 // Fehlermeldung anzeigen
                 final String message;
@@ -182,15 +187,19 @@ public class ExamResultFragment extends Fragment {
         };
         final Response.Listener<JSONArray> getGradesListener = new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(final JSONArray response) {
                 try {
                     examsResultHelper.getGradesListener(response);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "[Fehler] beim Parsen: Daten: " + response);
-                    Log.e(LOG_TAG, e.toString());
+                } catch (final Exception e) {
+                    Log.e(LOG_TAG, "[Fehler] beim Parsen: Daten: " + response, e);
 
                     // Downloads abbrechen
                     VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
+
+                    // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                    if (!isAdded()) {
+                        return;
+                    }
 
                     // Refresh ausschalten
                     swipeRefreshLayout.post(new Runnable() {
@@ -212,6 +221,11 @@ public class ExamResultFragment extends Fragment {
                     final long count = dao.queryNumEntries();
                     final boolean result = examsResultHelper.saveExamResults();
 
+                    // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                    if (!isAdded()) {
+                        return;
+                    }
+
                     // Refresh ausschalten
                     swipeRefreshLayout.post(new Runnable() {
                         @Override
@@ -220,7 +234,7 @@ public class ExamResultFragment extends Fragment {
                         }
                     });
 
-                    // Ergebniss des speicherns überprüfen
+                    // Ergebnis des speicherns überprüfen
                     if (result) {
                         if (count != examsResultHelper.getExamResults().size())
                             Toast.makeText(getActivity(), R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();

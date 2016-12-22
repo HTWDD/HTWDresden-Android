@@ -153,7 +153,11 @@ public class ExamsListFragment extends Fragment {
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(final VolleyError error) {
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                if (!isAdded()) {
+                    return;
+                }
                 // Bestimme Fehlermeldung
                 int responseCode = VolleyDownloader.getResponseCode(error);
 
@@ -187,7 +191,12 @@ public class ExamsListFragment extends Fragment {
 
         Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(final JSONArray response) {
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                if (!isAdded()) {
+                    return;
+                }
+
                 // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
 
