@@ -8,13 +8,14 @@ import org.json.JSONObject;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import de.htwdd.htwdresden.interfaces.IParseJSON;
+import io.realm.RealmObject;
 
 /**
  * Klasse für ein Prüfungsergebnis
  *
  * @author Kay Förster
  */
-public class ExamResult implements IGetContentValues, IParseJSON {
+public class ExamResult extends RealmObject implements IGetContentValues, IParseJSON {
     public String modul;
     public Float note;
     public String vermerk;

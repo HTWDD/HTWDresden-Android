@@ -24,6 +24,9 @@ public final class Const {
     }
 
     public static final class IntentParams {
+        public static final String BROADCAST_ACTION = "de.htwdd.htwdresden.BROADCAST";
+        public static final String BROADCAST_CODE = "statusCode";
+        public static final String BROADCAST_MESSAGE = "message";
         public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetabel";
         public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
     }

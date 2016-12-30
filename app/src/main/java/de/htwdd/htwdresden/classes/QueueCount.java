@@ -1,7 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
 /**
- * Hilfsklasse um die Anzahl der laufendenen Requeste zu zählen
+ * Hilfsklasse um die Anzahl der laufenden Requests zu zählen
  */
 public class QueueCount {
     private long countQueue = 0;
