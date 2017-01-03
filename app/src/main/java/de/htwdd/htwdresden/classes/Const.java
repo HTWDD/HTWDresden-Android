@@ -63,13 +63,6 @@ public final class Const {
                 return semesterNames[0];
             else return semesterNames[1];
         }
-
-        public static String getActualSemester() {
-            int mounth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-            if (mounth > 2 && mounth < 9)
-                return "S";
-            return "W";
-        }
     }
 
     public static final class Timetable {
@@ -194,6 +187,7 @@ public final class Const {
         }
 
         public static class ExamResults implements BaseColumns {
+            public static final String SEMESTER = "semester";
             public static final String COLUMN_NAME_MODUL = "modul";
             public static final String COLUMN_NAME_NOTE = "note";
             public static final String COLUMN_NAME_VERMERK = "vermerk";

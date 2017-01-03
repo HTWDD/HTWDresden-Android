@@ -14,10 +14,10 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.SemesterHelper;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
@@ -87,7 +87,7 @@ public class ManagementFragment extends Fragment {
 
     private void getSemesterplan() {
         final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
-        final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(Calendar.getInstance().get(Calendar.YEAR), Const.Semester.getActualSemester());
+        final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(SemesterHelper.getStartYearOfSemester(), SemesterHelper.getActualSemesterTag());
         final CardView cardView = (CardView) mLayout.findViewById(R.id.management_semesterplan);
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 
@@ -104,7 +104,7 @@ public class ManagementFragment extends Fragment {
             final TextView semesterplanPruefPeriod = (TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod);
             final TextView semesterplanRegistration = (TextView) mLayout.findViewById(R.id.semesterplan_reregistration);
 
-            String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
+            final String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
             semesterplanBezeichnung.setText(bezeichnung);
             semesterplanLecturePeriod.setText(getString(
                     R.string.timetable_ds_list_simple,
