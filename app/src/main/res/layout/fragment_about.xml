@@ -1,181 +1,139 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.htwdd.htwdresden.AboutFragment">
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="de.htwdd.htwdresden.AboutFragment">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:layout_margin="@dimen/activity_vertical_margin"
+        card_view:cardCornerRadius="4dp">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
+        <LinearLayout
+            style="title"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            card_view:cardCornerRadius="4dp">
+            android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_vertical_margin">
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:padding="@dimen/space_between_content">
+                android:layout_width="wrap_content"
+                android:text="@string/app_name"/>
 
-                <TextView
-                    android:id="@+id/app_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/app_name"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="false"
-                    android:layout_below="@+id/app_name"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/app_slogan" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            card_view:cardCornerRadius="4dp">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:padding="@dimen/space_between_content">
+                android:text="@string/app_slogan"/>
 
-                <TextView
-                    android:id="@+id/app_name_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/app_name"
-                    android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/app_name"
+                android:textStyle="bold"/>
 
-                <TableLayout
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1">
+
+                <TableRow>
+
+                    <TextView
+                        android:width="90sp"
+                        android:padding="3dip"
+                        android:text="@string/about_developer"/>
+
+                    <TextView
+                        android:padding="3dip"
+                        android:text="@string/app_developer_name"/>
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:width="90sp"
+                        android:padding="3dip"
+                        android:text="@string/about_version"/>
+
+                    <TextView
+                        android:id="@+id/app_version"
+                        android:padding="3dip"/>
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:width="90sp"
+                        android:padding="3dip"
+                        android:text="@string/about_contact"/>
+
+                    <TextView
+                        android:id="@+id/app_email"
+                        android:padding="3dip"
+                        android:text="@string/app_email"
+                        android:textColor="@color/colorAccent"
+                        android:textIsSelectable="true"/>
+                </TableRow>
+
+                <TableRow
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_below="@+id/app_name_2"
-                    android:stretchColumns="1">
+                    android:layout_height="fill_parent">
 
-                    <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:width="90sp"
+                        android:padding="3dip"
+                        android:text="@string/about_website"/>
 
-                        <TextView
-                            android:width="100sp"
-                            android:padding="3dip"
-                            android:text="@string/about_developer" />
+                    <TextView
+                        android:id="@+id/app_website"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="3dip"
+                        android:text="@string/app_website"
+                        android:textColor="@color/colorAccent"
+                        android:textIsSelectable="true"/>
+                </TableRow>
 
-                        <TextView
-                            android:padding="3dip"
-                            android:text="@string/app_developer_name" />
-                    </TableRow>
+                <TableRow>
 
-                    <TableRow>
+                    <TextView
+                        android:width="90sp"
+                        android:padding="3dip"
+                        android:text="@string/about_project"/>
 
-                        <TextView
-                            android:width="100sp"
-                            android:padding="3dip"
-                            android:text="@string/about_version" />
+                    <TextView
+                        android:id="@+id/about_link_github"
+                        android:padding="3dip"
+                        android:text="@string/app_github"
+                        android:textColor="@color/colorAccent"
+                        android:textIsSelectable="true"/>
 
-                        <TextView
-                            android:id="@+id/app_version"
-                            android:padding="3dip" />
-                    </TableRow>
+                </TableRow>
+            </TableLayout>
 
-                    <TableRow>
-
-                        <TextView
-                            android:width="100sp"
-                            android:padding="3dip"
-                            android:text="@string/about_contact" />
-
-                        <TextView
-                            android:id="@+id/app_email"
-                            android:padding="3dip"
-                            android:text="@string/app_email"
-                            android:textColor="@color/colorAccent"
-                            android:textIsSelectable="true" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:width="100sp"
-                            android:padding="3dip"
-                            android:text="@string/about_website" />
-
-                        <TextView
-                            android:id="@+id/app_website"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="3dip"
-                            android:text="@string/app_website"
-                            android:textColor="@color/colorAccent"
-                            android:textIsSelectable="true" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:width="100sp"
-                            android:padding="3dip"
-                            android:text="@string/about_project" />
-
-                        <TextView
-                            android:id="@+id/about_link_github"
-                            android:padding="3dip"
-                            android:text="@string/app_github"
-                            android:textColor="@color/colorAccent"
-                            android:textIsSelectable="true" />
-
-                    </TableRow>
-                </TableLayout>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            card_view:cardCornerRadius="4dp">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/about_info"
+                style="title"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:padding="@dimen/space_between_content">
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/about_info"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/about_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/about_info"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/about_info"
-                    android:text="@string/about_info_message" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_info_message"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </ScrollView>
