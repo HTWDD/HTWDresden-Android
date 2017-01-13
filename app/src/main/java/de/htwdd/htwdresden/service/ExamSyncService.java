@@ -35,8 +35,8 @@ public class ExamSyncService extends AbstractSyncHelper {
     private final static String LOG_TAG = "ExamSyncService";
     private Stack<JSONArray> results = new Stack<>();
     // Zugangsdaten
-    private final String sNummer;
-    private final String rzLogin;
+    private String sNummer;
+    private String rzLogin;
     // Error Listener
     private final Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
@@ -60,19 +60,20 @@ public class ExamSyncService extends AbstractSyncHelper {
             }
             setError(message);
             queueCount.decrementCountQueue();
+            Log.e(LOG_TAG, "[Fehler] Konnte Noten nicht abrufen: " + error.toString());
         }
     };
 
     public ExamSyncService() {
         super("ExamSyncService", INTENT_SYNC_EXAMS);
-
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sNummer = sharedPreferences.getString("sNummer", "");
-        rzLogin = sharedPreferences.getString("RZLogin", "");
     }
 
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sNummer = sharedPreferences.getString("sNummer", "");
+        rzLogin = sharedPreferences.getString("RZLogin", "");
+
         // Alle Noten laden
         getGradeResults();
         // Auf fertigstellung warten
@@ -157,6 +158,7 @@ public class ExamSyncService extends AbstractSyncHelper {
             for (final JSONArray jsonArray : results) {
                 realm.createAllFromJson(ExamResult.class, jsonArray);
             }
+            realm.commitTransaction();
         } catch (final Exception e) {
             Log.e(LOG_TAG, "[Fehler] Beim Speichern der Noten", e);
             realm.cancelTransaction();
