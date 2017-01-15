@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/space_between_content"
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,23 +20,23 @@
 
         <TextView
             android:id="@+id/note"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/space_between_content"
-            android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft" />
+            android:layout_marginEnd="@dimen/space_between_content"
+            android:layout_marginStart="?android:attr/expandableListPreferredChildPaddingLeft"/>
 
         <TextView
             android:id="@+id/credits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="@dimen/space_between_content"
-            android:paddingStart="@dimen/space_between_content" />
+            android:paddingStart="@dimen/space_between_content"/>
 
         <TextView
             android:id="@+id/vermerk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="@dimen/space_between_content"
-            android:paddingStart="@dimen/space_between_content" />
+            android:paddingStart="@dimen/space_between_content"/>
     </LinearLayout>
 </RelativeLayout>

@@ -197,6 +197,7 @@ public final class Const {
         }
 
         public static class ExamResults implements BaseColumns {
+            public static final String SEMESTER = "Semester";
             public static final String COLUMN_NAME_MODUL = "modul";
             public static final String COLUMN_NAME_NOTE = "note";
             public static final String COLUMN_NAME_VERMERK = "vermerk";

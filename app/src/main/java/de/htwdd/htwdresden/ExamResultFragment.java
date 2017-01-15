@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,23 +20,16 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import de.htwdd.htwdresden.adapter.ExamResultListAdapter;
+import de.htwdd.htwdresden.adapter.ExamResultAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.ExamResultDAO;
-import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.ExamSyncService;
 import de.htwdd.htwdresden.types.ExamResult;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 
 /**
@@ -48,8 +40,7 @@ import io.realm.Realm;
 public class ExamResultFragment extends Fragment {
     private ResponseReceiver responseReceiver;
     private long countExamResults = 0;
-    private HashMap<Integer, ArrayList<ExamResult>> listExamResults = new HashMap<>();
-    private ExamResultListAdapter adapter;
+    private ExamResultAdapter adapter;
     private View mLayout;
 
     public ExamResultFragment() {
@@ -57,17 +48,11 @@ public class ExamResultFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getInstance().register(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final Context context = getActivity();
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
-        adapter = new ExamResultListAdapter(getActivity(), listExamResults);
+        adapter = new ExamResultAdapter(context);
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -78,7 +63,7 @@ public class ExamResultFragment extends Fragment {
                 if (!VolleyDownloader.CheckInternet(context)) {
                     // Refresh ausschalten
                     swipeRefreshLayout.setRefreshing(false);
-                    showMessage(context.getString(R.string.info_no_internet));
+                    Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_LONG).show();
                     return;
                 }
                 // Überprüfe ob Einstellungen richtig gesetzt sind
@@ -110,10 +95,18 @@ public class ExamResultFragment extends Fragment {
         final Realm realm = Realm.getDefaultInstance();
         countExamResults = realm.where(ExamResult.class).count();
 
+        // Auf Änderungen an der Datenbank hören
+        realm.where(ExamResult.class).findAll().addChangeListener(new RealmChangeListener<RealmResults<ExamResult>>() {
+            @Override
+            public void onChange(final RealmResults<ExamResult> element) {
+                adapter.notifyDataSetChanged();
+                showMessageNoExamResults(element.size() > 0);
+            }
+        });
+        showMessageNoExamResults(countExamResults > 0);
+
         final ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
         expandableListView.setAdapter(adapter);
-
-        showData();
 
         // IntentReceiver erstellen
         final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
@@ -129,22 +122,21 @@ public class ExamResultFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
-        EventBus.getInstance().unregister(this);
     }
 
     /**
-     * Zeigt Infos entweder direkt im View oder per Toast an
+     * Hinweismeldung anzeigen wenn keine Noten vorhanden sind
      *
-     * @param message anzuzeigende Information
+     * @param examsAvailable Sind Noten vorhanden?
      */
-    private void showMessage(@NonNull final String message) {
-        // Wenn ListView keine Daten enthält als Text anzeigen, ansonsten per Toast
-        if (adapter.getGroupCount() == 0) {
-            final TextView textViewMessage = (TextView) mLayout.findViewById(R.id.info_message);
-            textViewMessage.setText(message);
+    private void showMessageNoExamResults(final boolean examsAvailable) {
+        final TextView infoMessage = (TextView) mLayout.findViewById(R.id.info_message);
+        if (examsAvailable) {
+            infoMessage.setText(null);
+            mLayout.setBackgroundColor(Color.WHITE);
         } else {
-            final Context context = getActivity();
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            infoMessage.setText(R.string.exams_result_no_results);
+            mLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.app_background));
         }
     }
 
@@ -166,55 +158,14 @@ public class ExamResultFragment extends Fragment {
                 final Realm realm = Realm.getDefaultInstance();
                 final long newCountExamResults = realm.where(ExamResult.class).count();
                 if (newCountExamResults > countExamResults) {
-                    Toast.makeText(getActivity(), R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), R.string.exams_result_update_noNewGrades, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.exams_result_update_noNewGrades, Toast.LENGTH_SHORT).show();
                 }
                 countExamResults = newCountExamResults;
             } else if (intent.hasExtra(Const.IntentParams.BROADCAST_MESSAGE)) {
-                showMessage(intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE));
-            } else showMessage(context.getString(R.string.info_error_save));
-        }
-    }
-
-
-    /**
-     * Behandelt die Benachrichtigung vom Eventbus das neue Prüfungsergebnisse zur Verfügung stehen
-     *
-     * @param updateExamResultsEvent Typ der Benachrichtigung
-     */
-    @Subscribe
-    public void updateExamResults(UpdateExamResultsEvent updateExamResultsEvent){
-        showData();
-    }
-
-    /**
-     * Zeigt bzw. Aktualisiert die Daten im View
-     */
-    private void showData() {
-        final TextView message = (TextView) mLayout.findViewById(R.id.info_message);
-
-        // Lade Daten aus Datenbank
-        final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(getActivity()));
-        final ArrayList<ExamResult> examResults = dao.getAll();
-
-        // Daten in HashMap umwandeln
-        listExamResults.clear();
-        for (ExamResult examResult : examResults) {
-            if (!listExamResults.containsKey(examResult.semester))
-                listExamResults.put(examResult.semester, new ArrayList<ExamResult>());
-            listExamResults.get(examResult.semester).add(examResult);
-        }
-
-        adapter.notifyDataSetChanged();
-
-        // Meldung anzeigen
-        if (examResults.size() == 0) {
-            message.setText(R.string.exams_result_no_results);
-            mLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.app_background));
-        } else {
-            message.setText(null);
-            mLayout.setBackgroundColor(Color.WHITE);
+                Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_LONG).show();
+            } else Toast.makeText(context, R.string.info_error_save, Toast.LENGTH_LONG).show();
         }
     }
 }
