@@ -23,13 +23,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                style="@style/TextAppearance.AppCompat.Title"/>
 
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/app_table_margin"
                 android:stretchColumns="2"
                 android:layout_below="@+id/stats_semester">
 
