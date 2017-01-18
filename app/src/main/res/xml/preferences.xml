@@ -51,6 +51,12 @@
             android:key="autoMute"
             android:summary="@string/settings_audio_summary"
             android:title="@string/settings_audio" />
+        <ListPreference
+            android:key="autoExamUpdate"
+            android:entries="@array/autoExamsUpdateInterval"
+            android:entryValues="@array/autoExamsUpdateInterval_values"
+            android:summary="@string/settings_exam_results_summary"
+            android:title="@string/settings_exam_results"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_app_intern">
         <CheckBoxPreference

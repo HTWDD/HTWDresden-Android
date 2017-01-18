@@ -67,7 +67,9 @@
     <string name="settings_prof_id">Professoren-Kennung</string>
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
     <string name="settings_audio">Automatisches Stummschalten</string>
-    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
+    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet.</string>
+    <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
+    <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
     <string name="settings_acra">Bug-Reporting</string>
     <string name="settings_acra_disabled">Eingeschaltet</string>
     <string name="settings_acra_enabled">Ausgeschaltet</string>
