@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,22 +24,22 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-
     public SettingsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Setze Toolbartitle
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        // Setze Title in Toolbar
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_settings));
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        final View view = super.onCreateView(inflater, container, savedInstanceState);
         if (view != null) {
             view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         }
@@ -58,36 +59,31 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(Const.preferencesKey.PREFERENCES_AUTO_MUTE)) {
-            Context context = getActivity();
-            boolean value = sharedPreferences.getBoolean(s, false);
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        final Context context = getActivity();
 
-            if (value) {
-                // Starte Hintergrundservice
-                VolumeControllerService volumeControllerService = new VolumeControllerService();
-                volumeControllerService.startMultiAlarmVolumeController(context);
+        switch (key) {
+            case Const.preferencesKey.PREFERENCES_AUTO_MUTE:
+                final boolean value = sharedPreferences.getBoolean(key, false);
+                final PackageManager packageManager = context.getPackageManager();
+                final VolumeControllerService volumeControllerService = new VolumeControllerService();
+                final ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
 
-                //enable a receiver -> starts alarms on reboot
-                ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
-                PackageManager pm = context.getPackageManager();
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
+                if (value) {
+                    // Starte Background Service
+                    volumeControllerService.startMultiAlarmVolumeController(context);
 
-            } else {
-                // Beende Hintergrundservice
-                VolumeControllerService volumeControllerService = new VolumeControllerService();
-                volumeControllerService.cancelMultiAlarmVolumeController(context);
-                volumeControllerService.resetSettingsFile(context);
+                    //enable a receiver -> starts alarms on reboot
+                    packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                } else {
+                    // Beende Background Service
+                    volumeControllerService.cancelMultiAlarmVolumeController(context);
+                    volumeControllerService.resetSettingsFile(context);
 
-                //disable a receiver, alarms will not be set on reboot
-                ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
-                PackageManager pm = context.getPackageManager();
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-            }
+                    //disable a receiver, alarms will not be set on reboot
+                    packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                }
+                break;
         }
     }
 }
