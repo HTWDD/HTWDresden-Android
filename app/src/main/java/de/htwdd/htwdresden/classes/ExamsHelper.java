@@ -4,6 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+
+import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.ExamStats;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Hilfsklasse für Noten
@@ -13,5 +23,63 @@ public final class ExamsHelper {
     public static boolean checkPreferences(@NonNull final Context context) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return !(sharedPreferences.getString("sNummer", "").length() < 5 || sharedPreferences.getString("RZLogin", "").length() < 3);
+    }
+
+    /**
+     * Erstellt eine Noten-Statistik für jedes Semester
+     *
+     * @return Liste der Noten-Statistik je Semester
+     */
+    public static ArrayList<ExamStats> getExamStats() {
+        final Realm realm = Realm.getDefaultInstance();
+        final ArrayList<ExamStats> stats = new ArrayList<>();
+        final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
+
+        for (final ExamResult result : examHeaders) {
+            stats.add(getExamStatsForSemester(realm, result.Semester));
+        }
+
+        return stats;
+    }
+
+    /**
+     * Erstellt die Noten-Statistik über das Semester. Wenn kein Semester angegeben wird, wird das ganze Studium berücksichtigt.
+     *
+     * @param realm    aktuelle Datenbankverbindung
+     * @param semester Semester für welches die Statistik erstellt wird
+     * @return {@link ExamStats} Objekt welches die Statistik enthält
+     */
+    public static ExamStats getExamStatsForSemester(@NonNull final Realm realm, @Nullable final Integer semester) {
+        // Datenbankabfrage
+        final RealmQuery<ExamResult> realmQuery = realm.where(ExamResult.class)
+                .isNotNull(Const.database.ExamResults.NOTE)
+                .notEqualTo(Const.database.ExamResults.NOTE, 0f);
+        // Wenn ein Semester angegeben, die Abfrage auf dieses einschränken
+        if (semester != null) {
+            realmQuery.equalTo(Const.database.ExamResults.SEMESTER, semester);
+        }
+
+        final float credits = realmQuery.sum(Const.database.ExamResults.CREDITS).floatValue();
+
+        final ExamStats stats = new ExamStats();
+        stats.semester = semester;
+        stats.gradeCount = realmQuery.count();
+        stats.setGradeBest(realmQuery.min(Const.database.ExamResults.NOTE).floatValue());
+        stats.setGradeWorst(realmQuery.max(Const.database.ExamResults.NOTE).floatValue());
+        stats.setCredits(credits);
+        // Berechne Durchschnitt
+        if (credits > 0) {
+            final RealmResults<ExamResult> noten = realmQuery.isNotNull(Const.database.ExamResults.CREDITS).notEqualTo(Const.database.ExamResults.CREDITS, 0f).findAll();
+            float average = 0f;
+            for (final ExamResult examResult : noten) {
+                average += examResult.PrNote * examResult.EctsCredits;
+            }
+            average /= credits;
+            stats.setAverage(average);
+        } else {
+            stats.setAverage(realmQuery.average(Const.database.ExamResults.NOTE));
+        }
+
+        return stats;
     }
 }

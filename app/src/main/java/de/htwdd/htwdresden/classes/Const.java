@@ -196,17 +196,10 @@ public final class Const {
             public static final String TABLE_NAME = "TimetableRoom";
         }
 
-        public static class ExamResults implements BaseColumns {
+        public static class ExamResults {
             public static final String SEMESTER = "Semester";
-            public static final String COLUMN_NAME_MODUL = "modul";
-            public static final String COLUMN_NAME_NOTE = "note";
-            public static final String COLUMN_NAME_VERMERK = "vermerk";
-            public static final String COLUMN_NAME_STATUS = "status";
-            public static final String COLUMN_NAME_CREDITS = "credits";
-            public static final String COLUMN_NAME_VERSUCH = "versuch";
-            public static final String COLUMN_NAME_SEMESTER = "semester";
-            public static final String COLUMN_NAME_KENNZEICHEN = "kennzeichen";
-            public static final String TABLE_NAME = "ExamResults";
+            static final String NOTE = "PrNote";
+            static final String CREDITS = "EctsCredits";
         }
 
         public static class SemesterPlanTable implements BaseColumns {

@@ -1,8 +1,5 @@
 package de.htwdd.htwdresden.types;
 
-import android.content.ContentValues;
-
-import de.htwdd.htwdresden.interfaces.IGetContentValues;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 
@@ -11,7 +8,7 @@ import io.realm.annotations.Index;
  *
  * @author Kay Förster
  */
-public class ExamResult extends RealmObject implements IGetContentValues {
+public class ExamResult extends RealmObject {
     @Index
     public Integer Semester;
     /**
@@ -24,9 +21,4 @@ public class ExamResult extends RealmObject implements IGetContentValues {
     public Float EctsCredits;
     public Short Versuch;
     public String PrForm;
-
-    @Override
-    public ContentValues getContentValues() {
-        return new ContentValues();
-    }
 }

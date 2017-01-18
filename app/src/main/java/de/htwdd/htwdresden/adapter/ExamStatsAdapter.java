@@ -1,15 +1,16 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.types.ExamStats;
+import io.realm.Realm;
 
 /**
  * Adapter zur Anzeige der Notenstatistik
@@ -19,13 +20,14 @@ import de.htwdd.htwdresden.types.ExamStats;
 public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
     private final String[] semesterNames;
 
-    public ExamStatsAdapter(Context context, ArrayList<ExamStats> data) {
-        super(context, data);
+    public ExamStatsAdapter(@NonNull final Context context) {
+        super(context, ExamsHelper.getExamStats());
+        data.add(0, ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null));
         semesterNames = context.getResources().getStringArray(R.array.semesterName);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder viewHolder;
         // ViewHolder
         if (convertView == null) {
@@ -40,26 +42,34 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
             viewHolder.gradeWorst = (TextView) convertView.findViewById(R.id.stats_gradeWorst);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        ExamStats examStats = getItem(position);
+        final ExamStats examStats = getItem(position);
         if (examStats.semester != null)
             viewHolder.semester.setText(Const.Semester.getSemesterName(semesterNames, examStats.semester));
         else viewHolder.semester.setText(R.string.exams_stats_study);
-        viewHolder.average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.average)));
-        viewHolder.countGrades.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, examStats.gradeCount, examStats.gradeCount));
-        viewHolder.countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.credits));
-        viewHolder.gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.gradeBest));
-        viewHolder.gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.gradeWorst));
+        viewHolder.average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.getAverage())));
+
+        viewHolder.countGrades.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
+        viewHolder.countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.getCredits()));
+        viewHolder.gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.getGradeBest()));
+        viewHolder.gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.getGradeWorst()));
 
         return convertView;
     }
 
+    private static class ViewHolder {
+        TextView semester;
+        TextView average;
+        TextView countGrades;
+        TextView countCredits;
+        TextView gradeBest;
+        TextView gradeWorst;
+    }
 
-    static class ViewHolder {
-        public TextView semester;
-        public TextView average;
-        public TextView countGrades;
-        public TextView countCredits;
-        public TextView gradeBest;
-        public TextView gradeWorst;
+    @Override
+    public void notifyDataSetChanged() {
+        this.data.clear();
+        this.data.add(ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null));
+        this.data.addAll(ExamsHelper.getExamStats());
+        super.notifyDataSetChanged();
     }
 }
