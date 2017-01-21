@@ -59,6 +59,11 @@ import io.realm.RealmResults;
  */
 public class OverviewFragment extends Fragment {
     private View mLayout;
+    // Datenbank
+    private RealmResults<ExamResult> examResults;
+    private RealmResults<Meal> meals;
+    private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
+    private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -121,22 +126,25 @@ public class OverviewFragment extends Fragment {
         // Daten für Mensa laden und anzeigen
         final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
-        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
-        meals.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
+        realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
             @Override
             public void onChange(final RealmResults<Meal> element) {
                 showMensaInfo(meals);
             }
-        });
+        };
+        meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
+        meals.addChangeListener(realmListenerMensa);
         showMensaInfo(meals);
 
         // Übersicht über Noten
-        realm.where(ExamResult.class).findAll().addChangeListener(new RealmChangeListener<RealmResults<ExamResult>>() {
+        realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
             public void onChange(final RealmResults<ExamResult> element) {
                 showExamStats(element.size() > 0);
             }
-        });
+        };
+        examResults = realm.where(ExamResult.class).findAll();
+        examResults.addChangeListener(realmListenerExams);
         showExamStats(realm.where(ExamResult.class).count() > 0);
 
         // Stundenplan anzeigen
@@ -156,6 +164,8 @@ public class OverviewFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        examResults.removeChangeListener(realmListenerExams);
+        meals.removeChangeListener(realmListenerMensa);
         super.onDestroy();
         EventBus.getInstance().unregister(this);
     }
@@ -177,18 +187,17 @@ public class OverviewFragment extends Fragment {
             final ExamStats examStats = ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null);
 
             // Views holen
-            final Context context = getActivity();
             final TextView stats_average = (TextView) mLayout.findViewById(R.id.stats_average);
             final TextView stats_countGrade = (TextView) mLayout.findViewById(R.id.stats_countGrade);
             final TextView stats_countCredits = (TextView) mLayout.findViewById(R.id.stats_countCredits);
             final TextView stats_gradeBest = (TextView) mLayout.findViewById(R.id.stats_gradeBest);
             final TextView stats_gradeWorst = (TextView) mLayout.findViewById(R.id.stats_gradeWorst);
 
-            stats_average.setText(context.getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
-            stats_countGrade.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
-            stats_countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.getCredits()));
-            stats_gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.getGradeBest()));
-            stats_gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.getGradeWorst()));
+            stats_average.setText(getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
+            stats_countGrade.setText(getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
+            stats_countCredits.setText(getString(R.string.exams_stats_count_credits, examStats.getCredits()));
+            stats_gradeBest.setText(getString(R.string.exams_stats_gradeBest, examStats.getGradeBest()));
+            stats_gradeWorst.setText(getString(R.string.exams_stats_gradeWorst, examStats.getGradeWorst()));
         } else {
             message.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
