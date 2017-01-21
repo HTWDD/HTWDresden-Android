@@ -33,7 +33,7 @@ public class VolumeControllerService extends IntentService {
     }
 
     /**
-     * Startet AlarmManeger zu Begin einer jeden Lehrveranstaltung
+     * Startet AlarmManager zu Begin einer jeden Lehrveranstaltung
      *
      * @param context aktueller App-Context
      */
@@ -100,12 +100,9 @@ public class VolumeControllerService extends IntentService {
     }
 
     public static class HtwddBootReceiver extends BroadcastReceiver {
-        public HtwddBootReceiver() {
-        }
-
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        public void onReceive(@NonNull final Context context, @NonNull final Intent intent) {
+            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
                 VolumeControllerService volumeControllerService = new VolumeControllerService();
                 volumeControllerService.startMultiAlarmVolumeController(context);
             }

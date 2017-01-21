@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
@@ -81,5 +82,16 @@ public final class ExamsHelper {
         }
 
         return stats;
+    }
+
+    /**
+     * Wandelt den ausgewählten String aus {@see SharedPreferences} in Millisekunden für den Update Service um
+     *
+     * @param intervalFromPreference String aus {@see SharedPreferences} mit Key {@see de.htwdd.htwdresden.classes.Const.preferencesKey.REFERENCES_AUTO_EXAM_UPDATE}
+     * @return UpdateInterval in Millisekunden
+     */
+    public static long getUpdateInterval(@NonNull final String intervalFromPreference) {
+        final int parsedValue = Integer.valueOf(intervalFromPreference);
+        return TimeUnit.MILLISECONDS.convert(parsedValue, TimeUnit.HOURS);
     }
 }

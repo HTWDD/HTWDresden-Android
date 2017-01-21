@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.service.ExamAutoUpdateService;
 import de.htwdd.htwdresden.service.VolumeControllerService;
 
 /**
@@ -64,12 +66,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         switch (key) {
             case Const.preferencesKey.PREFERENCES_AUTO_MUTE:
-                final boolean value = sharedPreferences.getBoolean(key, false);
+                final boolean value1 = sharedPreferences.getBoolean(key, false);
                 final PackageManager packageManager = context.getPackageManager();
                 final VolumeControllerService volumeControllerService = new VolumeControllerService();
                 final ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
 
-                if (value) {
+                if (value1) {
                     // Starte Background Service
                     volumeControllerService.startMultiAlarmVolumeController(context);
 
@@ -83,6 +85,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     //disable a receiver, alarms will not be set on reboot
                     packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
+                break;
+            case Const.preferencesKey.PREFERENCES_AUTO_EXAM_UPDATE:
+                final long updateInterval = ExamsHelper.getUpdateInterval(sharedPreferences.getString(key, "0"));
+                if (updateInterval == 0) {
+                    ExamAutoUpdateService.cancelAutoUpdate(context);
+                } else ExamAutoUpdateService.startAutoUpdate(context, updateInterval);
+
                 break;
         }
     }

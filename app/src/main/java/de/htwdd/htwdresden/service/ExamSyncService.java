@@ -35,8 +35,8 @@ public class ExamSyncService extends AbstractSyncHelper {
     private final static String LOG_TAG = "ExamSyncService";
     private Stack<JSONArray> results = new Stack<>();
     // Zugangsdaten
-    private String sNummer;
-    private String rzLogin;
+    String sNummer;
+    String rzLogin;
     // Error Listener
     private final Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
@@ -79,7 +79,7 @@ public class ExamSyncService extends AbstractSyncHelper {
         // Auf fertigstellung warten
         waitForFinish();
         // Ergebnisse speichern
-        if (!isCancel()) {
+        if (!isCancel() && broadcastNotifier != null) {
             final boolean result = saveGrades();
             if (result) {
                 broadcastNotifier.notifyStatus(0);
@@ -90,7 +90,7 @@ public class ExamSyncService extends AbstractSyncHelper {
     /**
      * Fordert alle Noten eines Studenten vom Webservice an
      */
-    private void getGradeResults() {
+    void getGradeResults() {
         final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
@@ -150,7 +150,7 @@ public class ExamSyncService extends AbstractSyncHelper {
      *
      * @return true wenn Speichern erfolgreich
      */
-    private boolean saveGrades() {
+    boolean saveGrades() {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         try {
@@ -181,6 +181,7 @@ public class ExamSyncService extends AbstractSyncHelper {
         // Downloads abbrechen
         VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
         // Benachrichtigung senden
-        broadcastNotifier.notifyStatus(-1, errorMessage);
+        if (broadcastNotifier != null)
+            broadcastNotifier.notifyStatus(-1, errorMessage);
     }
 }

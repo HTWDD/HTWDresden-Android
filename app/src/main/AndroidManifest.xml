@@ -56,15 +56,23 @@
             android:enabled="true"/>
         <service
             android:name=".service.ExamSyncService"
-            android:enabled="true"
-            android:exported="false"/>
-
+            android:enabled="true"/>
+        <service
+            android:name=".service.ExamAutoUpdateService"
+            android:enabled="true"/>
         <!-- Receiver-->
         <receiver
             android:name=".service.VolumeControllerService$HtwddBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <receiver
