@@ -37,7 +37,7 @@ public final class ExamsHelper {
         final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
 
         for (final ExamResult result : examHeaders) {
-            stats.add(getExamStatsForSemester(realm, result.Semester));
+            stats.add(getExamStatsForSemester(realm, result.semester));
         }
 
         return stats;
@@ -75,10 +75,10 @@ public final class ExamsHelper {
         stats.setCredits(credits);
         // Berechne Durchschnitt
         if (credits > 0) {
-            final RealmResults<ExamResult> noten = realmQuery.isNotNull(Const.database.ExamResults.CREDITS).notEqualTo(Const.database.ExamResults.CREDITS, 0f).findAll();
+            final RealmResults<ExamResult> noten = realmQuery.notEqualTo(Const.database.ExamResults.CREDITS, 0f).findAll();
             float average = 0f;
             for (final ExamResult examResult : noten) {
-                average += examResult.PrNote * examResult.EctsCredits;
+                average += examResult.grade * examResult.credits;
             }
             average /= credits;
             stats.setAverage(average);

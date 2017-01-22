@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,10 +48,9 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(final int i) {
         if (examHeaders.size() < i) {
-            Log.d("Adapter", "Kinder: immer 0");
             return 0;
         }
-        return (int) getChildren(examHeaders.get(i).Semester).count();
+        return (int) getChildren(examHeaders.get(i).semester).count();
     }
 
     @Override
@@ -64,7 +62,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
     public ExamResult getChild(int i, int i1) {
         if (examHeaders.size() < i)
             return null;
-        final RealmQuery<ExamResult> examResults = getChildren(examHeaders.get(i).Semester);
+        final RealmQuery<ExamResult> examResults = getChildren(examHeaders.get(i).semester);
         if (examResults.count() < i1)
             return null;
         return examResults.findAll().get(i1);
@@ -95,7 +93,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             viewHolder.textView1 = (TextView) view.findViewById(R.id.listHeader);
         } else viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.textView1.setText(Const.Semester.getSemesterName(semesterNames, getGroup(i).Semester));
+        viewHolder.textView1.setText(Const.Semester.getSemesterName(semesterNames, getGroup(i).semester));
 
         return view;
     }
@@ -114,10 +112,10 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         } else viewHolder = (ViewHolder) view.getTag();
 
         final ExamResult examResult = getChild(i, i1);
-        final Float note = examResult.PrNote;
+        final Float note = examResult.grade;
 
         // Modulnamen setzen
-        viewHolder.textView1.setText(examResult.PrTxt);
+        viewHolder.textView1.setText(examResult.text);
         viewHolder.textView1.setTypeface(null, Typeface.NORMAL);
         viewHolder.textView1.setTextColor(Color.BLACK);
 
@@ -125,11 +123,11 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         viewHolder.textView2.setText("");
 
         // Genauen Status setzen
-        switch (examResult.Status) {
+        switch (examResult.state != null ? examResult.state : "") {
             case "AN":
                 viewHolder.textView1.setTypeface(null, Typeface.ITALIC);
                 viewHolder.textView1.setTextColor(Color.GRAY);
-                switch (examResult.Vermerk) {
+                switch (examResult.note != null ? examResult.note : "") {
                     // Student hat sich abgemeldet
                     case "e":
                         viewHolder.textView2.setText(R.string.exams_result_sign_off);
@@ -146,7 +144,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
                 break;
             // Student hat bestanden
             case "BE":
-                if (examResult.EctsCredits == null || examResult.EctsCredits == 0.0f) {
+                if (examResult.credits == 0.0f) {
                     viewHolder.textView1.setTextColor(Color.BLACK);
                 } else {
                     viewHolder.textView1.setTextColor(ContextCompat.getColor(context, R.color.exam_results_green));
@@ -164,7 +162,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, note / 100));
         } else viewHolder.textView3.setText(R.string.exams_result_grade_empty);
         // Credits anzeigen
-        viewHolder.textView4.setText(context.getString(R.string.exams_result_credits, examResult.EctsCredits));
+        viewHolder.textView4.setText(context.getString(R.string.exams_result_credits, examResult.credits));
 
         return view;
     }

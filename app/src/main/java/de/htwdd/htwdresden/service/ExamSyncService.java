@@ -2,7 +2,6 @@ package de.htwdd.htwdresden.service;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -109,12 +108,13 @@ public class ExamSyncService extends AbstractSyncHelper {
             }
         };
         final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(
-                Request.Method.POST,
-                Const.internet.WEBSERVICE_URL_HISQIS + "getcourses?sNummer=s" + sNummer + "&RZLogin=" + Uri.encode(rzLogin),
+                Request.Method.GET,
+                Const.internet.WEBSERVICE_URL_HISQIS + "getcourses",
                 null,
                 response,
                 errorListener
         );
+        request.authentifikation("s" + sNummer, rzLogin);
 
         // Request markieren und absenden
         request.setTag(Const.internet.TAG_EXAM_RESULTS);
@@ -137,9 +137,9 @@ public class ExamSyncService extends AbstractSyncHelper {
                 queueCount.decrementCountQueue();
             }
         };
-        final String url = Const.internet.WEBSERVICE_URL_HISQIS + "getgrades?sNummer=s" + sNummer + "&RZLogin=" + Uri.encode(rzLogin) + "&AbschlNr=" + abschlussNummer +
-                "&StgNr=" + studiengangsnummer + "&POVersion=" + poVersion;
-        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(Request.Method.POST, url, null, response, errorListener);
+        final String url = Const.internet.WEBSERVICE_URL_HISQIS + "getgrades?AbschlNr=" + abschlussNummer + "&StgNr=" + studiengangsnummer + "&POVersion=" + poVersion;
+        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(Request.Method.GET, url, null, response, errorListener);
+        request.authentifikation("s" + sNummer, rzLogin);
         request.setTag(Const.internet.TAG_EXAM_RESULTS);
         queueCount.incrementCountQueue();
         VolleyDownloader.getInstance(context).addToRequestQueue(request);

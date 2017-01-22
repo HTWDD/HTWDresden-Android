@@ -41,7 +41,7 @@ public final class Const {
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
-        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
+        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
@@ -198,9 +198,9 @@ public final class Const {
         }
 
         public static class ExamResults {
-            public static final String SEMESTER = "Semester";
-            static final String NOTE = "PrNote";
-            static final String CREDITS = "EctsCredits";
+            public static final String SEMESTER = "semester";
+            static final String NOTE = "grade";
+            static final String CREDITS = "credits";
         }
 
         public static class SemesterPlanTable implements BaseColumns {
