@@ -2,11 +2,9 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,13 +65,14 @@ public class ExamResultStatsFragment extends Fragment {
      */
     private void showMessageNoResults(final boolean examsAvailable) {
         final TextView message = (TextView) mLayout.findViewById(R.id.message_info);
+        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
 
         if (examsAvailable) {
             message.setText(null);
-            mLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.app_background));
+            listView.setVisibility(View.VISIBLE);
         } else {
             message.setText(R.string.exams_result_no_results);
-            mLayout.setBackgroundColor(Color.WHITE);
+            listView.setVisibility(View.GONE);
         }
     }
 }

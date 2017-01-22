@@ -51,6 +51,10 @@ public final class ExamsHelper {
      * @return {@link ExamStats} Objekt welches die Statistik enthält
      */
     public static ExamStats getExamStatsForSemester(@NonNull final Realm realm, @Nullable final Integer semester) {
+        // Rückgabe-Objekt erstellen
+        final ExamStats stats = new ExamStats();
+        stats.semester = semester;
+
         // Datenbankabfrage
         final RealmQuery<ExamResult> realmQuery = realm.where(ExamResult.class)
                 .isNotNull(Const.database.ExamResults.NOTE)
@@ -59,11 +63,12 @@ public final class ExamsHelper {
         if (semester != null) {
             realmQuery.equalTo(Const.database.ExamResults.SEMESTER, semester);
         }
+        // Wenn keine Noten vorhanden sind, leeres Objekt zurückgeben, um Fehler beim ermitteln der St
+        if (realmQuery.count() == 0) {
+            return stats;
+        }
 
         final float credits = realmQuery.sum(Const.database.ExamResults.CREDITS).floatValue();
-
-        final ExamStats stats = new ExamStats();
-        stats.semester = semester;
         stats.gradeCount = realmQuery.count();
         stats.setGradeBest(realmQuery.min(Const.database.ExamResults.NOTE).floatValue());
         stats.setGradeWorst(realmQuery.max(Const.database.ExamResults.NOTE).floatValue());
