@@ -3,6 +3,8 @@ package de.htwdd.htwdresden.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,66 +12,60 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.types.ExamResult;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.Sort;
+
 
 /**
- * Adapter zur Anzeige der Prüfungsergebnisse
+ * Adapter für die Notenübersichtsseite
  *
  * @author Kay Förster
  */
-public class ExamResultListAdapter extends BaseExpandableListAdapter {
+public class ExamResultAdapter extends BaseExpandableListAdapter {
+    private final Context context;
+    private final LayoutInflater mLayoutInflater;
     private final String[] semesterNames;
-    private final HashMap<Integer, ArrayList<ExamResult>> data;
-    private Integer[] header;
-    private LayoutInflater mLayoutInflater;
-    private Context context;
+    private final Realm realm = Realm.getDefaultInstance();
+    private final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
 
-    public ExamResultListAdapter(Context context, HashMap<Integer, ArrayList<ExamResult>> data) {
-        this.context = context;
-        this.data = data;
-        // Array mit Headern erstellen
-        this.header = Arrays.copyOf(data.keySet().toArray(), data.keySet().size(), Integer[].class);
-        // Sortieren
-        Arrays.sort(header);
-
-        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ExamResultAdapter(@NonNull final Context context) {
+        super();
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         semesterNames = context.getResources().getStringArray(R.array.semesterName);
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        // Array mit Headern erstellen
-        this.header = Arrays.copyOf(data.keySet().toArray(), data.keySet().size(), Integer[].class);
-        // Sortieren
-        Arrays.sort(header);
-
-        super.notifyDataSetChanged();
+        this.context = context;
     }
 
     @Override
     public int getGroupCount() {
-        return data.keySet().size();
+        return examHeaders.size();
     }
 
     @Override
-    public int getChildrenCount(int i) {
-        return data.get(header[i]).size();
+    public int getChildrenCount(final int i) {
+        if (examHeaders.size() < i) {
+            return 0;
+        }
+        return (int) getChildren(examHeaders.get(i).semester).count();
     }
 
     @Override
-    public Object getGroup(int i) {
-        return header[i];
+    public ExamResult getGroup(final int i) {
+        return examHeaders.get(i);
     }
 
     @Override
-    public Object getChild(int i, int i1) {
-        return data.get(header[i]).get(i1);
+    public ExamResult getChild(int i, int i1) {
+        if (examHeaders.size() < i)
+            return null;
+        final RealmQuery<ExamResult> examResults = getChildren(examHeaders.get(i).semester);
+        if (examResults.count() < i1)
+            return null;
+        return examResults.findAll().get(i1);
     }
 
     @Override
@@ -88,9 +84,8 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int i, final boolean b, @Nullable View view, final ViewGroup viewGroup) {
         ViewHolder viewHolder;
-
         if (view == null) {
             viewHolder = new ViewHolder();
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_group, viewGroup, false);
@@ -98,16 +93,14 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
             viewHolder.textView1 = (TextView) view.findViewById(R.id.listHeader);
         } else viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.textView1.setText(Const.Semester.getSemesterName(semesterNames, (Integer)getGroup(i)));
+        viewHolder.textView1.setText(Const.Semester.getSemesterName(semesterNames, getGroup(i).semester));
 
         return view;
     }
 
     @Override
-    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        final ExamResult examResult = (ExamResult) getChild(i, i1);
+    public View getChildView(int i, int i1, boolean b, View view, final ViewGroup viewGroup) {
         ViewHolder viewHolder;
-
         if (view == null) {
             viewHolder = new ViewHolder();
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_item, viewGroup, false);
@@ -118,8 +111,11 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
             viewHolder.textView4 = (TextView) view.findViewById(R.id.credits);
         } else viewHolder = (ViewHolder) view.getTag();
 
-        // Modullnamen setzen
-        viewHolder.textView1.setText(examResult.modul);
+        final ExamResult examResult = getChild(i, i1);
+        final Float note = examResult.getGrade();
+
+        // Modulnamen setzen
+        viewHolder.textView1.setText(examResult.text);
         viewHolder.textView1.setTypeface(null, Typeface.NORMAL);
         viewHolder.textView1.setTextColor(Color.BLACK);
 
@@ -127,13 +123,12 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
         viewHolder.textView2.setText("");
 
         // Genauen Status setzen
-        switch (examResult.status) {
+        switch (examResult.state != null ? examResult.state : "") {
             case "AN":
                 viewHolder.textView1.setTypeface(null, Typeface.ITALIC);
                 viewHolder.textView1.setTextColor(Color.GRAY);
-
-                // Student hat sich abgemeldet
-                switch (examResult.vermerk) {
+                switch (examResult.note != null ? examResult.note : "") {
+                    // Student hat sich abgemeldet
                     case "e":
                         viewHolder.textView2.setText(R.string.exams_result_sign_off);
                         break;
@@ -149,10 +144,11 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
                 break;
             // Student hat bestanden
             case "BE":
-                if (examResult.credits != 0.0f)
-                    viewHolder.textView1.setTextColor(ContextCompat.getColor(context, R.color.exam_results_green));
-                else
+                if (examResult.credits == 0.0f) {
                     viewHolder.textView1.setTextColor(Color.BLACK);
+                } else {
+                    viewHolder.textView1.setTextColor(ContextCompat.getColor(context, R.color.exam_results_green));
+                }
                 break;
             // Student hat NICHT bestanden
             case "NB":
@@ -161,8 +157,11 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
                 break;
         }
 
-        // Note und Credits setzen
-        viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, examResult.note));
+        // Note anzeigen
+        if (note != 0.0) {
+            viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, note));
+        } else viewHolder.textView3.setText(R.string.exams_result_grade_empty);
+        // Credits anzeigen
         viewHolder.textView4.setText(context.getString(R.string.exams_result_credits, examResult.credits));
 
         return view;
@@ -173,10 +172,14 @@ public class ExamResultListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    static class ViewHolder {
-        public TextView textView1;
-        public TextView textView2;
-        public TextView textView3;
-        public TextView textView4;
+    private RealmQuery<ExamResult> getChildren(@NonNull final Integer semester) {
+        return realm.where(ExamResult.class).equalTo(Const.database.ExamResults.SEMESTER, semester);
+    }
+
+    private static class ViewHolder {
+        TextView textView1;
+        TextView textView2;
+        TextView textView3;
+        TextView textView4;
     }
 }

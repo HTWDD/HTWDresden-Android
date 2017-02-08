@@ -12,8 +12,8 @@ import de.htwdd.htwdresden.classes.Const;
  * @author Kay Förster
  */
 public class DatabaseManager extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "HTWDresden.db";
-    public static final int DATABASE_VERSION = 5;
+    private static final String DATABASE_NAME = "HTWDresden.db";
+    private static final int DATABASE_VERSION = 6;
 
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,16 +52,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Const.database.RoomTimetableEntry.COLUMN_NAME_PROFESSOR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.RoomTimetableEntry.COLUMN_NAME_WEEKSONLY + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
                 Const.database.RoomTimetableEntry.COLUMN_NAME_ROOMS + Const.database.TYPE_TEXT + ")");
-        sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.ExamResults.TABLE_NAME + " (" +
-                Const.database.ExamResults.COLUMN_NAME_MODUL + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_NOTE + Const.database.TYPE_FLOAT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_VERMERK + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_STATUS + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_CREDITS + Const.database.TYPE_FLOAT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_VERSUCH + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_SEMESTER + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.ExamResults.COLUMN_NAME_KENNZEICHEN + Const.database.TYPE_TEXT + " )");
-        sqLiteDatabase.execSQL("CREATE INDEX IndexSemester ON " + Const.database.ExamResults.TABLE_NAME + "(" + Const.database.ExamResults.COLUMN_NAME_SEMESTER + ");");
         sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.SemesterPlanTable.TABLE_NAME + " (" +
                 Const.database.SemesterPlanTable._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +
                 Const.database.SemesterPlanTable.COLUMN_NAME_TYPE + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
@@ -88,9 +78,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.TimetableEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.RoomTimetableEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.ExamResults.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.SemesterPlanTable.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.FreeDaysTable.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS ExamResults");
         onCreate(sqLiteDatabase);
     }
 }

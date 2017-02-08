@@ -51,13 +51,28 @@
         <service
             android:name=".service.VolumeControllerService"
             android:exported="false" />
-
+        <service
+            android:name=".service.TimetableWidgetService"
+            android:enabled="true"/>
+        <service
+            android:name=".service.ExamSyncService"
+            android:enabled="true"/>
+        <service
+            android:name=".service.ExamAutoUpdateService"
+            android:enabled="true"/>
         <!-- Receiver-->
         <receiver
             android:name=".service.VolumeControllerService$HtwddBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <receiver
@@ -82,10 +97,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/timetable_widget_info" />
         </receiver>
-
-        <service
-            android:name=".service.TimetableWidgetService"
-            android:enabled="true" />
 
     </application>
 

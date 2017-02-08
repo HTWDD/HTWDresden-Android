@@ -36,15 +36,15 @@ import java.util.Locale;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
+import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.ExamResultDAO;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
-import de.htwdd.htwdresden.events.UpdateExamResultsEvent;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
@@ -59,6 +59,11 @@ import io.realm.RealmResults;
  */
 public class OverviewFragment extends Fragment {
     private View mLayout;
+    // Datenbank
+    private RealmResults<ExamResult> examResults;
+    private RealmResults<Meal> meals;
+    private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
+    private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -121,20 +126,29 @@ public class OverviewFragment extends Fragment {
         // Daten für Mensa laden und anzeigen
         final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
-        final RealmResults<Meal> meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
-        meals.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
+        realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
             @Override
             public void onChange(final RealmResults<Meal> element) {
                 showMensaInfo(meals);
             }
-        });
+        };
+        meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
+        meals.addChangeListener(realmListenerMensa);
         showMensaInfo(meals);
+
+        // Übersicht über Noten
+        realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
+            @Override
+            public void onChange(final RealmResults<ExamResult> element) {
+                showExamStats(element.size() > 0);
+            }
+        };
+        examResults = realm.where(ExamResult.class).findAll();
+        examResults.addChangeListener(realmListenerExams);
+        showExamStats(realm.where(ExamResult.class).count() > 0);
 
         // Stundenplan anzeigen
         updateTimetable(null);
-
-        // Noten anzeigen
-        updateExamResults(null);
 
         // News laden
         showNews();
@@ -150,45 +164,43 @@ public class OverviewFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        examResults.removeChangeListener(realmListenerExams);
+        meals.removeChangeListener(realmListenerMensa);
         super.onDestroy();
         EventBus.getInstance().unregister(this);
     }
 
     /**
-     * Behandelt die Benachrichtigung vom Eventbus das neue Prüfungsergebnisse zur Verfügung stehen
+     * Zeigt eine Gesamtstatistik der Noten an oder einen entsprechenden Hinweis
      *
-     * @param updateExamResultsEvent Typ der Benachrichtigung
+     * @param examsAvailable Sind Noten vorhanden?
      */
-    @Subscribe
-    public void updateExamResults(@Nullable UpdateExamResultsEvent updateExamResultsEvent) {
-        final Context context = getActivity();
-        final ExamResultDAO dao = new ExamResultDAO(new DatabaseManager(context));
-        final ArrayList<ExamStats> examStatses = dao.getStats();
-        final ExamStats examStats;
+    private void showExamStats(final boolean examsAvailable) {
         final TextView message = (TextView) mLayout.findViewById(R.id.overview_examResultStatsMessage);
         final LinearLayout content = (LinearLayout) mLayout.findViewById(R.id.overview_examResultStatsContent);
 
-        if (examStatses.size() == 0) {
-            message.setVisibility(View.VISIBLE);
-            content.setVisibility(View.GONE);
-        } else {
-            // Nachricht ausblenden
+        if (examsAvailable) {
             message.setVisibility(View.GONE);
             content.setVisibility(View.VISIBLE);
-            examStats = examStatses.get(0);
 
-            // Views
+            // Erstelle Statistik
+            final ExamStats examStats = ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null);
+
+            // Views holen
             final TextView stats_average = (TextView) mLayout.findViewById(R.id.stats_average);
             final TextView stats_countGrade = (TextView) mLayout.findViewById(R.id.stats_countGrade);
             final TextView stats_countCredits = (TextView) mLayout.findViewById(R.id.stats_countCredits);
             final TextView stats_gradeBest = (TextView) mLayout.findViewById(R.id.stats_gradeBest);
             final TextView stats_gradeWorst = (TextView) mLayout.findViewById(R.id.stats_gradeWorst);
 
-            stats_average.setText(context.getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.average)));
-            stats_countGrade.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, examStats.gradeCount, examStats.gradeCount));
-            stats_countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.credits));
-            stats_gradeBest.setText(context.getString(R.string.exams_stats_gradeBest, examStats.gradeBest));
-            stats_gradeWorst.setText(context.getString(R.string.exams_stats_gradeWorst, examStats.gradeWorst));
+            stats_average.setText(getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
+            stats_countGrade.setText(getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
+            stats_countCredits.setText(getString(R.string.exams_stats_count_credits, examStats.getCredits()));
+            stats_gradeBest.setText(getString(R.string.exams_stats_gradeBest, examStats.getGradeBest()));
+            stats_gradeWorst.setText(getString(R.string.exams_stats_gradeWorst, examStats.getGradeWorst()));
+        } else {
+            message.setVisibility(View.VISIBLE);
+            content.setVisibility(View.GONE);
         }
     }
 

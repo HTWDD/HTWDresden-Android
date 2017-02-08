@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden.classes.internet;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Base64;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -31,5 +33,15 @@ public class JsonArrayRequestWithBasicAuth extends JsonArrayRequest {
     @Override
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    /**
+     * Fügt zum Request eine Basic Auth Authentifikation hinzu
+     *
+     * @param username Basic-Auth Nutzernamen
+     * @param passwort Basic-Auth Passwort
+     */
+    public void authentifikation(@NonNull final String username, @Nullable final String passwort) {
+        headers.put("Authorization", String.format("Basic %s", Base64.encodeToString(String.format("%s:%s", username, passwort).getBytes(), Base64.DEFAULT)));
     }
 }

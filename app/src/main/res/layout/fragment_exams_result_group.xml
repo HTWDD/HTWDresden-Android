@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/listHeader"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/space_between_content"
-    android:paddingEnd="@dimen/space_between_content"
-    android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-    android:paddingTop="@dimen/space_between_content"
-    android:textAppearance="@android:style/TextAppearance.Medium" />
-
+          android:id="@+id/listHeader"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingBottom="@dimen/space_between_content"
+          android:paddingEnd="@dimen/space_between_content"
+          android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+          android:paddingTop="@dimen/space_between_content"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>

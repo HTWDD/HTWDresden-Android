@@ -67,7 +67,9 @@
     <string name="settings_prof_id">Professoren-Kennung</string>
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
     <string name="settings_audio">Automatisches Stummschalten</string>
-    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
+    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet.</string>
+    <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
+    <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
     <string name="settings_acra">Bug-Reporting</string>
     <string name="settings_acra_disabled">Eingeschaltet</string>
     <string name="settings_acra_enabled">Ausgeschaltet</string>
@@ -142,14 +144,15 @@
     <string name="exams_from_Jhr">Jahrgang %s</string>
     <string name="exams_result_no_results">Noch keine Noten vorhanden.</string>
     <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
-    <string name="exams_result_update_newGrades">Neue Noten hinzugefügt</string>
-    <string name="exams_result_update_noNewGrades">Keine neuen Noten</string>
+    <string name="exams_result_update_newGrades">Neue Noten hinzugefügt.</string>
+    <string name="exams_result_update_noNewGrades">Keine neuen Noten vorhanden.</string>
     <string name="exams_result_wrong_auth">Fehler bei der Authentifikation! Bitte überprüfe deine Zugangsdaten.</string>
     <string name="exams_result_sign_off">Abgemeldet</string>
     <string name="exams_result_ill">Krankgeschrieben</string>
     <string name="exams_result_not_allowed">Nicht zugelassen</string>
-    <string name="exams_result_credits">Credits: %.0f</string>
+    <string name="exams_result_credits">Credits: %.1f</string>
     <string name="exams_result_grade">Note: %.1f</string>
+    <string name="exams_result_grade_empty">Note:</string>
     <string name="exams_stats_study">Studium</string>
     <string name="exams_stats_average">Durchschnitt: %s</string>
     <plurals name="exams_stats_count_grade">
@@ -159,9 +162,18 @@
     <string name="exams_stats_count_credits">%.0f Credits</string>
     <string name="exams_stats_gradeBest">beste Note: %.1f</string>
     <string name="exams_stats_gradeWorst">schlechteste Note: %.1f</string>
+    <string name="exams_notification_contentText">Zum Anzeigen berühren</string>
+    <plurals name="exams_notification_title">
+        <item quantity="one">Neues Prüfungsergebnis</item>
+        <item quantity="other">%d neue Prüfungsergebnisse</item>
+    </plurals>
+    <string name="exams_notification_result">%1$s (Note: %2$.1f)</string>
+    <string name="exams_notification_more_results">%d weitere Prüfungsergebnisse</string>
 
     <string name="about_info">Informationen</string>
-    <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht HTW-Server übertragen.</string>
+    <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.
+        \n\nEntwickelt mit der freundlichen Unterstützung des HTW-Rechenzentrums.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht
+        HTW-Server übertragen.</string>
     <string name="about_developer">Entwickler</string>
     <string name="about_version">Version</string>
     <string name="about_contact">Kontakt</string>

@@ -24,8 +24,12 @@ public final class Const {
     }
 
     public static final class IntentParams {
-        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetabel";
+        public static final String BROADCAST_ACTION = "de.htwdd.htwdresden.BROADCAST";
+        public static final String BROADCAST_CODE = "statusCode";
+        public static final String BROADCAST_MESSAGE = "message";
+        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetable";
         public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
+        public static final String START_ACTION_EXAM_RESULTS = "de.htwdd.htwdresden.examResults";
     }
 
     public static final class preferencesKey {
@@ -33,11 +37,12 @@ public final class Const {
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
+        public static final String PREFERENCES_AUTO_EXAM_UPDATE = "autoExamUpdate";
     }
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
-        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/";
+        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
@@ -164,7 +169,6 @@ public final class Const {
 
     public static final class database {
         public static final String TYPE_TEXT = " TEXT";
-        public static final String TYPE_FLOAT = " REAL";
         public static final String TYPE_INT = " INTEGER";
         public static final String COMMA_SEP = ",";
         public static final long RESULT_DB_ERROR = -1;
@@ -186,17 +190,11 @@ public final class Const {
             public static final String TABLE_NAME = "TimetableRoom";
         }
 
-        public static class ExamResults implements BaseColumns {
+        public static class ExamResults {
+            public static final String id = "id";
             public static final String SEMESTER = "semester";
-            public static final String COLUMN_NAME_MODUL = "modul";
-            public static final String COLUMN_NAME_NOTE = "note";
-            public static final String COLUMN_NAME_VERMERK = "vermerk";
-            public static final String COLUMN_NAME_STATUS = "status";
-            public static final String COLUMN_NAME_CREDITS = "credits";
-            public static final String COLUMN_NAME_VERSUCH = "versuch";
-            public static final String COLUMN_NAME_SEMESTER = "semester";
-            public static final String COLUMN_NAME_KENNZEICHEN = "kennzeichen";
-            public static final String TABLE_NAME = "ExamResults";
+            static final String GRADE = "grade";
+            static final String CREDITS = "credits";
         }
 
         public static class SemesterPlanTable implements BaseColumns {
