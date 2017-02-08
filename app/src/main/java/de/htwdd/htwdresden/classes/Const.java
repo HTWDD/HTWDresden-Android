@@ -200,7 +200,7 @@ public final class Const {
         public static class ExamResults {
             public static final String id = "id";
             public static final String SEMESTER = "semester";
-            static final String NOTE = "grade";
+            static final String GRADE = "grade";
             static final String CREDITS = "credits";
         }
 

@@ -112,7 +112,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         } else viewHolder = (ViewHolder) view.getTag();
 
         final ExamResult examResult = getChild(i, i1);
-        final Float note = examResult.grade;
+        final Float note = examResult.getGrade();
 
         // Modulnamen setzen
         viewHolder.textView1.setText(examResult.text);
@@ -158,8 +158,8 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         }
 
         // Note anzeigen
-        if (note != null) {
-            viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, note / 100));
+        if (note != 0.0) {
+            viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, note));
         } else viewHolder.textView3.setText(R.string.exams_result_grade_empty);
         // Credits anzeigen
         viewHolder.textView4.setText(context.getString(R.string.exams_result_credits, examResult.credits));

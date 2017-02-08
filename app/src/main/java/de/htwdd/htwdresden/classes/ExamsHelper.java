@@ -57,8 +57,8 @@ public final class ExamsHelper {
 
         // Datenbankabfrage
         final RealmQuery<ExamResult> realmQuery = realm.where(ExamResult.class)
-                .isNotNull(Const.database.ExamResults.NOTE)
-                .notEqualTo(Const.database.ExamResults.NOTE, 0f);
+                .isNotNull(Const.database.ExamResults.GRADE)
+                .notEqualTo(Const.database.ExamResults.GRADE, 0f);
         // Wenn ein Semester angegeben, die Abfrage auf dieses einschränken
         if (semester != null) {
             realmQuery.equalTo(Const.database.ExamResults.SEMESTER, semester);
@@ -70,20 +70,22 @@ public final class ExamsHelper {
 
         final float credits = realmQuery.sum(Const.database.ExamResults.CREDITS).floatValue();
         stats.gradeCount = realmQuery.count();
-        stats.setGradeBest(realmQuery.min(Const.database.ExamResults.NOTE).floatValue());
-        stats.setGradeWorst(realmQuery.max(Const.database.ExamResults.NOTE).floatValue());
+        stats.setGradeBest(realmQuery.min(Const.database.ExamResults.GRADE).floatValue());
+        stats.setGradeWorst(realmQuery.max(Const.database.ExamResults.GRADE).floatValue());
         stats.setCredits(credits);
         // Berechne Durchschnitt
         if (credits > 0) {
-            final RealmResults<ExamResult> noten = realmQuery.notEqualTo(Const.database.ExamResults.CREDITS, 0f).findAll();
+            final RealmResults<ExamResult> noten = realmQuery.notEqualTo(Const.database.ExamResults.CREDITS, 0f).isNotNull(Const.database.ExamResults.GRADE).findAll();
             float average = 0f;
             for (final ExamResult examResult : noten) {
-                average += examResult.grade * examResult.credits;
+                if (examResult.grade != null)
+                    average += examResult.grade * examResult.credits;
+                    average += examResult.grade * examResult.credits;
             }
             average /= credits;
             stats.setAverage(average);
         } else {
-            stats.setAverage(realmQuery.average(Const.database.ExamResults.NOTE));
+            stats.setAverage(realmQuery.average(Const.database.ExamResults.GRADE));
         }
 
         return stats;
