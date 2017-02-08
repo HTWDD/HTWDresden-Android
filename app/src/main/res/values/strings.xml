@@ -162,6 +162,13 @@
     <string name="exams_stats_count_credits">%.0f Credits</string>
     <string name="exams_stats_gradeBest">beste Note: %.1f</string>
     <string name="exams_stats_gradeWorst">schlechteste Note: %.1f</string>
+    <string name="exams_notification_contentText">Zum Anzeigen berühren</string>
+    <plurals name="exams_notification_title">
+        <item quantity="one">Neues Prüfungsergebnis</item>
+        <item quantity="other">%d neue Prüfungsergebnisse</item>
+    </plurals>
+    <string name="exams_notification_result">%1$s (Note: %2$.1f)</string>
+    <string name="exams_notification_more_results">%d weitere Prüfungsergebnisse</string>
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.

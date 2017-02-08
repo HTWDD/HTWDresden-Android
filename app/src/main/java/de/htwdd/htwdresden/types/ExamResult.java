@@ -48,6 +48,7 @@ public class ExamResult extends RealmObject {
     /**
      * Prüfungsnote
      */
+    @Nullable
     public Float grade;
     /**
      * Status der Prüfung
@@ -65,5 +66,16 @@ public class ExamResult extends RealmObject {
     /**
      * Versuch
      */
-    public short trail;
+    public short tries;
+
+    /**
+     * Liefert die im Standardformat oder 0 wenn keine Note vorhanden ist
+     *
+     * @return Note im Standardformat oder 0.0 wenn keine Note vorhanden
+     */
+    public Float getGrade() {
+        if (grade != null)
+            return grade / 100;
+        return 0f;
+    }
 }

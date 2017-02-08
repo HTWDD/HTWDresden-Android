@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            // Makriere im NavigationDrawer
+            // Markiere im NavigationDrawer
             setNavigationItem(item);
             // Ändere Inhalt
             selectFragment(item.getItemId());
@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 case Const.IntentParams.START_ACTION_MENSA:
                     goToNavigationItem(R.id.navigation_mensa);
                     return;
+                case Const.IntentParams.START_ACTION_EXAM_RESULTS:
+                    goToNavigationItem(R.id.navigation_exams);
+                    return;
             }
         }
         // Setze Start-Fragment
@@ -168,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         // Fragment ersetzen
         fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
 
-        // NavigationDrawer schliesen
+        // NavigationDrawer schließen
         mDrawerLayout.closeDrawers();
     }
 

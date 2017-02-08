@@ -27,8 +27,9 @@ public final class Const {
         public static final String BROADCAST_ACTION = "de.htwdd.htwdresden.BROADCAST";
         public static final String BROADCAST_CODE = "statusCode";
         public static final String BROADCAST_MESSAGE = "message";
-        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetabel";
+        public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetable";
         public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
+        public static final String START_ACTION_EXAM_RESULTS = "de.htwdd.htwdresden.examResults";
     }
 
     public static final class preferencesKey {
@@ -41,7 +42,7 @@ public final class Const {
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
-        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2";
+        public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
@@ -175,7 +176,6 @@ public final class Const {
 
     public static final class database {
         public static final String TYPE_TEXT = " TEXT";
-        public static final String TYPE_FLOAT = " REAL";
         public static final String TYPE_INT = " INTEGER";
         public static final String COMMA_SEP = ",";
         public static final long RESULT_DB_ERROR = -1;
@@ -198,6 +198,7 @@ public final class Const {
         }
 
         public static class ExamResults {
+            public static final String id = "id";
             public static final String SEMESTER = "semester";
             static final String NOTE = "grade";
             static final String CREDITS = "credits";
