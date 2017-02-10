@@ -21,13 +21,11 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.QueueCount;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
-import de.htwdd.htwdresden.events.UpdateAppEvent;
 import de.htwdd.htwdresden.types.SemesterPlan;
 
 /**
@@ -109,7 +107,6 @@ class CheckUpdates implements Runnable {
                             // Überprüfe APK-Version
                             if (response.getInt("androidAPK") > packageInfo.versionCode) {
                                 editor.putBoolean("appUpdate", true);
-                                EventBus.getInstance().post(new UpdateAppEvent());
                             } else editor.putBoolean("appUpdate", false);
 
                             // Überprüfe Semesterplan
