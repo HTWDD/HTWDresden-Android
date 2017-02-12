@@ -42,7 +42,7 @@ public class Tracking {
             jsonObject.put("type", type);
 
             // Sende Request an Webservice
-            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://track.benchr.de/track", jsonObject, null, null);
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "https://rubu2.rz.htw-dresden.de/API/track", jsonObject, null, null);
             VolleyDownloader.getInstance(context).getRequestQueue().add(jsonObjectRequest);
         } catch (final Exception e) {
             Log.e(LOG_TAG, "[Fehler] Beim Tracking-Aufruf", e);
