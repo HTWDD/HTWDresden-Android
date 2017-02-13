@@ -30,14 +30,14 @@
                     android:id="@+id/semesterplan_Bezeichnung"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/managment_semesterplan"
+                    android:text="@string/management_semesterplan"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/space_between_content"
-                    android:text="@string/managment_semesterplan_lecturePeriod"
+                    android:text="@string/management_semesterplan_lecturePeriod"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/space_between_content"
-                    android:text="@string/managment_semesterplan_freeDays"
+                    android:text="@string/management_semesterplan_freeDays"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
 
                 <LinearLayout
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/space_between_content"
-                    android:text="@string/managment_semesterplan_examsPeriod"
+                    android:text="@string/management_semesterplan_examsPeriod"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault"
                     android:visibility="visible" />
 
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/space_between_content"
-                    android:text="@string/managment_semesterplan_reregistration"
+                    android:text="@string/management_semesterplan_reregistration"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
 
                 <TextView

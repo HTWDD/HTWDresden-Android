@@ -204,9 +204,4 @@
 
     <string name="preference_title_stummschalten">Automatisches Stummschalten</string>
     <string name="preference_summary_stummschalten">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
-    <string name="managment_semesterplan">Semesterplan</string>
-    <string name="managment_semesterplan_lecturePeriod">Lehrveranstaltungen</string>
-    <string name="managment_semesterplan_freeDays">Freie Tage</string>
-    <string name="managment_semesterplan_examsPeriod">Prüfungsabschnitt</string>
-    <string name="managment_semesterplan_reregistration">Rückmeldung</string>
 </resources>
