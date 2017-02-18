@@ -38,6 +38,8 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class ExamResultFragment extends Fragment {
+    private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
+    private RealmResults<ExamResult> examResults;
     private ResponseReceiver responseReceiver;
     private long countExamResults = 0;
     private ExamResultAdapter adapter;
@@ -96,13 +98,15 @@ public class ExamResultFragment extends Fragment {
         countExamResults = realm.where(ExamResult.class).count();
 
         // Auf Änderungen an der Datenbank hören
-        realm.where(ExamResult.class).findAll().addChangeListener(new RealmChangeListener<RealmResults<ExamResult>>() {
+        realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
             public void onChange(final RealmResults<ExamResult> element) {
                 adapter.notifyDataSetChanged();
                 showMessageNoExamResults(element.size() > 0);
             }
-        });
+        };
+        examResults = realm.where(ExamResult.class).findAll();
+        examResults.addChangeListener(realmListenerExams);
         showMessageNoExamResults(countExamResults > 0);
 
         final ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
@@ -121,6 +125,7 @@ public class ExamResultFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        examResults.removeChangeListener(realmListenerExams);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
     }
 

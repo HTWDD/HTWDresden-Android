@@ -136,7 +136,7 @@ public final class ExamAutoUpdateService extends ExamSyncService {
     /**
      * Broadcast Receiver welcher nach dem Booten den Service automatisch wieder aktiviert
      */
-    public class UpdateExamsReceiver extends BroadcastReceiver {
+    public static class UpdateExamsReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(@NonNull final Context context, @NonNull final Intent intent) {
             if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
