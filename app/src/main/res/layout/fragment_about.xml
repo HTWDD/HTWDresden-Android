@@ -83,27 +83,6 @@
                         android:textIsSelectable="true"/>
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:width="90sp"
-                        android:padding="3dip"
-                        android:text="@string/about_website"/>
-
-                    <TextView
-                        android:id="@+id/app_website"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dip"
-                        android:text="@string/app_website"
-                        android:textColor="@color/colorAccent"
-                        android:textIsSelectable="true"/>
-                </TableRow>
-
                 <TableRow>
 
                     <TextView
