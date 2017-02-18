@@ -38,7 +38,6 @@ public class AboutFragment extends Fragment {
         final TextView viewVersion = (TextView) view.findViewById(R.id.app_version);
         final TextView textGitHub = (TextView) view.findViewById(R.id.about_link_github);
         final TextView textMail = (TextView) view.findViewById(R.id.app_email);
-        final TextView textPage = (TextView) view.findViewById(R.id.app_website);
 
         // Zeige die aktuelle Versionsnummer an
         try {
@@ -61,15 +60,6 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sendEmail(getActivity(), new String[]{getText(R.string.app_email).toString()}, getString(R.string.about_mail_info_message), "[Android]", "");
-            }
-        });
-
-        // Setze OnClickListener für Webseite
-        textPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://htwdd.github.io"));
-                startActivity(browserIntent);
             }
         });
 
