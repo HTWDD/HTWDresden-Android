@@ -77,7 +77,7 @@ public final class ExamAutoUpdateService extends ExamSyncService {
 
                 // Vorschau der ersten beiden Noten
                 ExamResult examResult;
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < countNewResults && i < 3; i++) {
                     examResult = newResults.get(i);
                     if (examResult.grade != null && examResult.grade > 0.0) {
                         inboxStyle.addLine(getString(R.string.exams_notification_result, examResult.text, examResult.getGrade()));
