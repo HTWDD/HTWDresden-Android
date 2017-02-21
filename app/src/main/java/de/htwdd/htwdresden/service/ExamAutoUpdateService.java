@@ -86,8 +86,8 @@ public final class ExamAutoUpdateService extends ExamSyncService {
                     }
                 }
                 // Hinweis das weitere Noten vorhanden sind
-                if (countNewResults > 2) {
-                    inboxStyle.setSummaryText(getString(R.string.exams_notification_more_results, countNewResults - 2));
+                if (countNewResults > 3) {
+                    inboxStyle.setSummaryText(getString(R.string.exams_notification_more_results, countNewResults - 3));
                 }
 
                 // Allgemeine Notifikation-Einstellungen
