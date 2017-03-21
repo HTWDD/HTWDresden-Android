@@ -86,7 +86,7 @@ public class MensaDetailWeekFragment extends Fragment {
             }
         });
 
-        listView.setAdapter(new MensaOverviewWeekAdapter(getActivity(), beginOfWeek, realmResults));
+        listView.setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realmResults));
 
         return mLayout;
     }

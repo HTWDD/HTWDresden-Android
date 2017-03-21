@@ -91,7 +91,7 @@ public class MensaDetailDayFragment extends Fragment {
         });
 
         // Setze Adapter
-        mensaArrayAdapter = new MensaOverviewDayAdapter(getActivity(), realmResults);
+        mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
 
         // Setze Link für Details
