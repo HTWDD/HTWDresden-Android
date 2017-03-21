@@ -90,7 +90,7 @@
     <string name="timetable_moreLessonsPoints">***</string>
     <string name="timetable_only_KW">einige KW</string>
     <string name="timetable_ds_grid">%1$s\n-\n%2$s</string>
-    <string name="timetable_ds_list">%1$s. DS (%2$s - %3$s)</string>
+    <string name="timetable_ds_list">%1$d. DS (%2$s - %3$s)</string>
     <string name="timetable_ds_list_simple">%1$s - %2$s</string>
     <string name="timetable_edit_activity_titel">Stunde bearbeiten</string>
     <string name="timetable_edit_lessonName">Vorlesung</string>
