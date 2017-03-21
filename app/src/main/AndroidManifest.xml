@@ -38,14 +38,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.htwdd.htwdresden.MainActivity" />
         </activity>
-        <activity
-            android:name="org.acra.dialog.CrashReportDialog"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="true"
-            android:launchMode="singleInstance"
-            android:process=":error_report"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
-            tools:replace="android:theme" />
 
         <!-- Services-->
         <service

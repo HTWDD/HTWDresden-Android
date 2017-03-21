@@ -269,7 +269,7 @@ public class TimetableOverviewFragment extends Fragment {
         switch (modus) {
             default:
             case 1:
-                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
+                url = "https://rubu2.rz.htw-dresden.de/API/v0/studentTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
                 break;
             case 2:
                 url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?Prof=" + prof_kennung;

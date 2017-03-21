@@ -29,8 +29,8 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
     private static final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
     private final Calendar beginOfWeek;
 
-    public MensaOverviewWeekAdapter(@NonNull final Context context, @NonNull final Calendar beginOfWeek, @Nullable final OrderedRealmCollection<Meal> data) {
-        super(context, data);
+    public MensaOverviewWeekAdapter(@NonNull final Calendar beginOfWeek, @Nullable final OrderedRealmCollection<Meal> data) {
+        super(data);
         this.beginOfWeek = beginOfWeek;
     }
 
@@ -41,6 +41,7 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
 
     @Override
     public View getView(final int i, @Nullable View view, final ViewGroup viewGroup) {
+        final Context context = viewGroup.getContext();
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item, viewGroup, false);

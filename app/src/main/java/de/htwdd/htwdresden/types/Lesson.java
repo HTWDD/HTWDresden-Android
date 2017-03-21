@@ -157,12 +157,21 @@ public class Lesson implements IParseJSON, IGetContentValues, Cloneable {
         day = jsonObject.getInt("day");
         long time = Time.valueOf(jsonObject.getString("endTime")).getTime();
         endTime = TimeUnit.MINUTES.convert(time + GregorianCalendar.getInstance().getTimeZone().getOffset(time), TimeUnit.MILLISECONDS);
-        professor = jsonObject.getString("professor");
-        weeksOnly = jsonObject.getString("WeeksOnly");
+        professor = jsonObject.optString("professor");
 
-        // Räume in einfachen String konventieren
+        // Wochen auseinander nehmen
+        final JSONArray weeks = jsonObject.getJSONArray("weeksOnly");
+        if (weeks != null && weeks.length() > 0) {
+            final int countWeeks = weeks.length();
+            weeksOnly = "";
+            for (int i = 0; i < countWeeks; i++) {
+                weeksOnly += weeks.getInt(i) + ";";
+            }
+        }
+
+        // Räume in einfachen String konvertieren
         rooms = "";
-        JSONArray roomArray = jsonObject.getJSONArray("Rooms");
+        JSONArray roomArray = jsonObject.getJSONArray("rooms");
         int roomArrayCount = roomArray.length();
         for (int i = 0; i < roomArrayCount; i++)
             rooms += roomArray.getString(i).replaceAll(" ", "") + " ";
