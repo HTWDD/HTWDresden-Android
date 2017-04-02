@@ -27,6 +27,7 @@ public final class Const {
         public static final String BROADCAST_ACTION = "de.htwdd.htwdresden.BROADCAST";
         public static final String BROADCAST_CODE = "statusCode";
         public static final String BROADCAST_MESSAGE = "message";
+        public static final String BROADCAST_FINISH_TIMETABLE_UPDATE = "de.htwdd.htwdresden.timetableUpdate";
         public static final String START_ACTION_TIMETABLE = "de.htwdd.htwdresden.timetable";
         public static final String START_ACTION_MENSA = "de.htwdd.htwdresden.mensa";
         public static final String START_ACTION_EXAM_RESULTS = "de.htwdd.htwdresden.examResults";
@@ -38,6 +39,9 @@ public final class Const {
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
         public static final String PREFERENCES_AUTO_EXAM_UPDATE = "autoExamUpdate";
+        public static final String PREFERENCES_TIMETABLE_STUDIENJAHR = "StgJhr";
+        public static final String PREFERENCES_TIMETABLE_STUDIENGANG = "Stg";
+        public static final String PREFERENCES_TIMETABLE_STUDIENGRUPPE = "StgGrp";
     }
 
     public static final class internet {
@@ -52,6 +56,7 @@ public final class Const {
         public static final int HTTP_NETWORK_ERROR = 996;
         public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
         public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
+        public static final String TAG_TIMETABLE = "TIMETABLE";
     }
 
     public static final class Semester {
@@ -195,6 +200,10 @@ public final class Const {
             public static final String SEMESTER = "semester";
             static final String GRADE = "grade";
             static final String CREDITS = "credits";
+        }
+
+        public static class Lesson {
+            public static final String id = "id";
         }
 
         public static class SemesterPlanTable implements BaseColumns {

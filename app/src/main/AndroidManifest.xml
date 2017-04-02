@@ -52,6 +52,9 @@
         <service
             android:name=".service.ExamAutoUpdateService"
             android:enabled="true"/>
+        <service
+            android:name=".service.TimetableStudentSyncService"
+            android:enabled="true"/>
         <!-- Receiver-->
         <receiver
             android:name=".service.VolumeControllerService$HtwddBootReceiver"
