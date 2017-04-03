@@ -134,7 +134,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
 
             // Lösche alle übrig gebliebenen Stunden
             for (final Map.Entry<String, Date> entry : stateDatabase.entrySet()) {
-                realm.where(Lesson2.class).equalTo(Const.database.Lesson.id, entry.getKey()).findAll().deleteAllFromRealm();
+                realm.where(Lesson2.class).equalTo(Const.database.Lesson.ID, entry.getKey()).findAll().deleteAllFromRealm();
             }
             // Update abschließen
             realm.commitTransaction();

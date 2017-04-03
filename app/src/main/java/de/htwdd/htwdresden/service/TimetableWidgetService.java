@@ -15,8 +15,12 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.TimetableWidget;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.Lesson2;
 import de.htwdd.htwdresden.types.LessonSearchResult;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Service zum regelmäßigen Updaten des Stundenplan Widgets
@@ -28,41 +32,41 @@ public class TimetableWidgetService extends Service {
     private void updateWidget() {
         final RemoteViews view = new RemoteViews(getPackageName(), R.layout.widget_timetable);
         final Context context = getApplicationContext();
+        final Realm realm = Realm.getDefaultInstance();
         final String[] lessonType = getResources().getStringArray(R.array.lesson_type);
 
         // Aktuelle Stunde anzeigen
-        LessonSearchResult lessonSearchResult = LessonHelper.getCurrentUserLesson(context);
-        Lesson lesson;
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
+        final RealmResults<Lesson2> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        switch (currentLesson.size()) {
+            case 0:
                 view.setTextViewText(R.id.widget_timetable_lesson_time, null);
                 view.setTextViewText(R.id.widget_timetable_lesson, null);
                 view.setTextViewText(R.id.widget_timetable_room, null);
                 break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
-
-                view.setTextViewText(R.id.widget_timetable_lesson_time, lessonSearchResult.getTimeRemaining());
+            case 1:
+                final Lesson2 lesson = currentLesson.first();
+                view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
                 view.setTextViewText(R.id.widget_timetable_lesson, lesson.getName());
-                if (!lesson.getRooms().isEmpty())
+                if (lesson.getRooms().size() > 0)
                     view.setTextViewText(R.id.widget_timetable_room, getString(
                             R.string.timetable_ds_list_simple,
-                            lessonType[lesson.getTypeInt()],
-                            lesson.getRooms()
+                            lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                            TimetableHelper.getStringOfRooms(lesson)
                     ));
                 else
-                    view.setTextViewText(R.id.widget_timetable_room, lessonType[lesson.getTypeInt()]);
+                    view.setTextViewText(R.id.widget_timetable_room, lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
                 break;
-            case Const.Timetable.MORE_LESSON_FOUND:
-                view.setTextViewText(R.id.widget_timetable_lesson_time, lessonSearchResult.getTimeRemaining());
+            default:
+                view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
                 view.setTextViewText(R.id.widget_timetable_lesson, getString(R.string.timetable_moreLessons));
                 view.setTextViewText(R.id.widget_timetable_room, null);
                 break;
         }
+        realm.close();
 
         // Nächste Stunde anzeigen
-        lessonSearchResult = LessonHelper.getNextUserLesson(context);
+        Lesson lesson;
+        LessonSearchResult lessonSearchResult = LessonHelper.getNextUserLesson(context);
         switch (lessonSearchResult.getCode()) {
             case Const.Timetable.NO_LESSON_FOUND:
                 view.setTextViewText(R.id.widget_timetable_lesson_time_next, null);

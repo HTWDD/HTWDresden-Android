@@ -76,6 +76,11 @@ public final class Const {
     }
 
     public static final class Timetable {
+        public static final int TAG_VORLESUNG = 0;
+        public static final int TAG_PRAKTIKUM = 1;
+        public static final int TAG_UBUNG = 2;
+        public static final int TAG_OTHER = 3;
+
         public static final int NO_LESSON_FOUND = 0;
         public static final int ONE_LESSON_FOUND = 1;
         public static final int MORE_LESSON_FOUND = 2;
@@ -203,7 +208,12 @@ public final class Const {
         }
 
         public static class Lesson {
-            public static final String id = "id";
+            public static final String ID = "id";
+            static final String DAY = "day";
+            static final String WEEK = "week";
+            static final String END_TIME = "endTime";
+            static final String BEGIN_TIME = "beginTime";
+            static final String WEEKS_ONLY = "weeksOnly";
         }
 
         public static class SemesterPlanTable implements BaseColumns {

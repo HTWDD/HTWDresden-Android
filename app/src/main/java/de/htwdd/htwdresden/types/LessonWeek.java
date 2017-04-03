@@ -8,6 +8,8 @@ import io.realm.RealmObject;
  * @author Kay Förster
  */
 public class LessonWeek extends RealmObject{
+    private int weekOfYear;
+
     public int getWeekOfYear() {
         return weekOfYear;
     }
@@ -15,6 +17,4 @@ public class LessonWeek extends RealmObject{
     public void setWeekOfYear(final int weekOfYear) {
         this.weekOfYear = weekOfYear;
     }
-
-    private int weekOfYear;
 }

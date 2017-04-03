@@ -36,46 +36,6 @@ public class LessonHelper {
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
 
     /**
-     * Liefert Lehrveranstaltungen die zum aktuellen Zeitpunkt stattfinden
-     *
-     * @param context App-Context
-     * @return {@link LessonSearchResult} mit Beschreibung zur aktuellen Stunde
-     */
-    @NonNull
-    public static LessonSearchResult getCurrentUserLesson(@NonNull final Context context) {
-        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
-        LessonSearchResult lessonSearchResult = new LessonSearchResult();
-
-        // Aktuelle Stunde bestimmen
-        final int currentDS = Const.Timetable.getCurrentDS(null);
-
-        // Ist aktuell Vorlesungszeit?
-        if (currentDS != 0 && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            // Suche nach aktuell möglichen Stunden
-            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.DAY_OF_WEEK) - 1, currentDS);
-            if (lessons.size() > 0) {
-                // Suche nach einer passenden Veranstaltung
-                lessonSearchResult = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
-
-                // Verbleibende Zeit anzeigen
-                long difference = TimeUnit.MINUTES.convert(
-                        GregorianCalendar.getInstance(Locale.GERMANY).getTimeInMillis() - Const.Timetable.getCalendar(Const.Timetable.endDS[currentDS - 1]).getTimeInMillis(),
-                        TimeUnit.MILLISECONDS);
-
-                if (difference < 0)
-                    lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_end), -difference));
-                else
-                    lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_final), difference));
-
-                lessonSearchResult.setCalendar(calendar);
-            }
-        }
-
-        return lessonSearchResult;
-    }
-
-    /**
      * Liefert die nächste Stunde(n)
      *
      * @param context App-Context

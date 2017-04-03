@@ -34,6 +34,22 @@ public class Lesson2 extends RealmObject {
         return id;
     }
 
+    public String getLessonTag() {
+        return lessonTag;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public RealmList<Room> getRooms() {
+        return rooms;
+    }
+
     public Date getLastChanged() {
         return lastChanged;
     }

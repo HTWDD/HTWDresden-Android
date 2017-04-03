@@ -187,7 +187,7 @@
     <string name="overview_lessons_next">Nächste</string>
     <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
     <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
-    <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
+    <string name="overview_lessons_remaining_final">Ende seit %1$d Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
     <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future">%1$s %2$s</string>

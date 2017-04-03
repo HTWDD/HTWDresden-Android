@@ -39,6 +39,7 @@ import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.TimetableUserDAO;
@@ -47,6 +48,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.types.Lesson2;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
@@ -209,6 +211,7 @@ public class OverviewFragment extends Fragment {
      *
      * @param updateTimetableEvent Typ der Benachrichtigung
      */
+    //TODO Irgendwie wird das zwei mal aufgerufen!!!
     @Subscribe
     public void updateTimetable(@Nullable UpdateTimetableEvent updateTimetableEvent) {
         final Context context = getActivity();
@@ -227,42 +230,47 @@ public class OverviewFragment extends Fragment {
         final LinearLayout overview_lessons_list = (LinearLayout) mLayout.findViewById(R.id.overview_lessons_list);
         final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
+        final Realm realm = Realm.getDefaultInstance();
         // Aktuelle Stunde anzeigen
-        LessonSearchResult lessonSearchResult = LessonHelper.getCurrentUserLesson(context);
-        Lesson lesson;
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
+        final RealmResults<Lesson2> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        Lesson2 lesson;
+
+        switch (currentLesson.size()) {
+            case 0:
                 overview_lessons_current_tag.setVisibility(View.GONE);
                 overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
                 overview_lessons_current_remaining.setVisibility(View.GONE);
                 break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
-
+            case 1:
+                lesson = currentLesson.first();
                 overview_lessons_current_tag.setVisibility(View.VISIBLE);
-                overview_lessons_current_tag.setText(lesson.getTag());
+                overview_lessons_current_tag.setText(lesson.getLessonTag());
                 overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
-                if (!lesson.getRooms().isEmpty())
+                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
+                if (lesson.getRooms().size() > 0) {
                     overview_lessons_current_type.setText(
-                            mLayout.getResources().getString(
+                            getString(
                                     R.string.timetable_ds_list_simple,
-                                    lessonType[lesson.getTypeInt()],
-                                    lesson.getRooms()));
-                else overview_lessons_current_type.setText(lessonType[lesson.getTypeInt()]);
+                                    lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                                    TimetableHelper.getStringOfRooms(lesson)
+                            )
+                    );
+                } else overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
                 break;
-            case Const.Timetable.MORE_LESSON_FOUND:
+            default:
                 overview_lessons_current_type.setText(null);
                 overview_lessons_current_tag.setVisibility(View.VISIBLE);
                 overview_lessons_current_tag.setText(R.string.timetable_moreLessons);
                 overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
+                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
                 break;
         }
 
+        realm.close();
+
         // Nächste Stunde anzeigen lassen
-        lessonSearchResult = LessonHelper.getNextUserLesson(context);
+        Lesson lesson1;
+        LessonSearchResult lessonSearchResult = LessonHelper.getNextUserLesson(context);
         switch (lessonSearchResult.getCode()) {
             case Const.Timetable.NO_LESSON_FOUND:
                 overview_lessons_next_remaining.setText(null);
@@ -270,18 +278,18 @@ public class OverviewFragment extends Fragment {
                 overview_lessons_next_type.setText(null);
                 break;
             case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
+                lesson1 = lessonSearchResult.getLesson();
+                assert lesson1 != null;
 
                 overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
-                overview_lessons_next_tag.setText(lesson.getTag());
-                if (!lesson.getRooms().isEmpty()) {
+                overview_lessons_next_tag.setText(lesson1.getTag());
+                if (!lesson1.getRooms().isEmpty()) {
                     overview_lessons_next_type.setText(
                             mLayout.getResources().getString(
                                     R.string.timetable_ds_list_simple,
-                                    lessonType[lesson.getTypeInt()],
-                                    lesson.getRooms()));
-                } else overview_lessons_next_type.setText(lessonType[lesson.getTypeInt()]);
+                                    lessonType[lesson1.getTypeInt()],
+                                    lesson1.getRooms()));
+                } else overview_lessons_next_type.setText(lessonType[lesson1.getTypeInt()]);
                 break;
             case Const.Timetable.MORE_LESSON_FOUND:
                 overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
