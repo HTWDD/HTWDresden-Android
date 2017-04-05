@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
 import de.htwdd.htwdresden.classes.Const;
@@ -69,7 +71,7 @@ public class MensaDetailWeekFragment extends Fragment {
         });
 
         // Setze Kalender auf Montag der ausgewählten Woche
-        final Calendar beginOfWeek = GregorianCalendar.getInstance();
+        final Calendar beginOfWeek = GregorianCalendar.getInstance(Locale.GERMANY);
         beginOfWeek.set(Calendar.DAY_OF_WEEK, beginOfWeek.getFirstDayOfWeek());
         if (modus == 2) {
             beginOfWeek.add(Calendar.WEEK_OF_YEAR, 1);
