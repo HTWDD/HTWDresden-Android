@@ -39,6 +39,7 @@ import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
+import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
@@ -266,37 +267,33 @@ public class OverviewFragment extends Fragment {
                 break;
         }
 
+        // Nächste Stunde anzeigen
+        final NextLessonResult nextLessonResult = TimetableHelper.getNextLessons(realm);
+        if (nextLessonResult.getResults() == null || nextLessonResult.getResults().size() == 0) {
+            overview_lessons_next_remaining.setText(null);
+            overview_lessons_next_tag.setText(null);
+            overview_lessons_next_type.setText(null);
+        } else if (nextLessonResult.getResults().size() == 1) {
+            lesson = nextLessonResult.getResults().first();
+            overview_lessons_next_tag.setText(lesson.getLessonTag());
+            overview_lessons_next_remaining.setText(TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            if (lesson.getRooms().size() > 0) {
+                overview_lessons_next_type.setText(
+                        getString(
+                                R.string.timetable_ds_list_simple,
+                                lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                                TimetableHelper.getStringOfRooms(lesson)
+                        ));
+            } else overview_lessons_next_type.setText(lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+        } else {
+            overview_lessons_next_remaining.setText(TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
+            overview_lessons_next_type.setText(null);
+        }
         realm.close();
 
         // Nächste Stunde anzeigen lassen
-        Lesson lesson1;
         LessonSearchResult lessonSearchResult = LessonHelper.getNextUserLesson(context);
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
-                overview_lessons_next_remaining.setText(null);
-                overview_lessons_next_tag.setText(null);
-                overview_lessons_next_type.setText(null);
-                break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson1 = lessonSearchResult.getLesson();
-                assert lesson1 != null;
-
-                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
-                overview_lessons_next_tag.setText(lesson1.getTag());
-                if (!lesson1.getRooms().isEmpty()) {
-                    overview_lessons_next_type.setText(
-                            mLayout.getResources().getString(
-                                    R.string.timetable_ds_list_simple,
-                                    lessonType[lesson1.getTypeInt()],
-                                    lesson1.getRooms()));
-                } else overview_lessons_next_type.setText(lessonType[lesson1.getTypeInt()]);
-                break;
-            case Const.Timetable.MORE_LESSON_FOUND:
-                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
-                overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
-                overview_lessons_next_type.setText(null);
-                break;
-        }
 
         // Stundenplanvorschau
         overview_lessons_busy_plan.setVisibility(View.GONE);

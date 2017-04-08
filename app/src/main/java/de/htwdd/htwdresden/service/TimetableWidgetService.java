@@ -14,11 +14,9 @@ import de.htwdd.htwdresden.MainActivity;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.TimetableWidget;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.LessonHelper;
+import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.Lesson2;
-import de.htwdd.htwdresden.types.LessonSearchResult;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -62,37 +60,32 @@ public class TimetableWidgetService extends Service {
                 view.setTextViewText(R.id.widget_timetable_room, null);
                 break;
         }
-        realm.close();
 
         // Nächste Stunde anzeigen
-        Lesson lesson;
-        LessonSearchResult lessonSearchResult = LessonHelper.getNextUserLesson(context);
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
-                view.setTextViewText(R.id.widget_timetable_lesson_time_next, null);
-                view.setTextViewText(R.id.widget_timetable_lesson_next, null);
-                view.setTextViewText(R.id.widget_timetable_room_next, null);
-                break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
-                view.setTextViewText(R.id.widget_timetable_lesson_time_next, lessonSearchResult.getTimeRemaining());
-                view.setTextViewText(R.id.widget_timetable_lesson_next, lesson.getName());
-                if (!lesson.getRooms().isEmpty())
-                    view.setTextViewText(R.id.widget_timetable_room_next, getString(
-                            R.string.timetable_ds_list_simple,
-                            lessonType[lesson.getTypeInt()],
-                            lesson.getRooms()
-                    ));
-                else
-                    view.setTextViewText(R.id.widget_timetable_room_next, lessonType[lesson.getTypeInt()]);
-                break;
-            case Const.Timetable.MORE_LESSON_FOUND:
-                view.setTextViewText(R.id.widget_timetable_lesson_time_next, lessonSearchResult.getTimeRemaining());
-                view.setTextViewText(R.id.widget_timetable_lesson_next, getString(R.string.timetable_moreLessons));
-                view.setTextViewText(R.id.widget_timetable_room_next, null);
-                break;
+        final NextLessonResult nextLessonResult = TimetableHelper.getNextLessons(realm);
+        if (nextLessonResult.getResults() == null || nextLessonResult.getResults().size() == 0) {
+            view.setTextViewText(R.id.widget_timetable_lesson_time_next, null);
+            view.setTextViewText(R.id.widget_timetable_lesson_next, null);
+            view.setTextViewText(R.id.widget_timetable_room_next, null);
+        } else if (nextLessonResult.getResults().size() == 1) {
+            final Lesson2 lesson = nextLessonResult.getResults().first();
+            view.setTextViewText(R.id.widget_timetable_lesson_time_next, TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            view.setTextViewText(R.id.widget_timetable_lesson_next, lesson.getName());
+            if (lesson.getRooms().size() > 0) {
+                view.setTextViewText(R.id.widget_timetable_room_next, getString(
+                        R.string.timetable_ds_list_simple,
+                        lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                        TimetableHelper.getStringOfRooms(lesson)
+                ));
+            } else {
+                view.setTextViewText(R.id.widget_timetable_room_next, lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+            }
+        } else {
+            view.setTextViewText(R.id.widget_timetable_lesson_time_next, TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            view.setTextViewText(R.id.widget_timetable_lesson_next, getString(R.string.timetable_moreLessons));
+            view.setTextViewText(R.id.widget_timetable_room_next, null);
         }
+        realm.close();
 
         // Erstelle Intent zum Starten der App
         Intent intent = new Intent(context, MainActivity.class);

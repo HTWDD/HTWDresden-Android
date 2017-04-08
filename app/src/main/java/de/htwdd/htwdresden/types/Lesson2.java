@@ -46,6 +46,14 @@ public class Lesson2 extends RealmObject {
         return type;
     }
 
+    public int getDay() {
+        return day;
+    }
+
+    public int getBeginTime() {
+        return beginTime;
+    }
+
     public RealmList<Room> getRooms() {
         return rooms;
     }
