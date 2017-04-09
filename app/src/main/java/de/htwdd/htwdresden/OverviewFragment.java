@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,13 +31,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
@@ -56,19 +52,16 @@ import io.realm.RealmResults;
 public class OverviewFragment extends Fragment {
     private View mLayout;
     // Datenbank
+    private Realm realm;
     private RealmResults<ExamResult> examResults;
     private RealmResults<Meal> meals;
+    private RealmResults<Lesson2> lessons;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
     private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
+    private RealmChangeListener<RealmResults<Lesson2>> realmListenerLessons;
 
     public OverviewFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getInstance().register(this);
     }
 
     @Override
@@ -120,8 +113,8 @@ public class OverviewFragment extends Fragment {
         });
 
         // Daten für Mensa laden und anzeigen
-        final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
+        realm = Realm.getDefaultInstance();
         realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
             @Override
             public void onChange(final RealmResults<Meal> element) {
@@ -143,8 +136,15 @@ public class OverviewFragment extends Fragment {
         examResults.addChangeListener(realmListenerExams);
         showExamStats(realm.where(ExamResult.class).count() > 0);
 
-        // Stundenplan anzeigen
-        updateTimetable(null);
+        // Change Listener für Lehrveranstaltungen
+        realmListenerLessons = new RealmChangeListener<RealmResults<Lesson2>>() {
+            @Override
+            public void onChange(final RealmResults<Lesson2> element) {
+                showUserTimetableOverview();
+            }
+        };
+        lessons = realm.where(Lesson2.class).findAll();
+        lessons.addChangeListener(realmListenerLessons);
 
         // News laden
         showNews();
@@ -155,15 +155,17 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateTimetable(null);
+        // Übersicht aktualisieren
+        showUserTimetableOverview();
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
+        super.onDestroyView();
         examResults.removeChangeListener(realmListenerExams);
         meals.removeChangeListener(realmListenerMensa);
-        super.onDestroy();
-        EventBus.getInstance().unregister(this);
+        lessons.removeChangeListener(realmListenerLessons);
+        realm.close();
     }
 
     /**
@@ -201,13 +203,9 @@ public class OverviewFragment extends Fragment {
     }
 
     /**
-     * Behandelt die Benachrichtigung vom Eventbus das ein neuer Stundenplan zur Verfügung steht
-     *
-     * @param updateTimetableEvent Typ der Benachrichtigung
+     * Übersicht über Stundenplan
      */
-    //TODO Irgendwie wird das zwei mal aufgerufen!!!
-    @Subscribe
-    public void updateTimetable(@Nullable UpdateTimetableEvent updateTimetableEvent) {
+    private void showUserTimetableOverview() {
         final Context context = getActivity();
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
@@ -222,7 +220,6 @@ public class OverviewFragment extends Fragment {
         final LinearLayout overview_lessons_list = (LinearLayout) mLayout.findViewById(R.id.overview_lessons_list);
         final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
-        final Realm realm = Realm.getDefaultInstance();
         // Aktuelle Stunde anzeigen
         final RealmResults<Lesson2> currentLesson = TimetableHelper.getCurrentLessons(realm);
         Lesson2 lesson;
@@ -306,8 +303,6 @@ public class OverviewFragment extends Fragment {
             overview_lessons_list.removeAllViews();
             TimetableHelper.createSimpleLessonOverview(context, realm, overview_lessons_list, nextLessonResult.getOnNextDay(), currentDs);
         }
-
-        realm.close();
     }
 
     /**
