@@ -29,28 +29,21 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
-import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.Lesson2;
-import de.htwdd.htwdresden.types.LessonSearchResult;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -216,8 +209,6 @@ public class OverviewFragment extends Fragment {
     @Subscribe
     public void updateTimetable(@Nullable UpdateTimetableEvent updateTimetableEvent) {
         final Context context = getActivity();
-        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(getActivity()));
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
         // TextViews bestimmen
@@ -290,66 +281,38 @@ public class OverviewFragment extends Fragment {
             overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
             overview_lessons_next_type.setText(null);
         }
-        realm.close();
 
-        // Nächste Stunde anzeigen lassen
-        LessonSearchResult lessonSearchResult = LessonHelper.getNextUserLesson(context);
-
-        // Stundenplanvorschau
+        // Vorschau des aktuellen Stundenplans
         overview_lessons_busy_plan.setVisibility(View.GONE);
-        final Calendar calendarNextLesson = lessonSearchResult.getCalendar();
-        if (lessonSearchResult.getCode() != Const.Timetable.NO_LESSON_FOUND && calendarNextLesson != null) {
-            int timeDifference = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
-            int currentDS = 0;
+        if (nextLessonResult.getResults() != null && nextLessonResult.getResults().size() > 0) {
+            final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+            final int differenceDay = Math.abs(nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+            int currentDs = 0;
 
-            switch (timeDifference) {
-                case 0:
-                    // Bezeichnung ändern
-                    overview_lessons_day.setText(R.string.timetable_overview_today);
-                    // Wenn Plan von heute, aktuelle Stunde hervorheben
-                    currentDS = Const.Timetable.getCurrentDS(null);
-                    break;
-                case 1:
-                    // Bezeichnung ändern
-                    overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
-                    break;
-                default:
-                    return;
+            // Vorschau nur für heute und morgen anzeigen
+            if (differenceDay > 1) {
+                return;
+            } else if (differenceDay == 0) {
+                overview_lessons_day.setText(R.string.timetable_overview_today);
+                currentDs = TimetableHelper.getCurrentDS(TimetableHelper.getMinutesSinceMidnight(calendar));
+            } else {
+                overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
             }
 
             // Übersicht anzeigen
             overview_lessons_busy_plan.setVisibility(View.VISIBLE);
 
-            // Daten für Stundenplan-Vorschau
-            final String[] values = new String[7];
-            for (int i = 1; i < 8; i++) {
-                final ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, i);
-
-                // Suche nach passender Stunde
-                final LessonSearchResult lessonSearchResult_vorschau = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
-
-                switch (lessonSearchResult_vorschau.getCode()) {
-                    case Const.Timetable.NO_LESSON_FOUND:
-                        values[i - 1] = "";
-                        break;
-                    case Const.Timetable.ONE_LESSON_FOUND:
-                        final Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
-                        assert lesson_vorschau != null;
-                        values[i - 1] = lesson_vorschau.getTag() + " (" + lesson_vorschau.getType() + ")";
-                        break;
-                    case Const.Timetable.MORE_LESSON_FOUND:
-                        values[i - 1] = getResources().getString(R.string.timetable_moreLessons);
-                        break;
-                }
-            }
-
-            // Stundenplanvorschau erstellen
-            LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
+            // Vorschau des Stundenplans erstellen
+            overview_lessons_list.removeAllViews();
+            TimetableHelper.createSimpleLessonOverview(context, realm, overview_lessons_list, nextLessonResult.getOnNextDay(), currentDs);
         }
+
+        realm.close();
     }
 
     /**
      * Zeigt die Mahlzeiten als einfache Liste an
+     *
      * @param meals Liste der Mahlzeiten
      */
     private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {

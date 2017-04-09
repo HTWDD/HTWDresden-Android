@@ -24,7 +24,7 @@ public class NextLessonResult {
         this.results = results;
     }
 
-    Calendar getOnNextDay() {
+    public Calendar getOnNextDay() {
         return onNextDay;
     }
 

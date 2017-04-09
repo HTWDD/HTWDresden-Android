@@ -15,17 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableUserDAO;
 import de.htwdd.htwdresden.types.Lesson;
 import de.htwdd.htwdresden.types.LessonSearchResult;
 
@@ -34,84 +27,6 @@ import de.htwdd.htwdresden.types.LessonSearchResult;
  */
 public class LessonHelper {
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
-
-    /**
-     * Liefert die nächste Stunde(n)
-     *
-     * @param context App-Context
-     * @return LessonSearchResult mit Beschreibung zur nächste Stunde
-     */
-    @NonNull
-    public static LessonSearchResult getNextUserLesson(@NonNull final Context context) {
-        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final Calendar calendarNextLesson = GregorianCalendar.getInstance(Locale.GERMANY);
-        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(context));
-        LessonSearchResult lessonSearchResult;
-
-        // Aktuelle Stunde bestimmen
-        int nextDS = Const.Timetable.getCurrentDS(null);
-
-        // Vorlesungszeit vorbei? Dann auf nächsten Tag springen
-        if (calendar.getTimeInMillis() > Const.Timetable.getCalendar(Const.Timetable.endDS[7 - 1]).getTimeInMillis()) {
-            nextDS = 0;
-            calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
-        }
-
-        // Suche nach einer passenden Veranstaltung
-        do {
-            // DS erhöhen
-            if ((++nextDS) % 8 == 0) {
-                nextDS = 1;
-                calendarNextLesson.add(Calendar.DAY_OF_YEAR, 1);
-            }
-
-            // Lade Stunde aus DB
-            ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, nextDS);
-
-            // Suche nach passender Stunde
-            lessonSearchResult = LessonHelper.searchLesson(lessons, calendarNextLesson.get(Calendar.WEEK_OF_YEAR));
-        }
-        // Suche solange nach einer passenden Stunde bis eine Stunde gefunden wurde. Nach über zwei Tagen wird die Suche abgebrochen
-        while (lessonSearchResult.getCode() == Const.Timetable.NO_LESSON_FOUND && (calendarNextLesson.get(Calendar.WEEK_OF_YEAR) - calendar.get(Calendar.WEEK_OF_YEAR)) < 2);
-
-        // Wenn keine Stunde gefunden wurde kann hier abgebrochen werden, ansonsten Anzahl setzen
-        if (lessonSearchResult.getCode() == Const.Timetable.NO_LESSON_FOUND)
-            return lessonSearchResult;
-
-        //Zeit-Abstand berechen und Stunde anzeigen
-        int differenceDay = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
-        switch (differenceDay) {
-            case 0:
-                long minuten = TimeUnit.MINUTES.convert(
-                        Const.Timetable.getCalendar(Const.Timetable.beginDS[nextDS - 1]).getTimeInMillis() - calendar.getTimeInMillis(),
-                        TimeUnit.MILLISECONDS
-                );
-                lessonSearchResult.setTimeRemaining(String.format(context.getString(R.string.overview_lessons_remaining_start), minuten));
-                break;
-            case 1:
-                lessonSearchResult.setTimeRemaining(context.getString(
-                        R.string.overview_lessons_tomorrow_param,
-                        context.getString(
-                                R.string.timetable_ds_list_simple,
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1])))
-                ));
-                break;
-            default:
-                final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
-                lessonSearchResult.setTimeRemaining(context.getString(
-                        R.string.overview_lessons_future,
-                        nameOfDays[calendarNextLesson.get(Calendar.DAY_OF_WEEK)],
-                        context.getString(
-                                R.string.timetable_ds_list_simple,
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1])))
-                ));
-                break;
-        }
-        lessonSearchResult.setCalendar(calendarNextLesson);
-        return lessonSearchResult;
-    }
 
     /**
      * @param lessons Liste der zu überprüfenden Stunden

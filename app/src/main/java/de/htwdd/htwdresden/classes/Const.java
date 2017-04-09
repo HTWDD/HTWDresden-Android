@@ -92,7 +92,8 @@ public final class Const {
                 (int) TimeUnit.MINUTES.convert(13, TimeUnit.HOURS) + 20,
                 (int) TimeUnit.MINUTES.convert(15, TimeUnit.HOURS) + 10,
                 (int) TimeUnit.MINUTES.convert(17, TimeUnit.HOURS),
-                (int) TimeUnit.MINUTES.convert(18, TimeUnit.HOURS) + 40};
+                (int) TimeUnit.MINUTES.convert(18, TimeUnit.HOURS) + 40,
+                (int) TimeUnit.MINUTES.convert(20, TimeUnit.HOURS) + 20};
 
         public static final int[] endDS = {
                 (int) TimeUnit.MINUTES.convert(9, TimeUnit.HOURS),
@@ -101,7 +102,8 @@ public final class Const {
                 (int) TimeUnit.MINUTES.convert(14, TimeUnit.HOURS) + 50,
                 (int) TimeUnit.MINUTES.convert(16, TimeUnit.HOURS) + 40,
                 (int) TimeUnit.MINUTES.convert(18, TimeUnit.HOURS) + 30,
-                (int) TimeUnit.MINUTES.convert(20, TimeUnit.HOURS) + 10};
+                (int) TimeUnit.MINUTES.convert(20, TimeUnit.HOURS) + 10,
+                (int) TimeUnit.MINUTES.convert(21, TimeUnit.HOURS) + 50};
 
         public static int db_week(final int calendarWeek) {
             return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
@@ -138,6 +140,7 @@ public final class Const {
          * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht oder null für aktuelle Zeit
          * @return Aktuelle Stunde oder 0 falls außerhalb der Unterrichtszeiten
          */
+        @Deprecated
         public static int getCurrentDS(@Nullable Long currentTime) {
             if (currentTime == null) {
                 final Calendar calendar = GregorianCalendar.getInstance();

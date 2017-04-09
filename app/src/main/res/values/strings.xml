@@ -80,6 +80,7 @@
     <string name="mensa_price">%s €</string>
 
     <string name="timetable_overview_today">Heute</string>
+    <string name="timetable_overview_lessons">%1$s (%2$s)</string>
     <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>
     <string name="timetable_add">Stunde hinzufügen</string>
