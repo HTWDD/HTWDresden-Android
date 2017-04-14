@@ -48,11 +48,11 @@ public class TimetableWidgetService extends Service {
                 if (lesson.getRooms().size() > 0)
                     view.setTextViewText(R.id.widget_timetable_room, getString(
                             R.string.timetable_ds_list_simple,
-                            lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                            lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
                             TimetableHelper.getStringOfRooms(lesson)
                     ));
                 else
-                    view.setTextViewText(R.id.widget_timetable_room, lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+                    view.setTextViewText(R.id.widget_timetable_room, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
                 break;
             default:
                 view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
@@ -74,11 +74,11 @@ public class TimetableWidgetService extends Service {
             if (lesson.getRooms().size() > 0) {
                 view.setTextViewText(R.id.widget_timetable_room_next, getString(
                         R.string.timetable_ds_list_simple,
-                        lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                        lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
                         TimetableHelper.getStringOfRooms(lesson)
                 ));
             } else {
-                view.setTextViewText(R.id.widget_timetable_room_next, lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+                view.setTextViewText(R.id.widget_timetable_room_next, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
             }
         } else {
             view.setTextViewText(R.id.widget_timetable_lesson_time_next, TimetableHelper.getStringStartNextLesson(context, nextLessonResult));

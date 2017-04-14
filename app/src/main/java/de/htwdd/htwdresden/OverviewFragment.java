@@ -240,11 +240,11 @@ public class OverviewFragment extends Fragment {
                     overview_lessons_current_type.setText(
                             getString(
                                     R.string.timetable_ds_list_simple,
-                                    lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                                    lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
                                     TimetableHelper.getStringOfRooms(lesson)
                             )
                     );
-                } else overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+                } else overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
                 break;
             default:
                 overview_lessons_current_type.setText(null);
@@ -269,10 +269,10 @@ public class OverviewFragment extends Fragment {
                 overview_lessons_next_type.setText(
                         getString(
                                 R.string.timetable_ds_list_simple,
-                                lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)],
+                                lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
                                 TimetableHelper.getStringOfRooms(lesson)
                         ));
-            } else overview_lessons_next_type.setText(lessonType[TimetableHelper.getIntegerTagOfLesson(lesson)]);
+            } else overview_lessons_next_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
         } else {
             overview_lessons_next_remaining.setText(TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
             overview_lessons_next_tag.setText(R.string.timetable_moreLessons);

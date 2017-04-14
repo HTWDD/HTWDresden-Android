@@ -4,6 +4,7 @@ import java.util.Date;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -20,7 +21,9 @@ public class Lesson2 extends RealmObject {
     private String lessonTag;
     private String name;
     private String type;
+    @Index
     private int day;
+    @Index
     private int week;
     private int beginTime;
     private int endTime;
@@ -50,8 +53,16 @@ public class Lesson2 extends RealmObject {
         return day;
     }
 
+    public int getWeek() {
+        return week;
+    }
+
     public int getBeginTime() {
         return beginTime;
+    }
+
+    public RealmList<LessonWeek> getWeeksOnly() {
+        return weeksOnly;
     }
 
     public RealmList<Room> getRooms() {

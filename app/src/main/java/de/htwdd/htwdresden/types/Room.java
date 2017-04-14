@@ -3,6 +3,7 @@ package de.htwdd.htwdresden.types;
 import android.support.annotation.Nullable;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Repräsentiert einen Raum für {@link Lesson2}
@@ -10,6 +11,7 @@ import io.realm.RealmObject;
  * @author Kay Förster
  */
 public class Room extends RealmObject {
+    @PrimaryKey
     private String roomName;
 
     public String getRoomName() {
