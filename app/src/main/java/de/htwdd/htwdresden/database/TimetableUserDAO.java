@@ -1,7 +1,6 @@
 package de.htwdd.htwdresden.database;
 
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -30,20 +29,6 @@ public class TimetableUserDAO extends AbstractDAO<Lesson> {
     @Override
     public ArrayList<Lesson> getAll() {
         return null;
-    }
-
-    public long countDS(final int week, final int day, final int ds) {
-        SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();
-        long count = DatabaseUtils.queryNumEntries(
-                database,
-                getTableName(),
-                "(" + Const.database.TimetableEntry.COLUMN_NAME_WEEK + "= ? OR " + Const.database.TimetableEntry.COLUMN_NAME_WEEK + " = 0) AND " +
-                        Const.database.TimetableEntry.COLUMN_NAME_DAY + "= ? AND " +
-                        Const.database.TimetableEntry.COLUMN_NAME_DS + "= ?",
-                new String[]{String.valueOf(Const.Timetable.db_week(week)), String.valueOf(day), String.valueOf(ds)}
-        );
-        database.close();
-        return count;
     }
 
     /**

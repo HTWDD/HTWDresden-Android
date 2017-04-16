@@ -53,10 +53,8 @@ public class TimetableOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
         realm = Realm.getDefaultInstance();
-        final Context context = getActivity();
 
         // Arguments überprüfen
-
         final Bundle bundle = getArguments();
         if (bundle != null)
             calendarWeek = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
@@ -138,7 +136,7 @@ public class TimetableOverviewFragment extends Fragment {
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         intentFilter.addCategory(Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
         responseReceiver = new ResponseReceiver();
-        LocalBroadcastManager.getInstance(context).registerReceiver(responseReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(responseReceiver, intentFilter);
 
         return mLayout;
     }
@@ -163,6 +161,7 @@ public class TimetableOverviewFragment extends Fragment {
         bundle.putInt(Const.BundleParams.TIMETABLE_DAY, day);
         bundle.putInt(Const.BundleParams.TIMETABLE_DS, (indexOfItem - day) / 7);
         bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, editMode);
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true);
 
         final Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
         intent.putExtras(bundle);

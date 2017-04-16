@@ -61,6 +61,14 @@ public class Lesson2 extends RealmObject {
         return beginTime;
     }
 
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public String getProfessor() {
+        return professor;
+    }
+
     public RealmList<LessonWeek> getWeeksOnly() {
         return weeksOnly;
     }

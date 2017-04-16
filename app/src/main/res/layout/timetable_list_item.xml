@@ -20,26 +20,24 @@
 
             <TextView
                 android:id="@+id/timetable_edit_lessonName"
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/timetable_edit_lessonType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timetable_edit_lessonName"
-                android:layout_centerHorizontal="true"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                style="@style/TextAppearance.AppCompat.Subhead"/>
 
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timetable_edit_lessonType"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/app_table_margin"
+                android:layout_marginTop="@dimen/space_between_content"
                 android:stretchColumns="2">
 
                 <TableRow
