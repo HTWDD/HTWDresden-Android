@@ -26,7 +26,7 @@ public abstract class AbstractSyncHelper extends IntentService {
     @Nullable
     protected BroadcastNotifier broadcastNotifier;
     /**
-     * Standard Error Listener für die Bestimmung der Fehlerursache, ruft anschließen {@link #setError(String)}
+     * Standard Error Listener für die Bestimmung der Fehlerursache, ruft anschließen {@link #setError(String, int)}
      */
     protected final Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
@@ -48,7 +48,7 @@ public abstract class AbstractSyncHelper extends IntentService {
                 default:
                     message = getString(R.string.info_internet_error);
             }
-            setError(message);
+            setError(message, VolleyDownloader.getResponseCode(error));
             queueCount.decrementCountQueue();
             Log.e("AbstractSyncHelper", "[Fehler] Konnte Ressource nicht abrufen!", error);
         }
@@ -88,9 +88,10 @@ public abstract class AbstractSyncHelper extends IntentService {
     }
 
     /**
-     * Behandelt alle Maßnamen wenn ein Fehler aufgetreten ist
+     * Behandelt alle Maßnahmen wenn ein Fehler aufgetreten ist
      *
      * @param errorMessage Fehlerbeschreibung welche an den User weitergeleitet werden kann
+     * @param errorCode Fehlercode zur genaueren Differenzierung
      */
-    abstract void setError(@NonNull final String errorMessage);
+    abstract void setError(@NonNull final String errorMessage, final int errorCode);
 }

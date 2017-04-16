@@ -60,14 +60,14 @@ public class ExamSyncService extends AbstractSyncHelper {
     }
 
     @Override
-    void setError(@NonNull final String errorMessage) {
+    void setError(@NonNull final String errorMessage, final int errorCode) {
         // Synchronisation abbrechen
         setCancelToTrue();
         // Downloads abbrechen
         VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
         // Benachrichtigung senden
         if (broadcastNotifier != null)
-            broadcastNotifier.notifyStatus(-1, errorMessage);
+            broadcastNotifier.notifyStatus(errorCode, errorMessage);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ExamSyncService extends AbstractSyncHelper {
                     }
                 } catch (final JSONException e) {
                     Log.e(LOG_TAG, "[Fehler] Beim Verarbeiten der verfügbaren Studiengänge", e);
-                    setError("Fehler beim Verarbeiten der verfügbaren Studiengänge");
+                    setError("Fehler beim Verarbeiten der verfügbaren Studiengänge", -1);
                 }
                 queueCount.decrementCountQueue();
             }
@@ -146,7 +146,7 @@ public class ExamSyncService extends AbstractSyncHelper {
         } catch (final Exception e) {
             Log.e(LOG_TAG, "[Fehler] Beim Speichern der Noten", e);
             realm.cancelTransaction();
-            setError(context.getString(R.string.info_error_save));
+            setError(context.getString(R.string.info_error_save), -1);
             return false;
         } finally {
             realm.close();

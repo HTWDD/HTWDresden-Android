@@ -9,19 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableRoomDAO;
-import de.htwdd.htwdresden.types.Lesson;
+import io.realm.Realm;
 
 
 public class RoomTimetableOverviewFragment extends Fragment {
+    private Realm realm;
 
     public RoomTimetableOverviewFragment() {
         // Required empty public constructor
@@ -30,7 +28,8 @@ public class RoomTimetableOverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
+        final View mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
+        realm = Realm.getDefaultInstance();
 
         // Arguments überprüfen
         Bundle bundle = getArguments();
@@ -42,22 +41,22 @@ public class RoomTimetableOverviewFragment extends Fragment {
         } else return mLayout;
 
         // SwipeRefreshLayout deaktivieren
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
 
-        // Lade Daten aus DB
-        DatabaseManager databaseManager = new DatabaseManager(getActivity());
-        TimetableRoomDAO timetableUserDAO = new TimetableRoomDAO(databaseManager);
-        ArrayList<Lesson> lessons_week = new ArrayList<>();
-        lessons_week.addAll(timetableUserDAO.getWeekShort(week, room));
-
         // Adapter zum handeln der Daten
-        TimetableGridAdapter gridAdapter = new TimetableGridAdapter(getActivity(), lessons_week, week);
+        TimetableGridAdapter gridAdapter = new TimetableGridAdapter(realm, week);
 
         // GridView
         GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
         gridView.setAdapter(gridAdapter);
 
         return mLayout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        realm.close();
+        super.onDestroyView();
     }
 }

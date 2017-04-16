@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,16 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.classes.TimetableHelper;
+import de.htwdd.htwdresden.types.Lesson2;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Adapter für die Grid-Stundenplan-Ansicht
@@ -25,55 +31,50 @@ import de.htwdd.htwdresden.types.Lesson;
  * @author Kay Förster
  */
 public class TimetableGridAdapter extends BaseAdapter {
-    private Context context;
-    private int week;
-    private ArrayList<Lesson> lessons_week;
-    private LayoutInflater mLayoutInflater;
-    private static String[] lessonType;
-    private static final String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
+    private final Realm realm;
+    private final Calendar calendar;
+    private final int week;
+    private final boolean filterCurrentWeek;
+    private final static String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
+    private final static GridView.LayoutParams layoutParams_1 = new GridView.LayoutParams(GridView.AUTO_FIT, 50);
+    private final static GridView.LayoutParams layoutParams_2 = new GridView.LayoutParams(GridView.AUTO_FIT, 180);
 
-    public TimetableGridAdapter(Context context, ArrayList<Lesson> lessons_week, int week) {
-        this.context = context;
+    public TimetableGridAdapter(@NonNull final Realm realm, final int week) {
+        this.realm = realm;
+        this.calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        this.filterCurrentWeek = true;
         this.week = week;
-        this.lessons_week = lessons_week;
-        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        lessonType = context.getResources().getStringArray(R.array.lesson_type);
     }
 
     @Override
     public int getCount() {
-        return 56;
+        return 63;
     }
 
     @Override
-    public ArrayList<Lesson> getItem(int i) {
-        int ds = i / 7;
-        int day = i % 7;
+    public RealmResults<Lesson2> getItem(final int i) {
+        final int day = i % 7;
+        calendar.set(Calendar.DAY_OF_WEEK, day + 1);
+        calendar.set(Calendar.WEEK_OF_YEAR, week);
 
-        ArrayList<Lesson> lessons = new ArrayList<>();
-
-        for (Lesson lesson : lessons_week)
-            if (lesson.getDay() == day && lesson.getDs() == ds)
-                lessons.add(lesson);
-
-        return lessons;
+        return TimetableHelper.getLessonsByDateAndDs(realm, calendar, filterCurrentWeek, (i - day) / 7);
     }
 
     @Override
-    public long getItemId(int i) {
+    public long getItemId(final int i) {
         return i;
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, @Nullable View view, final ViewGroup viewGroup) {
+        final Context context = viewGroup.getContext();
         final ViewHolder viewHolder;
-        ArrayList<Lesson> lessons;
 
         // ViewHolder
         if (view == null) {
             viewHolder = new ViewHolder();
-            view = mLayoutInflater.inflate(R.layout.fragment_timetable_grid_item, viewGroup, false);
+            view = LayoutInflater.from(context).inflate(R.layout.fragment_timetable_grid_item, viewGroup, false);
             view.setTag(viewHolder);
             viewHolder.type = (TextView) view.findViewById(R.id.timetableType);
             viewHolder.tag = (TextView) view.findViewById(R.id.timetableTag);
@@ -90,13 +91,13 @@ public class TimetableGridAdapter extends BaseAdapter {
         viewHolder.kw.setVisibility(View.GONE);
 
         // Standardgröße
-        viewHolder.layout.setLayoutParams(viewHolder.layoutParams_2);
+        viewHolder.layout.setLayoutParams(layoutParams_2);
 
         switch (i) {
             case 0:
                 viewHolder.type.setText(null);
                 viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                viewHolder.layout.setLayoutParams(viewHolder.layoutParams_1);
+                viewHolder.layout.setLayoutParams(layoutParams_1);
                 break;
             case 1:
             case 2:
@@ -106,7 +107,7 @@ public class TimetableGridAdapter extends BaseAdapter {
             case 6:
                 viewHolder.type.setText(nameOfDays[i + 1]);
                 viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                viewHolder.layout.setLayoutParams(viewHolder.layoutParams_1);
+                viewHolder.layout.setLayoutParams(layoutParams_1);
                 break;
             case 7:
             case 14:
@@ -115,6 +116,7 @@ public class TimetableGridAdapter extends BaseAdapter {
             case 35:
             case 42:
             case 49:
+            case 56:
                 viewHolder.type.setText(context.getResources().getString(
                         R.string.timetable_ds_grid,
                         DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[(i / 7) - 1])),
@@ -127,55 +129,43 @@ public class TimetableGridAdapter extends BaseAdapter {
                 viewHolder.tag.setVisibility(View.VISIBLE);
                 viewHolder.room.setVisibility(View.VISIBLE);
 
-                Lesson lesson = null;
-                lessons = getItem(i);
+                Lesson2 lesson = null;
+                final RealmResults<Lesson2> lessons = getItem(i);
 
-                // Nur eine Stunde für dieser DS vorhanden
-                if (lessons.size() == 1) {
-                    lesson = lessons.get(0);
-
-                    viewHolder.tag.setText(lesson.getTag());
-                    viewHolder.room.setText(lesson.getRooms());
-
-                    if (!lesson.getWeeksOnly().isEmpty()) {
-                        viewHolder.kw.setVisibility(View.VISIBLE);
-                    }
+                // Keine Lehrveranstaltung in diesem Zeitabschnitt
+                if (lessons.size() == 0) {
+                    viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    viewHolder.tag.setText(null);
+                    viewHolder.type.setText(null);
+                    viewHolder.room.setText(null);
+                    break;
                 }
-                // mehrere Stunden für dieser DS vorhanden
+                // Nur eine Lehrveranstaltung für diesem Zeitabschnitt
+                else if (lessons.size() == 1) {
+                    lesson = lessons.first();
+                }
+                // mehrere Lehrveranstaltungen für dieser DS vorhanden
                 else if (lessons.size() > 1) {
-                    int single = 0;
-                    viewHolder.more.setVisibility(View.VISIBLE);
+                    int singleLesson = 0;
+                    if (!filterCurrentWeek) {
+                        // Wenn nicht nach einer entsprechenden Woche gesucht wird jetzt nach einer Lehrveranstaltung suchen, welche bevorzugt angezeigt werden kann
+                        for (Lesson2 lesson2 : lessons) {
+                            final long inside = lesson2.getWeeksOnly()
+                                    .where()
+                                    .equalTo("weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
+                                    .or()
+                                    .isEmpty("weekOfYear")
+                                    .count();
 
-                    // Suche nach einer passenden Veranstaltung
-                    for (Lesson tmp : lessons) {
-                        // Es ist keine spezielle KW gesetzt, d.h. die Veranstaltung ist immer
-                        if (tmp.getWeeksOnly().isEmpty()) {
-                            single++;
-
-                            if (single == 1)
-                                lesson = tmp;
-                            else
-                                // Zweite Veranstallung gefunden, die "immer" ist
-                                break;
-                        }
-
-                        // Es sind spezielle KW gestzt, suche aktuelle zum anzeigen
-                        String[] lessonWeek = tmp.getWeeksOnly().split(";");
-
-                        // Aktuelle Woche enthalten?
-                        if (Arrays.asList(lessonWeek).contains(week + "")) {
-                            single++;
-
-                            if (single == 1)
-                                lesson = tmp;
-                            else
-                                // Zweite Veranstallung gefunden, die "immer" ist
-                                break;
+                            if (inside > 0) {
+                                singleLesson++;
+                                lesson = lesson2;
+                            }
                         }
                     }
 
                     // Es gibt keine passende Veranstaltung die angezeigt werden kann
-                    if (single != 1) {
+                    if (singleLesson != 1) {
                         viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                         viewHolder.tag.setText(null);
                         viewHolder.room.setVisibility(View.GONE);
@@ -183,30 +173,28 @@ public class TimetableGridAdapter extends BaseAdapter {
                         break;
                     }
 
-                    // Doch eine Veranstalltung gefunden
-                    viewHolder.tag.setText(lesson.getTag());
-                    viewHolder.room.setText(lesson.getRooms());
+                    viewHolder.more.setVisibility(View.VISIBLE);
                 }
-                // Keine Stunde in dieser DS
-                else {
-                    viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
-                    viewHolder.tag.setText(null);
-                    viewHolder.type.setText(null);
-                    viewHolder.room.setText(null);
+
+                if (lesson == null) {
                     break;
                 }
 
+                viewHolder.tag.setText(lesson.getLessonTag());
+                viewHolder.room.setText(TimetableHelper.getStringOfRooms(lesson));
+
                 // Setze Hintergrundfarbe
-                switch (lesson.getTypeInt()) {
-                    case 0:
+                final String[] lessonType = view.getResources().getStringArray(R.array.lesson_type);
+                switch (TimetableHelper.getIntegerTypOfLesson(lesson)) {
+                    case Const.Timetable.TAG_VORLESUNG:
                         viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.timetable_blue));
                         viewHolder.type.setText(lessonType[0]);
                         break;
-                    case 1:
+                    case Const.Timetable.TAG_PRAKTIKUM:
                         viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.timetable_organge));
                         viewHolder.type.setText(lessonType[1]);
                         break;
-                    case 2:
+                    case Const.Timetable.TAG_UBUNG:
                         viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.timetable_green));
                         viewHolder.type.setText(lessonType[2]);
                         break;
@@ -223,15 +211,13 @@ public class TimetableGridAdapter extends BaseAdapter {
         return view;
     }
 
-    static class ViewHolder {
-        public int position;
-        public TextView tag;
-        public TextView type;
-        public TextView room;
-        public TextView more;
-        public TextView kw;
-        public LinearLayout layout;
-        public final GridView.LayoutParams layoutParams_1 = new GridView.LayoutParams(GridView.AUTO_FIT, 50);
-        public final GridView.LayoutParams layoutParams_2 = new GridView.LayoutParams(GridView.AUTO_FIT, 180);
+    private static class ViewHolder {
+        int position;
+        TextView tag;
+        TextView type;
+        TextView room;
+        TextView more;
+        TextView kw;
+        LinearLayout layout;
     }
 }

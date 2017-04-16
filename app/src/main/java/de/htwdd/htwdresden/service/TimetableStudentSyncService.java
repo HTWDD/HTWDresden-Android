@@ -63,16 +63,15 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
     }
 
     @Override
-    void setError(@NonNull final String errorMessage) {
+    void setError(@NonNull final String errorMessage, final int errorCode) {
         // Synchronisation abbrechen
         setCancelToTrue();
         // Downloads abbrechen
         VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_TIMETABLE);
         // Benachrichtigung senden
         if (broadcastNotifier != null)
-            broadcastNotifier.notifyStatus(-1, errorMessage);
+            broadcastNotifier.notifyStatus(errorCode, errorMessage);
     }
-
 
     /**
      * Lädt den Stundenplan vom Webservice herunter und speichert des Response in {@link #results}
@@ -143,7 +142,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         } catch (final JSONException e) {
             realm.cancelTransaction();
             Log.e(LOG_TAG, "[Fehler] bei der Verarbeitung des JSON-Responses", e);
-            setError(getString(R.string.timetable_save_error));
+            setError(getString(R.string.timetable_save_error), -1);
             return false;
         } finally {
             realm.close();
