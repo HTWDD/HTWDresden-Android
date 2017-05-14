@@ -13,11 +13,11 @@
                     android:title="@string/navi_mensa" />
                 <item
                     android:id="@+id/navigation_timetable"
-                    android:icon="@drawable/ic_access_time_24dp"
+                    android:icon="@drawable/ic_access_time_black_24dp"
                     android:title="@string/navi_timetable" />
                 <item
                     android:id="@+id/navigation_room_timetable"
-                    android:icon="@drawable/ic_room_24dp"
+                    android:icon="@drawable/ic_room_black_24dp"
                     android:title="@string/navi_room_timetable" />
                 <item
                     android:id="@+id/navigation_exams"
