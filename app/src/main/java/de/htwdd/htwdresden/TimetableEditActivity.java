@@ -61,11 +61,13 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
             fragment = new TimetableEditFragment();
         }
         // Stunde bearbeiten
-        else if (edit && countResults == 1)
+        else if (edit && countResults == 1) {
             fragment = new TimetableEditFragment();
-        else
-            // Übersicht anzeigen (auch bei bearbeiten wenn mehrere Einträge vorhanden sind)
+        }
+        // Übersicht anzeigen (auch bei bearbeiten wenn mehrere Einträge vorhanden sind)
+        else {
             fragment = new TimetableDetailsFragment();
+        }
         fragment.setArguments(bundle);
 
         // Bei orientation change Fragment nicht neuladen
