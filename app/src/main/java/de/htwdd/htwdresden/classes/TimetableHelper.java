@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonWeek;
 import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -225,21 +226,33 @@ public class TimetableHelper {
     /**
      * Liefert die Räume verkettet als String zurück
      *
-     * @param lesson Lehrveranstaltung aus welcher Räume ausgegeben werdern sollen
+     * @param lesson Lehrveranstaltung aus welcher Räume ausgegeben werden sollen
      * @return verkette Räume
      */
     public static String getStringOfRooms(@NonNull final Lesson2 lesson) {
-        final RealmList<Room> rooms = lesson.getRooms();
         String roomsString = "";
 
+        final RealmList<Room> rooms = lesson.getRooms();
         for (final Room room : rooms) {
             roomsString += room.getRoomName() + "; ";
         }
-        final int roomsStringLength = roomsString.length();
-        if (roomsStringLength > 2) {
-            roomsString = roomsString.substring(0, roomsStringLength - 2);
+        return removeLastComma(roomsString);
+    }
+
+    /**
+     * Liefert die Kalenderwochen verkettet als String zurück
+     *
+     * @param lesson Lehrveranstaltung aus welcher Kalenderwochen ausgegeben werden sollen
+     * @return verkettete Kalenderwochen
+     */
+    public static String getStringOfKws(@NonNull final Lesson2 lesson) {
+        String weeks = "";
+
+        final RealmList<LessonWeek> lessonWeeks = lesson.getWeeksOnly();
+        for (final LessonWeek lessonWeek : lessonWeeks) {
+            weeks += lessonWeek.getWeekOfYear() + "; ";
         }
-        return roomsString;
+        return removeLastComma(weeks);
     }
 
     /**
@@ -336,10 +349,10 @@ public class TimetableHelper {
     }
 
     /**
-     * Wandet {@link JSONObject} in ein für die App besser speicherbares Format um
+     * Wandet {@link JSONObject} in ein für die App besseres Format zum Speichern um
      *
      * @param lesson {@link JSONObject} einer Lehrveranstaltung
-     * @return unformiertes {@link JSONObject} einer Lehrveranstaltung
+     * @return umstrukturiertes {@link JSONObject} einer Lehrveranstaltung
      * @throws JSONException Fehler beim Zugriff auf JSON-Daten
      */
     @NonNull
@@ -356,6 +369,20 @@ public class TimetableHelper {
         lesson.put("rooms", convertPrimitivTypToJsonObject(lesson.getJSONArray("rooms"), "roomName"));
 
         return lesson;
+    }
+
+    /**
+     * Entfernt das letzte Leerzeichen und Komma von einer verketten Aufzählung
+     *
+     * @param s verkette Aufzählung
+     * @return verkette Aufzählung ohne letztes Komma und Leerzeichen
+     */
+    private static String removeLastComma(@NonNull String s) {
+        final int length = s.length();
+        if (length > 2) {
+            s = s.substring(0, length - 2);
+        }
+        return s;
     }
 
     /**

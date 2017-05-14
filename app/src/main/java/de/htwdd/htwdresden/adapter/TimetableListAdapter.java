@@ -17,10 +17,8 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.types.Lesson2;
-import de.htwdd.htwdresden.types.LessonWeek;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
-import io.realm.RealmList;
 
 /**
  * Adapter um Stunden in einer Liste anzeigen
@@ -68,7 +66,7 @@ public class TimetableListAdapter extends RealmBaseAdapter<Lesson2> {
         viewHolder.lesson_room.setText(TimetableHelper.getStringOfRooms(lesson));
         viewHolder.lesson_kw.setText(lessonWeek[lesson.getWeek()]);
         viewHolder.lesson_day.setText(nameOfDays[lesson.getDay() - 1]);
-        viewHolder.lesson_weeksOnly.setText(getStringOfKws(lesson.getWeeksOnly()));
+        viewHolder.lesson_weeksOnly.setText(TimetableHelper.getStringOfKws(lesson));
         if (lesson.getProfessor() != null && !lesson.getProfessor().isEmpty()) {
             viewHolder.lesson_typ.setText(context.getString(R.string.timetable_details_subtitle, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)], lesson.getProfessor()));
         } else {
@@ -82,19 +80,6 @@ public class TimetableListAdapter extends RealmBaseAdapter<Lesson2> {
         ));
 
         return view;
-    }
-
-    private static String getStringOfKws(@NonNull final RealmList<LessonWeek> lessonWeeks) {
-        String weeks = "";
-
-        for (final LessonWeek lessonWeek : lessonWeeks) {
-            weeks += lessonWeek.getWeekOfYear() + "; ";
-        }
-        final int length = weeks.length();
-        if (length > 2) {
-            weeks = weeks.substring(0, length - 2);
-        }
-        return weeks;
     }
 
     private static class ViewHolder {
