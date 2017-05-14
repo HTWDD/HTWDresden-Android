@@ -111,20 +111,6 @@ public final class Const {
         }
 
         /**
-         * Liefert einen {@link Calendar} mit dem heutigen Datum und der übergebenen Uhrzeit
-         *
-         * @param minutesSinceMidnight Minuten seit Mitternacht (Uhrzeit)
-         * @return {@link Calendar} mit der übergebenen Uhrzeit und dem heutigen Datum
-         */
-        public static Calendar getCalendar(final long minutesSinceMidnight) {
-            final int hour = (int) TimeUnit.HOURS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
-            final Calendar calendar = GregorianCalendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, (int) (minutesSinceMidnight - TimeUnit.MINUTES.convert(hour, TimeUnit.HOURS)));
-            return calendar;
-        }
-
-        /**
          * Wandelt die übergebenen Minuten seit Mitternacht in ein {@link Date}-Objekt um
          *
          * @param minutesSinceMidnight Minuten seit Mitternacht
