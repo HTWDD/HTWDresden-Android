@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.types;
 
+import android.support.annotation.Nullable;
+
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -32,6 +34,8 @@ public class Lesson2 extends RealmObject {
     private RealmList<Room> rooms;
     private Date lastChanged;
     private boolean editedByUser;
+    private boolean createdByUser;
+    private boolean hideLesson;
 
     public String getId() {
         return id;
@@ -41,43 +45,103 @@ public class Lesson2 extends RealmObject {
         return lessonTag;
     }
 
+    public void setLessonTag(@Nullable final String lessonTag) {
+        this.lessonTag = lessonTag;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(@Nullable final String name) {
+        this.name = name;
     }
 
     public String getType() {
         return type;
     }
 
+    public void setType(@Nullable final String type) {
+        this.type = type;
+    }
+
     public int getDay() {
         return day;
+    }
+
+    public void setDay(final int day) {
+        this.day = day;
     }
 
     public int getWeek() {
         return week;
     }
 
+    public void setWeek(final int week) {
+        this.week = week;
+    }
+
     public int getBeginTime() {
         return beginTime;
+    }
+
+    public void setBeginTime(final int beginTime) {
+        this.beginTime = beginTime;
     }
 
     public int getEndTime() {
         return endTime;
     }
 
+    public void setEndTime(final int endTime) {
+        this.endTime = endTime;
+    }
+
     public String getProfessor() {
         return professor;
+    }
+
+    public void setProfessor(@Nullable final String professor) {
+        this.professor = professor;
     }
 
     public RealmList<LessonWeek> getWeeksOnly() {
         return weeksOnly;
     }
 
+    public void setWeeksOnly(@Nullable final RealmList<LessonWeek> weeksOnly) {
+        this.weeksOnly = weeksOnly;
+    }
+
     public RealmList<Room> getRooms() {
         return rooms;
     }
 
+    public void setRooms(@Nullable final RealmList<Room> rooms) {
+        this.rooms = rooms;
+    }
+
     public Date getLastChanged() {
         return lastChanged;
+    }
+
+    public void setEditedByUser(final boolean editedByUser) {
+        this.editedByUser = editedByUser;
+    }
+
+    public boolean isCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(final boolean createdByUser) {
+        this.createdByUser = createdByUser;
+    }
+
+    public boolean isHideLesson() {
+        return hideLesson;
+    }
+
+    public void setHideLesson(final boolean hideLesson) {
+        this.hideLesson = hideLesson;
     }
 }

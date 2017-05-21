@@ -29,17 +29,15 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableUserDAO;
-import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Lesson2;
 import de.htwdd.htwdresden.types.LessonWeek;
+import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -62,8 +60,8 @@ public class TimetableEditFragment extends Fragment {
     private EditText lesson_endTime;
     private TextInputEditText lesson_weeksOnly;
     private Lesson2 lesson = null;
-    private long startTime;
-    private long endTime;
+    private int startTime;
+    private int endTime;
     private boolean[] selectedKws = new boolean[53];
 
     public TimetableEditFragment() {
@@ -85,8 +83,8 @@ public class TimetableEditFragment extends Fragment {
 
         // Alten Zustand wiederherstellen
         if (savedInstanceState != null) {
-            startTime = savedInstanceState.getLong("startTime", 0);
-            endTime = savedInstanceState.getLong("endTime", 0);
+            startTime = savedInstanceState.getInt("startTime", 0);
+            endTime = savedInstanceState.getInt("endTime", 0);
             selectedKws = savedInstanceState.getBooleanArray("selectedKws");
         }
 
@@ -95,59 +93,58 @@ public class TimetableEditFragment extends Fragment {
 
         createListener();
 
-        // Soll eine Stunden bearbeitet werden
-        if (bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false)) {
-            // ...anhand einer Stunden-ID
-            if (bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID)) {
-                lesson = realm.where(Lesson2.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
-            }
-            // ...oder der übergeben Stunde
-            else {
-                final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-                calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 0) + 1);
-                calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
-                lesson = TimetableHelper.getLessonsByDateAndDs(realm, calendar, true, bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)).first(null);
-            }
+        // Wenn neue Stunde erstellt werden soll, hier aufhören
+        if (!bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false))
+            return mLayout;
 
-            if (lesson != null) {
-                // Formular mit Daten füllen
-                fillForms(lesson);
-            }
+        // ...anhand einer Stunden-ID
+        if (bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID)) {
+            lesson = realm.where(Lesson2.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
+        }
+        // ...oder der übergeben Stunde
+        else {
+            final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+            calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 0) + 1);
+            calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
+            lesson = TimetableHelper.getLessonsByDateAndDs(realm, calendar, true, bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)).first(null);
         }
 
-        // Werte in View eintragen
         if (lesson != null) {
+            // Formular mit Daten füllen
+            fillForms(lesson);
 
-            Button buttonDelete = (Button) mLayout.findViewById(R.id.timetable_edit_LessonDelete);
+            // Button zum Löschen / Ausblenden einer Lehrveranstaltung
+            final Button buttonDelete = (Button) mLayout.findViewById(R.id.timetable_edit_LessonDelete);
             buttonDelete.setEnabled(true);
-            buttonDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DatabaseManager databaseManager = new DatabaseManager(getActivity());
-                    TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
-                    long result = timetableUserDAO.delete(String.valueOf(lesson.getId()));
-                    if (result > 0) {
-                        EventBus.getInstance().post(new UpdateTimetableEvent());
-                        Toast.makeText(getActivity(), R.string.timetable_edit_lessonDeleteSuccess, Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-                    } else
-                        Snackbar.make(view, R.string.info_error_error, Snackbar.LENGTH_LONG).show();
-                }
-            });
-        }
 
-        Button buttonSave = (Button) mLayout.findViewById(R.id.timetable_edit_lessonSave);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (saveLesson()) {
-                    EventBus.getInstance().post(new UpdateTimetableEvent());
-                    Toast.makeText(getActivity(), R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
-                } else
-                    Snackbar.make(view, R.string.info_error_save, Snackbar.LENGTH_LONG).show();
+            // Lehrveranstaltung wurde vom Nutzer erstellt und kann gelöscht werden
+            if (lesson.isCreatedByUser()) {
+                buttonDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        realm.beginTransaction();
+                        lesson.deleteFromRealm();
+                        realm.commitTransaction();
+                        Toast.makeText(activity, R.string.timetable_edit_lessonDeleteSuccess, Toast.LENGTH_SHORT).show();
+                        activity.finish();
+                    }
+                });
             }
-        });
+            // Lehrveranstaltung nur ausblenden
+            else {
+                buttonDelete.setText(lesson.isHideLesson() ? R.string.timetable_edit_show : R.string.timetable_edit_hide);
+                buttonDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        realm.beginTransaction();
+                        lesson.setHideLesson(!lesson.isHideLesson());
+                        realm.commitTransaction();
+                        Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
+                        activity.finish();
+                    }
+                });
+            }
+        }
 
         return mLayout;
     }
@@ -155,8 +152,8 @@ public class TimetableEditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong("startTime", startTime);
-        outState.putLong("endTime", endTime);
+        outState.putInt("startTime", startTime);
+        outState.putInt("endTime", endTime);
         outState.putBooleanArray("selectedKws", selectedKws);
     }
 
@@ -235,7 +232,7 @@ public class TimetableEditFragment extends Fragment {
                 final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(final TimePicker timePicker, final int hourOfDay, final int minute) {
-                        setTimeAndUpdateView(TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute, endTime);
+                        setTimeAndUpdateView((int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute, endTime);
                     }
                 }, hour, minute, true);
                 timePickerDialog.show();
@@ -251,7 +248,7 @@ public class TimetableEditFragment extends Fragment {
                 final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(final TimePicker timePicker, final int hourOfDay, final int minute) {
-                        setTimeAndUpdateView(startTime, TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute);
+                        setTimeAndUpdateView(startTime, (int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute);
                     }
                 }, hour, minute, true);
                 timePickerDialog.show();
@@ -294,6 +291,18 @@ public class TimetableEditFragment extends Fragment {
             }
         });
 
+        // Speichern
+        mLayout.findViewById(R.id.timetable_edit_lessonSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Activity activity = getActivity();
+                if (saveLesson()) {
+                    Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
+                    activity.finish();
+                } else
+                    Snackbar.make(view, R.string.info_error_save, Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**
@@ -338,7 +347,7 @@ public class TimetableEditFragment extends Fragment {
      * @param startTime True wenn Startzeit sonst Endzeit
      * @return Zeit in Minuten seit Mitternacht
      */
-    private long getMinutes(final boolean startTime) {
+    private int getMinutes(final boolean startTime) {
         final int currentDS = TimetableHelper.getCurrentDS(TimetableHelper.getMinutesSinceMidnight(GregorianCalendar.getInstance(Locale.GERMANY))) - 1;
 
         if (currentDS >= 0) {
@@ -349,7 +358,7 @@ public class TimetableEditFragment extends Fragment {
     }
 
     // Setzt im View die ausgewählte Zeit
-    private void setTimeAndUpdateView(final long startTime, final long endTime) {
+    private void setTimeAndUpdateView(final int startTime, final int endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
         lesson_beginTime.setText(dateFormat.format(Const.Timetable.getDate(startTime)));
@@ -362,34 +371,60 @@ public class TimetableEditFragment extends Fragment {
      * @return true beim erfolgreichen speichern sonst false
      */
     private boolean saveLesson() {
-//        Lesson lesson = new Lesson();
-//        lesson.setName(lesson_name.getText().toString());
-//        lesson.setTag(lesson_tag.getText().toString());
-//        lesson.setProfessor(lesson_prof.getText().toString());
-//        lesson.setTypeInt(lesson_type.getSelectedItemPosition());
-//        lesson.setRooms(lesson_rooms.getText().toString());
-//        lesson.setWeek(lesson_week.getSelectedItemPosition());
-//        lesson.setDay(lesson_day.getSelectedItemPosition() + 1);
-//        lesson.setDs(lesson_ds.getSelectedItemPosition() + 1);
-//        lesson.setWeeksOnly(lesson_weeksOnly.getText().toString());
-//
-//        /**
-//         * Wenn keine Kurzform gesetzt ist, diese automatisch erzeugen
-//         */
-//        if (lesson.getTag().isEmpty()) {
-//            lesson.setTag(lesson.getName().substring(0, Math.min(lesson.getName().length(), 5)));
-//        }
-//
-//        DatabaseManager databaseManager = new DatabaseManager(getActivity());
-//        TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
-//
-//        // Stunde speichern
-//        if (this.lesson == null)
-//            return timetableUserDAO.save(lesson) != -1;
-//        else {
-//            lesson.setId(this.lesson.getId());
-//            return timetableUserDAO.update(lesson) > 0;
-//        }
+        try {
+            realm.beginTransaction();
+            if (lesson == null) {
+                lesson = realm.createObject(Lesson2.class, "user_" + UUID.randomUUID().toString());
+                lesson.setCreatedByUser(true);
+            }
+
+            lesson.setName(lesson_name.getText().toString());
+            lesson.setLessonTag(lesson_tag.getText().toString());
+            lesson.setProfessor(lesson_prof.getText().toString());
+            lesson.setType(lesson_type.getSelectedItem().toString());
+            lesson.setWeek(lesson_week.getSelectedItemPosition());
+            lesson.setDay(lesson_day.getSelectedItemPosition() + 1);
+            lesson.setBeginTime(startTime);
+            lesson.setEndTime(endTime);
+            lesson.setEditedByUser(true);
+
+            // Wenn keine Kurzform gesetzt ist, diese automatisch erzeugen
+            if (lesson.getLessonTag().isEmpty()) {
+                lesson.setLessonTag(lesson.getName().substring(0, Math.min(lesson.getName().length(), 5)));
+            }
+
+            // Liste ausgewählten Kalenderwochen erstellen
+            final RealmList<LessonWeek> lessonWeeks = new RealmList<>();
+            LessonWeek lessonWeek;
+            for (int i = 0; i < 53; i++) {
+                if (selectedKws[i]) {
+                    lessonWeek = realm.where(LessonWeek.class).equalTo("weekOfYear", i + 1).findFirst();
+                    if (lessonWeek == null) {
+                        lessonWeek = realm.createObject(LessonWeek.class, i + 1);
+                    }
+                    lessonWeeks.add(lessonWeek);
+                }
+            }
+            lesson.setWeeksOnly(lessonWeeks);
+
+            // Liste von Räumen erstellen
+            String[] rooms = lesson_rooms.getText().toString().split(";");
+            Room room;
+            final RealmList<Room> roomsList = new RealmList<>();
+            for (final String roomName : rooms) {
+                room = realm.where(Room.class).equalTo("roomName", roomName).findFirst();
+                if (room == null) {
+                    room = realm.createObject(Room.class, roomName);
+                }
+                roomsList.add(room);
+            }
+            lesson.setRooms(roomsList);
+
+
+            realm.commitTransaction();
+        } catch (final Exception e) {
+            return false;
+        }
         return true;
     }
 }
