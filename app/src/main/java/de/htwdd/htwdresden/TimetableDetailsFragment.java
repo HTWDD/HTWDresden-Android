@@ -76,7 +76,7 @@ public class TimetableDetailsFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                bundle.putBoolean(Const.BundleParams.TIMETABLE_CREATE, true);
+                bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, false);
                 startEditFragment(bundle);
             }
         });

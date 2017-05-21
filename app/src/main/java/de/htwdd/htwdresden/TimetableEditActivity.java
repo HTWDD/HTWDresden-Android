@@ -17,7 +17,9 @@ import java.util.Locale;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.Lesson2;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class TimetableEditActivity extends AppCompatActivity implements INavigation {
     private ActionBar actionBar;
@@ -39,35 +41,34 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
 
         // Parameter holen
         final Bundle bundle = getIntent().getExtras();
-        final boolean edit = bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false);
-        final boolean create = bundle.getBoolean(Const.BundleParams.TIMETABLE_CREATE, false);
+        boolean edit = bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false);
+        Fragment fragment;
 
         // Anzahl möglicher Stunden aus DB bestimmen um zu entscheiden welches Fragment angezeigt werden soll
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 1) + 1);
         calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
-        final int countResults = TimetableHelper.getLessonsByDateAndDs(
+
+        final RealmResults<Lesson2> results = TimetableHelper.getLessonsByDateAndDs(
                 realm,
                 calendar,
                 bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK),
                 bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)
-        ).size();
+        );
+        final int countResults = results.size();
 
-        Fragment fragment;
-
-        // Neue Stunden anlegen
-        if (create || countResults == 0) {
-            bundle.putBoolean(Const.BundleParams.TIMETABLE_CREATE, true);
+        if (countResults == 0) {
+            edit = false;
             fragment = new TimetableEditFragment();
-        }
-        // Stunde bearbeiten
-        else if (edit && countResults == 1) {
+        } else if (edit && countResults == 1) {
+            bundle.putString(Const.BundleParams.TIMETABLE_LESSON_ID, results.first().getId());
             fragment = new TimetableEditFragment();
-        }
-        // Übersicht anzeigen (auch bei bearbeiten wenn mehrere Einträge vorhanden sind)
-        else {
+        } else {
             fragment = new TimetableDetailsFragment();
         }
+
+        // Parameter übergeben
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, edit);
         fragment.setArguments(bundle);
 
         // Bei orientation change Fragment nicht neuladen

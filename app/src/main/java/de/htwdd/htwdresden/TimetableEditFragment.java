@@ -26,7 +26,6 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.UUID;
@@ -93,21 +92,11 @@ public class TimetableEditFragment extends Fragment {
 
         createListener();
 
-        // Wenn neue Stunde erstellt werden soll, hier aufhören
-        if (!bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false))
+        // Wenn keine Lehrveranstaltung übergeben wurde, hier aufhören
+        if (!bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID))
             return mLayout;
 
-        // ...anhand einer Stunden-ID
-        if (bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID)) {
-            lesson = realm.where(Lesson2.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
-        }
-        // ...oder der übergeben Stunde
-        else {
-            final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-            calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 0) + 1);
-            calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
-            lesson = TimetableHelper.getLessonsByDateAndDs(realm, calendar, true, bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)).first(null);
-        }
+        lesson = realm.where(Lesson2.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
 
         if (lesson != null) {
             // Formular mit Daten füllen

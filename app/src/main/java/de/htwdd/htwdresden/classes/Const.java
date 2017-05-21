@@ -19,7 +19,6 @@ public final class Const {
         public static final String TIMETABLE_DS = "TIMETABLE_DS";
         public static final String TIMETABLE_LESSON_ID = "TIMETABLE_LESSON_ID";
         public static final String TIMETABLE_EDIT = "TIMETABLE_EDIT";
-        public static final String TIMETABLE_CREATE = "TIMETABLE_CREATE";
         public static final String TIMETABLE_FILTER_CURRENT_WEEK = "TIMETABLE_FILTER_CURRENT_WEEK";
         public static final String ROOM_TIMETABLE_ROOM = "ROOM_TIMETABLE_ROOM";
     }
