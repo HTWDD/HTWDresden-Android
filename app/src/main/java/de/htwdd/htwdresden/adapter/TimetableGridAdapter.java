@@ -164,6 +164,9 @@ public class TimetableGridAdapter extends BaseAdapter {
                         }
                     }
 
+                    // Verdeutlichen das mehrere Lehrveranstaltung möglich sind
+                    viewHolder.more.setVisibility(View.VISIBLE);
+
                     // Es gibt keine passende Veranstaltung die angezeigt werden kann
                     if (singleLesson != 1) {
                         viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
@@ -172,8 +175,6 @@ public class TimetableGridAdapter extends BaseAdapter {
                         viewHolder.type.setText(R.string.timetable_moreLessons);
                         break;
                     }
-
-                    viewHolder.more.setVisibility(View.VISIBLE);
                 }
 
                 if (lesson == null) {
