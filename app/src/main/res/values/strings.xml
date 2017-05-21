@@ -67,6 +67,7 @@
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
     <string name="settings_audio">Automatisches Stummschalten</string>
     <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet.</string>
+    <string name="settings_audio_request_permission">Berechtigung wird benötigt zum ändern der Benachrichtigungseinstellungen</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
     <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
     <string name="settings_acra">Bug-Reporting</string>
@@ -199,7 +200,4 @@
     <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
         Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
         Klicken Sie bitte dazu auf OK.</string>
-
-    <string name="preference_title_stummschalten">Automatisches Stummschalten</string>
-    <string name="preference_summary_stummschalten">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet</string>
 </resources>
