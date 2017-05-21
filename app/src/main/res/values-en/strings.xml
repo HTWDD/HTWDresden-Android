@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timetable_edit_hide">Hide</string>
+    <string name="timetable_edit_delete">Delete</string>
+    <string name="timetable_edit_show">Show</string>
+    <string name="timetable_edit_save">Save</string>
+    <string name="timetable_edit_label_time">Time</string>
+    <string name="timetable_edit_label_general">General</string>
+</resources>
