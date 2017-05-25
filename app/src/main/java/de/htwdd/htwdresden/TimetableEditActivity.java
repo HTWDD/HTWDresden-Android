@@ -57,6 +57,7 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
                 bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
         final int countResults = results.size();
 
+        // Entscheiden welches Fragment eingebunden werden soll
         if (countResults == 0) {
             edit = false;
             fragment = new TimetableEditFragment();

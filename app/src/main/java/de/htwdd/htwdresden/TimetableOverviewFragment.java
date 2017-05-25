@@ -22,10 +22,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.INavigation;
@@ -37,7 +33,7 @@ import io.realm.RealmResults;
 
 
 public class TimetableOverviewFragment extends Fragment {
-    private int calendarWeek;
+    private Bundle arguments;
     private Realm realm;
     private RealmResults<Lesson2> lessons;
     private RealmChangeListener<RealmResults<Lesson2>> realmChangeListener;
@@ -53,10 +49,7 @@ public class TimetableOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
         realm = Realm.getDefaultInstance();
-
-        // Parameter aus Bundle holen
-        final Bundle bundle = new Bundle(getArguments());
-        calendarWeek = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
+        arguments = new Bundle(getArguments());
 
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
@@ -99,12 +92,12 @@ public class TimetableOverviewFragment extends Fragment {
             }
         });
 
-        // Adapter zum handeln der Daten
+        // Adapter zum Anzeigen der Daten
         final TimetableGridAdapter gridAdapter = new TimetableGridAdapter(
                 realm,
-                calendarWeek,
-                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
-                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false)
+                arguments.getInt(Const.BundleParams.TIMETABLE_WEEK, 1),
+                arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
+                arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false)
         );
 
         // Benachrichtigung über geänderte Daten
@@ -160,11 +153,12 @@ public class TimetableOverviewFragment extends Fragment {
     private void startEditActivity(final int indexOfItem, final boolean editMode) {
         final int day = indexOfItem % 7;
         final Bundle bundle = new Bundle();
-        bundle.putInt(Const.BundleParams.TIMETABLE_WEEK, calendarWeek);
+        bundle.putInt(Const.BundleParams.TIMETABLE_WEEK, arguments.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
         bundle.putInt(Const.BundleParams.TIMETABLE_DAY, day);
         bundle.putInt(Const.BundleParams.TIMETABLE_DS, (indexOfItem - day) / 7);
         bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, editMode);
-        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true);
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true));
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
 
         final Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
         intent.putExtras(bundle);
