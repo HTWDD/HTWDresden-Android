@@ -35,15 +35,17 @@ public class TimetableGridAdapter extends BaseAdapter {
     private final Calendar calendar;
     private final int week;
     private final boolean filterCurrentWeek;
+    private final boolean showHiddenLessons;
     private final static String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
     private final static GridView.LayoutParams layoutParams_1 = new GridView.LayoutParams(GridView.AUTO_FIT, 50);
     private final static GridView.LayoutParams layoutParams_2 = new GridView.LayoutParams(GridView.AUTO_FIT, 180);
 
-    public TimetableGridAdapter(@NonNull final Realm realm, final int week) {
+    public TimetableGridAdapter(@NonNull final Realm realm, final int week, final boolean filterCurrentWeek, final boolean showHiddenLessons) {
         this.realm = realm;
         this.calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        this.filterCurrentWeek = true;
+        this.filterCurrentWeek = filterCurrentWeek;
+        this.showHiddenLessons = showHiddenLessons;
         this.week = week;
     }
 
@@ -58,7 +60,7 @@ public class TimetableGridAdapter extends BaseAdapter {
         calendar.set(Calendar.DAY_OF_WEEK, day + 1);
         calendar.set(Calendar.WEEK_OF_YEAR, week);
 
-        return TimetableHelper.getLessonsByDateAndDs(realm, calendar, filterCurrentWeek, (i - day) / 7);
+        return TimetableHelper.getLessonsByDateAndDs(realm, calendar, (i - day) / 7, filterCurrentWeek, showHiddenLessons);
     }
 
     @Override
@@ -153,11 +155,9 @@ public class TimetableGridAdapter extends BaseAdapter {
                             final long inside = lesson2.getWeeksOnly()
                                     .where()
                                     .equalTo("weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
-                                    .or()
-                                    .isEmpty("weekOfYear")
                                     .count();
 
-                            if (inside > 0) {
+                            if (inside > 0 || lesson2.getWeeksOnly().isEmpty()) {
                                 singleLesson++;
                                 lesson = lesson2;
                             }
