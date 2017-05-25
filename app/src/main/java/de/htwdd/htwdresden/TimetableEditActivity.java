@@ -52,9 +52,9 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
         final RealmResults<Lesson2> results = TimetableHelper.getLessonsByDateAndDs(
                 realm,
                 calendar,
-                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK),
-                bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)
-        );
+                bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1),
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
         final int countResults = results.size();
 
         if (countResults == 0) {

@@ -52,9 +52,9 @@ public class TimetableDetailsFragment extends Fragment {
         final RealmResults<Lesson2> lessons = TimetableHelper.getLessonsByDateAndDs(
                 realm,
                 calendar,
-                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK),
-                bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1)
-        );
+                bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1),
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
 
         // Adapter für Daten erstellen
         final TimetableListAdapter timetableListAdapter = new TimetableListAdapter(getActivity(), lessons);

@@ -45,7 +45,7 @@ public class VolumeController {
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             // Nach aktueller Veranstaltung suchen
-            final RealmResults<Lesson2> lessons = TimetableHelper.getLessonsByDateAndDs(realm, calendar, true, currentDs);
+            final RealmResults<Lesson2> lessons = TimetableHelper.getLessonsByDateAndDs(realm, calendar, currentDs, true, false);
 
             // Gibt es aktuell eine Lehrveranstaltung?, wenn nein return
             if (lessons.size() == 0)

@@ -57,6 +57,8 @@ public class TimetableHelper {
         return realm.where(Lesson2.class)
                 // Nach Tag einschränken
                 .equalTo(Const.database.Lesson.DAY, calendar.get(Calendar.DAY_OF_WEEK) - 1)
+                // Nicht ausgeblendet
+                .equalTo(Const.database.Lesson.HIDE_LESSON, false)
                 // Nach Kalenderwoche einschränken
                 .beginGroup()
                 .equalTo(Const.database.Lesson.WEEK, getWeekTyp(calendar.get(Calendar.WEEK_OF_YEAR)))
@@ -78,11 +80,13 @@ public class TimetableHelper {
      *
      * @param realm aktuelle Datenbankverbindung
      * @param calendar Tag für welchen die Lehrveranstaltungen gelistet werden soll
-     * @param filterCurrentWeek Nur Lehrveranstaltungen der aktuellen Kalenderwoche zurückgeben
      * @param ds Zeit in welcher die Lehrveranstaltungen stattfinden sollen
+     * @param filterCurrentWeek Nur Lehrveranstaltungen der aktuellen Kalenderwoche zurückgeben
+     * @param showHiddenLessons versteckte Lehrveranstaltungen mit anzeigen
      * @return Liste von passenden Lehrveranstaltungen
      */
-    public static RealmResults<Lesson2> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, final boolean filterCurrentWeek, final int ds) {
+    public static RealmResults<Lesson2> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, final int ds, final boolean filterCurrentWeek,
+                                                              final boolean showHiddenLessons) {
         final int dsIndex = ds > 0 ? ds - 1 : 0;
         final RealmQuery<Lesson2> realmQuery = realm.where(Lesson2.class)
                 .equalTo(Const.database.Lesson.DAY, calendar.get(Calendar.DAY_OF_WEEK) - 1)
@@ -100,6 +104,11 @@ public class TimetableHelper {
                     .isEmpty(Const.database.Lesson.WEEKS_ONLY)
                     .or().equalTo(Const.database.Lesson.WEEKS_ONLY + ".weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
                     .endGroup();
+        }
+
+        // Versteckte Lehrveranstaltungen ausschließen
+        if (!showHiddenLessons) {
+            realmQuery.equalTo(Const.database.Lesson.HIDE_LESSON, false);
         }
 
         return realmQuery.findAll();
@@ -132,6 +141,7 @@ public class TimetableHelper {
 
             // Da in der passenden Zeit mehrere Veranstaltungen stattfinden können, diese suchen
             final RealmResults<Lesson2> results = realm.where(Lesson2.class)
+                    .equalTo(Const.database.Lesson.HIDE_LESSON, false)
                     .equalTo(Const.database.Lesson.DAY, startLesson.getDay())
                     .greaterThanOrEqualTo(Const.database.Lesson.BEGIN_TIME, startLesson.getBeginTime())
                     .lessThan(Const.database.Lesson.BEGIN_TIME, endDS[nextDs > 0 ? nextDs - 1 : nextDs])
@@ -290,7 +300,7 @@ public class TimetableHelper {
             ));
 
             // Stunde anzeigen
-            lesson2s = getLessonsByDateAndDs(realm, onNextDay, true, i + 1);
+            lesson2s = getLessonsByDateAndDs(realm, onNextDay, i + 1, true, false);
             foundedLessons = lesson2s.size();
             final TextView textLesson = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_lesson);
             switch (foundedLessons) {
@@ -420,7 +430,8 @@ public class TimetableHelper {
         final long currentTime = getMinutesSinceMidnight(calendar);
         final int currentDs = getCurrentDS(currentTime);
 
-        final RealmQuery<Lesson2> realmQuery = realm.where(Lesson2.class);
+        // Nur Lehrveranstaltungen suchen die nicht ausgeblendet werden sollen
+        final RealmQuery<Lesson2> realmQuery = realm.where(Lesson2.class).equalTo(Const.database.Lesson.HIDE_LESSON, false);
 
         // Lehrveranstaltungen auf aktuelle Woche einschränken
         realmQuery.beginGroup()

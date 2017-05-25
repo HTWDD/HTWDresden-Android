@@ -6,4 +6,10 @@
     <string name="timetable_edit_save">Save</string>
     <string name="timetable_edit_label_time">Time</string>
     <string name="timetable_edit_label_general">General</string>
+    <string name="timetable_overview_options_menu_filter_week">week filter</string>
+    <string name="timetable_overview_options_menu_filter_hidden">hidden lessons</string>
+    <string name="timetable_tab_current_week">Current week (%d)</string>
+    <string name="timetable_tab_next_week">Next week (%d)</string>
+    <string name="timetable_tab_odd_week">odd week</string>
+    <string name="timetable_tab_even_week">even week</string>
 </resources>

@@ -20,6 +20,7 @@ public final class Const {
         public static final String TIMETABLE_LESSON_ID = "TIMETABLE_LESSON_ID";
         public static final String TIMETABLE_EDIT = "TIMETABLE_EDIT";
         public static final String TIMETABLE_FILTER_CURRENT_WEEK = "TIMETABLE_FILTER_CURRENT_WEEK";
+        public static final String TIMETABLE_FILTER_SHOW_HIDDEN = "TIMETABLE_FILTER_SHOW_HIDDEN";
         public static final String ROOM_TIMETABLE_ROOM = "ROOM_TIMETABLE_ROOM";
     }
 
@@ -203,6 +204,7 @@ public final class Const {
             static final String END_TIME = "endTime";
             static final String BEGIN_TIME = "beginTime";
             static final String WEEKS_ONLY = "weeksOnly";
+            static final String HIDE_LESSON = "hideLesson";
         }
 
         public static class SemesterPlanTable implements BaseColumns {

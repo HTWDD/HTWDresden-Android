@@ -54,11 +54,9 @@ public class TimetableOverviewFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
         realm = Realm.getDefaultInstance();
 
-        // Arguments überprüfen
-        final Bundle bundle = getArguments();
-        if (bundle != null)
-            calendarWeek = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
-        else calendarWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+        // Parameter aus Bundle holen
+        final Bundle bundle = new Bundle(getArguments());
+        calendarWeek = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
 
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
@@ -102,7 +100,12 @@ public class TimetableOverviewFragment extends Fragment {
         });
 
         // Adapter zum handeln der Daten
-        final TimetableGridAdapter gridAdapter = new TimetableGridAdapter(realm, calendarWeek);
+        final TimetableGridAdapter gridAdapter = new TimetableGridAdapter(
+                realm,
+                calendarWeek,
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
+                bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false)
+        );
 
         // Benachrichtigung über geänderte Daten
         realmChangeListener = new RealmChangeListener<RealmResults<Lesson2>>() {

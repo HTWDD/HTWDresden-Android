@@ -80,14 +80,18 @@
     <string name="mensa_price">%s €</string>
 
     <string name="timetable_overview_today">Heute</string>
-    <string name="timetable_overview_lessons">%1$s (%2$s)</string>
+    <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
+    <string name="timetable_overview_options_menu_filter_week">Wochenfilter</string>
+    <string name="timetable_overview_options_menu_filter_hidden">versteckte Stunden</string>
     <string name="timetable_sync_success">Stundenplan erfolgreich aktualisiert!</string>
     <string name="timetable_sync_notFound">Studiengruppe oder Webservice nicht gefunden.</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>
     <string name="timetable_add">Stunde hinzufügen</string>
     <string name="timetable_details">Stunden-Details</string>
-    <string name="timetable_current_week">Aktuelle Woche (%d)</string>
-    <string name="timetable_next_week">Nächste Woche (%d)</string>
+    <string name="timetable_tab_current_week">Aktuelle Woche (%d)</string>
+    <string name="timetable_tab_next_week">Nächste Woche (%d)</string>
+    <string name="timetable_tab_even_week">gerade Woche</string>
+    <string name="timetable_tab_odd_week">ungerade Woche</string>
     <string name="timetable_moreLessons">mehrere Stunden</string>
     <string name="timetable_moreLessonsPoints" translatable="false">***</string>
     <string name="timetable_only_KW">einige KW</string>

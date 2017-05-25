@@ -51,12 +51,12 @@ public class RoomTimetableDetailsFragment extends Fragment {
         bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
         bundle_2.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
         mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_current_week, currentWeek),
+                getResources().getString(R.string.timetable_tab_current_week, currentWeek),
                 RoomTimetableOverviewFragment.class,
                 bundle_1
         ));
         mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_next_week, nextWeek),
+                getResources().getString(R.string.timetable_tab_next_week, nextWeek),
                 RoomTimetableOverviewFragment.class,
                 bundle_2
         ));

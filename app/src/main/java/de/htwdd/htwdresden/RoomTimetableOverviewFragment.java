@@ -45,7 +45,7 @@ public class RoomTimetableOverviewFragment extends Fragment {
         swipeRefreshLayout.setEnabled(false);
 
         // Adapter zum handeln der Daten
-        TimetableGridAdapter gridAdapter = new TimetableGridAdapter(realm, week);
+        TimetableGridAdapter gridAdapter = new TimetableGridAdapter(realm, week, true, false);
 
         // GridView
         GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
