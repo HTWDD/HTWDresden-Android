@@ -389,7 +389,7 @@ public class TimetableHelper {
      */
     private static String removeLastComma(@NonNull String s) {
         final int length = s.length();
-        if (length > 2) {
+        if (length >= 2) {
             s = s.substring(0, length - 2);
         }
         return s;
