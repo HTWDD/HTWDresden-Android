@@ -47,6 +47,7 @@ public final class Const {
 
     public static final class internet {
         public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
+        public static final String WEBSERVICE_URL_APP = "https://rubu2.rz.htw-dresden.de/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final int HTTP_UNAUTHORIZED = 401;
@@ -205,6 +206,7 @@ public final class Const {
             static final String BEGIN_TIME = "beginTime";
             static final String WEEKS_ONLY = "weeksOnly";
             static final String HIDE_LESSON = "hideLesson";
+            public static final String CREATED_BY_USER = "createdByUser";
         }
 
         public static class SemesterPlanTable implements BaseColumns {

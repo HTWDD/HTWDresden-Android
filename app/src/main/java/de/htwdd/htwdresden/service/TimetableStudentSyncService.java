@@ -43,19 +43,19 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
 
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
+        Log.d(LOG_TAG, "Starte TimetableStudentSyncService");
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final String studienjahr = sharedPreferences.getString("StgJhr", "");
         final String studiengang = sharedPreferences.getString("Stg", "");
         final String studiengruppe = sharedPreferences.getString("StgGrp", "");
-        Log.d(LOG_TAG, "Starte TimetableStudentSyncService");
 
         // Stundenplan vom Webservice laden
-        getTimetable(studienjahr, studiengang, studiengruppe);
+        getTimetableFromWeb(studienjahr, studiengang, studiengruppe);
         // Auf fertigstellung warten
         waitForFinish();
         if (!isCancel()) {
             final boolean result = saveTimetable();
-            Log.d(LOG_TAG, "Speichern beendet" + result);
+            Log.d(LOG_TAG, "Speichern beendet: " + result);
             if (result && broadcastNotifier != null) {
                 broadcastNotifier.notifyStatus(0);
             }
@@ -80,7 +80,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
      * @param studiengang   Studiengang des Studenten
      * @param studiengruppe Studiengruppe des Studenten
      */
-    private void getTimetable(@NonNull final String studienjahr, @NonNull final String studiengang, @NonNull final String studiengruppe) {
+    private void getTimetableFromWeb(@NonNull final String studienjahr, @NonNull final String studiengang, @NonNull final String studiengruppe) {
         final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
@@ -90,7 +90,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         };
         final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(
                 Request.Method.GET,
-                "https://rubu2.rz.htw-dresden.de/API/v0/studentTimetable.php?StgJhr=" + studienjahr + "&Stg=" + studiengang + "&StgGrp=" + studiengruppe,
+                Const.internet.WEBSERVICE_URL_APP + "v0/studentTimetable.php?StgJhr=" + studienjahr + "&Stg=" + studiengang + "&StgGrp=" + studiengruppe,
                 null,
                 response,
                 errorListener
@@ -102,10 +102,15 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         VolleyDownloader.getInstance(context).addToRequestQueue(request);
     }
 
+    /**
+     * Speichert den Stundenplan
+     *
+     * @return true wenn erfolgreich gespeichert, sonst false
+     */
     private boolean saveTimetable() {
         final Realm realm = Realm.getDefaultInstance();
         final HashMap<String, Date> stateDatabase = new HashMap<>((int) realm.where(Lesson2.class).count());
-        final RealmResults<Lesson2> results = realm.where(Lesson2.class).findAll();
+        final RealmResults<Lesson2> results = realm.where(Lesson2.class).equalTo(Const.database.Lesson.CREATED_BY_USER, false).findAll();
         for (final Lesson2 lesson : results) {
             stateDatabase.put(lesson.getId(), lesson.getLastChanged());
         }
