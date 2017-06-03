@@ -187,6 +187,11 @@ public class TimetableOverviewFragment extends Fragment {
                 case Const.internet.HTTP_NOT_FOUND:
                     Toast.makeText(context, R.string.timetable_sync_notFound, Toast.LENGTH_SHORT).show();
                     break;
+                case Const.internet.HTTP_TIMEOUT:
+                case Const.internet.HTTP_UNAUTHORIZED:
+                case Const.internet.HTTP_NO_CONNECTION:
+                    Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_SHORT).show();
+                    break;
                 case -1:
                 default:
                     Toast.makeText(context, R.string.timetable_save_error, Toast.LENGTH_LONG).show();
