@@ -56,7 +56,6 @@ public final class Const {
         public static final int HTTP_TIMEOUT = 998;
         public static final int HTTP_NO_CONNECTION = 997;
         public static final int HTTP_NETWORK_ERROR = 996;
-        public static final String TAG_ROOM_TIMETABLE = "ROOM_TIMETABLE";
         public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
         public static final String TAG_TIMETABLE = "TIMETABLE";
     }
@@ -208,6 +207,11 @@ public final class Const {
             static final String HIDE_LESSON = "hideLesson";
             public static final String CREATED_BY_USER = "createdByUser";
         }
+
+        public static class LessonRoom {
+            public static final String ROOM = "room";
+        }
+
 
         public static class SemesterPlanTable implements BaseColumns {
             public static final String TABLE_NAME = "SemesterPlan";
