@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,22 +23,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableRoomDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
 import de.htwdd.htwdresden.service.TimetableStudentSyncService;
-import de.htwdd.htwdresden.types.RoomTimetable;
+import de.htwdd.htwdresden.types.LessonRoom;
+import io.realm.Realm;
 
 
 /**
@@ -48,7 +43,7 @@ import de.htwdd.htwdresden.types.RoomTimetable;
 public class RoomTimetableFragment extends Fragment {
     private static final String LOG_TAG = "RoomTimetableFragment";
     private View mLayout;
-    private ArrayList<RoomTimetable> roomTimetables = new ArrayList<>();
+    private Realm realm;
     private RoomTimetableAdapter roomTimetableAdapter;
     private ResponseReceiver responseReceiver;
 
@@ -67,31 +62,35 @@ public class RoomTimetableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_room_timetable, container, false);
+        realm = Realm.getDefaultInstance();
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
         // Setze Titel der Toolbar
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_room_timetable));
 
         // Adapter für Liste erzeugen
-        roomTimetableAdapter = new RoomTimetableAdapter(getActivity(), roomTimetables);
+        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM));
 
         // ListView
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         listView.setAdapter(roomTimetableAdapter);
         listView.addFooterView(inflater.inflate(R.layout.fragment_room_timetable_footer, listView, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, roomTimetableAdapter.getItem(i).roomName);
-                Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+                final LessonRoom lessonRoom = roomTimetableAdapter.getItem(i);
+                if (lessonRoom == null) {
+                    return;
+                }
+
+                final Bundle bundle = new Bundle();
+                final Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, lessonRoom.getRoom());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-
-        // Daten zum anzeigen laden
-        loadData();
+        listView.setEmptyView(mLayout.findViewById(R.id.info));
 
         // FloatingActionButton Aktion setzen
         mLayout.findViewById(R.id.fab_add).setOnClickListener(new View.OnClickListener() {
@@ -137,7 +136,7 @@ public class RoomTimetableFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 }
                 // Überprüfe ob Räume vorhanden sind
-                else if (roomTimetables.size() == 0) {
+                else if (roomTimetableAdapter.getCount() == 0) {
                     Toast.makeText(context, R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 } else {
@@ -165,6 +164,7 @@ public class RoomTimetableFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        realm.close();
     }
 
     @Override
@@ -175,20 +175,21 @@ public class RoomTimetableFragment extends Fragment {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String room = roomTimetables.get(info.position).roomName;
+    public boolean onContextItemSelected(@NonNull final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final LessonRoom room = roomTimetableAdapter.getItem(info.position);
+        if (room == null) {
+            return false;
+        }
 
         switch (item.getItemId()) {
             case R.id.room_timetable_delete:
-                // Lösche Raum aus DB
-                DatabaseManager databaseManager = new DatabaseManager(getActivity());
-                TimetableRoomDAO timetableRoomDAO = new TimetableRoomDAO(databaseManager);
-                timetableRoomDAO.deleteRoom(room);
-                loadData();
+                realm.beginTransaction();
+                realm.where(LessonRoom.class).equalTo(Const.database.LessonRoom.ROOM, room.getRoom()).findAll().deleteAllFromRealm();
+                realm.commitTransaction();
                 return true;
             case R.id.room_timetable_update:
-                startUpdateService(room);
+                startUpdateService(room.getRoom());
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -248,38 +249,5 @@ public class RoomTimetableFragment extends Fragment {
                     break;
             }
         }
-    }
-
-    /**
-     * Zeigt die Raumpläne aus der Datenbank in der ListView an
-     */
-    private void loadData() {
-        // Kalender zum bestimmen welcher Plan angezeigt wird
-        Calendar calendar = GregorianCalendar.getInstance();
-
-        // Wenn Sonntag ist, auf Plan für Montag springen
-        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-
-        DatabaseManager databaseManager = new DatabaseManager(getActivity());
-        TimetableRoomDAO timetableRoomDAO = new TimetableRoomDAO(databaseManager);
-
-        // Lade Stundenpläne aus DB
-        roomTimetables.clear();
-        roomTimetables.addAll(timetableRoomDAO.getOverview(calendar.get(Calendar.DAY_OF_WEEK), calendar.get(Calendar.WEEK_OF_YEAR)));
-
-        // Hinweis ein / ausblenden
-        TextView textView = (TextView) mLayout.findViewById(R.id.info);
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-
-        if (roomTimetables.size() == 0) {
-            textView.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-        } else {
-            textView.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-        }
-
-        roomTimetableAdapter.notifyDataSetChanged();
     }
 }
