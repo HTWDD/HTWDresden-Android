@@ -1,24 +1,20 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Time;
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +28,6 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-import static de.htwdd.htwdresden.classes.Const.Timetable.beginDS;
 import static de.htwdd.htwdresden.classes.Const.Timetable.endDS;
 
 
@@ -41,8 +36,7 @@ import static de.htwdd.htwdresden.classes.Const.Timetable.endDS;
  *
  * @author Kay Förster
  */
-public class TimetableHelper {
-    private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
+public class TimetableHelper extends AbstractTimetableHelper {
 
     /**
      * Liefert eine Liste der aktuell laufenden Lehrveranstaltungen
@@ -271,91 +265,17 @@ public class TimetableHelper {
      * @param context      aktueller App-Context
      * @param realm        aktuelle Datenbankverbindung
      * @param linearLayout {@link LinearLayout} in welchem die Liste eingefügt wird
-     * @param onNextDay    Tag für welchen die Übersicht erstellt werden soll
+     * @param day          Tag für welchen die Übersicht erstellt werden soll
      * @param current_ds   aktuelle DS welche hervorgehoben werden soll,sonst 0
      */
-    public static void createSimpleLessonOverview(@NonNull final Context context, final Realm realm, @NonNull final LinearLayout linearLayout, final Calendar onNextDay, final int current_ds) {
-        final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final Resources resources = context.getResources();
-
-        RealmResults<Lesson2> lesson2s;
-        int foundedLessons;
-        for (int i = 0; i < 8; i++) {
-            final View sub_view = mLayoutInflater.inflate(R.layout.fragment_timetable_mini_plan, linearLayout, false);
-
-            // Hintergrund einfärben
-            if (i == (current_ds - 1))
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.timetable_blue));
-            else if (i % 2 == 0)
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.app_background));
-            else
-                sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-
-            // Zeiten anzeigen
-            final TextView textDS = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_ds);
-            textDS.setText(resources.getString(
-                    R.string.timetable_ds_list_simple,
-                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[i])),
-                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[i]))
-            ));
-
-            // Stunde anzeigen
-            lesson2s = getLessonsByDateAndDs(realm, onNextDay, i + 1, true, false);
-            foundedLessons = lesson2s.size();
-            final TextView textLesson = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_lesson);
-            switch (foundedLessons) {
-                case 0:
-                    textLesson.setText("");
-                    break;
-                case 1:
-                    final Lesson2 lesson = lesson2s.first();
-                    textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
-                    break;
-                default:
-                    textLesson.setText(R.string.timetable_moreLessons);
-                    break;
-            }
-
-            // View zum LinearLayout hinzufügen
-            linearLayout.addView(sub_view);
+    public static void createSimpleLessonOverview(@NonNull final Context context, final Realm realm, @NonNull final LinearLayout linearLayout, final Calendar day,
+                                                  final int current_ds) {
+        final int countUnits = Const.Timetable.beginDS.length;
+        final List<RealmResults<Lesson2>> realmResultsList = new ArrayList<>(countUnits);
+        for (int i = 0; i < countUnits; i++) {
+            realmResultsList.add(getLessonsByDateAndDs(realm, day, i + 1, true, false));
         }
-    }
-
-    /**
-     * Liefert die Minuten seit Mitternacht aus dem übergeben {@see Calendar}
-     *
-     * @param calendar Datum / Zeit
-     * @return Minuten seit Mitternacht
-     */
-    public static long getMinutesSinceMidnight(@NonNull final Calendar calendar) {
-        return TimeUnit.MINUTES.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS) + calendar.get(Calendar.MINUTE);
-    }
-
-    /**
-     * Liefert die aktuelle DS zur übergeben Zeit
-     *
-     * @param currentTime Minuten seit Mitternacht
-     * @return die aktuelle DS, 0 falls vor der ersten DS oder -1 nach der letzten DS
-     */
-    public static int getCurrentDS(long currentTime) {
-        if (currentTime >= endDS[6])
-            return -1;
-        else if (currentTime >= beginDS[6])
-            return 7;
-        else if (currentTime >= beginDS[5])
-            return 6;
-        else if (currentTime >= beginDS[4])
-            return 5;
-        else if (currentTime >= beginDS[3])
-            return 4;
-        else if (currentTime >= beginDS[2])
-            return 3;
-        else if (currentTime >= beginDS[1])
-            return 2;
-        else if (currentTime >= beginDS[0])
-            return 1;
-
-        return 0;
+        createSimpleLessonOverview(context, realmResultsList, linearLayout, current_ds);
     }
 
     /**
@@ -477,16 +397,5 @@ public class TimetableHelper {
         // Ergebnisse sortieren und erste Stunde bestimmen
         final RealmResults<Lesson2> results = realmQuery.findAllSorted(Const.database.Lesson.DAY, Sort.ASCENDING, Const.database.Lesson.BEGIN_TIME, Sort.ASCENDING);
         return results.size() > 0 ? results.first() : null;
-    }
-
-    /**
-     * Bestimmt ob übergebene Kalenderwoche gerade oder ungerade ist
-     *
-     * @param calendarWeek aktuelle Kalenderwoche
-     * @return 1=ungerade KW, 2=gerade KW
-     */
-    private static int getWeekTyp(final int calendarWeek) {
-        final int result = calendarWeek % 2;
-        return result == 0 ? 2 : result;
     }
 }

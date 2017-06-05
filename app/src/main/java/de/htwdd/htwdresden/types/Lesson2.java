@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import java.util.Date;
 
+import de.htwdd.htwdresden.interfaces.ILesson;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -15,7 +16,7 @@ import io.realm.annotations.Required;
  *
  * @author Kay Förster
  */
-public class Lesson2 extends RealmObject {
+public class Lesson2 extends RealmObject implements ILesson {
     @PrimaryKey
     @Required
     private String id;
