@@ -22,8 +22,7 @@
                 android:id="@+id/fragment_room_timetable_titel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="30sp" />
+                style="@style/TextAppearance.AppCompat.Title"/>
 
             <TextView
                 android:id="@+id/overview_lesson_day"
