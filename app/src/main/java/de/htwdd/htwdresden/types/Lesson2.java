@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.types;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Date;
@@ -42,6 +43,7 @@ public class Lesson2 extends RealmObject implements ILesson {
         return id;
     }
 
+    @Override
     public String getLessonTag() {
         return lessonTag;
     }
@@ -58,6 +60,7 @@ public class Lesson2 extends RealmObject implements ILesson {
         this.name = name;
     }
 
+    @Override
     public String getType() {
         return type;
     }
@@ -106,6 +109,7 @@ public class Lesson2 extends RealmObject implements ILesson {
         this.professor = professor;
     }
 
+    @Override
     public RealmList<LessonWeek> getWeeksOnly() {
         return weeksOnly;
     }
@@ -114,6 +118,8 @@ public class Lesson2 extends RealmObject implements ILesson {
         this.weeksOnly = weeksOnly;
     }
 
+    @NonNull
+    @Override
     public RealmList<Room> getRooms() {
         return rooms;
     }

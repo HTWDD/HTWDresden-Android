@@ -36,6 +36,7 @@ public class LessonRoom extends RealmObject implements ILesson {
     @Index
     private String room;
     private Date lastChanged;
+    private String studyGroups;
 
     public String getId() {
         return id;
@@ -107,6 +108,7 @@ public class LessonRoom extends RealmObject implements ILesson {
         this.professor = professor;
     }
 
+    @Override
     public RealmList<LessonWeek> getWeeksOnly() {
         return weeksOnly;
     }
@@ -119,11 +121,25 @@ public class LessonRoom extends RealmObject implements ILesson {
         return lastChanged;
     }
 
+    @NonNull
+    @Override
+    public RealmList<Room> getRooms() {
+        return new RealmList<>();
+    }
+
     public String getRoom() {
         return room;
     }
 
     public void setRoom(@NonNull final String room) {
         this.room = room;
+    }
+
+    public String getStudyGroups() {
+        return studyGroups;
+    }
+
+    public void setStudyGroups(final String studyGroups) {
+        this.studyGroups = studyGroups;
     }
 }
