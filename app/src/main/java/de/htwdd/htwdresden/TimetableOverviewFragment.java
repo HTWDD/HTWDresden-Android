@@ -22,7 +22,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
+import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableStudentSyncService;
@@ -93,7 +93,7 @@ public class TimetableOverviewFragment extends Fragment {
         });
 
         // Adapter zum Anzeigen der Daten
-        final TimetableGridAdapter gridAdapter = new TimetableGridAdapter(
+        final TimetableUserGridAdapter gridAdapter = new TimetableUserGridAdapter(
                 realm,
                 arguments.getInt(Const.BundleParams.TIMETABLE_WEEK, 1),
                 arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),

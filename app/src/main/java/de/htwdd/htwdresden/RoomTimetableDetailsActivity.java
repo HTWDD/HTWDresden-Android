@@ -2,8 +2,8 @@ package de.htwdd.htwdresden;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +15,10 @@ public class RoomTimetableDetailsActivity extends AppCompatActivity implements I
     private ActionBar actionBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.my_awesome_toolbar));
 
         actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -28,10 +26,9 @@ public class RoomTimetableDetailsActivity extends AppCompatActivity implements I
 
         // Bei orientation change Fragment nicht neuladen
         if (savedInstanceState == null) {
-            Fragment fragment = new RoomTimetableDetailsFragment();
+            final Fragment fragment = new RoomTimetableDetailsFragment();
             fragment.setArguments(getIntent().getExtras());
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.activity_sync_FrameLayout, fragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.activity_sync_FrameLayout, fragment).commit();
         }
     }
 
@@ -50,7 +47,7 @@ public class RoomTimetableDetailsActivity extends AppCompatActivity implements I
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(@Nullable final String title) {
         if (title == null || title.isEmpty())
             actionBar.setTitle(R.string.app_name);
         else actionBar.setTitle(title);

@@ -21,46 +21,39 @@ import java.util.Locale;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.interfaces.ILesson;
 import io.realm.Realm;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 /**
- * Adapter für die Grid-Stundenplan-Ansicht
+ * abstracter Adapter für die Grid-Stundenplan-Ansicht
  *
  * @author Kay Förster
  */
-public class TimetableGridAdapter extends BaseAdapter {
-    private final Realm realm;
-    private final Calendar calendar;
-    private final int week;
-    private final boolean filterCurrentWeek;
-    private final boolean showHiddenLessons;
+abstract class AbstractTimetableGridAdapter<T extends RealmModel & ILesson> extends BaseAdapter {
+    protected final Realm realm;
+    protected final Calendar calendar;
+    protected final int week;
+    final boolean filterCurrentWeek;
     private final static String[] nameOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
     private final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
     private final static GridView.LayoutParams layoutParams_1 = new GridView.LayoutParams(GridView.AUTO_FIT, 50);
     private final static GridView.LayoutParams layoutParams_2 = new GridView.LayoutParams(GridView.AUTO_FIT, 180);
 
-    public TimetableGridAdapter(@NonNull final Realm realm, final int week, final boolean filterCurrentWeek, final boolean showHiddenLessons) {
+    AbstractTimetableGridAdapter(@NonNull final Realm realm, final int week, final boolean filterCurrentWeek) {
         this.realm = realm;
         this.calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        this.filterCurrentWeek = filterCurrentWeek;
-        this.showHiddenLessons = showHiddenLessons;
         this.week = week;
+        this.filterCurrentWeek = filterCurrentWeek;
     }
+
+    @Override
+    public abstract RealmResults<T> getItem(final int i);
 
     @Override
     public int getCount() {
         return 63;
-    }
-
-    @Override
-    public RealmResults<Lesson2> getItem(final int i) {
-        final int day = i % 7;
-        calendar.set(Calendar.DAY_OF_WEEK, day + 1);
-        calendar.set(Calendar.WEEK_OF_YEAR, week);
-
-        return TimetableHelper.getLessonsByDateAndDs(realm, calendar, (i - day) / 7, filterCurrentWeek, showHiddenLessons);
     }
 
     @Override
@@ -131,8 +124,8 @@ public class TimetableGridAdapter extends BaseAdapter {
                 viewHolder.tag.setVisibility(View.VISIBLE);
                 viewHolder.room.setVisibility(View.VISIBLE);
 
-                Lesson2 lesson = null;
-                final RealmResults<Lesson2> lessons = getItem(i);
+                T lesson = null;
+                final RealmResults<T> lessons = getItem(i);
 
                 // Keine Lehrveranstaltung in diesem Zeitabschnitt
                 if (lessons.size() == 0) {
@@ -151,7 +144,7 @@ public class TimetableGridAdapter extends BaseAdapter {
                     int singleLesson = 0;
                     if (!filterCurrentWeek) {
                         // Wenn nicht nach einer entsprechenden Woche gesucht wird jetzt nach einer Lehrveranstaltung suchen, welche bevorzugt angezeigt werden kann
-                        for (Lesson2 lesson2 : lessons) {
+                        for (T lesson2 : lessons) {
                             final long inside = lesson2.getWeeksOnly()
                                     .where()
                                     .equalTo("weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
@@ -182,7 +175,7 @@ public class TimetableGridAdapter extends BaseAdapter {
                 }
 
                 viewHolder.tag.setText(lesson.getLessonTag());
-                viewHolder.room.setText(TimetableHelper.getStringOfRooms(lesson));
+                viewHolder.room.setText(getLessonInfo(lesson));
 
                 // Setze Hintergrundfarbe
                 final String[] lessonType = view.getResources().getStringArray(R.array.lesson_type);
@@ -211,6 +204,9 @@ public class TimetableGridAdapter extends BaseAdapter {
 
         return view;
     }
+
+    @Nullable
+    abstract String getLessonInfo(@NonNull final T lesson);
 
     private static class ViewHolder {
         int position;

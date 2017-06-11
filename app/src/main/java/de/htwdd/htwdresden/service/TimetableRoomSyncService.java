@@ -19,7 +19,7 @@ import java.util.Map;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.TimetableHelper;
+import de.htwdd.htwdresden.classes.TimetableRoomHelper;
 import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.LessonRoom;
@@ -133,7 +133,7 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
 
                 // Einzelne Lehrveranstaltungen speichern
                 for (int i = 0; i < countResults; i++) {
-                    jsonObject = TimetableHelper.convertTimetableJsonObject(jsonResults.getJSONObject(i));
+                    jsonObject = TimetableRoomHelper.convertTimetableJsonObject(jsonResults.getJSONObject(i));
                     jsonObject.put(Const.database.LessonRoom.ROOM, room);
                     realm.createOrUpdateObjectFromJson(LessonRoom.class, jsonObject);
                 }
