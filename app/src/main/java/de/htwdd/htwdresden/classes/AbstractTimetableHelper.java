@@ -9,13 +9,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Time;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
+import de.htwdd.htwdresden.types.Lesson2;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
@@ -68,6 +76,70 @@ abstract class AbstractTimetableHelper {
     }
 
     /**
+     * Liefert {@link Lesson2#lessonTag} einer Lehrveranstaltung als einheitlichen int zurück
+     *
+     * @param lesson Stunde aus welchen der Typ/Tag bestimmt werden soll
+     * @return int zur Identifikation der Art von Veranstaltung
+     */
+    public static int getIntegerTypOfLesson(@NonNull final ILesson lesson) {
+        final String type = lesson.getType();
+
+        if (type.startsWith("V")) {
+            return Const.Timetable.TAG_VORLESUNG;
+        } else if (type.startsWith("Pr")) {
+            return Const.Timetable.TAG_PRAKTIKUM;
+        } else if (type.startsWith("Ü")) {
+            return Const.Timetable.TAG_UBUNG;
+        } else return Const.Timetable.TAG_OTHER;
+    }
+
+    /**
+     * Wandet {@link JSONObject} in ein für die App besseres Format zum Speichern um
+     *
+     * @param lesson {@link JSONObject} einer Lehrveranstaltung
+     * @return umstrukturiertes {@link JSONObject} einer Lehrveranstaltung
+     * @throws JSONException Fehler beim Zugriff auf JSON-Daten
+     */
+    @NonNull
+    public static JSONObject convertTimetableJsonObject(@NonNull final JSONObject lesson) throws JSONException {
+        // Zeit in Minuten seit Mitternacht umrechnen
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        final long beginTime = Time.valueOf(lesson.getString("beginTime")).getTime();
+        final long endTime = Time.valueOf(lesson.getString("endTime")).getTime();
+        lesson.put("beginTime", TimeUnit.MINUTES.convert(beginTime + calendar.getTimeZone().getOffset(beginTime), TimeUnit.MILLISECONDS));
+        lesson.put("endTime", TimeUnit.MINUTES.convert(endTime + calendar.getTimeZone().getOffset(endTime), TimeUnit.MILLISECONDS));
+
+        // Array von primitiven Typen in Objekte umwandeln
+        lesson.put("weeksOnly", convertPrimitivTypToJsonObject(lesson.getJSONArray("weeksOnly"), "weekOfYear"));
+        lesson.put("rooms", convertPrimitivTypToJsonObject(lesson.getJSONArray("rooms"), "roomName"));
+
+        return lesson;
+    }
+
+    /**
+     * Wandelt eine {@link JSONArray} von primitiven Typen in ein {@link JSONArray} von Objekten um
+     *
+     * @param array {@link JSONArray} von primitiven Typen
+     * @param type  Name des Objektes
+     * @return JSONArray mit Objekten des primitiven Typs
+     * @throws JSONException Fehler beim Zugriff auf das {@link JSONArray}
+     */
+    @NonNull
+    private static JSONArray convertPrimitivTypToJsonObject(@NonNull final JSONArray array, @NonNull final String type) throws JSONException {
+        final int count = array.length();
+        final JSONArray result = new JSONArray();
+
+        JSONObject jsonObject;
+        for (int i = 0; i < count; i++) {
+            jsonObject = new JSONObject();
+            jsonObject.put(type, array.get(i));
+            result.put(jsonObject);
+        }
+
+        return result;
+    }
+
+    /**
      * Bestimmt ob übergebene Kalenderwoche gerade oder ungerade ist
      *
      * @param calendarWeek aktuelle Kalenderwoche
@@ -76,6 +148,20 @@ abstract class AbstractTimetableHelper {
     static int getWeekTyp(final int calendarWeek) {
         final int result = calendarWeek % 2;
         return result == 0 ? 2 : result;
+    }
+
+    /**
+     * Entfernt das letzte Leerzeichen und Komma von einer verketten Aufzählung
+     *
+     * @param s verkette Aufzählung
+     * @return verkette Aufzählung ohne letztes Komma und Leerzeichen
+     */
+    static String removeLastComma(@NonNull String s) {
+        final int length = s.length();
+        if (length >= 2) {
+            s = s.substring(0, length - 2);
+        }
+        return s;
     }
 
     /**

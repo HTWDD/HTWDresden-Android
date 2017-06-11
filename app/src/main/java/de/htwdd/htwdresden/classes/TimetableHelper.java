@@ -5,20 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.LinearLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.Time;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.interfaces.ILesson;
 import de.htwdd.htwdresden.types.Lesson2;
 import de.htwdd.htwdresden.types.LessonWeek;
 import de.htwdd.htwdresden.types.Room;
@@ -150,24 +145,6 @@ public class TimetableHelper extends AbstractTimetableHelper {
     }
 
     /**
-     * Liefert {@link Lesson2#lessonTag} einer Lehrveranstaltung als einheitlichen int zurück
-     *
-     * @param lesson Stunde aus welchen der Typ/Tag bestimmt werden soll
-     * @return int zur Identifikation der Art von Veranstaltung
-     */
-    public static int getIntegerTypOfLesson(@NonNull final Lesson2 lesson) {
-        final String type = lesson.getType();
-
-        if (type.startsWith("V")) {
-            return Const.Timetable.TAG_VORLESUNG;
-        } else if (type.startsWith("Pr")) {
-            return Const.Timetable.TAG_PRAKTIKUM;
-        } else if (type.startsWith("Ü")) {
-            return Const.Timetable.TAG_UBUNG;
-        } else return Const.Timetable.TAG_OTHER;
-    }
-
-    /**
      * Text wie lange die aktuelle Lehrveranstaltung noch geht
      *
      * @param context aktueller App-Context
@@ -233,7 +210,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @param lesson Lehrveranstaltung aus welcher Räume ausgegeben werden sollen
      * @return verkette Räume
      */
-    public static String getStringOfRooms(@NonNull final Lesson2 lesson) {
+    public static String getStringOfRooms(@NonNull final ILesson lesson) {
         String roomsString = "";
 
         final RealmList<Room> rooms = lesson.getRooms();
@@ -276,66 +253,6 @@ public class TimetableHelper extends AbstractTimetableHelper {
             realmResultsList.add(getLessonsByDateAndDs(realm, day, i + 1, true, false));
         }
         createSimpleLessonOverview(context, realmResultsList, linearLayout, current_ds);
-    }
-
-    /**
-     * Wandet {@link JSONObject} in ein für die App besseres Format zum Speichern um
-     *
-     * @param lesson {@link JSONObject} einer Lehrveranstaltung
-     * @return umstrukturiertes {@link JSONObject} einer Lehrveranstaltung
-     * @throws JSONException Fehler beim Zugriff auf JSON-Daten
-     */
-    @NonNull
-    public static JSONObject convertTimetableJsonObject(@NonNull final JSONObject lesson) throws JSONException {
-        // Zeit in Minuten seit Mitternacht umrechnen
-        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final long beginTime = Time.valueOf(lesson.getString("beginTime")).getTime();
-        final long endTime = Time.valueOf(lesson.getString("endTime")).getTime();
-        lesson.put("beginTime", TimeUnit.MINUTES.convert(beginTime + calendar.getTimeZone().getOffset(beginTime), TimeUnit.MILLISECONDS));
-        lesson.put("endTime", TimeUnit.MINUTES.convert(endTime + calendar.getTimeZone().getOffset(endTime), TimeUnit.MILLISECONDS));
-
-        // Array von primitiven Typen in Objekte umwandeln
-        lesson.put("weeksOnly", convertPrimitivTypToJsonObject(lesson.getJSONArray("weeksOnly"), "weekOfYear"));
-        lesson.put("rooms", convertPrimitivTypToJsonObject(lesson.getJSONArray("rooms"), "roomName"));
-
-        return lesson;
-    }
-
-    /**
-     * Entfernt das letzte Leerzeichen und Komma von einer verketten Aufzählung
-     *
-     * @param s verkette Aufzählung
-     * @return verkette Aufzählung ohne letztes Komma und Leerzeichen
-     */
-    private static String removeLastComma(@NonNull String s) {
-        final int length = s.length();
-        if (length >= 2) {
-            s = s.substring(0, length - 2);
-        }
-        return s;
-    }
-
-    /**
-     * Wandelt eine {@link JSONArray} von primitiven Typen in ein {@link JSONArray} von Objekten um
-     *
-     * @param array {@link JSONArray} von primitiven Typen
-     * @param type  Name des Objektes
-     * @return JSONArray mit Objekten des primitiven Typs
-     * @throws JSONException Fehler beim Zugriff auf das {@link JSONArray}
-     */
-    @NonNull
-    private static JSONArray convertPrimitivTypToJsonObject(@NonNull final JSONArray array, @NonNull final String type) throws JSONException {
-        final int count = array.length();
-        final JSONArray result = new JSONArray();
-
-        JSONObject jsonObject;
-        for (int i = 0; i < count; i++) {
-            jsonObject = new JSONObject();
-            jsonObject.put(type, array.get(i));
-            result.put(jsonObject);
-        }
-
-        return result;
     }
 
     /**

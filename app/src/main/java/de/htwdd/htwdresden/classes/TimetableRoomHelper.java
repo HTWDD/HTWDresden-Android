@@ -4,6 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -20,6 +24,25 @@ import io.realm.RealmResults;
  */
 public class TimetableRoomHelper extends AbstractTimetableHelper {
 
+    @NonNull
+    public static JSONObject convertTimetableJsonObject(@NonNull final JSONObject lesson) throws JSONException {
+        final JSONObject jsonObject = AbstractTimetableHelper.convertTimetableJsonObject(lesson);
+
+        if (jsonObject.has("studyGroups")) {
+            final JSONArray jsonArray = jsonObject.getJSONArray("studyGroups");
+            final int count = jsonArray.length();
+            String room = "";
+
+            for (int i = 0; i < count; i++) {
+                room += jsonArray.getString(i) + "; ";
+            }
+            room = removeLastComma(room);
+            jsonObject.put("studyGroups", room);
+        }
+        return jsonObject;
+    }
+
+
     /**
      * Liefert eine List der Lehrveranstaltungen des übergebenen Tages und Ds für einen Raum
      *
@@ -30,8 +53,8 @@ public class TimetableRoomHelper extends AbstractTimetableHelper {
      * @param filterCurrentWeek Nur Lehrveranstaltungen der aktuellen Kalenderwoche zurückgeben
      * @return Liste von passenden Lehrveranstaltungen
      */
-    private static RealmResults<LessonRoom> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, @NonNull final String room, final int ds,
-                                                                  final boolean filterCurrentWeek) {
+    public static RealmResults<LessonRoom> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, @NonNull final String room, final int ds,
+                                                                 final boolean filterCurrentWeek) {
         final int dsIndex = ds > 0 ? ds - 1 : 0;
         final RealmQuery<LessonRoom> realmQuery = realm.where(LessonRoom.class)
                 .equalTo(Const.database.LessonRoom.ROOM, room)
