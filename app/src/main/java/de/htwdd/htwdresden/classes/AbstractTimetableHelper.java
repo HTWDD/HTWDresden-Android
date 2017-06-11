@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
-import de.htwdd.htwdresden.types.Lesson2;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
@@ -76,7 +75,7 @@ abstract class AbstractTimetableHelper {
     }
 
     /**
-     * Liefert {@link Lesson2#lessonTag} einer Lehrveranstaltung als einheitlichen int zurück
+     * Liefert die Kurz-Tag einer Lehrveranstaltung als einheitlichen int zurück
      *
      * @param lesson Stunde aus welchen der Typ/Tag bestimmt werden soll
      * @return int zur Identifikation der Art von Veranstaltung

@@ -24,7 +24,7 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -109,9 +109,9 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
      */
     private boolean saveTimetable() {
         final Realm realm = Realm.getDefaultInstance();
-        final HashMap<String, Date> stateDatabase = new HashMap<>((int) realm.where(Lesson2.class).count());
-        final RealmResults<Lesson2> results = realm.where(Lesson2.class).equalTo(Const.database.Lesson.CREATED_BY_USER, false).findAll();
-        for (final Lesson2 lesson : results) {
+        final HashMap<String, Date> stateDatabase = new HashMap<>((int) realm.where(LessonUser.class).count());
+        final RealmResults<LessonUser> results = realm.where(LessonUser.class).equalTo(Const.database.Lesson.CREATED_BY_USER, false).findAll();
+        for (final LessonUser lesson : results) {
             stateDatabase.put(lesson.getId(), lesson.getLastChanged());
         }
 
@@ -119,7 +119,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         try {
             // Speichere einzelne Results
             int countResults;
-            Lesson2 lesson;
+            LessonUser lesson;
             JSONArray jsonResults;
             JSONObject jsonResult;
 
@@ -131,14 +131,14 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
                 for (int i = 0; i < countResults; i++) {
                     jsonResult = jsonResults.getJSONObject(i);
 
-                    lesson = realm.createOrUpdateObjectFromJson(Lesson2.class, TimetableHelper.convertTimetableJsonObject(jsonResult));
+                    lesson = realm.createOrUpdateObjectFromJson(LessonUser.class, TimetableHelper.convertTimetableJsonObject(jsonResult));
                     stateDatabase.remove(lesson.getId());
                 }
             }
 
             // Lösche alle übrig gebliebenen Stunden
             for (final Map.Entry<String, Date> entry : stateDatabase.entrySet()) {
-                realm.where(Lesson2.class).equalTo(Const.database.Lesson.ID, entry.getKey()).findAll().deleteAllFromRealm();
+                realm.where(LessonUser.class).equalTo(Const.database.Lesson.ID, entry.getKey()).findAll().deleteAllFromRealm();
             }
             // Update abschließen
             realm.commitTransaction();

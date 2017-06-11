@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.Calendar;
 
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -14,7 +14,7 @@ import io.realm.RealmResults;
  *
  * @author Kay Förster
  */
-public class TimetableUserGridAdapter extends AbstractTimetableGridAdapter<Lesson2> {
+public class TimetableUserGridAdapter extends AbstractTimetableGridAdapter<LessonUser> {
     private final boolean showHiddenLessons;
 
     public TimetableUserGridAdapter(@NonNull final Realm realm, final int week, final boolean filterCurrentWeek, final boolean showHiddenLessons) {
@@ -23,7 +23,7 @@ public class TimetableUserGridAdapter extends AbstractTimetableGridAdapter<Lesso
     }
 
     @Override
-    public RealmResults<Lesson2> getItem(final int i) {
+    public RealmResults<LessonUser> getItem(final int i) {
         final int day = i % 7;
         calendar.set(Calendar.DAY_OF_WEEK, day + 1);
         calendar.set(Calendar.WEEK_OF_YEAR, week);
@@ -32,7 +32,7 @@ public class TimetableUserGridAdapter extends AbstractTimetableGridAdapter<Lesso
     }
 
     @Override
-    String getLessonInfo(@NonNull final Lesson2 lesson) {
+    String getLessonInfo(@NonNull final LessonUser lesson) {
         return TimetableHelper.getStringOfRooms(lesson);
     }
 }

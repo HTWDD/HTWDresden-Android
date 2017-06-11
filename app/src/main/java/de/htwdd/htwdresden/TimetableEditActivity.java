@@ -17,7 +17,7 @@ import java.util.Locale;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -49,7 +49,7 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
         calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 1) + 1);
         calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
 
-        final RealmResults<Lesson2> results = TimetableHelper.getLessonsByDateAndDs(
+        final RealmResults<LessonUser> results = TimetableHelper.getLessonsByDateAndDs(
                 realm,
                 calendar,
                 bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1),

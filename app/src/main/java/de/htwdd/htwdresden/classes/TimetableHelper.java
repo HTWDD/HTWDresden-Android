@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.LessonWeek;
 import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
@@ -40,10 +40,10 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @return Liste von aktuell laufenden Lehrveranstaltungen. Finden aktuell keine statt ist die Liste leer
      */
     @NonNull
-    public static RealmResults<Lesson2> getCurrentLessons(@NonNull final Realm realm) {
+    public static RealmResults<LessonUser> getCurrentLessons(@NonNull final Realm realm) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final long currentTime = getMinutesSinceMidnight(calendar);
-        return realm.where(Lesson2.class)
+        return realm.where(LessonUser.class)
                 // Nach Tag einschränken
                 .equalTo(Const.database.Lesson.DAY, calendar.get(Calendar.DAY_OF_WEEK) - 1)
                 // Nicht ausgeblendet
@@ -74,10 +74,10 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @param showHiddenLessons versteckte Lehrveranstaltungen mit anzeigen
      * @return Liste von passenden Lehrveranstaltungen
      */
-    public static RealmResults<Lesson2> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, final int ds, final boolean filterCurrentWeek,
-                                                              final boolean showHiddenLessons) {
+    public static RealmResults<LessonUser> getLessonsByDateAndDs(@NonNull final Realm realm, @NonNull final Calendar calendar, final int ds, final boolean filterCurrentWeek,
+                                                                 final boolean showHiddenLessons) {
         final int dsIndex = ds > 0 ? ds - 1 : 0;
-        final RealmQuery<Lesson2> realmQuery = realm.where(Lesson2.class)
+        final RealmQuery<LessonUser> realmQuery = realm.where(LessonUser.class)
                 .equalTo(Const.database.Lesson.DAY, calendar.get(Calendar.DAY_OF_WEEK) - 1)
                 // Nach Kalenderwoche einschränken
                 .beginGroup()
@@ -113,7 +113,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
         final NextLessonResult lessonResult = new NextLessonResult(GregorianCalendar.getInstance(Locale.GERMANY));
 
         // Suche Lehrveranstaltung in der aktuellen Woche
-        Lesson2 startLesson = getStartNextLessonInWeek(realm, lessonResult.getOnNextDay());
+        LessonUser startLesson = getStartNextLessonInWeek(realm, lessonResult.getOnNextDay());
         // Suche Lehrveranstaltung in der nächsten Woche
         if (startLesson == null) {
             final Calendar calendar = lessonResult.getOnNextDay();
@@ -129,7 +129,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
             lessonResult.getOnNextDay().set(Calendar.DAY_OF_WEEK, startLesson.getDay() + 1);
 
             // Da in der passenden Zeit mehrere Veranstaltungen stattfinden können, diese suchen
-            final RealmResults<Lesson2> results = realm.where(Lesson2.class)
+            final RealmResults<LessonUser> results = realm.where(LessonUser.class)
                     .equalTo(Const.database.Lesson.HIDE_LESSON, false)
                     .equalTo(Const.database.Lesson.DAY, startLesson.getDay())
                     .greaterThanOrEqualTo(Const.database.Lesson.BEGIN_TIME, startLesson.getBeginTime())
@@ -226,7 +226,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @param lesson Lehrveranstaltung aus welcher Kalenderwochen ausgegeben werden sollen
      * @return verkettete Kalenderwochen
      */
-    public static String getStringOfKws(@NonNull final Lesson2 lesson) {
+    public static String getStringOfKws(@NonNull final LessonUser lesson) {
         String weeks = "";
 
         final RealmList<LessonWeek> lessonWeeks = lesson.getWeeksOnly();
@@ -248,7 +248,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
     public static void createSimpleLessonOverview(@NonNull final Context context, final Realm realm, @NonNull final LinearLayout linearLayout, final Calendar day,
                                                   final int current_ds) {
         final int countUnits = Const.Timetable.beginDS.length;
-        final List<RealmResults<Lesson2>> realmResultsList = new ArrayList<>(countUnits);
+        final List<RealmResults<LessonUser>> realmResultsList = new ArrayList<>(countUnits);
         for (int i = 0; i < countUnits; i++) {
             realmResultsList.add(getLessonsByDateAndDs(realm, day, i + 1, true, false));
         }
@@ -260,15 +260,15 @@ public class TimetableHelper extends AbstractTimetableHelper {
      *
      * @param realm    aktuelle Datenbankverbindung
      * @param calendar aktuelle Zeitpunkt ab welchem gesucht werden soll
-     * @return erste passende {@link Lesson2} oder null
+     * @return erste passende {@link LessonUser} oder null
      */
     @Nullable
-    private static Lesson2 getStartNextLessonInWeek(@NonNull final Realm realm, @NonNull final Calendar calendar) {
+    private static LessonUser getStartNextLessonInWeek(@NonNull final Realm realm, @NonNull final Calendar calendar) {
         final long currentTime = getMinutesSinceMidnight(calendar);
         final int currentDs = getCurrentDS(currentTime);
 
         // Nur Lehrveranstaltungen suchen die nicht ausgeblendet werden sollen
-        final RealmQuery<Lesson2> realmQuery = realm.where(Lesson2.class).equalTo(Const.database.Lesson.HIDE_LESSON, false);
+        final RealmQuery<LessonUser> realmQuery = realm.where(LessonUser.class).equalTo(Const.database.Lesson.HIDE_LESSON, false);
 
         // Lehrveranstaltungen auf aktuelle Woche einschränken
         realmQuery.beginGroup()
@@ -312,7 +312,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
         realmQuery.endGroup();
 
         // Ergebnisse sortieren und erste Stunde bestimmen
-        final RealmResults<Lesson2> results = realmQuery.findAllSorted(Const.database.Lesson.DAY, Sort.ASCENDING, Const.database.Lesson.BEGIN_TIME, Sort.ASCENDING);
+        final RealmResults<LessonUser> results = realmQuery.findAllSorted(Const.database.Lesson.DAY, Sort.ASCENDING, Const.database.Lesson.BEGIN_TIME, Sort.ASCENDING);
         return results.size() > 0 ? results.first() : null;
     }
 }

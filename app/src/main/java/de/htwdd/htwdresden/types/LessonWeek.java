@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Repräsentiert eine Kalenderwoche für {@link Lesson2}
+ * Repräsentiert eine Kalenderwoche für {@link LessonUser}
  *
  * @author Kay Förster
  */

@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.htwdd.htwdresden.service.VolumeControllerService;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -45,7 +45,7 @@ public class VolumeController {
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             // Nach aktueller Veranstaltung suchen
-            final RealmResults<Lesson2> lessons = TimetableHelper.getLessonsByDateAndDs(realm, calendar, currentDs, true, false);
+            final RealmResults<LessonUser> lessons = TimetableHelper.getLessonsByDateAndDs(realm, calendar, currentDs, true, false);
 
             // Gibt es aktuell eine Lehrveranstaltung?, wenn nein return
             if (lessons.size() == 0)

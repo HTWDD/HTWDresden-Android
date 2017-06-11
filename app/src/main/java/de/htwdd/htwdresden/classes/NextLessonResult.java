@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import java.util.Calendar;
 
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.RealmResults;
 
 /**
@@ -14,13 +14,13 @@ import io.realm.RealmResults;
 public class NextLessonResult {
     private Calendar onNextDay;
     @Nullable
-    private RealmResults<Lesson2> results;
+    private RealmResults<LessonUser> results;
 
     NextLessonResult(@NonNull final Calendar onNextDay) {
         this.onNextDay = onNextDay;
     }
 
-    void setResults(@Nullable final RealmResults<Lesson2> results) {
+    void setResults(@Nullable final RealmResults<LessonUser> results) {
         this.results = results;
     }
 
@@ -29,7 +29,7 @@ public class NextLessonResult {
     }
 
     @Nullable
-    public RealmResults<Lesson2> getResults() {
+    public RealmResults<LessonUser> getResults() {
         return results;
     }
 }

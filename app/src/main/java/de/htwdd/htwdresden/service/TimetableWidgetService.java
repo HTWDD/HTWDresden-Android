@@ -16,7 +16,7 @@ import de.htwdd.htwdresden.TimetableWidget;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -34,7 +34,7 @@ public class TimetableWidgetService extends Service {
         final String[] lessonType = getResources().getStringArray(R.array.lesson_type);
 
         // Aktuelle Stunde anzeigen
-        final RealmResults<Lesson2> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
         switch (currentLesson.size()) {
             case 0:
                 view.setTextViewText(R.id.widget_timetable_lesson_time, null);
@@ -42,7 +42,7 @@ public class TimetableWidgetService extends Service {
                 view.setTextViewText(R.id.widget_timetable_room, null);
                 break;
             case 1:
-                final Lesson2 lesson = currentLesson.first();
+                final LessonUser lesson = currentLesson.first();
                 view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
                 view.setTextViewText(R.id.widget_timetable_lesson, lesson.getName());
                 if (lesson.getRooms().size() > 0)
@@ -68,7 +68,7 @@ public class TimetableWidgetService extends Service {
             view.setTextViewText(R.id.widget_timetable_lesson_next, null);
             view.setTextViewText(R.id.widget_timetable_room_next, null);
         } else if (nextLessonResult.getResults().size() == 1) {
-            final Lesson2 lesson = nextLessonResult.getResults().first();
+            final LessonUser lesson = nextLessonResult.getResults().first();
             view.setTextViewText(R.id.widget_timetable_lesson_time_next, TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
             view.setTextViewText(R.id.widget_timetable_lesson_next, lesson.getName());
             if (lesson.getRooms().size() > 0) {

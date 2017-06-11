@@ -20,7 +20,7 @@ import de.htwdd.htwdresden.adapter.TimetableListAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -49,7 +49,7 @@ public class TimetableDetailsFragment extends Fragment {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         calendar.set(Calendar.DAY_OF_WEEK, bundle.getInt(Const.BundleParams.TIMETABLE_DAY, 1) + 1);
         calendar.set(Calendar.WEEK_OF_YEAR, bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
-        final RealmResults<Lesson2> lessons = TimetableHelper.getLessonsByDateAndDs(
+        final RealmResults<LessonUser> lessons = TimetableHelper.getLessonsByDateAndDs(
                 realm,
                 calendar,
                 bundle.getInt(Const.BundleParams.TIMETABLE_DS, 1),

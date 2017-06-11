@@ -39,7 +39,7 @@ import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -55,10 +55,10 @@ public class OverviewFragment extends Fragment {
     private Realm realm;
     private RealmResults<ExamResult> examResults;
     private RealmResults<Meal> meals;
-    private RealmResults<Lesson2> lessons;
+    private RealmResults<LessonUser> lessons;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
     private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
-    private RealmChangeListener<RealmResults<Lesson2>> realmListenerLessons;
+    private RealmChangeListener<RealmResults<LessonUser>> realmListenerLessons;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -137,13 +137,13 @@ public class OverviewFragment extends Fragment {
         showExamStats(realm.where(ExamResult.class).count() > 0);
 
         // Change Listener für Lehrveranstaltungen
-        realmListenerLessons = new RealmChangeListener<RealmResults<Lesson2>>() {
+        realmListenerLessons = new RealmChangeListener<RealmResults<LessonUser>>() {
             @Override
-            public void onChange(final RealmResults<Lesson2> element) {
+            public void onChange(final RealmResults<LessonUser> element) {
                 showUserTimetableOverview();
             }
         };
-        lessons = realm.where(Lesson2.class).findAll();
+        lessons = realm.where(LessonUser.class).findAll();
         lessons.addChangeListener(realmListenerLessons);
 
         // News laden
@@ -221,8 +221,8 @@ public class OverviewFragment extends Fragment {
         final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
         // Aktuelle Stunde anzeigen
-        final RealmResults<Lesson2> currentLesson = TimetableHelper.getCurrentLessons(realm);
-        Lesson2 lesson;
+        final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        LessonUser lesson;
 
         switch (currentLesson.size()) {
             case 0:

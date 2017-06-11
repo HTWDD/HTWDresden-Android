@@ -17,7 +17,7 @@ import io.realm.annotations.Required;
  *
  * @author Kay Förster
  */
-public class Lesson2 extends RealmObject implements ILesson {
+public class LessonUser extends RealmObject implements ILesson {
     @PrimaryKey
     @Required
     private String id;

@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.LessonWeek;
 import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
@@ -58,7 +58,7 @@ public class TimetableEditFragment extends Fragment {
     private EditText lesson_beginTime;
     private EditText lesson_endTime;
     private TextInputEditText lesson_weeksOnly;
-    private Lesson2 lesson = null;
+    private LessonUser lesson = null;
     private int startTime;
     private int endTime;
     private boolean[] selectedKws = new boolean[53];
@@ -96,7 +96,7 @@ public class TimetableEditFragment extends Fragment {
         if (!bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID))
             return mLayout;
 
-        lesson = realm.where(Lesson2.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
+        lesson = realm.where(LessonUser.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
 
         if (lesson != null) {
             // Formular mit Daten füllen
@@ -299,7 +299,7 @@ public class TimetableEditFragment extends Fragment {
      *
      * @param lesson ausgewählte Lehrveranstaltung
      */
-    private void fillForms(@NonNull final Lesson2 lesson) {
+    private void fillForms(@NonNull final LessonUser lesson) {
         lesson_name.setText(lesson.getName());
         lesson_tag.setText(lesson.getLessonTag());
         lesson_prof.setText(lesson.getProfessor());
@@ -363,7 +363,7 @@ public class TimetableEditFragment extends Fragment {
         try {
             realm.beginTransaction();
             if (lesson == null) {
-                lesson = realm.createObject(Lesson2.class, "user_" + UUID.randomUUID().toString());
+                lesson = realm.createObject(LessonUser.class, "user_" + UUID.randomUUID().toString());
                 lesson.setCreatedByUser(true);
             }
 

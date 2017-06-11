@@ -16,7 +16,7 @@ import java.util.Arrays;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
 
@@ -25,13 +25,13 @@ import io.realm.RealmBaseAdapter;
  *
  * @author Kay Förster
  */
-public class TimetableListAdapter extends RealmBaseAdapter<Lesson2> {
+public class TimetableListAdapter extends RealmBaseAdapter<LessonUser> {
     private static final String[] nameOfDays = Arrays.copyOfRange(DateFormatSymbols.getInstance().getWeekdays(), 2, 8);
     private final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
     private static String[] lessonWeek;
     private static String[] lessonType;
 
-    public TimetableListAdapter(@NonNull final Context context, @Nullable final OrderedRealmCollection<Lesson2> data) {
+    public TimetableListAdapter(@NonNull final Context context, @Nullable final OrderedRealmCollection<LessonUser> data) {
         super(data);
         final Resources resources = context.getResources();
         lessonType = resources.getStringArray(R.array.lesson_type);
@@ -58,7 +58,7 @@ public class TimetableListAdapter extends RealmBaseAdapter<Lesson2> {
             viewHolder.lesson_weeksOnly = (TextView) view.findViewById(R.id.timetable_edit_lessonWeeksOnly);
         } else viewHolder = (ViewHolder) view.getTag();
 
-        final Lesson2 lesson = getItem(i);
+        final LessonUser lesson = getItem(i);
         if (lesson == null)
             return view;
 

@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Repräsentiert einen Raum für {@link Lesson2}
+ * Repräsentiert einen Raum für {@link LessonUser}
  *
  * @author Kay Förster
  */

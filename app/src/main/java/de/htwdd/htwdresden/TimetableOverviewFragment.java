@@ -26,7 +26,7 @@ import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableStudentSyncService;
-import de.htwdd.htwdresden.types.Lesson2;
+import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -35,8 +35,8 @@ import io.realm.RealmResults;
 public class TimetableOverviewFragment extends Fragment {
     private Bundle arguments;
     private Realm realm;
-    private RealmResults<Lesson2> lessons;
-    private RealmChangeListener<RealmResults<Lesson2>> realmChangeListener;
+    private RealmResults<LessonUser> lessons;
+    private RealmChangeListener<RealmResults<LessonUser>> realmChangeListener;
     private View mLayout;
     private ResponseReceiver responseReceiver;
 
@@ -101,13 +101,13 @@ public class TimetableOverviewFragment extends Fragment {
         );
 
         // Benachrichtigung über geänderte Daten
-        realmChangeListener = new RealmChangeListener<RealmResults<Lesson2>>() {
+        realmChangeListener = new RealmChangeListener<RealmResults<LessonUser>>() {
             @Override
-            public void onChange(final RealmResults<Lesson2> element) {
+            public void onChange(final RealmResults<LessonUser> element) {
                 gridAdapter.notifyDataSetChanged();
             }
         };
-        lessons = realm.where(Lesson2.class).findAll();
+        lessons = realm.where(LessonUser.class).findAll();
         lessons.addChangeListener(realmChangeListener);
 
         // GridView
