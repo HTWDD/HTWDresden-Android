@@ -2,11 +2,8 @@ package de.htwdd.htwdresden.classes;
 
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -82,10 +79,6 @@ public final class Const {
         public static final int TAG_UBUNG = 2;
         public static final int TAG_OTHER = 3;
 
-        public static final int NO_LESSON_FOUND = 0;
-        public static final int ONE_LESSON_FOUND = 1;
-        public static final int MORE_LESSON_FOUND = 2;
-
         public static final int[] beginDS = {
                 (int) TimeUnit.MINUTES.convert(7, TimeUnit.HOURS) + 30,
                 (int) TimeUnit.MINUTES.convert(9, TimeUnit.HOURS) + 20,
@@ -106,10 +99,6 @@ public final class Const {
                 (int) TimeUnit.MINUTES.convert(20, TimeUnit.HOURS) + 10,
                 (int) TimeUnit.MINUTES.convert(21, TimeUnit.HOURS) + 50};
 
-        public static int db_week(final int calendarWeek) {
-            return calendarWeek % 2 == 0 ? 2 : calendarWeek % 2;
-        }
-
         /**
          * Wandelt die übergebenen Minuten seit Mitternacht in ein {@link Date}-Objekt um
          *
@@ -119,39 +108,6 @@ public final class Const {
         public static Date getDate(final long minutesSinceMidnight) {
             final long millis = TimeUnit.MILLISECONDS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
             return new Date(millis - TimeZone.getDefault().getOffset(millis));
-        }
-
-        /**
-         * Liefert die DS zur übergebenen / aktuellen Zeit
-         *
-         * @param currentTime aktuelle Zeit, in Minuten seit Mitternacht oder null für aktuelle Zeit
-         * @return Aktuelle Stunde oder 0 falls außerhalb der Unterrichtszeiten
-         */
-        @Deprecated
-        public static int getCurrentDS(@Nullable Long currentTime) {
-            if (currentTime == null) {
-                final Calendar calendar = GregorianCalendar.getInstance();
-                currentTime = TimeUnit.MINUTES.convert(calendar.get(Calendar.HOUR_OF_DAY), TimeUnit.HOURS) + calendar.get(Calendar.MINUTE);
-            }
-
-            if (currentTime >= endDS[6])
-                return 0;
-            else if (currentTime >= beginDS[6])
-                return 7;
-            else if (currentTime >= beginDS[5])
-                return 6;
-            else if (currentTime >= beginDS[4])
-                return 5;
-            else if (currentTime >= beginDS[3])
-                return 4;
-            else if (currentTime >= beginDS[2])
-                return 3;
-            else if (currentTime >= beginDS[1])
-                return 2;
-            else if (currentTime >= beginDS[0])
-                return 1;
-
-            return 0;
         }
     }
 
@@ -172,23 +128,6 @@ public final class Const {
         public static final String TYPE_INT = " INTEGER";
         public static final String COMMA_SEP = ",";
         public static final long RESULT_DB_ERROR = -1;
-
-        public static class TimetableEntry implements BaseColumns {
-            public static final String COLUMN_NAME_LESSONTAG = "lessonTag";
-            public static final String COLUMN_NAME_NAME = "name";
-            public static final String COLUMN_NAME_TYP = "typ";
-            public static final String COLUMN_NAME_WEEK = "week";
-            public static final String COLUMN_NAME_DAY = "day";
-            public static final String COLUMN_NAME_DS = "ds";
-            public static final String COLUMN_NAME_PROFESSOR = "professor";
-            public static final String COLUMN_NAME_WEEKSONLY = "WeeksOnly";
-            public static final String COLUMN_NAME_ROOMS = "rooms";
-            public static final String TABLE_NAME = "TimetableUser";
-        }
-
-        public static class RoomTimetableEntry extends TimetableEntry {
-            public static final String TABLE_NAME = "TimetableRoom";
-        }
 
         public static class ExamResults {
             public static final String id = "id";
@@ -211,7 +150,6 @@ public final class Const {
         public static class LessonRoom {
             public static final String ROOM = "room";
         }
-
 
         public static class SemesterPlanTable implements BaseColumns {
             public static final String TABLE_NAME = "SemesterPlan";
