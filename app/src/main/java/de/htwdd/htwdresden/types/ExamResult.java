@@ -32,11 +32,6 @@ public class ExamResult extends RealmObject {
     @Nullable
     public Date examDate;
     /**
-     * Veröffentlichungsdatum der Prüfungsergebnisse
-     */
-    @Nullable
-    public Date publicDate;
-    /**
      * Name der Prüfung
      */
     public String text;
