@@ -236,7 +236,7 @@ public class RoomTimetableFragment extends Fragment {
                     Toast.makeText(context, R.string.room_timetable_update_success, Toast.LENGTH_LONG).show();
                     break;
                 case Const.internet.HTTP_NOT_FOUND:
-                    Toast.makeText(context, R.string.timetable_sync_notFound, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.room_timetable_add_no_Lessons, Toast.LENGTH_SHORT).show();
                     break;
                 case Const.internet.HTTP_TIMEOUT:
                 case Const.internet.HTTP_UNAUTHORIZED:
