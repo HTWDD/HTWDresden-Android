@@ -3,11 +3,16 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,80 +22,93 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.squareup.otto.Subscribe;
-
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import de.htwdd.htwdresden.adapter.TimetableGridAdapter;
+import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
-import de.htwdd.htwdresden.classes.LessonHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableUserDAO;
-import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Lesson;
+import de.htwdd.htwdresden.service.TimetableStudentSyncService;
+import de.htwdd.htwdresden.types.LessonUser;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 
 public class TimetableOverviewFragment extends Fragment {
+    private Bundle arguments;
+    private Realm realm;
+    private RealmResults<LessonUser> lessons;
+    private RealmChangeListener<RealmResults<LessonUser>> realmChangeListener;
     private View mLayout;
-    private int week;
-    private TimetableGridAdapter gridAdapter;
-    private ArrayList<Lesson> lessons_week;
+    private ResponseReceiver responseReceiver;
 
     public TimetableOverviewFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        lessons_week = new ArrayList<>();
-        EventBus.getInstance().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Erst Abmelden wenn Fragment entgültig zerstört wird, da ansonsten Nachrichten aus anderen
-        // Activitys nicht registriert werden.
-        EventBus.getInstance().unregister(this);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
-
-        // Arguments überprüfen
-        final Bundle bundle = getArguments();
-        if (bundle != null)
-            week = bundle.getInt(Const.BundleParams.TIMETABLE_WEEK, new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR));
-        else week = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+        realm = Realm.getDefaultInstance();
+        arguments = new Bundle(getArguments());
 
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadData();
+                final Context context = getActivity();
+                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+                // Überprüfe Einstellungen, ansonsten
+                if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, "").length() < 2
+                        || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() != 3
+                        || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() == 0) {
+                    // Zeige Toast mit Link zu Einstellungen an
+                    Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.navi_settings, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Navigation ändern
+                                    ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
+                                    // Fragment "Einstellungen" anzeigen
+                                    final FragmentManager fragmentManager = getActivity().getFragmentManager();
+                                    fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                                }
+                            })
+                            .show();
+                    // Refresh ausschalten
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                    return;
+                }
+
+                // Service starten
+                Log.d("Time", "Starte Service");
+                context.startService(new Intent(context, TimetableStudentSyncService.class));
             }
         });
 
-        // Lade Daten aus DB
-        loadLessons();
+        // Adapter zum Anzeigen der Daten
+        final TimetableUserGridAdapter gridAdapter = new TimetableUserGridAdapter(
+                realm,
+                arguments.getInt(Const.BundleParams.TIMETABLE_WEEK, 1),
+                arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true),
+                arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false)
+        );
 
-        // Adapter zum handeln der Daten
-        gridAdapter = new TimetableGridAdapter(getActivity(), lessons_week, week);
+        // Benachrichtigung über geänderte Daten
+        realmChangeListener = new RealmChangeListener<RealmResults<LessonUser>>() {
+            @Override
+            public void onChange(final RealmResults<LessonUser> element) {
+                gridAdapter.notifyDataSetChanged();
+            }
+        };
+        lessons = realm.where(LessonUser.class).findAll();
+        lessons.addChangeListener(realmChangeListener);
 
         // GridView
         final GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
@@ -98,187 +116,62 @@ public class TimetableOverviewFragment extends Fragment {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle1 = new Bundle();
-                bundle1.putInt(Const.BundleParams.TIMETABLE_WEEK, week);
-                bundle1.putInt(Const.BundleParams.TIMETABLE_DAY, i % 7);
-                bundle1.putInt(Const.BundleParams.TIMETABLE_DS, i / 7);
-                bundle1.putBoolean(Const.BundleParams.TIMETABLE_EDIT, true);
-
-                Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
-                intent.putExtras(bundle1);
-                startActivity(intent);
+                startEditActivity(i, true);
                 return true;
             }
         });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle1 = new Bundle();
-                bundle1.putInt(Const.BundleParams.TIMETABLE_WEEK, week);
-                bundle1.putInt(Const.BundleParams.TIMETABLE_DAY, i % 7);
-                bundle1.putInt(Const.BundleParams.TIMETABLE_DS, i / 7);
-
-                Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
-                intent.putExtras(bundle1);
-                startActivity(intent);
+                startEditActivity(i, false);
             }
         });
+
+        // IntentReceiver erstellen
+        final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        intentFilter.addCategory(Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
+        responseReceiver = new ResponseReceiver();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(responseReceiver, intentFilter);
 
         return mLayout;
     }
 
-    /**
-     * Behandelt die Benachrichtigung vom Eventbus das ein neuer Stundenplan zur Verfügung steht
-     *
-     * @param event Typ der Benachrichtigung
-     */
-    @Subscribe
-    public void updateTimetable(UpdateTimetableEvent event) {
-        loadLessons();
-        gridAdapter.notifyDataSetChanged();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+    }
+
+    @Override
+    public void onDestroyView() {
+        lessons.removeChangeListener(realmChangeListener);
+        realm.close();
+        super.onDestroyView();
+    }
+
+    private void startEditActivity(final int indexOfItem, final boolean editMode) {
+        final int day = indexOfItem % 7;
+        final Bundle bundle = new Bundle();
+        bundle.putInt(Const.BundleParams.TIMETABLE_WEEK, arguments.getInt(Const.BundleParams.TIMETABLE_WEEK, 1));
+        bundle.putInt(Const.BundleParams.TIMETABLE_DAY, day);
+        bundle.putInt(Const.BundleParams.TIMETABLE_DS, (indexOfItem - day) / 7);
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, editMode);
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true));
+        bundle.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, arguments.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
+
+        final Intent intent = new Intent(getActivity(), TimetableEditActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /**
-     * Lädt die Stunden der aktuellen Woche {@see week} aus der Datenbank und speichert sie in einer
-     * Liste {@see lesson_week}
+     * Empfänger für Updates der Noten vom Service
      */
-    void loadLessons() {
-        final DatabaseManager databaseManager = new DatabaseManager(getActivity());
-        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
-        lessons_week.clear();
-        lessons_week.addAll(timetableUserDAO.getWeekShort(week));
-    }
-
-    /**
-     * Lädt die entsprechenden Pläne aus dem Internet
-     */
-    private void loadData() {
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Bestimme Fehlermeldung
-                int responseCode = VolleyDownloader.getResponseCode(error);
-
-                // Fehlermeldung anzeigen
-                String message;
-                switch (responseCode) {
-                    case Const.internet.HTTP_TIMEOUT:
-                        message = getString(R.string.info_internet_timeout);
-                        break;
-                    case Const.internet.HTTP_NO_CONNECTION:
-                    case Const.internet.HTTP_NOT_FOUND:
-                        message = getString(R.string.info_internet_no_connection);
-                        break;
-                    case Const.internet.HTTP_NETWORK_ERROR:
-                    default:
-                        message = getString(R.string.info_internet_error);
-                }
-                Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        loadData();
-                    }
-                }).show();
-
-                // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        };
-        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                ArrayList<Lesson> lessons;
-                try {
-                    lessons = LessonHelper.getList(response);
-                } catch (Exception e) {
-                    Log.e(this.getClass().getSimpleName(), "[Fehler] beim Parsen: Daten: " + response);
-                    Log.e(this.getClass().getSimpleName(), e.toString());
-
-                    // Fehlermeldung anzeigen
-                    Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
-
-                    // Refresh ausschalten
-                    swipeRefreshLayout.setRefreshing(false);
-                    return;
-                }
-
-                // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
-
-                // Verbindung zur Datenbank
-                DatabaseManager databaseManager = new DatabaseManager(getActivity());
-                TimetableUserDAO timetableUserDAO = new TimetableUserDAO(databaseManager);
-                // Daten speichern
-                boolean result = timetableUserDAO.replaceTimetable(lessons);
-                if (result) {
-                    EventBus.getInstance().post(new UpdateTimetableEvent());
-                    Snackbar.make(mLayout, R.string.timetable_updade_success, Snackbar.LENGTH_SHORT).show();
-                } else
-                    Snackbar.make(mLayout, R.string.timetable_save_error, Snackbar.LENGTH_LONG).show();
-            }
-        };
-
-        // Starte Refreshing
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        // Hole Einstellungen
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String stgJhr = sharedPreferences.getString("StgJhr", "");
-        final String stg = sharedPreferences.getString("Stg", "");
-        final String stgGrp = sharedPreferences.getString("StgGrp", "");
-        final String prof_kennung = sharedPreferences.getString("prof_kennung", "");
-
-        // Überprüfe Einstellunen, ansonsten
-        if ((stgJhr.length() < 2 || stg.length() != 3 || stgGrp.length() == 0) && (prof_kennung.length() == 0)) {
-            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.navi_settings, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Navigation ändern
-                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
-                            // Einstellungsfragment anzeigen
-                            final FragmentManager fragmentManager = getActivity().getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
-                        }
-                    })
-                    .show();
-            // Refresh ausschalten
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
-            return;
-        }
-
-        // Auswahl was geladen werden soll
-        final int modus;
-        if (!(stgJhr.length() < 2 || stg.length() != 3 || stgGrp.length() == 0))
-            modus = 1;
-        else modus = 2;
-
-        // Wähle URL aus
-        final String url;
-        switch (modus) {
-            default:
-            case 1:
-                url = "https://rubu2.rz.htw-dresden.de/API/v0/studentTimetable.php?StgJhr=" + stgJhr + "&Stg=" + stg + "&StgGrp=" + stgGrp;
-                break;
-            case 2:
-                url = Const.internet.WEBSERVICE_URL + "GetTimetable.php?Prof=" + prof_kennung;
-                break;
-        }
-
-        // Überprüfe Internetverbindung
-        if (!VolleyDownloader.CheckInternet(getActivity())) {
-            // Refresh ausschalten
+    private class ResponseReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -286,13 +179,24 @@ public class TimetableOverviewFragment extends Fragment {
                 }
             });
 
-            // Meldung anzeigen
-            Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
-            return;
+            final int intentResponse = intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1);
+            switch (intentResponse) {
+                case 0:
+                    Toast.makeText(context, R.string.timetable_sync_success, Toast.LENGTH_LONG).show();
+                    break;
+                case Const.internet.HTTP_NOT_FOUND:
+                    Toast.makeText(context, R.string.timetable_sync_notFound, Toast.LENGTH_SHORT).show();
+                    break;
+                case Const.internet.HTTP_TIMEOUT:
+                case Const.internet.HTTP_UNAUTHORIZED:
+                case Const.internet.HTTP_NO_CONNECTION:
+                    Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_SHORT).show();
+                    break;
+                case -1:
+                default:
+                    Toast.makeText(context, R.string.timetable_save_error, Toast.LENGTH_LONG).show();
+                    break;
+            }
         }
-
-        // Download der Informationen
-        final JsonArrayRequest arrayRequest = new JsonArrayRequest(url, jsonArrayListener, errorListener);
-        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(arrayRequest);
     }
 }

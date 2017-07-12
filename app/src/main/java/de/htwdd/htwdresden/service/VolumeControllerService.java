@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.VolumeController;
@@ -88,7 +91,10 @@ public class VolumeControllerService extends IntentService {
 
     public static Calendar setCalendar(final int minutesSinceMidnight) {
         //Set Calender at time specified by timeInMinutes
-        Calendar calendar = Const.Timetable.getCalendar(minutesSinceMidnight);
+        final int hour = (int) TimeUnit.HOURS.convert(minutesSinceMidnight, TimeUnit.MINUTES);
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, (int) (minutesSinceMidnight - TimeUnit.MINUTES.convert(hour, TimeUnit.HOURS)));
         calendar.set(Calendar.SECOND, 0);
         return calendar;
     }

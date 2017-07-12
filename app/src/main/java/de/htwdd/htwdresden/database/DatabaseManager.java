@@ -30,28 +30,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.TimetableEntry.TABLE_NAME + " (" +
-                Const.database.TimetableEntry._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_LESSONTAG + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_NAME + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_TYP + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_WEEK + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_DAY + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_DS + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_PROFESSOR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_WEEKSONLY + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.TimetableEntry.COLUMN_NAME_ROOMS + Const.database.TYPE_TEXT + ")");
-        sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.RoomTimetableEntry.TABLE_NAME + " (" +
-                Const.database.RoomTimetableEntry._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_LESSONTAG + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_NAME + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_TYP + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_WEEK + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_DAY + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_DS + Const.database.TYPE_INT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_PROFESSOR + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_WEEKSONLY + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
-                Const.database.RoomTimetableEntry.COLUMN_NAME_ROOMS + Const.database.TYPE_TEXT + ")");
         sqLiteDatabase.execSQL("CREATE TABLE " + Const.database.SemesterPlanTable.TABLE_NAME + " (" +
                 Const.database.SemesterPlanTable._ID + Const.database.TYPE_INT + " PRIMARY KEY" + Const.database.COMMA_SEP +
                 Const.database.SemesterPlanTable.COLUMN_NAME_TYPE + Const.database.TYPE_TEXT + Const.database.COMMA_SEP +
@@ -76,11 +54,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.TimetableEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.RoomTimetableEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.SemesterPlanTable.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Const.database.FreeDaysTable.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS ExamResults");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS TimetableUser");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS TimetableRoom");
         onCreate(sqLiteDatabase);
     }
 }

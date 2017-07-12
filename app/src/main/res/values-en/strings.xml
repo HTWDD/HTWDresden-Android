@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timetable_edit_hide">Hide</string>
+    <string name="timetable_edit_delete">Delete</string>
+    <string name="timetable_edit_show">Show</string>
+    <string name="timetable_edit_save">Save</string>
+    <string name="timetable_edit_label_time">Time</string>
+    <string name="timetable_edit_label_general">General</string>
+    <string name="timetable_overview_options_menu_filter_week">week filter</string>
+    <string name="timetable_overview_options_menu_filter_hidden">hidden lessons</string>
+    <string name="timetable_tab_current_week">Current week (%d)</string>
+    <string name="timetable_tab_next_week">Next week (%d)</string>
+    <string name="timetable_tab_odd_week">odd week</string>
+    <string name="timetable_tab_even_week">even week</string>
+    <string name="timetable_save_error">Failed to save the timetable!</string>
+    <string name="timetable_overview_today">today</string>
+    <string name="timetable_sync_success">Timetable successfully updated!</string>
+    <string name="timetable_moreLessons">Several lessons</string>
+    <string name="timetable_sync_notFound">Study group or web service not found.</string>
+    <string name="room_timetable_addDialog_message">Please enter the room number with spaces between the building and the room number.</string>
+    <string name="room_timetable_add">Add room</string>
+</resources>
