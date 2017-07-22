@@ -4,8 +4,8 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,23 +32,24 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class MensaDetailWeekFragment extends Fragment {
-    private int modus;
+    private int modus = 1;
+    private Realm realm;
 
     public MensaDetailWeekFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
+
         // Inflate the layout for this fragment
         final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
 
         // Überprüfe Bundle & setze Modus
         final Bundle bundle = getArguments();
-        if (bundle == null || bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, -1) == -1)
-            modus = 1;
-        else
-            modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE);
+        if (bundle != null)
+            modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
 
         // Suche Views
         final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
@@ -88,8 +89,12 @@ public class MensaDetailWeekFragment extends Fragment {
             }
         });
 
-        listView.setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realmResults));
-
         return mLayout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realm.close();
     }
 }

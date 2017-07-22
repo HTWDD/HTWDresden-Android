@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,12 @@ import java.util.ArrayList;
  *
  * @author Kay Förster
  */
-public abstract class AbstractBaseAdapter<T> extends BaseAdapter {
+abstract class AbstractBaseAdapter<T> extends BaseAdapter {
     ArrayList<T> data;
     LayoutInflater mLayoutInflater;
     Context context;
 
-    public AbstractBaseAdapter(Context context, ArrayList<T> data) {
+    AbstractBaseAdapter(@NonNull final Context context, @NonNull final ArrayList<T> data) {
         this.data = data;
         this.context = context;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

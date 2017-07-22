@@ -94,9 +94,7 @@ public class TimetableWidgetService extends Service {
         view.setOnClickPendingIntent(R.id.timetable_widget_layout, pendingIntent);
 
         // Update das Widget
-        ComponentName thisWidget = new ComponentName(this, TimetableWidget.class);
-        AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        manager.updateAppWidget(thisWidget, view);
+        AppWidgetManager.getInstance(this).updateAppWidget(new ComponentName(this, TimetableWidget.class), view);
     }
 
     @Override

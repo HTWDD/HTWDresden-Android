@@ -105,9 +105,7 @@ class CheckUpdates implements Runnable {
                             final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 
                             // Überprüfe APK-Version
-                            if (response.getInt("androidAPK") > packageInfo.versionCode) {
-                                editor.putBoolean("appUpdate", true);
-                            } else editor.putBoolean("appUpdate", false);
+                            editor.putBoolean("appUpdate", response.getInt("androidAPK") > packageInfo.versionCode);
 
                             // Überprüfe Semesterplan
                             if (response.optLong("semesterplan_update", 0) > sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, -1))

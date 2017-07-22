@@ -27,7 +27,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 
 /**
  * Hinweis zum Navigation Drawer:
- * Das Highlighting ist aktuell in der Support-Libary nicht vollständig / richtig implentiert,
+ * Das Highlighting ist aktuell in der Support-Library nicht vollständig / richtig implementiert,
  * darum manuelle Behandlung im Code
  *
  * @see <a href="https://guides.codepath.com/android/Fragment-Navigation-Drawer#limitations">Navigation Drawer Limitations</a>
