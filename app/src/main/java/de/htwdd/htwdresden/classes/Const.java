@@ -36,6 +36,7 @@ public final class Const {
         public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
+        public static final String PREFERENCES_STUDY_GROUP_LAST_UPDATE = "studyGroupsLastUpdate";
         public static final String PREFERENCES_AUTO_EXAM_UPDATE = "autoExamUpdate";
         public static final String PREFERENCES_TIMETABLE_STUDIENJAHR = "StgJhr";
         public static final String PREFERENCES_TIMETABLE_STUDIENGANG = "Stg";
@@ -47,6 +48,7 @@ public final class Const {
         public static final String WEBSERVICE_URL_APP = "https://rubu2.rz.htw-dresden.de/API/";
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
+        public static final String WEBSERVICE_URL_STUDYGROUPS = WEBSERVICE_URL_APP + "v0/studyGroups.php";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
         public static final int HTTP_DOWNLOAD_ERROR = 999;

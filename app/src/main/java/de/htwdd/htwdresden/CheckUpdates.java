@@ -27,6 +27,10 @@ import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.database.DatabaseManager;
 import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.types.SemesterPlan;
+import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
+import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
+import de.htwdd.htwdresden.types.studyGroups.StudyYear;
+import io.realm.Realm;
 
 /**
  *
@@ -52,6 +56,7 @@ class CheckUpdates implements Runnable {
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
+        final long studyGroupsLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_STUDY_GROUP_LAST_UPDATE, 0);
 
         // Aktualisiere Mensa
         if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)) {
@@ -66,6 +71,11 @@ class CheckUpdates implements Runnable {
 
         // Überprüfe Version
         checkForUpdates();
+
+        // Aktualisiere Studiengruppen
+        if ((calendar.getTimeInMillis() - studyGroupsLastUpdate) > TimeUnit.MILLISECONDS.convert(14, TimeUnit.DAYS)) {
+            updateStudyGroups();
+        }
 
         // Wenn alle Mensa-Request abgeschlossen, Updatezeitpunkt speichern. Maximal 2 Minuten warten
         if (queueCount.update) {
@@ -159,4 +169,34 @@ class CheckUpdates implements Runnable {
                 null);
         VolleyDownloader.getInstance(context).addToRequestQueue(jsonArrayRequest);
     }
+
+    /**
+     * Studiengruppen aktualisieren
+     */
+    private void updateStudyGroups() {
+        VolleyDownloader.getInstance(context).addToRequestQueue(
+                new JsonArrayRequest(
+                        Const.internet.WEBSERVICE_URL_STUDYGROUPS,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(final JSONArray response) {
+                                final Realm realm = Realm.getDefaultInstance();
+                                realm.beginTransaction();
+                                realm.delete(StudyGroup.class);
+                                realm.delete(StudyCourse.class);
+                                realm.delete(StudyYear.class);
+                                realm.createAllFromJson(StudyYear.class, response);
+                                realm.commitTransaction();
+                                realm.close();
+
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, Calendar.getInstance().getTimeInMillis())
+                                        .apply();
+                            }
+                        },
+                        null)
+        );
+    }
+
 }
