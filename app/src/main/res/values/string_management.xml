@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="management_semesterplan">Semesterplan</string>
     <string name="management_semesterplan_lecturePeriod">Lehrveranstaltungen</string>
-    <string name="management_semesterplan_freeDays">Freie Tage</string>
+    <string name="management_semesterplan_freeDays">Unterbrechungen der Lehrveranstaltungen</string>
     <string name="management_semesterplan_examsPeriod">Prüfungsabschnitt</string>
     <string name="management_semesterplan_reregistration">Rückmeldung</string>
     <string name="management_services">Leistungsangebot</string>

@@ -97,8 +97,7 @@ public class ManagementFragment extends Fragment {
         }
 
         // Allgemeine Semesterinformationen
-        final String[] semesterName = (mLayout.getResources().getStringArray(R.array.semesterName));
-        final String semesterBezeichnung = "S".equals(semester.getType()) ? semesterName[0] : semesterName[1];
+        final String semesterBezeichnung = mLayout.getResources().getString("S".equals(semester.getType()) ? R.string.academic_year_summer : R.string.academic_year_winter);
         ((TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung)).setText(semesterBezeichnung + " " + semester.getYear());
         ((TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod)).setText(getString(
                     R.string.timetable_ds_list_simple,

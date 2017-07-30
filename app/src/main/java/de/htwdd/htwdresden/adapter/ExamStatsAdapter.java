@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.types.ExamStats;
 import io.realm.Realm;
@@ -18,12 +17,10 @@ import io.realm.Realm;
  * @author Kay Förster
  */
 public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
-    private final String[] semesterNames;
 
     public ExamStatsAdapter(@NonNull final Context context) {
         super(context, ExamsHelper.getExamStats());
         data.add(0, ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null));
-        semesterNames = context.getResources().getStringArray(R.array.semesterName);
     }
 
     @Override
@@ -44,7 +41,7 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
 
         final ExamStats examStats = getItem(position);
         if (examStats.semester != null)
-            viewHolder.semester.setText(Const.Semester.getSemesterName(semesterNames, examStats.semester));
+            viewHolder.semester.setText(ExamsHelper.getSemesterName(convertView.getResources(), examStats.semester));
         else viewHolder.semester.setText(R.string.exams_stats_study);
         viewHolder.average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.getAverage())));
 

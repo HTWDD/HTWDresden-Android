@@ -34,8 +34,8 @@
     <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
     <string name="info_internet_error">Unbekannter Netzwerkfehler</string>
 
-    <string name="semesterplan_wintersemester">Wintersemester</string>
-    <string name="semesterplan_sommersemester">Sommersemester</string>
+    <string name="academic_year_winter">Wintersemester</string>
+    <string name="academic_year_summer">Sommersemester</string>
 
     <string name="settings_category_access_data">Zugangsdaten</string>
     <string name="settings_category_study">Studium</string>

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.types.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -29,14 +30,12 @@ import io.realm.Sort;
 public class ExamResultAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final LayoutInflater mLayoutInflater;
-    private final String[] semesterNames;
     private final Realm realm = Realm.getDefaultInstance();
     private final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
 
     public ExamResultAdapter(@NonNull final Context context) {
         super();
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        semesterNames = context.getResources().getStringArray(R.array.semesterName);
         this.context = context;
     }
 
@@ -93,7 +92,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             viewHolder.textView1 = (TextView) view.findViewById(R.id.listHeader);
         } else viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.textView1.setText(Const.Semester.getSemesterName(semesterNames, getGroup(i).semester));
+        viewHolder.textView1.setText(ExamsHelper.getSemesterName(view.getResources(), getGroup(i).semester));
 
         return view;
     }

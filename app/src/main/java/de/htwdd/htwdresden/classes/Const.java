@@ -1,7 +1,5 @@
 package de.htwdd.htwdresden.classes;
 
-import android.support.annotation.NonNull;
-
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -56,16 +54,6 @@ public final class Const {
         public static final int HTTP_NETWORK_ERROR = 996;
         public static final String TAG_EXAM_RESULTS = "EXAM_RESULTS";
         public static final String TAG_TIMETABLE = "TIMETABLE";
-    }
-
-    public static final class Semester {
-        public static String getSemesterName(final @NonNull String[] semesterNames, final @NonNull Integer semester) {
-            int semesterCalc = semester - 20000;
-            if (semesterCalc % 2 == 1)
-                return semesterNames[0] + " " + semesterCalc / 10;
-            else
-                return semesterNames[1] + " " + semesterCalc / 10 + " / " + ((semesterCalc / 10) + 1);
-        }
     }
 
     public static final class Timetable {
