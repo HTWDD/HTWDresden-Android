@@ -5,31 +5,27 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.Date;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.SemesterHelper;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.SemesterPlanDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.FreeDay;
-import de.htwdd.htwdresden.types.SemesterPlan;
+import de.htwdd.htwdresden.types.semsterPlan.Semester;
+import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
+import io.realm.Realm;
+import io.realm.RealmList;
 
 
 /**
  * Fragement zur Übersicht aller wichtigen Uni-Einrichtungen
  */
 public class ManagementFragment extends Fragment {
-    private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private Realm realm;
     private View mLayout;
 
     public ManagementFragment() {
@@ -39,108 +35,101 @@ public class ManagementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = inflater.inflate(R.layout.fragment_management, container, false);
+        realm = Realm.getDefaultInstance();
 
         // Setze Toolbartitle
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
 
-        CardView management_office = (CardView) mLayout.findViewById(R.id.management_office);
-        management_office.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.management_office).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html"));
-                getActivity().startActivity(browserIntent);
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html")));
             }
         });
 
-        CardView management_printing = (CardView) mLayout.findViewById(R.id.management_printing);
-        management_printing.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.management_printing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/intern/technik-druck-it-dienste/drucken-kopieren.html"));
-                getActivity().startActivity(browserIntent);
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/intern/technik-druck-it-dienste/drucken-kopieren.html")));
             }
         });
 
-        CardView management_examination_office = (CardView) mLayout.findViewById(R.id.management_examination_office);
-        management_examination_office.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.management_examination_office).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html"));
-                getActivity().startActivity(browserIntent);
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html")));
             }
         });
 
-        CardView management_stura = (CardView) mLayout.findViewById(R.id.management_stura);
-        management_stura.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.management_stura).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stura.htw-dresden.de/"));
-                getActivity().startActivity(browserIntent);
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stura.htw-dresden.de/")));
             }
         });
 
         // Semesterplan anzeigen
-        getSemesterplan();
+        showSemesterInfo();
 
         return mLayout;
     }
 
-    private void getSemesterplan() {
-        final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(getActivity()));
-        final SemesterPlan semesterPlan = semesterPlanDAO.getSemsterplan(SemesterHelper.getStartYearOfSemester(), SemesterHelper.getActualSemesterTag());
-        final CardView cardView = (CardView) mLayout.findViewById(R.id.management_semesterplan);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realm.close();
+    }
+
+    /**
+     * Aktuellen Semesterplan anzeigen
+     */
+    private void showSemesterInfo() {
+        final Date date = new Date();
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        final Semester semester = realm.where(Semester.class)
+                .lessThanOrEqualTo(Const.database.SemesterPlan.SEMESTER_START, date)
+                .greaterThanOrEqualTo(Const.database.SemesterPlan.SEMESTER_END, date)
+                .findFirst();
 
-        if (semesterPlan == null) {
-            cardView.setVisibility(View.GONE);
+        if (semester == null) {
+            mLayout.findViewById(R.id.management_semesterplan).setVisibility(View.GONE);
             return;
-        } else cardView.setVisibility(View.VISIBLE);
+        }
 
-        try {
-            final TextView semesterplanBezeichnung = (TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung);
-            final TextView semesterplanLecturePeriod = (TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod);
-            final TextView semesterplanFreieTage = (TextView) mLayout.findViewById(R.id.semesterplan_freieTage);
-            final TextView semesterplanFreieTageNamen = (TextView) mLayout.findViewById(R.id.semesterplan_freieTageNamen);
-            final TextView semesterplanPruefPeriod = (TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod);
-            final TextView semesterplanRegistration = (TextView) mLayout.findViewById(R.id.semesterplan_reregistration);
-
-            final String bezeichnung = Const.Semester.getSemesterName(mLayout.getResources().getStringArray(R.array.semesterName), semesterPlan.getType()) + " " + semesterPlan.getYear();
-            semesterplanBezeichnung.setText(bezeichnung);
-            semesterplanLecturePeriod.setText(getString(
+        // Allgemeine Semesterinformationen
+        final String[] semesterName = (mLayout.getResources().getStringArray(R.array.semesterName));
+        final String semesterBezeichnung = "S".equals(semester.getType()) ? semesterName[0] : semesterName[1];
+        ((TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung)).setText(semesterBezeichnung + " " + semester.getYear());
+        ((TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod)).setText(getString(
                     R.string.timetable_ds_list_simple,
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getLecturePeriod().getBeginDay())),
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getLecturePeriod().getEndDay()))
+                dateFormat.format(semester.getLecturePeriod().getBeginDay()),
+                dateFormat.format(semester.getLecturePeriod().getEndDay())
             ));
-            semesterplanPruefPeriod.setText(getString(
-                    R.string.timetable_ds_list_simple,
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getExamsPeriod().getBeginDay())),
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getExamsPeriod().getEndDay()))
-            ));
-            semesterplanRegistration.setText(getString(
-                    R.string.timetable_ds_list_simple,
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getReregistration().getBeginDay())),
-                    dateFormat.format(SIMPLE_DATE_FORMAT.parse(semesterPlan.getReregistration().getEndDay()))
-            ));
+        ((TextView) mLayout.findViewById(R.id.semesterplan_pruefPeriod)).setText(getString(
+                R.string.timetable_ds_list_simple,
+                dateFormat.format(semester.getExamsPeriod().getBeginDay()),
+                dateFormat.format(semester.getExamsPeriod().getEndDay())
+        ));
+        ((TextView) mLayout.findViewById(R.id.semesterplan_reregistration)).setText(getString(
+                R.string.timetable_ds_list_simple,
+                dateFormat.format(semester.getReregistration().getBeginDay()),
+                dateFormat.format(semester.getReregistration().getEndDay())
+        ));
 
-            semesterplanFreieTageNamen.setText(null);
-            semesterplanFreieTage.setText(null);
-
-            if (semesterPlan.getFreeDays() == null)
-                return;
-
-            for (FreeDay freeDay : semesterPlan.getFreeDays()) {
-                if (semesterplanFreieTage.getText().length() != 0) {
-                    semesterplanFreieTageNamen.append("\n");
-                    semesterplanFreieTage.append("\n");
-                }
-                semesterplanFreieTageNamen.append(freeDay.getName());
-                semesterplanFreieTage.append(getString(
-                        R.string.timetable_ds_list_simple,
-                        dateFormat.format(SIMPLE_DATE_FORMAT.parse(freeDay.getBeginDay())),
-                        dateFormat.format(SIMPLE_DATE_FORMAT.parse(freeDay.getEndDay()))));
+        // Freie Tage anzeigen
+        final RealmList<TimePeriod> freeDays = semester.getFreeDays();
+        final TextView semesterPlanFreieTage = (TextView) mLayout.findViewById(R.id.semesterplan_freieTage);
+        final TextView semesterPlanFreieTageNamen = (TextView) mLayout.findViewById(R.id.semesterplan_freieTageNamen);
+        for (final TimePeriod period : freeDays) {
+            if (semesterPlanFreieTage.getText().length() != 0) {
+                semesterPlanFreieTageNamen.append("\n");
+                semesterPlanFreieTage.append("\n");
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            semesterPlanFreieTageNamen.append(period.getName());
+            semesterPlanFreieTage.append(getString(
+                        R.string.timetable_ds_list_simple,
+                    dateFormat.format(period.getBeginDay()),
+                    dateFormat.format(period.getEndDay())));
         }
     }
 }

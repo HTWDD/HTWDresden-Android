@@ -1,6 +1,5 @@
 package de.htwdd.htwdresden.classes;
 
-import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
@@ -67,12 +66,6 @@ public final class Const {
             else
                 return semesterNames[1] + " " + semesterCalc / 10 + " / " + ((semesterCalc / 10) + 1);
         }
-
-        public static String getSemesterName(final @NonNull String[] semesterNames, final @NonNull String semester) {
-            if (semester.equals("S"))
-                return semesterNames[0];
-            else return semesterNames[1];
-        }
     }
 
     public static final class Timetable {
@@ -126,10 +119,6 @@ public final class Const {
     }
 
     public static final class database {
-        public static final String TYPE_TEXT = " TEXT";
-        public static final String TYPE_INT = " INTEGER";
-        public static final String COMMA_SEP = ",";
-        public static final long RESULT_DB_ERROR = -1;
 
         public static class ExamResults {
             public static final String id = "id";
@@ -153,26 +142,9 @@ public final class Const {
             public static final String ROOM = "room";
         }
 
-        public static class SemesterPlanTable implements BaseColumns {
-            public static final String TABLE_NAME = "SemesterPlan";
-            public static final String COLUMN_NAME_TYPE = "type";
-            public static final String COLUMN_NAME_YEAR = "year";
-            public static final String COLUMN_NAME_PERIOD_BEGIN = "per_begin";
-            public static final String COLUMN_NAME_PERIOD_END = "per_end";
-            public static final String COLUMN_NAME_LECTURE_PERIOD_BEGIN = "lec_per_begin";
-            public static final String COLUMN_NAME_LECTURE_PERIOD_END = "lec_per_end";
-            public static final String COLUMN_NAME_EXAM_PERIOD_BEGIN = "ex_per_begin";
-            public static final String COLUMN_NAME_EXAM_PERIOD_END = "ex_per_end";
-            public static final String COLUMN_NAME_REG_PERIOD_BEGIN = "reg_per_begin";
-            public static final String COLUMN_NAME_REG_PERIOD_END = "reg_per_end";
-        }
-
-        public static class FreeDaysTable implements BaseColumns {
-            public static final String TABLE_NAME = "FreeDays";
-            public static final String COLUMN_NAME_BEZ = "days_bez";
-            public static final String COLUMN_NAME_FREE_BEGIN = "free_begin";
-            public static final String COLUMN_NAME_FREE_END = "free_end";
-            public static final String COLUMN_NAME_PARENT_ID = "parent_id";
+        public static class SemesterPlan {
+            public static final String SEMESTER_START = "period.beginDay";
+            public static final String SEMESTER_END = "period.endDay";
         }
     }
 }
