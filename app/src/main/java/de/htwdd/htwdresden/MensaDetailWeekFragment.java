@@ -51,11 +51,8 @@ public class MensaDetailWeekFragment extends Fragment {
         if (bundle != null)
             modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
 
-        // Suche Views
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-
         // Setze Swipe Refresh Layout
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,7 +72,7 @@ public class MensaDetailWeekFragment extends Fragment {
         final Calendar beginOfWeek = GregorianCalendar.getInstance(Locale.GERMANY);
         beginOfWeek.set(Calendar.DAY_OF_WEEK, beginOfWeek.getFirstDayOfWeek());
         if (modus == 2) {
-            beginOfWeek.add(Calendar.WEEK_OF_YEAR, 1);
+            beginOfWeek.roll(Calendar.WEEK_OF_YEAR, 1);
         }
 
         // Hole Daten aus DB
@@ -88,6 +85,8 @@ public class MensaDetailWeekFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realmResults));
 
         return mLayout;
     }
