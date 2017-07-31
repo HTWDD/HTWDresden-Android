@@ -19,4 +19,24 @@
     <string name="timetable_sync_notFound">Study group or web service not found.</string>
     <string name="room_timetable_addDialog_message">Please enter the room number with spaces between the building and the room number.</string>
     <string name="room_timetable_add">Add room</string>
+    <string name="navi_mensa">Canteen</string>
+    <string name="navi_timetable">Timetable</string>
+    <string name="navi_settings">Settings</string>
+    <string name="navi_overview">Overview</string>
+    <string name="navi_room_timetable">Room occupancy</string>
+    <string name="navi_head_settings">Options</string>
+    <string name="navi_campus">Campusplan</string>
+    <string name="navi_about">About the app</string>
+    <string name="navi_exams">Notes / Exams</string>
+    <string name="navi_head_uni">Student life</string>
+    <string name="about_project">Project</string>
+    <string name="about_version">Version</string>
+    <string name="navi_uni_administration">Management</string>
+    <string name="management_semesterplan_examsPeriod">Examination period</string>
+    <string name="management_semesterplan_reregistration">Re-registration</string>
+    <string name="management_semesterplan_lecturePeriod">Lecture period</string>
+    <string name="management_semesterplan_freeDays">No lecture courses on official holidays</string>
+    <string name="academic_year_summer">Summer semester</string>
+    <string name="academic_year_winter">Winter semester</string>
+    <string name="mensa_no_offer">No offer available!</string>
 </resources>
