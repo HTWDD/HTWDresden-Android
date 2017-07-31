@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           tools:targetApi="25">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/food"
+        android:shortcutId="navi_mensa"
+        android:shortcutShortLabel="@string/navi_mensa">
+        <intent
+            android:action="de.htwdd.htwdresden.mensa"
+            android:targetClass="de.htwdd.htwdresden.MainActivity"
+            android:targetPackage="de.htwdd.htwdresden"/>
+        <categories android:name="android.intent.action.MAIN"/>
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:shortcutId="navi_timetable"
+        android:shortcutShortLabel="@string/navi_timetable">
+        <intent
+            android:action="de.htwdd.htwdresden.timetable"
+            android:targetClass="de.htwdd.htwdresden.MainActivity"
+            android:targetPackage="de.htwdd.htwdresden"/>
+        <categories android:name="android.intent.action.MAIN"/>
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_mode_edit_24dp"
+        android:shortcutId="navi_exams"
+        android:shortcutShortLabel="@string/navi_exams">
+        <intent
+            android:action="de.htwdd.htwdresden.examResults"
+            android:targetClass="de.htwdd.htwdresden.MainActivity"
+            android:targetPackage="de.htwdd.htwdresden"/>
+        <categories android:name="android.intent.action.MAIN"/>
+    </shortcut>
+</shortcuts>

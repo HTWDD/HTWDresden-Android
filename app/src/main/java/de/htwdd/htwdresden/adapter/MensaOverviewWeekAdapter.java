@@ -56,7 +56,7 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
 
         // Bestimme Tag
         final Calendar calendar = (Calendar) beginOfWeek.clone();
-        calendar.add(Calendar.DAY_OF_WEEK, i);
+        calendar.roll(Calendar.DAY_OF_WEEK, i);
 
         // Gerichte für den jeweiligen Tag laden
         if (adapterData == null)

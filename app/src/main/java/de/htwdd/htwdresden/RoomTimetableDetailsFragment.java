@@ -22,7 +22,9 @@ import de.htwdd.htwdresden.types.TabItem;
 
 
 /**
- * Hauptfragment welches die verschiedenen Sub-Fragmente enthält
+ * Fragment, welches verschiedene Tabs mit einzelnen Wochen enthält
+ *
+ * @author Kay Förster
  */
 public class RoomTimetableDetailsFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
@@ -37,28 +39,26 @@ public class RoomTimetableDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle = getArguments();
-        room = bundle.getString(Const.BundleParams.ROOM_TIMETABLE_ROOM, "");
-
+        final Bundle bundleCurrentWeek = new Bundle();
+        final Bundle bundleNextWeek = new Bundle();
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        bundleCurrentWeek.putInt(Const.BundleParams.TIMETABLE_WEEK, calendar.get(Calendar.WEEK_OF_YEAR));
         calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        bundleNextWeek.putInt(Const.BundleParams.TIMETABLE_WEEK, calendar.get(Calendar.WEEK_OF_YEAR));
 
-        final Bundle bundle_1 = new Bundle();
-        bundle_1.putInt(Const.BundleParams.TIMETABLE_WEEK, currentWeek);
-        bundle_1.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
-        final Bundle bundle_2 = new Bundle();
-        bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
-        bundle_2.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
+        room = bundle.getString(Const.BundleParams.ROOM_TIMETABLE_ROOM, "");
+        bundleCurrentWeek.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
+        bundleNextWeek.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
+
         mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_current_week, currentWeek),
+                getResources().getString(R.string.timetable_tab_current_week, bundleCurrentWeek.getInt(Const.BundleParams.TIMETABLE_WEEK)),
                 RoomTimetableOverviewFragment.class,
-                bundle_1
+                bundleCurrentWeek
         ));
         mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_next_week, nextWeek),
+                getResources().getString(R.string.timetable_tab_next_week, bundleNextWeek.getInt(Const.BundleParams.TIMETABLE_WEEK)),
                 RoomTimetableOverviewFragment.class,
-                bundle_2
+                bundleNextWeek
         ));
     }
 
@@ -66,19 +66,19 @@ public class RoomTimetableDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        // Setze Toolbartitle
+        // Setze Title der Toolbar
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.room_timetable_details_title, room));
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        // Adapter für Tabs erstellen und an view hängen
+        // Adapter für Tabs erstellen und an View hängen
         viewPager.setAdapter( new ViewPagerAdapter(getFragmentManager(), mTabs));
 
         // TabLayout "stylen"
         final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
-        // Stetze feste Anzahl an Tabs (Tabs wirken nciht angeklatscht)
+        // Setze feste Anzahl an Tabs (Tabs wirken nicht abgeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        // Tabs nehemen immer die ganze Breite ein
+        // Tabs nahmen immer die ganze Breite ein
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 

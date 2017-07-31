@@ -4,6 +4,7 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
 import de.htwdd.htwdresden.classes.Const;
@@ -30,29 +32,27 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class MensaDetailWeekFragment extends Fragment {
-    private int modus;
+    private int modus = 1;
+    private Realm realm;
 
     public MensaDetailWeekFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
+
         // Inflate the layout for this fragment
         final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
 
         // Überprüfe Bundle & setze Modus
         final Bundle bundle = getArguments();
-        if (bundle == null || bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, -1) == -1)
-            modus = 1;
-        else
-            modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE);
-
-        // Suche Views
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        if (bundle != null)
+            modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
 
         // Setze Swipe Refresh Layout
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -69,10 +69,10 @@ public class MensaDetailWeekFragment extends Fragment {
         });
 
         // Setze Kalender auf Montag der ausgewählten Woche
-        final Calendar beginOfWeek = GregorianCalendar.getInstance();
+        final Calendar beginOfWeek = GregorianCalendar.getInstance(Locale.GERMANY);
         beginOfWeek.set(Calendar.DAY_OF_WEEK, beginOfWeek.getFirstDayOfWeek());
         if (modus == 2) {
-            beginOfWeek.add(Calendar.WEEK_OF_YEAR, 1);
+            beginOfWeek.roll(Calendar.WEEK_OF_YEAR, 1);
         }
 
         // Hole Daten aus DB
@@ -86,8 +86,14 @@ public class MensaDetailWeekFragment extends Fragment {
             }
         });
 
-        listView.setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realmResults));
+        ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realmResults));
 
         return mLayout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realm.close();
     }
 }

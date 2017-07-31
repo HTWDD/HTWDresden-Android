@@ -7,17 +7,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.adapter.ExamResultAdapter;
@@ -102,15 +99,14 @@ public class ExamResultFragment extends Fragment {
             @Override
             public void onChange(final RealmResults<ExamResult> element) {
                 adapter.notifyDataSetChanged();
-                showMessageNoExamResults(element.size() > 0);
             }
         };
         examResults = realm.where(ExamResult.class).findAll();
         examResults.addChangeListener(realmListenerExams);
-        showMessageNoExamResults(countExamResults > 0);
 
         final ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
         expandableListView.setAdapter(adapter);
+        expandableListView.setEmptyView(mLayout.findViewById(R.id.info_message));
 
         // IntentReceiver erstellen
         final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
@@ -127,22 +123,6 @@ public class ExamResultFragment extends Fragment {
         super.onDestroy();
         examResults.removeChangeListener(realmListenerExams);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
-    }
-
-    /**
-     * Hinweismeldung anzeigen wenn keine Noten vorhanden sind
-     *
-     * @param examsAvailable Sind Noten vorhanden?
-     */
-    private void showMessageNoExamResults(final boolean examsAvailable) {
-        final TextView infoMessage = (TextView) mLayout.findViewById(R.id.info_message);
-        if (examsAvailable) {
-            infoMessage.setText(null);
-            mLayout.setBackgroundColor(Color.WHITE);
-        } else {
-            infoMessage.setText(R.string.exams_result_no_results);
-            mLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.app_background));
-        }
     }
 
     /**

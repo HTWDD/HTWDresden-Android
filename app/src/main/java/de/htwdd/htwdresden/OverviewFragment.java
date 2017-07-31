@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,25 +27,19 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.EventBus;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.classes.LessonHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
+import de.htwdd.htwdresden.classes.NextLessonResult;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableUserDAO;
-import de.htwdd.htwdresden.events.UpdateTimetableEvent;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
-import de.htwdd.htwdresden.types.Lesson;
-import de.htwdd.htwdresden.types.LessonSearchResult;
+import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -60,19 +52,16 @@ import io.realm.RealmResults;
 public class OverviewFragment extends Fragment {
     private View mLayout;
     // Datenbank
+    private Realm realm;
     private RealmResults<ExamResult> examResults;
     private RealmResults<Meal> meals;
+    private RealmResults<LessonUser> lessons;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
     private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
+    private RealmChangeListener<RealmResults<LessonUser>> realmListenerLessons;
 
     public OverviewFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getInstance().register(this);
     }
 
     @Override
@@ -124,8 +113,8 @@ public class OverviewFragment extends Fragment {
         });
 
         // Daten für Mensa laden und anzeigen
-        final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
+        realm = Realm.getDefaultInstance();
         realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
             @Override
             public void onChange(final RealmResults<Meal> element) {
@@ -147,8 +136,15 @@ public class OverviewFragment extends Fragment {
         examResults.addChangeListener(realmListenerExams);
         showExamStats(realm.where(ExamResult.class).count() > 0);
 
-        // Stundenplan anzeigen
-        updateTimetable(null);
+        // Change Listener für Lehrveranstaltungen
+        realmListenerLessons = new RealmChangeListener<RealmResults<LessonUser>>() {
+            @Override
+            public void onChange(final RealmResults<LessonUser> element) {
+                showUserTimetableOverview();
+            }
+        };
+        lessons = realm.where(LessonUser.class).findAll();
+        lessons.addChangeListener(realmListenerLessons);
 
         // News laden
         showNews();
@@ -159,15 +155,17 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateTimetable(null);
+        // Übersicht aktualisieren
+        showUserTimetableOverview();
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
+        super.onDestroyView();
         examResults.removeChangeListener(realmListenerExams);
         meals.removeChangeListener(realmListenerMensa);
-        super.onDestroy();
-        EventBus.getInstance().unregister(this);
+        lessons.removeChangeListener(realmListenerLessons);
+        realm.close();
     }
 
     /**
@@ -205,15 +203,10 @@ public class OverviewFragment extends Fragment {
     }
 
     /**
-     * Behandelt die Benachrichtigung vom Eventbus das ein neuer Stundenplan zur Verfügung steht
-     *
-     * @param updateTimetableEvent Typ der Benachrichtigung
+     * Übersicht über Stundenplan
      */
-    @Subscribe
-    public void updateTimetable(@Nullable UpdateTimetableEvent updateTimetableEvent) {
+    private void showUserTimetableOverview() {
         final Context context = getActivity();
-        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final TimetableUserDAO timetableUserDAO = new TimetableUserDAO(new DatabaseManager(getActivity()));
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
         // TextViews bestimmen
@@ -228,123 +221,93 @@ public class OverviewFragment extends Fragment {
         final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
 
         // Aktuelle Stunde anzeigen
-        LessonSearchResult lessonSearchResult = LessonHelper.getCurrentUserLesson(context);
-        Lesson lesson;
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
+        final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        LessonUser lesson;
+
+        switch (currentLesson.size()) {
+            case 0:
                 overview_lessons_current_tag.setVisibility(View.GONE);
                 overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
                 overview_lessons_current_remaining.setVisibility(View.GONE);
                 break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
-
+            case 1:
+                lesson = currentLesson.first();
                 overview_lessons_current_tag.setVisibility(View.VISIBLE);
-                overview_lessons_current_tag.setText(lesson.getTag());
+                overview_lessons_current_tag.setText(lesson.getLessonTag());
                 overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
-                if (!lesson.getRooms().isEmpty())
+                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
+                if (lesson.getRooms().size() > 0) {
                     overview_lessons_current_type.setText(
-                            mLayout.getResources().getString(
+                            getString(
                                     R.string.timetable_ds_list_simple,
-                                    lessonType[lesson.getTypeInt()],
-                                    lesson.getRooms()));
-                else overview_lessons_current_type.setText(lessonType[lesson.getTypeInt()]);
+                                    lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
+                                    TimetableHelper.getStringOfRooms(lesson)
+                            )
+                    );
+                } else overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
                 break;
-            case Const.Timetable.MORE_LESSON_FOUND:
+            default:
                 overview_lessons_current_type.setText(null);
                 overview_lessons_current_tag.setVisibility(View.VISIBLE);
                 overview_lessons_current_tag.setText(R.string.timetable_moreLessons);
                 overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(lessonSearchResult.getTimeRemaining());
+                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
                 break;
         }
 
-        // Nächste Stunde anzeigen lassen
-        lessonSearchResult = LessonHelper.getNextUserLesson(context);
-        switch (lessonSearchResult.getCode()) {
-            case Const.Timetable.NO_LESSON_FOUND:
-                overview_lessons_next_remaining.setText(null);
-                overview_lessons_next_tag.setText(null);
-                overview_lessons_next_type.setText(null);
-                break;
-            case Const.Timetable.ONE_LESSON_FOUND:
-                lesson = lessonSearchResult.getLesson();
-                assert lesson != null;
-
-                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
-                overview_lessons_next_tag.setText(lesson.getTag());
-                if (!lesson.getRooms().isEmpty()) {
-                    overview_lessons_next_type.setText(
-                            mLayout.getResources().getString(
-                                    R.string.timetable_ds_list_simple,
-                                    lessonType[lesson.getTypeInt()],
-                                    lesson.getRooms()));
-                } else overview_lessons_next_type.setText(lessonType[lesson.getTypeInt()]);
-                break;
-            case Const.Timetable.MORE_LESSON_FOUND:
-                overview_lessons_next_remaining.setText(lessonSearchResult.getTimeRemaining());
-                overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
-                overview_lessons_next_type.setText(null);
-                break;
+        // Nächste Stunde anzeigen
+        final NextLessonResult nextLessonResult = TimetableHelper.getNextLessons(realm);
+        if (nextLessonResult.getResults() == null || nextLessonResult.getResults().size() == 0) {
+            overview_lessons_next_remaining.setText(null);
+            overview_lessons_next_tag.setText(null);
+            overview_lessons_next_type.setText(null);
+        } else if (nextLessonResult.getResults().size() == 1) {
+            lesson = nextLessonResult.getResults().first();
+            overview_lessons_next_tag.setText(lesson.getLessonTag());
+            overview_lessons_next_remaining.setText(TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            if (lesson.getRooms().size() > 0) {
+                overview_lessons_next_type.setText(
+                        getString(
+                                R.string.timetable_ds_list_simple,
+                                lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
+                                TimetableHelper.getStringOfRooms(lesson)
+                        ));
+            } else overview_lessons_next_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
+        } else {
+            overview_lessons_next_remaining.setText(TimetableHelper.getStringStartNextLesson(context, nextLessonResult));
+            overview_lessons_next_tag.setText(R.string.timetable_moreLessons);
+            overview_lessons_next_type.setText(null);
         }
 
-        // Stundenplanvorschau
+        // Vorschau des aktuellen Stundenplans
         overview_lessons_busy_plan.setVisibility(View.GONE);
-        final Calendar calendarNextLesson = lessonSearchResult.getCalendar();
-        if (lessonSearchResult.getCode() != Const.Timetable.NO_LESSON_FOUND && calendarNextLesson != null) {
-            int timeDifference = Math.abs(calendarNextLesson.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
-            int currentDS = 0;
+        if (nextLessonResult.getResults() != null && nextLessonResult.getResults().size() > 0) {
+            final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+            final int differenceDay = Math.abs(nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+            int currentDs = 0;
 
-            switch (timeDifference) {
-                case 0:
-                    // Bezeichnung ändern
-                    overview_lessons_day.setText(R.string.timetable_overview_today);
-                    // Wenn Plan von heute, aktuelle Stunde hervorheben
-                    currentDS = Const.Timetable.getCurrentDS(null);
-                    break;
-                case 1:
-                    // Bezeichnung ändern
-                    overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
-                    break;
-                default:
-                    return;
+            // Vorschau nur für heute und morgen anzeigen
+            if (differenceDay > 1) {
+                return;
+            } else if (differenceDay == 0) {
+                overview_lessons_day.setText(R.string.timetable_overview_today);
+                currentDs = TimetableHelper.getCurrentDS(TimetableHelper.getMinutesSinceMidnight(calendar));
+            } else {
+                overview_lessons_day.setText(R.string.overview_lessons_tomorrow);
             }
 
             // Übersicht anzeigen
             overview_lessons_busy_plan.setVisibility(View.VISIBLE);
 
-            // Daten für Stundenplan-Vorschau
-            final String[] values = new String[7];
-            for (int i = 1; i < 8; i++) {
-                final ArrayList<Lesson> lessons = timetableUserDAO.getByDS(calendarNextLesson.get(Calendar.WEEK_OF_YEAR), calendarNextLesson.get(Calendar.DAY_OF_WEEK) - 1, i);
-
-                // Suche nach passender Stunde
-                final LessonSearchResult lessonSearchResult_vorschau = LessonHelper.searchLesson(lessons, calendar.get(Calendar.WEEK_OF_YEAR));
-
-                switch (lessonSearchResult_vorschau.getCode()) {
-                    case Const.Timetable.NO_LESSON_FOUND:
-                        values[i - 1] = "";
-                        break;
-                    case Const.Timetable.ONE_LESSON_FOUND:
-                        final Lesson lesson_vorschau = lessonSearchResult_vorschau.getLesson();
-                        assert lesson_vorschau != null;
-                        values[i - 1] = lesson_vorschau.getTag() + " (" + lesson_vorschau.getType() + ")";
-                        break;
-                    case Const.Timetable.MORE_LESSON_FOUND:
-                        values[i - 1] = getResources().getString(R.string.timetable_moreLessons);
-                        break;
-                }
-            }
-
-            // Stundenplanvorschau erstellen
-            LessonHelper.createSimpleDayOverviewLayout(getActivity(), overview_lessons_list, null, values, currentDS);
+            // Vorschau des Stundenplans erstellen
+            overview_lessons_list.removeAllViews();
+            TimetableHelper.createSimpleLessonOverview(context, realm, overview_lessons_list, nextLessonResult.getOnNextDay(), currentDs);
         }
     }
 
     /**
      * Zeigt die Mahlzeiten als einfache Liste an
+     *
      * @param meals Liste der Mahlzeiten
      */
     private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {

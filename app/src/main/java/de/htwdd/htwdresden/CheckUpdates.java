@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
@@ -23,10 +24,15 @@ import java.util.concurrent.TimeUnit;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.QueueCount;
+import de.htwdd.htwdresden.classes.SemesterHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.SemesterPlanDAO;
-import de.htwdd.htwdresden.types.SemesterPlan;
+import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.semsterPlan.Semester;
+import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
+import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
+import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
+import de.htwdd.htwdresden.types.studyGroups.StudyYear;
+import io.realm.Realm;
 
 /**
  *
@@ -49,12 +55,14 @@ class CheckUpdates implements Runnable {
         }
 
         // Einstellungen holen
+        final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
+        final long studyGroupsLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_STUDY_GROUP_LAST_UPDATE, 0);
 
         // Aktualisiere Mensa
-        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)) {
+        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
             final MensaHelper mensaHelper = new MensaHelper(context, queueCount, (short) 9);
             mensaHelper.loadAndSaveMeals(1);
@@ -66,6 +74,17 @@ class CheckUpdates implements Runnable {
 
         // Überprüfe Version
         checkForUpdates();
+
+        // Aktualisiere Studiengruppen
+        if ((calendar.getTimeInMillis() - studyGroupsLastUpdate) > TimeUnit.MILLISECONDS.convert(14, TimeUnit.DAYS) || realm.where(StudyYear.class).count() == 0) {
+            updateStudyGroups();
+        }
+
+        // Aktualisiere Semesterplan
+        if (realm.where(Semester.class).count() == 0) {
+            updateSemesterplan();
+        }
+        realm.close();
 
         // Wenn alle Mensa-Request abgeschlossen, Updatezeitpunkt speichern. Maximal 2 Minuten warten
         if (queueCount.update) {
@@ -105,9 +124,7 @@ class CheckUpdates implements Runnable {
                             final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 
                             // Überprüfe APK-Version
-                            if (response.getInt("androidAPK") > packageInfo.versionCode) {
-                                editor.putBoolean("appUpdate", true);
-                            } else editor.putBoolean("appUpdate", false);
+                            editor.putBoolean("appUpdate", response.getInt("androidAPK") > packageInfo.versionCode);
 
                             // Überprüfe Semesterplan
                             if (response.optLong("semesterplan_update", 0) > sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, -1))
@@ -133,32 +150,57 @@ class CheckUpdates implements Runnable {
                 Const.internet.WEBSERVICE_URL_SEMESTERPLAN,
                 new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        // Datenbankzugriff
+                    public void onResponse(final JSONArray response) {
                         try {
-                            // Datenbankzugriff
-                            final SemesterPlanDAO semesterPlanDAO = new SemesterPlanDAO(new DatabaseManager(context));
-                            // Alle Einträge löschen
-                            semesterPlanDAO.clearDatabase();
-                            // Einzelne Einträge durchgehen und speichern
-                            for (int i = 0; i < response.length(); i++) {
-                                final JSONObject semesterPlanJSON = response.getJSONObject(i);
-                                final SemesterPlan semesterPlan = new SemesterPlan(semesterPlanJSON);
-                                // Eintrag durchgehen speichern
-                                semesterPlanDAO.save(semesterPlan);
-                            }
-                        } catch (JSONException e) {
-                            Log.e(LOG_TAG, "[Fehler beim Parsen des Semesterplans]");
-                            Log.e(LOG_TAG, e.getMessage());
-                            return;
-                        }
+                            final JSONArray semesterPlan = SemesterHelper.convertSemesterPlanJsonObject(response);
+                            final Realm realm = Realm.getDefaultInstance();
+                            realm.beginTransaction();
+                            realm.delete(TimePeriod.class);
+                            realm.delete(Semester.class);
+                            realm.createAllFromJson(Semester.class, semesterPlan);
+                            realm.commitTransaction();
+                            realm.close();
 
-                        final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-                        editor.putLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, System.currentTimeMillis());
-                        editor.apply();
+                            PreferenceManager.getDefaultSharedPreferences(context)
+                                    .edit()
+                                    .putLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, Calendar.getInstance().getTimeInMillis())
+                                    .apply();
+                        } catch (final ParseException | JSONException e) {
+                            Log.e(LOG_TAG, "[Fehler] Beim Verarbeiten der Studiengruppen", e);
+                        }
                     }
                 },
                 null);
         VolleyDownloader.getInstance(context).addToRequestQueue(jsonArrayRequest);
     }
+
+    /**
+     * Studiengruppen aktualisieren
+     */
+    private void updateStudyGroups() {
+        VolleyDownloader.getInstance(context).addToRequestQueue(
+                new JsonArrayRequest(
+                        Const.internet.WEBSERVICE_URL_STUDYGROUPS,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(final JSONArray response) {
+                                final Realm realm = Realm.getDefaultInstance();
+                                realm.beginTransaction();
+                                realm.delete(StudyGroup.class);
+                                realm.delete(StudyCourse.class);
+                                realm.delete(StudyYear.class);
+                                realm.createAllFromJson(StudyYear.class, response);
+                                realm.commitTransaction();
+                                realm.close();
+
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, Calendar.getInstance().getTimeInMillis())
+                                        .apply();
+                            }
+                        },
+                        null)
+        );
+    }
+
 }

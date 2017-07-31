@@ -2,6 +2,7 @@ package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
 import io.realm.Realm;
@@ -99,5 +101,20 @@ public final class ExamsHelper {
     public static long getUpdateInterval(@NonNull final String intervalFromPreference) {
         final int parsedValue = Integer.valueOf(intervalFromPreference);
         return TimeUnit.MILLISECONDS.convert(parsedValue, TimeUnit.HOURS);
+    }
+
+    /**
+     * Liefert die Semesterbezeichnung
+     *
+     * @param resources App-Ressourcen
+     * @param semester  Semesterkennzeichnung als Zahl
+     * @return Semesterbezeichnung als String
+     */
+    public static String getSemesterName(final @NonNull Resources resources, final @NonNull Integer semester) {
+        int semesterCalc = semester - 20000;
+        if (semesterCalc % 2 == 1)
+            return resources.getString(R.string.academic_year_summer) + " " + semesterCalc / 10;
+        else
+            return resources.getString(R.string.academic_year_winter) + " " + semesterCalc / 10 + " / " + ((semesterCalc / 10) + 1);
     }
 }

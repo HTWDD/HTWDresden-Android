@@ -3,12 +3,15 @@ package de.htwdd.htwdresden;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -20,31 +23,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.LessonHelper;
-import de.htwdd.htwdresden.classes.QueueCount;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.database.DatabaseManager;
-import de.htwdd.htwdresden.database.TimetableRoomDAO;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Lesson;
-import de.htwdd.htwdresden.types.RoomTimetable;
+import de.htwdd.htwdresden.service.TimetableRoomSyncService;
+import de.htwdd.htwdresden.service.TimetableStudentSyncService;
+import de.htwdd.htwdresden.types.LessonRoom;
+import io.realm.Realm;
 
 
 /**
@@ -53,9 +41,11 @@ import de.htwdd.htwdresden.types.RoomTimetable;
  * @author Kay Förster
  */
 public class RoomTimetableFragment extends Fragment {
+    private static final String LOG_TAG = "RoomTimetableFragment";
     private View mLayout;
-    private ArrayList<RoomTimetable> roomTimetables = new ArrayList<>();
+    private Realm realm;
     private RoomTimetableAdapter roomTimetableAdapter;
+    private ResponseReceiver responseReceiver;
 
     public RoomTimetableFragment() {
         // Required empty public constructor
@@ -72,34 +62,38 @@ public class RoomTimetableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_room_timetable, container, false);
+        realm = Realm.getDefaultInstance();
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
 
-        // Setze Toolbartitle
+        // Setze Titel der Toolbar
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_room_timetable));
 
         // Adapter für Liste erzeugen
-        roomTimetableAdapter = new RoomTimetableAdapter(getActivity(), roomTimetables);
+        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM));
 
         // ListView
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         listView.setAdapter(roomTimetableAdapter);
         listView.addFooterView(inflater.inflate(R.layout.fragment_room_timetable_footer, listView, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, roomTimetableAdapter.getItem(i).roomName);
-                Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+                final LessonRoom lessonRoom = roomTimetableAdapter.getItem(i);
+                if (lessonRoom == null) {
+                    return;
+                }
+
+                final Bundle bundle = new Bundle();
+                final Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, lessonRoom.getRoom());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
-
-        // Daten zum anzeigen laden
-        loadData();
+        listView.setEmptyView(mLayout.findViewById(R.id.info));
 
         // FloatingActionButton Aktion setzen
-        FloatingActionButton floatingActionButton = (FloatingActionButton) mLayout.findViewById(R.id.fab_add);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.fab_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(getActivity())
@@ -109,12 +103,13 @@ public class RoomTimetableFragment extends Fragment {
                         .setPositiveButton(R.string.general_add, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                TextView textView = (EditText) ((AlertDialog) dialogInterface).findViewById(R.id.textView);
-                                String room = textView.getText().toString();
+                                final String room = ((EditText) ((AlertDialog) dialogInterface).findViewById(R.id.textView)).getText().toString();
 
                                 if (room.isEmpty())
-                                    Toast.makeText(getActivity(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
-                                else loadRoom(room, new QueueCount());
+                                    Toast.makeText(mLayout.getContext(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
+                                else {
+                                    startUpdateService(room);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.general_close, new DialogInterface.OnClickListener() {
@@ -127,38 +122,27 @@ public class RoomTimetableFragment extends Fragment {
             }
         });
 
-        // SwipeRefreseh
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        // SwipeRefresh Action setzen
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-                final QueueCount queueCount = new QueueCount();
-                queueCount.update = true;
+                final Context context = mLayout.getContext();
 
                 // Überprüfe Internetverbindung
                 if (!VolleyDownloader.CheckInternet(getActivity())) {
-                    // Refresh ausschalten
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-
                     // Meldung anzeigen
-                    Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (roomTimetables.size() != 0) {
-                    // Download der einzelnen Räume
-                    for (RoomTimetable room : roomTimetables) {
-                        loadRoom(room.roomName, queueCount);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
+                }
+                // Überprüfe ob Räume vorhanden sind
+                else if (roomTimetableAdapter.getCount() == 0) {
+                    Toast.makeText(context, R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    // Service starten
+                    Log.d(LOG_TAG, "Starte Service");
+                    context.startService(new Intent(context, TimetableStudentSyncService.class));
                 }
             }
         });
@@ -166,7 +150,21 @@ public class RoomTimetableFragment extends Fragment {
         // Löschen über Context-Menu
         registerForContextMenu(listView);
 
+        // IntentReceiver erstellen
+        final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        intentFilter.addCategory(Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
+        responseReceiver = new ResponseReceiver();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(responseReceiver, intentFilter);
+
         return mLayout;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        realm.close();
     }
 
     @Override
@@ -177,22 +175,21 @@ public class RoomTimetableFragment extends Fragment {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String room = roomTimetables.get(info.position).roomName;
+    public boolean onContextItemSelected(@NonNull final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final LessonRoom room = roomTimetableAdapter.getItem(info.position);
+        if (room == null) {
+            return false;
+        }
 
         switch (item.getItemId()) {
             case R.id.room_timetable_delete:
-                // Lösche Raum aus DB
-                DatabaseManager databaseManager = new DatabaseManager(getActivity());
-                TimetableRoomDAO timetableRoomDAO = new TimetableRoomDAO(databaseManager);
-                timetableRoomDAO.deleteRoom(room);
-                loadData();
+                realm.beginTransaction();
+                realm.where(LessonRoom.class).equalTo(Const.database.LessonRoom.ROOM, room.getRoom()).findAll().deleteAllFromRealm();
+                realm.commitTransaction();
                 return true;
             case R.id.room_timetable_update:
-                QueueCount queueCount = new QueueCount();
-                queueCount.update = true;
-                loadRoom(room, queueCount);
+                startUpdateService(room.getRoom());
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -200,157 +197,32 @@ public class RoomTimetableFragment extends Fragment {
     }
 
     /**
-     * Zeigt die Raumpläne aus der Datenbank in der ListView an
+     * Startet Service zum aktualisieren des Belegungsplanes
+     *
+     * @param room optionale Raumbezeichnung, wenn angeben wird nur dieser aktualisiert
      */
-    private void loadData() {
-        // Kalender zum bestimmen welcher Plan angezeigt wird
-        Calendar calendar = GregorianCalendar.getInstance();
+    private void startUpdateService(@Nullable final String room) {
+        final Context context = mLayout.getContext();
+        final Intent intent = new Intent(context, TimetableRoomSyncService.class);
 
-        // Wenn Sonntag ist, auf Plan für Montag springen
-        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-
-        DatabaseManager databaseManager = new DatabaseManager(getActivity());
-        TimetableRoomDAO timetableRoomDAO = new TimetableRoomDAO(databaseManager);
-
-        // Lade Stundepläne aus DB
-        roomTimetables.clear();
-        roomTimetables.addAll(timetableRoomDAO.getOverview(calendar.get(Calendar.DAY_OF_WEEK), calendar.get(Calendar.WEEK_OF_YEAR)));
-
-        // Hinweis ein / ausblenden
-        TextView textView = (TextView) mLayout.findViewById(R.id.info);
-        ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-
-        if (roomTimetables.size() == 0) {
-            textView.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-        } else {
-            textView.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+        // Raum übergeben
+        if (room != null && !room.isEmpty()) {
+            intent.putExtra(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
         }
 
-        roomTimetableAdapter.notifyDataSetChanged();
+        // Service starten
+        Log.d(LOG_TAG, "Starte Service");
+        context.startService(intent);
+        ((SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout)).setRefreshing(true);
     }
 
     /**
-     * Lädt den gesuchten Raum vom Webservice uns speichert diesen in der Datenbank
-     *
-     * @param room für welchen der Belegungsplan geladen werden soll
+     * Empfänger für Updates der Noten vom Service
      */
-    private void loadRoom(@NonNull final String room, @NonNull final QueueCount queueCount) {
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Bestimme Fehlermeldung
-                int responseCode = VolleyDownloader.getResponseCode(error);
-
-                // aktuell laufende Requests reduzieren
-                queueCount.decrementCountQueue();
-
-                // weitere Download abbrechen
-                VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
-
-                // Fehlermeldung anzeigen
-                String message;
-                switch (responseCode) {
-                    case Const.internet.HTTP_TIMEOUT:
-                        message = getString(R.string.info_internet_timeout);
-                        break;
-                    case Const.internet.HTTP_NO_CONNECTION:
-                    case Const.internet.HTTP_NOT_FOUND:
-                        message = getString(R.string.info_internet_no_connection);
-                        break;
-                    case Const.internet.HTTP_NETWORK_ERROR:
-                    default:
-                        message = getString(R.string.info_internet_error);
-                }
-
-                Snackbar snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
-                if (!queueCount.update)
-                    snackbar.setAction(R.string.general_repeat, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            loadRoom(room, queueCount);
-                        }
-                    });
-                snackbar.show();
-
-                // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        };
-        final Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                ArrayList<Lesson> lessons;
-
-                // Aktuell laufende Requests minimieren
-                queueCount.decrementCountQueue();
-
-                // Ergebnis verarbeiten
-                try {
-                    lessons = LessonHelper.getList(response);
-                } catch (Exception e) {
-                    Log.e(this.getClass().getSimpleName(), "[Fehler] beim Parsen: Daten: " + response);
-                    Log.e(this.getClass().getSimpleName(), e.toString());
-
-                    // Fehlermeldung anzeigen
-                    Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
-
-                    // Weitere Download abbrechen
-                    VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
-
-                    // Refresh ausschalten
-                    swipeRefreshLayout.setRefreshing(false);
-                    return;
-                }
-
-                // Refresh ausschalten
-                if (queueCount.getCountQueue() == 0)
-                    swipeRefreshLayout.setRefreshing(false);
-
-                // Anzahl der Stunden überprüfen
-                if (lessons.size() == 0) {
-                    Toast.makeText(getActivity(), R.string.room_timetable_add_no_Lessons, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Verbindung zur Datenbank
-                DatabaseManager databaseManager = new DatabaseManager(getActivity());
-                TimetableRoomDAO timetableRoomDAO = new TimetableRoomDAO(databaseManager);
-
-                // Daten speichern
-                boolean result = timetableRoomDAO.replaceTimetable(room.toUpperCase(), lessons);
-                if (!result) {
-                    Snackbar.make(mLayout, R.string.room_timetable_add_save_error, Snackbar.LENGTH_LONG).show();
-                    // Weitere Downloads abbrechen
-                    VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
-                    // Lade neue Daten aus der Datenbank
-                    loadData();
-                } else if (queueCount.getCountQueue() == 0) {
-                    if (queueCount.update)
-                        Snackbar.make(mLayout, R.string.room_timetable_update_success, Snackbar.LENGTH_SHORT).show();
-                    else
-                        Snackbar.make(mLayout, R.string.room_timetable_add_success, Snackbar.LENGTH_SHORT).show();
-
-                    // Lade neue Daten aus der Datenbank
-                    loadData();
-                }
-            }
-        };
-
-        // Starte Refreshing
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        // Überprüfe Internetverbindung
-        if (!VolleyDownloader.CheckInternet(getActivity())) {
-            // Refresh ausschalten
+    private class ResponseReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -358,24 +230,24 @@ public class RoomTimetableFragment extends Fragment {
                 }
             });
 
-            // Weitere Downloads abbrechen
-            VolleyDownloader.getInstance(getActivity()).getRequestQueue().cancelAll(Const.internet.TAG_ROOM_TIMETABLE);
-
-            // Meldung anzeigen
-            Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Download der Informationen
-        try {
-            JsonArrayRequest stringRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetTimetable.php?Room=" + URLEncoder.encode(room, "utf-8"), jsonArrayListener, errorListener);
-            stringRequest.setTag(Const.internet.TAG_ROOM_TIMETABLE);
-            VolleyDownloader.getInstance(getActivity()).addToRequestQueue(stringRequest);
-            // Anzahl der laufenden Requests zählen
-            queueCount.incrementCountQueue();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), R.string.info_error, Toast.LENGTH_SHORT).show();
+            final int intentResponse = intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1);
+            switch (intentResponse) {
+                case 0:
+                    Toast.makeText(context, R.string.room_timetable_update_success, Toast.LENGTH_LONG).show();
+                    break;
+                case Const.internet.HTTP_NOT_FOUND:
+                    Toast.makeText(context, R.string.room_timetable_add_no_Lessons, Toast.LENGTH_SHORT).show();
+                    break;
+                case Const.internet.HTTP_TIMEOUT:
+                case Const.internet.HTTP_UNAUTHORIZED:
+                case Const.internet.HTTP_NO_CONNECTION:
+                    Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_SHORT).show();
+                    break;
+                case -1:
+                default:
+                    Toast.makeText(context, R.string.info_error, Toast.LENGTH_LONG).show();
+                    break;
+            }
         }
     }
 }

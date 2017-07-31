@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_filter_week"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/timetable_overview_options_menu_filter_week"/>
+    <item
+        android:id="@+id/menu_filter_hidden"
+        android:checkable="true"
+        android:title="@string/timetable_overview_options_menu_filter_hidden"/>
+</menu>

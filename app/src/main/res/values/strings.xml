@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">HTWDresden</string>
+    <string name="app_name" translatable="false">HTWDresden</string>
     <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
-    <string name="app_developer_name">Kay Förster</string>
-    <string name="app_email">app@htw-dresden.de</string>
-    <string name="app_github">github.com/HTWDD/HTWDresden</string>
+    <string name="app_developer_name" translatable="false">Kay Förster</string>
+    <string name="app_email" translatable="false">app@htw-dresden.de</string>
+    <string name="app_github" translatable="false">github.com/HTWDD/HTWDresden</string>
 
     <string name="general_repeat">Wiederholen</string>
     <string name="general_close">Schließen</string>
@@ -26,7 +26,6 @@
     <string name="info_no_settings">Fehlende Einstellungen!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_semesterlan_outofdate">Der Semesterplan ist auf dem Server nicht mehr aktuell</string>
-    <string name="info_error_read_sqlite">Fehler beim Lesen aus der lokalen Datenbank</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
     <string name="info_error_error">Fehler beim Löschen</string>
@@ -35,8 +34,8 @@
     <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
     <string name="info_internet_error">Unbekannter Netzwerkfehler</string>
 
-    <string name="semesterplan_wintersemester">Wintersemester</string>
-    <string name="semesterplan_sommersemester">Sommersemester</string>
+    <string name="academic_year_winter">Wintersemester</string>
+    <string name="academic_year_summer">Sommersemester</string>
 
     <string name="settings_category_access_data">Zugangsdaten</string>
     <string name="settings_category_study">Studium</string>
@@ -54,7 +53,7 @@
     <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
     <string name="settings_jahrgang">Jahrgang</string>
     <string name="settings_studiengang">Studiengang</string>
-    <string name="settings_studiengang_split">/</string>
+    <string name="settings_studiengang_split" translatable="false">/</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
     <string name="settings_studiengang_dialogMessage">Beispiel: 15/021/61</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
@@ -81,37 +80,45 @@
     <string name="mensa_price">%s €</string>
 
     <string name="timetable_overview_today">Heute</string>
-    <string name="timetable_updade_success">Stundenplan erfolgreich aktualisiert!</string>
+    <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
+    <string name="timetable_overview_options_menu_filter_week">Wochenfilter</string>
+    <string name="timetable_overview_options_menu_filter_hidden">versteckte Stunden</string>
+    <string name="timetable_sync_success">Stundenplan erfolgreich aktualisiert!</string>
+    <string name="timetable_sync_notFound">Studiengruppe oder Webservice nicht gefunden.</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>
     <string name="timetable_add">Stunde hinzufügen</string>
     <string name="timetable_details">Stunden-Details</string>
-    <string name="timetable_current_week">Aktuelle Woche (%d)</string>
-    <string name="timetable_next_week">Nächste Woche (%d)</string>
+    <string name="timetable_tab_current_week">Aktuelle Woche (%d)</string>
+    <string name="timetable_tab_next_week">Nächste Woche (%d)</string>
+    <string name="timetable_tab_even_week">gerade Woche</string>
+    <string name="timetable_tab_odd_week">ungerade Woche</string>
     <string name="timetable_moreLessons">mehrere Stunden</string>
-    <string name="timetable_moreLessonsPoints">***</string>
+    <string name="timetable_moreLessonsPoints" translatable="false">***</string>
     <string name="timetable_only_KW">einige KW</string>
     <string name="timetable_ds_grid">%1$s\n-\n%2$s</string>
     <string name="timetable_ds_list">%1$d. DS (%2$s - %3$s)</string>
     <string name="timetable_ds_list_simple">%1$s - %2$s</string>
+    <string name="timetable_calendar_week">%d. KW</string>
     <string name="timetable_edit_activity_titel">Stunde bearbeiten</string>
-    <string name="timetable_edit_lessonName">Vorlesung</string>
-    <string name="timetable_edit_lessonName_hint">Name der Vorlesung</string>
-    <string name="timetable_edit_lessonTag">Kurzform</string>
-    <string name="timetable_edit_lessonTag_hint">z.B. Ma</string>
+    <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung</string>
+    <string name="timetable_edit_lessonTag_hint">Kurzform</string>
     <string name="timetable_edit_lessonType">Art</string>
-    <string name="timetable_edit_lessonProf">Dozent</string>
-    <string name="timetable_edit_lessonProf_hint">Professor / Mitarbeiter</string>
+    <string name="timetable_edit_lessonProf_hint">Name des Dozenten</string>
     <string name="timetable_edit_lessonRoom">Raum</string>
-    <string name="timetable_edit_lessonRoom_hint">z.B. S311</string>
-    <string name="timetable_edit_label_time">Zeit</string>
+    <string name="timetable_edit_label_time">Zeitpunkt</string>
     <string name="timetable_edit_label_general">Allgemein</string>
     <string name="timetable_edit_lessonWeek">Woche</string>
     <string name="timetable_edit_lessonDay">Tag</string>
-    <string name="timetable_edit_lessonDS">DS</string>
-    <string name="timetable_edit_lessonWeeks">nur KW</string>
-    <string name="timetable_edit_lessonWeeks_hint">z.B. 20;22</string>
+    <string name="timetable_edit_lessonDS">Zeit</string>
+    <string name="timetable_edit_lessonDS_value">Zeit individual festlegen</string>
+    <string name="timetable_edit_time_individual_to">bis</string>
+    <string name="timetable_edit_lessonWeeks">nur in KW</string>
+    <string name="timetable_edit_lessonWeeks_title">Lehrveranstaltung findet ausschl. in folgenden KW statt</string>
+    <string name="timetable_edit_lessonWeeks_hint">Ausschließlich in folgenden Kalenderwochen</string>
     <string name="timetable_edit_save">Speichern</string>
     <string name="timetable_edit_delete">Löschen</string>
+    <string name="timetable_edit_hide">Ausblenden</string>
+    <string name="timetable_edit_show">Einblenden</string>
     <string name="timetable_edit_lessonSaveSuccess">Stunde erfolgreich gespeichert!</string>
     <string name="timetable_edit_lessonDeleteSuccess">Stunde erfolgreich gelöscht!</string>
     <string name="timetable_details_title">(%1$s) %2$s</string>
@@ -124,7 +131,7 @@
     <string name="room_timetable_add_no_Lessons">Raum nicht gefunden!</string>
     <string name="room_timetable_addDialog_message">Bitte gib die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer ein.</string>
     <string name="room_timetable_addDialog_hint">z.B. S 531</string>
-    <string name="room_timetable_update_success">Ausgewählte Räume erfolgreich aktualisiert!</string>
+    <string name="room_timetable_update_success">Belegungsplan aktualisiert!</string>
     <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
     <string name="room_timetable_details_title">Belegungsplan %s</string>
 
@@ -179,7 +186,6 @@
     <string name="about_contact">Kontakt</string>
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
-    <string name="title_activity_room_timetable_details">RoomTimetableDetailsActivity</string>
 
     <string name="overview_update_available">Update verfügbar!</string>
     <string name="overview_update_available_message">Bitte Update auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
@@ -188,7 +194,7 @@
     <string name="overview_lessons_next">Nächste</string>
     <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
     <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
-    <string name="overview_lessons_remaining_final">Ende seit %1$s Minuten</string>
+    <string name="overview_lessons_remaining_final">Ende seit %1$d Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
     <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future">%1$s %2$s</string>

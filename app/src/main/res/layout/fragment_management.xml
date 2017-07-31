@@ -30,7 +30,6 @@
                     android:id="@+id/semesterplan_Bezeichnung"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/management_semesterplan"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
                 <TextView

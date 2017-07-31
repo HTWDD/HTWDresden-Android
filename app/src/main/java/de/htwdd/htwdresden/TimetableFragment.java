@@ -2,10 +2,15 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,62 +27,131 @@ import de.htwdd.htwdresden.types.TabItem;
 
 
 /**
- * Hauptfragment welches die verschiedenen Sub-Fragmente enthält
+ * Fragment, welches verschiedene Tabs mit einzelnen Wochen enthält
  */
 public class TimetableFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
+    private ViewPagerAdapter pagerAdapter;
+    private final Bundle bundleCurrentWeek = new Bundle();
+    private final Bundle bundleNextWeek = new Bundle();
 
     public TimetableFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Kalenderwoche für Bundle bestimmen
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+        bundleCurrentWeek.putInt(Const.BundleParams.TIMETABLE_WEEK, calendar.get(Calendar.WEEK_OF_YEAR));
         calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        final int nextWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-
-        final Bundle bundle_1 = new Bundle();
-        final Bundle bundle_2 = new Bundle();
-        bundle_1.putInt(Const.BundleParams.TIMETABLE_WEEK, currentWeek);
-        bundle_2.putInt(Const.BundleParams.TIMETABLE_WEEK, nextWeek);
-        mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_current_week, currentWeek),
-                TimetableOverviewFragment.class,
-                bundle_1
-        ));
-        mTabs.add(new TabItem(
-                getResources().getString(R.string.timetable_next_week, nextWeek),
-                TimetableOverviewFragment.class,
-                bundle_2
-        ));
+        bundleNextWeek.putInt(Const.BundleParams.TIMETABLE_WEEK, calendar.get(Calendar.WEEK_OF_YEAR));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
-
-        // Setze Toolbartitle
-        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
-
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        // Adapter für Tabs erstellen und an view hängen
-        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
-        viewPager.setAdapter(viewPagerAdapter);
+        // Setze Title der Toolbar
+        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
+        // Optionsmenü aktivieren
+        setHasOptionsMenu(true);
+
+        // Zustand wiederherstellen
+        if (savedInstanceState != null) {
+            bundleCurrentWeek.putAll(savedInstanceState);
+            bundleNextWeek.putAll(savedInstanceState);
+        }
+
+        // Adapter für Tabs erstellen und an View hängen
+        replaceTabs();
+        pagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
+        viewPager.setAdapter(pagerAdapter);
 
         // TabLayout "stylen"
         final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
-        // Stetze feste Anzahl an Tabs (Tabs wirken nciht angeklatscht)
+        // Setze feste Anzahl an Tabs (Tabs wirken nicht abgeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        // Tabs nehemen immer die ganze Breite ein
+        // Tabs nahmen immer die ganze Breite ein
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true));
+        outState.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_timetable, menu);
+        menu.findItem(R.id.menu_filter_week).setChecked(bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true));
+        menu.findItem(R.id.menu_filter_hidden).setChecked(bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int itemId = item.getItemId();
+        // Item Status umdrehen
+        final boolean filterWeek = !item.isChecked();
+        item.setChecked(filterWeek);
+
+        switch (itemId) {
+            case R.id.menu_filter_week:
+                // Parameter für Fragments aktualisieren
+                bundleCurrentWeek.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, filterWeek);
+                bundleNextWeek.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, filterWeek);
+                // Tabs ersetzen
+                replaceTabs();
+                pagerAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.menu_filter_hidden:
+                // Parameter für Fragments aktualisieren
+                bundleCurrentWeek.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, filterWeek);
+                bundleNextWeek.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, filterWeek);
+                // Tabs ersetzen
+                replaceTabs();
+                pagerAdapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void replaceTabs() {
+        final Resources resources = getResources();
+        mTabs.clear();
+
+        if (bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true)) {
+            mTabs.add(new TabItem(
+                    resources.getString(R.string.timetable_tab_current_week, bundleCurrentWeek.getInt(Const.BundleParams.TIMETABLE_WEEK)),
+                    TimetableOverviewFragment.class,
+                    bundleCurrentWeek
+            ));
+            mTabs.add(new TabItem(
+                    resources.getString(R.string.timetable_tab_next_week, bundleNextWeek.getInt(Const.BundleParams.TIMETABLE_WEEK)),
+                    TimetableOverviewFragment.class,
+                    bundleNextWeek
+            ));
+        } else {
+            mTabs.add(new TabItem(
+                    resources.getString(R.string.timetable_tab_even_week),
+                    TimetableOverviewFragment.class,
+                    bundleCurrentWeek
+            ));
+            mTabs.add(new TabItem(
+                    resources.getString(R.string.timetable_tab_odd_week),
+                    TimetableOverviewFragment.class,
+                    bundleNextWeek
+            ));
+        }
     }
 }
