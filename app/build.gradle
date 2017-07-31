@@ -30,6 +30,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.volley:volley:1.0.0'
     compile 'ch.acra:acra:4.9.2'
-    compile 'io.realm:android-adapters:2.0.0'
+    compile 'io.realm:android-adapters:2.1.0'
     apply plugin: 'realm-android'
 }
