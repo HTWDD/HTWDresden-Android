@@ -206,7 +206,11 @@ abstract class AbstractTimetableHelper {
                     break;
                 case 1:
                     final ILesson lesson = lessons.first();
-                    textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
+                    if (lesson.getLessonTag() != null) {
+                        textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
+                    } else {
+                        textLesson.setText(lesson.getType());
+                    }
                     break;
                 default:
                     textLesson.setText(R.string.timetable_moreLessons);

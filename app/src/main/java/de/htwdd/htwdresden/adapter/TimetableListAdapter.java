@@ -62,11 +62,16 @@ public class TimetableListAdapter extends RealmBaseAdapter<LessonUser> {
         if (lesson == null)
             return view;
 
-        viewHolder.lesson_name.setText(context.getString(R.string.timetable_details_title, lesson.getLessonTag(), lesson.getName()));
+
         viewHolder.lesson_room.setText(TimetableHelper.getStringOfRooms(lesson));
         viewHolder.lesson_kw.setText(lessonWeek[lesson.getWeek()]);
         viewHolder.lesson_day.setText(nameOfDays[lesson.getDay() - 1]);
         viewHolder.lesson_weeksOnly.setText(TimetableHelper.getStringOfKws(lesson));
+        if (lesson.getLessonTag() != null) {
+            viewHolder.lesson_name.setText(context.getString(R.string.timetable_details_title, lesson.getLessonTag(), lesson.getName()));
+        } else {
+            viewHolder.lesson_name.setText(lesson.getName());
+        }
         if (lesson.getProfessor() != null && !lesson.getProfessor().isEmpty()) {
             viewHolder.lesson_typ.setText(context.getString(R.string.timetable_details_subtitle, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)], lesson.getProfessor()));
         } else {
