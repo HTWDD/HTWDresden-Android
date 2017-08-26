@@ -104,6 +104,7 @@ public final class ExamAutoUpdateService extends ExamSyncService {
                 notificationManager.notify(645, builder.build());
             }
         }
+        realm.close();
     }
 
     /**

@@ -35,6 +35,7 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class ExamResultFragment extends Fragment {
+    private Realm realm;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
     private RealmResults<ExamResult> examResults;
     private ResponseReceiver responseReceiver;
@@ -51,7 +52,8 @@ public class ExamResultFragment extends Fragment {
         // Inflate the layout for this fragment
         final Context context = getActivity();
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
-        adapter = new ExamResultAdapter(context);
+        realm = Realm.getDefaultInstance();
+        adapter = new ExamResultAdapter(context, realm);
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,7 +93,6 @@ public class ExamResultFragment extends Fragment {
         });
 
         // Daten aus Datenbank laden
-        final Realm realm = Realm.getDefaultInstance();
         countExamResults = realm.where(ExamResult.class).count();
 
         // Auf Änderungen an der Datenbank hören
@@ -119,10 +120,11 @@ public class ExamResultFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        examResults.removeChangeListener(realmListenerExams);
+    public void onDestroyView() {
+        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        examResults.removeChangeListener(realmListenerExams);
+        realm.close();
     }
 
     /**
@@ -140,7 +142,6 @@ public class ExamResultFragment extends Fragment {
             });
 
             if (intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1) == 0) {
-                final Realm realm = Realm.getDefaultInstance();
                 final long newCountExamResults = realm.where(ExamResult.class).count();
                 if (newCountExamResults > countExamResults) {
                     Toast.makeText(context, R.string.exams_result_update_newGrades, Toast.LENGTH_SHORT).show();

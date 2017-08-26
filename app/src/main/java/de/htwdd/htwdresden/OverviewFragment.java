@@ -182,7 +182,7 @@ public class OverviewFragment extends Fragment {
             content.setVisibility(View.VISIBLE);
 
             // Erstelle Statistik
-            final ExamStats examStats = ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null);
+            final ExamStats examStats = ExamsHelper.getExamStatsForSemester(realm, null);
 
             // Views holen
             final TextView stats_average = (TextView) mLayout.findViewById(R.id.stats_average);

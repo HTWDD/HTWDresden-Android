@@ -76,7 +76,6 @@ public class MensaDetailWeekFragment extends Fragment {
         }
 
         // Hole Daten aus DB
-        final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Meal> realmResults = realm.where(Meal.class).findAll();
         // Bei Änderungen an der Datenbasis Aktualisierung ausschalten
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {

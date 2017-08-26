@@ -50,7 +50,7 @@ public class RoomTimetableOverviewFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        realm.close();
         super.onDestroyView();
+        realm.close();
     }
 }

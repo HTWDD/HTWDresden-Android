@@ -30,13 +30,15 @@ import io.realm.Sort;
 public class ExamResultAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final LayoutInflater mLayoutInflater;
-    private final Realm realm = Realm.getDefaultInstance();
-    private final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
+    private final Realm realm;
+    private final RealmResults<ExamResult> examHeaders;
 
-    public ExamResultAdapter(@NonNull final Context context) {
+    public ExamResultAdapter(@NonNull final Context context, final Realm realm) {
         super();
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.realm = realm;
         this.context = context;
+        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
     }
 
     @Override

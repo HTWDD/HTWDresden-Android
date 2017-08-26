@@ -41,7 +41,7 @@ public final class ExamsHelper {
         for (final ExamResult result : examHeaders) {
             stats.add(getExamStatsForSemester(realm, result.semester));
         }
-
+        realm.close();
         return stats;
     }
 
