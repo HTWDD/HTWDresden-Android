@@ -109,12 +109,15 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
                     goToNavigationItem(R.id.navigation_timetable);
+                    intent.setAction("");
                     return;
                 case Const.IntentParams.START_ACTION_MENSA:
                     goToNavigationItem(R.id.navigation_mensa);
+                    intent.setAction("");
                     return;
                 case Const.IntentParams.START_ACTION_EXAM_RESULTS:
                     goToNavigationItem(R.id.navigation_exams);
+                    intent.setAction("");
                     return;
             }
         }
