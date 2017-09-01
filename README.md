@@ -1,7 +1,7 @@
 # HTWDresden
 Die App für Studenten der HTW Dresden.
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/de_badge_web_generic.png" width="200" alt="Google Play"/>](https://play.google.com/store/apps/details?id=de.htwdd.htwdresden&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/de_badge_web_generic.png" width="200" alt="Google Play"/>](https://play.google.com/store/apps/details?id=de.htwdd.htwdresden&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 [<img src="https://gitlab.com/fdroid/artwork/raw/master/badge/get-it-on-de.png" alt="F-Droid" width="200"/>](https://github.com/HTWDD/HTWDresden/wiki/Installation#installation-%C3%BCber-f-droid)
 
 HTWDresden ist ein eigenständiges, inoffizielles Projekt und nicht durch die HTW Dresden selbst vertreten. Das Benutzen erfolgt auf eigene Verantwortung.
