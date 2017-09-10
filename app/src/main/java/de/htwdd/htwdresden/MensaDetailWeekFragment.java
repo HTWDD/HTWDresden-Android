@@ -4,6 +4,7 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ public class MensaDetailWeekFragment extends Fragment {
             modus = bundle.getInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
 
         // Setze Swipe Refresh Layout
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -80,7 +81,7 @@ public class MensaDetailWeekFragment extends Fragment {
         // Bei Änderungen an der Datenbasis Aktualisierung ausschalten
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
             @Override
-            public void onChange(final RealmResults<Meal> element) {
+            public void onChange(@NonNull final RealmResults<Meal> element) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

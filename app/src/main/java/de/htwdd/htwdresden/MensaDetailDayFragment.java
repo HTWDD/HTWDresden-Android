@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -45,8 +46,8 @@ public class MensaDetailDayFragment extends Fragment {
         realm = Realm.getDefaultInstance();
 
         // Suche Views
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final ListView listView = mLayout.findViewById(R.id.listView);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
 
         // Setze Swipe Refresh Layout
@@ -70,7 +71,7 @@ public class MensaDetailDayFragment extends Fragment {
         // Bei Änderungen an der Datenbasis Hinweismeldung überprüfen
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
             @Override
-            public void onChange(final RealmResults<Meal> element) {
+            public void onChange(@NonNull final RealmResults<Meal> element) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
