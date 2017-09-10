@@ -22,7 +22,7 @@ import io.realm.RealmList;
 
 
 /**
- * Fragement zur Übersicht aller wichtigen Uni-Einrichtungen
+ * Fragment zur Übersicht aller wichtigen Uni-Einrichtungen
  */
 public class ManagementFragment extends Fragment {
     private Realm realm;
@@ -37,27 +37,27 @@ public class ManagementFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_management, container, false);
         realm = Realm.getDefaultInstance();
 
-        // Setze Toolbartitle
+        // Setze Toolbar Titel
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
 
         mLayout.findViewById(R.id.management_office).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html")));
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html")));
             }
         });
 
-        mLayout.findViewById(R.id.management_printing).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/intern/technik-druck-it-dienste/drucken-kopieren.html")));
-            }
-        });
+//        mLayout.findViewById(R.id.management_printing).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/intern/technik-druck-it-dienste/drucken-kopieren.html")));
+//            }
+//        });
 
         mLayout.findViewById(R.id.management_examination_office).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/hochschule/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html")));
+                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html")));
             }
         });
 
@@ -96,7 +96,7 @@ public class ManagementFragment extends Fragment {
             return;
         }
 
-        // Allgemeine Semesterinformationen
+        // Allgemeine Studienjahresablaufplan
         final String semesterBezeichnung = mLayout.getResources().getString("S".equals(semester.getType()) ? R.string.academic_year_summer : R.string.academic_year_winter);
         ((TextView) mLayout.findViewById(R.id.semesterplan_Bezeichnung)).setText(semesterBezeichnung + " " + semester.getYear());
         ((TextView) mLayout.findViewById(R.id.semesterplan_lecturePeriod)).setText(getString(
@@ -117,8 +117,8 @@ public class ManagementFragment extends Fragment {
 
         // Freie Tage anzeigen
         final RealmList<TimePeriod> freeDays = semester.getFreeDays();
-        final TextView semesterPlanFreieTage = (TextView) mLayout.findViewById(R.id.semesterplan_freieTage);
-        final TextView semesterPlanFreieTageNamen = (TextView) mLayout.findViewById(R.id.semesterplan_freieTageNamen);
+        final TextView semesterPlanFreieTage = mLayout.findViewById(R.id.semesterplan_freieTage);
+        final TextView semesterPlanFreieTageNamen = mLayout.findViewById(R.id.semesterplan_freieTageNamen);
         for (final TimePeriod period : freeDays) {
             if (semesterPlanFreieTage.getText().length() != 0) {
                 semesterPlanFreieTageNamen.append("\n");
