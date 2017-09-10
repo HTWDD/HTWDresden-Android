@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.NextLessonResult;
@@ -70,11 +72,11 @@ public class OverviewFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_overview, container, false);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        // Setze Toolbartitle
+        // Setze Toolbar Titel
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_overview));
 
         // Update verfügbar
-        final CardView cardUpdate = (CardView) mLayout.findViewById(R.id.overview_app_update);
+        final CardView cardUpdate = mLayout.findViewById(R.id.overview_app_update);
         cardUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,8 +88,7 @@ public class OverviewFragment extends Fragment {
             cardUpdate.setVisibility(View.VISIBLE);
 
         // Stundenplan
-        final CardView cardTimetable = (CardView) mLayout.findViewById(R.id.overview_timetable);
-        cardTimetable.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.overview_timetable).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable);
@@ -95,8 +96,7 @@ public class OverviewFragment extends Fragment {
         });
 
         // Navigation zur Mensa
-        final CardView cardMensa = (CardView) mLayout.findViewById(R.id.overview_mensa);
-        cardMensa.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.overview_mensa).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa);
@@ -104,8 +104,7 @@ public class OverviewFragment extends Fragment {
         });
 
         // Noten
-        final CardView cardExam = (CardView) mLayout.findViewById(R.id.overview_examResultStats);
-        cardExam.setOnClickListener(new View.OnClickListener() {
+        mLayout.findViewById(R.id.overview_examResultStats).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_exams);
@@ -117,7 +116,7 @@ public class OverviewFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
             @Override
-            public void onChange(final RealmResults<Meal> element) {
+            public void onChange(@NonNull final RealmResults<Meal> element) {
                 showMensaInfo(meals);
             }
         };
@@ -128,7 +127,7 @@ public class OverviewFragment extends Fragment {
         // Übersicht über Noten
         realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
-            public void onChange(final RealmResults<ExamResult> element) {
+            public void onChange(@NonNull final RealmResults<ExamResult> element) {
                 showExamStats(element.size() > 0);
             }
         };
@@ -139,7 +138,7 @@ public class OverviewFragment extends Fragment {
         // Change Listener für Lehrveranstaltungen
         realmListenerLessons = new RealmChangeListener<RealmResults<LessonUser>>() {
             @Override
-            public void onChange(final RealmResults<LessonUser> element) {
+            public void onChange(@NonNull final RealmResults<LessonUser> element) {
                 showUserTimetableOverview();
             }
         };
@@ -174,8 +173,8 @@ public class OverviewFragment extends Fragment {
      * @param examsAvailable Sind Noten vorhanden?
      */
     private void showExamStats(final boolean examsAvailable) {
-        final TextView message = (TextView) mLayout.findViewById(R.id.overview_examResultStatsMessage);
-        final LinearLayout content = (LinearLayout) mLayout.findViewById(R.id.overview_examResultStatsContent);
+        final TextView message = mLayout.findViewById(R.id.overview_examResultStatsMessage);
+        final LinearLayout content = mLayout.findViewById(R.id.overview_examResultStatsContent);
 
         if (examsAvailable) {
             message.setVisibility(View.GONE);
@@ -185,11 +184,11 @@ public class OverviewFragment extends Fragment {
             final ExamStats examStats = ExamsHelper.getExamStatsForSemester(realm, null);
 
             // Views holen
-            final TextView stats_average = (TextView) mLayout.findViewById(R.id.stats_average);
-            final TextView stats_countGrade = (TextView) mLayout.findViewById(R.id.stats_countGrade);
-            final TextView stats_countCredits = (TextView) mLayout.findViewById(R.id.stats_countCredits);
-            final TextView stats_gradeBest = (TextView) mLayout.findViewById(R.id.stats_gradeBest);
-            final TextView stats_gradeWorst = (TextView) mLayout.findViewById(R.id.stats_gradeWorst);
+            final TextView stats_average = mLayout.findViewById(R.id.stats_average);
+            final TextView stats_countGrade = mLayout.findViewById(R.id.stats_countGrade);
+            final TextView stats_countCredits = mLayout.findViewById(R.id.stats_countCredits);
+            final TextView stats_gradeBest = mLayout.findViewById(R.id.stats_gradeBest);
+            final TextView stats_gradeWorst = mLayout.findViewById(R.id.stats_gradeWorst);
 
             stats_average.setText(getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
             stats_countGrade.setText(getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
@@ -210,15 +209,15 @@ public class OverviewFragment extends Fragment {
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
         // TextViews bestimmen
-        final TextView overview_lessons_current_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_current_remaining);
-        final TextView overview_lessons_current_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_current_tag);
-        final TextView overview_lessons_current_type = (TextView) mLayout.findViewById(R.id.overview_lessons_current_type);
-        final TextView overview_lessons_next_remaining = (TextView) mLayout.findViewById(R.id.overview_lessons_next_remaining);
-        final TextView overview_lessons_next_tag = (TextView) mLayout.findViewById(R.id.overview_lessons_next_tag);
-        final TextView overview_lessons_next_type = (TextView) mLayout.findViewById(R.id.overview_lessons_next_type);
-        final TableRow overview_lessons_busy_plan = (TableRow) mLayout.findViewById(R.id.overview_lessons_busy_plan);
-        final LinearLayout overview_lessons_list = (LinearLayout) mLayout.findViewById(R.id.overview_lessons_list);
-        final TextView overview_lessons_day = (TextView) mLayout.findViewById(R.id.overview_lesson_day);
+        final TextView overview_lessons_current_remaining = mLayout.findViewById(R.id.overview_lessons_current_remaining);
+        final TextView overview_lessons_current_tag = mLayout.findViewById(R.id.overview_lessons_current_tag);
+        final TextView overview_lessons_current_type = mLayout.findViewById(R.id.overview_lessons_current_type);
+        final TextView overview_lessons_next_remaining = mLayout.findViewById(R.id.overview_lessons_next_remaining);
+        final TextView overview_lessons_next_tag = mLayout.findViewById(R.id.overview_lessons_next_tag);
+        final TextView overview_lessons_next_type = mLayout.findViewById(R.id.overview_lessons_next_type);
+        final TableRow overview_lessons_busy_plan = mLayout.findViewById(R.id.overview_lessons_busy_plan);
+        final LinearLayout overview_lessons_list = mLayout.findViewById(R.id.overview_lessons_list);
+        final TextView overview_lessons_day = mLayout.findViewById(R.id.overview_lesson_day);
 
         // Aktuelle Stunde anzeigen
         final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
@@ -311,8 +310,8 @@ public class OverviewFragment extends Fragment {
      * @param meals Liste der Mahlzeiten
      */
     private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
-        final TextView message = (TextView) mLayout.findViewById(R.id.overview_mensaMessage);
-        final TextView content = (TextView) mLayout.findViewById(R.id.overview_mensaContent);
+        final TextView message = mLayout.findViewById(R.id.overview_mensaMessage);
+        final TextView content = mLayout.findViewById(R.id.overview_mensaContent);
         final int countMeals = meals.size();
 
         // Aktuell kein Angebot vorhanden
@@ -338,12 +337,12 @@ public class OverviewFragment extends Fragment {
     }
 
     private void showNews() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("https://www2.htw-dresden.de/~app/API/GetNews.php", new Response.Listener<JSONArray>() {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL_NEWS, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                final CardView cardView = (CardView) mLayout.findViewById(R.id.overview_news);
-                final TextView title = (TextView) mLayout.findViewById(R.id.overview_news_title);
-                final WebView content = (WebView) mLayout.findViewById(R.id.overview_news_content);
+                final CardView cardView = mLayout.findViewById(R.id.overview_news);
+                final TextView title = mLayout.findViewById(R.id.overview_news_title);
+                final WebView content = mLayout.findViewById(R.id.overview_news_content);
                 final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
                 final Calendar tmpCalendar = GregorianCalendar.getInstance();
                 final Calendar calendar = GregorianCalendar.getInstance();
@@ -387,11 +386,11 @@ public class OverviewFragment extends Fragment {
                             });
                         }
 
-                        // Es kann nur ein News gleichzeitig angeteigt werden, weitere werden nicht betrachtet
+                        // Es kann nur eine News gleichzeitig angezeigt werden, weitere werden nicht betrachtet
                         break;
 
-                    } catch (JSONException | ParseException e) {
-                        e.printStackTrace();
+                    } catch (final JSONException | ParseException e) {
+                        Log.e("OverviewFragment", "[Error] beim Verarbeiten der News", e);
                     }
                 }
             }
