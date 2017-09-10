@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         setContentView(R.layout.activity_main);
 
         // Toolbar einfügen
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        final Toolbar toolbar = findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
         actionBar = getSupportActionBar();
@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Hole Views
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        final NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mDrawerLayout = findViewById(R.id.drawerLayout);
+        final NavigationView mNavigationView = findViewById(R.id.navigation_view);
 
-        // Wenn Views nicht gefunden, sofort abrechen
+        // Wenn Views nicht gefunden, sofort abbrechen
         assert mNavigationView != null && mDrawerLayout != null;
 
         // Actionbar Titel anpassen
@@ -109,12 +109,15 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
                     goToNavigationItem(R.id.navigation_timetable);
+                    intent.setAction("");
                     return;
                 case Const.IntentParams.START_ACTION_MENSA:
                     goToNavigationItem(R.id.navigation_mensa);
+                    intent.setAction("");
                     return;
                 case Const.IntentParams.START_ACTION_EXAM_RESULTS:
                     goToNavigationItem(R.id.navigation_exams);
+                    intent.setAction("");
                     return;
             }
         }
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         Fragment fragment;
         String tag = null;
 
-        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backtaste verwendet wird.
+        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backbutton verwendet wird.
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         switch (position) {
@@ -198,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
      */
     private Menu getMenu(@Nullable NavigationView mNavigationView) {
         if (mNavigationView == null)
-            mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+            mNavigationView = findViewById(R.id.navigation_view);
 
         // Wenn mNavigationView nicht gefunden wird Ausnahme werfen
         assert mNavigationView != null;

@@ -3,6 +3,8 @@ package de.htwdd.htwdresden;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -19,7 +21,9 @@ import de.htwdd.htwdresden.types.TabItem;
 
 
 /**
- * Hauptfragment welches die verschiedenen Sub-Fragmente enthält
+ * Übersicht über die verschiedenen Mensa-Funktionalitäten
+ *
+ * @author Kay Förster
  */
 public class MensaFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
@@ -29,7 +33,7 @@ public class MensaFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle_1 = new Bundle();
@@ -56,24 +60,23 @@ public class MensaFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tabs, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
 
-        // Setze Toolbartitle
+        // Setze Title Toolbar
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_mensa));
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         // Adapter für Tabs erstellen und an view hängen
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
         viewPager.setAdapter(viewPagerAdapter);
 
         // TabLayout "stylen"
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
-        // Stetze feste Anzahl an Tabs (Tabs wirken nciht angeklatscht)
+        final TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
+        // Setze feste Anzahl an Tabs
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        // Tabs nehemen immer die ganze Breite ein
+        // Tabs nehmen immer die ganze Breite ein
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 

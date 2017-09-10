@@ -30,7 +30,7 @@ public final class Const {
 
     public static final class preferencesKey {
         public static final String PREFERENCES_AUTO_MUTE = "autoMute";
-        public static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
+        static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
         public static final String PREFERENCES_STUDY_GROUP_LAST_UPDATE = "studyGroupsLastUpdate";
@@ -46,6 +46,7 @@ public final class Const {
         public static final String WEBSERVICE_URL_HISQIS = "https://wwwqis.htw-dresden.de/appservice/v2/";
         public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
         public static final String WEBSERVICE_URL_STUDYGROUPS = WEBSERVICE_URL_APP + "v0/studyGroups.php";
+        public static final String WEBSERVICE_URL_NEWS = WEBSERVICE_URL_APP + "v0/news.json";
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_NOT_FOUND = 404;
         public static final int HTTP_DOWNLOAD_ERROR = 999;

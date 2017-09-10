@@ -213,6 +213,7 @@ public class MensaHelper {
         // Neue Einträge hinzufügen
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
+        realm.close();
     }
 
     /**
@@ -229,6 +230,7 @@ public class MensaHelper {
         // Neue Einträge hinzufügen
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
+        realm.close();
     }
 
     /**

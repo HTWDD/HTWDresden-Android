@@ -9,6 +9,7 @@ import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
+import de.htwdd.htwdresden.classes.DatabaseMigrations;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -45,14 +46,14 @@ public class HTWDresdenApplication extends Application {
             editor.apply();
         }
 
-        // Arca starten
+        // ACRA starten
         ACRA.init(this);
 
         // Realm initialisieren
         Realm.init(this);
         final RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .schemaVersion(2)
+                .migration(new DatabaseMigrations())
+                .schemaVersion(3)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 

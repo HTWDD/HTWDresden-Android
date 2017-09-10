@@ -190,7 +190,7 @@ abstract class AbstractTimetableHelper {
                 sub_view.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
 
             // Zeiten anzeigen
-            final TextView textDS = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_ds);
+            final TextView textDS = sub_view.findViewById(R.id.timetable_busy_plan_ds);
             textDS.setText(resources.getString(
                     R.string.timetable_ds_list_simple,
                     DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[iteration])),
@@ -199,14 +199,18 @@ abstract class AbstractTimetableHelper {
 
             // Stunde anzeigen
             foundedLessons = lessons.size();
-            final TextView textLesson = (TextView) sub_view.findViewById(R.id.timetable_busy_plan_lesson);
+            final TextView textLesson = sub_view.findViewById(R.id.timetable_busy_plan_lesson);
             switch (foundedLessons) {
                 case 0:
                     textLesson.setText("");
                     break;
                 case 1:
                     final ILesson lesson = lessons.first();
-                    textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
+                    if (lesson.getLessonTag() != null) {
+                        textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
+                    } else {
+                        textLesson.setText(lesson.getType());
+                    }
                     break;
                 default:
                     textLesson.setText(R.string.timetable_moreLessons);

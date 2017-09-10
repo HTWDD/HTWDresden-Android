@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.types.ExamStats;
@@ -17,10 +19,12 @@ import io.realm.Realm;
  * @author Kay Förster
  */
 public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
+    private Realm realm;
 
-    public ExamStatsAdapter(@NonNull final Context context) {
+    public ExamStatsAdapter(@NonNull final Context context, @NonNull final Realm realm) {
         super(context, ExamsHelper.getExamStats());
-        data.add(0, ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null));
+        this.realm = realm;
+        data.add(0, ExamsHelper.getExamStatsForSemester(realm, null));
     }
 
     @Override
@@ -43,7 +47,7 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
         if (examStats.semester != null)
             viewHolder.semester.setText(ExamsHelper.getSemesterName(convertView.getResources(), examStats.semester));
         else viewHolder.semester.setText(R.string.exams_stats_study);
-        viewHolder.average.setText(context.getString(R.string.exams_stats_average, String.format("%.2f", examStats.getAverage())));
+        viewHolder.average.setText(context.getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
 
         viewHolder.countGrades.setText(context.getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
         viewHolder.countCredits.setText(context.getString(R.string.exams_stats_count_credits, examStats.getCredits()));
@@ -53,6 +57,14 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
         return convertView;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        this.data.clear();
+        this.data.add(ExamsHelper.getExamStatsForSemester(realm, null));
+        this.data.addAll(ExamsHelper.getExamStats());
+        super.notifyDataSetChanged();
+    }
+
     private static class ViewHolder {
         TextView semester;
         TextView average;
@@ -60,13 +72,5 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
         TextView countCredits;
         TextView gradeBest;
         TextView gradeWorst;
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        this.data.clear();
-        this.data.add(ExamsHelper.getExamStatsForSemester(Realm.getDefaultInstance(), null));
-        this.data.addAll(ExamsHelper.getExamStats());
-        super.notifyDataSetChanged();
     }
 }

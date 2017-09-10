@@ -145,9 +145,9 @@ public class TimetableOverviewFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        super.onDestroyView();
         lessons.removeChangeListener(realmChangeListener);
         realm.close();
-        super.onDestroyView();
     }
 
     private void startEditActivity(final int indexOfItem, final boolean editMode) {

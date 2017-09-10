@@ -1,14 +1,12 @@
 package de.htwdd.htwdresden;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +19,8 @@ import android.widget.Toast;
 import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
-import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.service.ExamSyncService;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -50,8 +46,8 @@ public class MensaDetailDayFragment extends Fragment {
         realm = Realm.getDefaultInstance();
 
         // Suche Views
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final ListView listView = mLayout.findViewById(R.id.listView);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
 
         // Setze Swipe Refresh Layout
@@ -71,12 +67,11 @@ public class MensaDetailDayFragment extends Fragment {
         });
 
         // Setze Adapter
-        final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
         // Bei Änderungen an der Datenbasis Hinweismeldung überprüfen
         realmResults.addChangeListener(new RealmChangeListener<RealmResults<Meal>>() {
             @Override
-            public void onChange(final RealmResults<Meal> element) {
+            public void onChange(@NonNull final RealmResults<Meal> element) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

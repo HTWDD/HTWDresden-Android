@@ -22,7 +22,9 @@ import io.realm.RealmResults;
  * Fragment zur Anzeige der Statistik der Prüfungsergebnisse
  */
 public class ExamResultStatsFragment extends Fragment {
-    private View mLayout;
+    private Realm realm;
+    private RealmResults<ExamResult> allExamResults;
+    private RealmChangeListener<RealmResults<ExamResult>> realmChangeListener;
 
     public ExamResultStatsFragment() {
         // Required empty public constructor
@@ -30,49 +32,41 @@ public class ExamResultStatsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
+        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
+        realm = Realm.getDefaultInstance();
 
         // Refresh ausschalten
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
 
+        // Hinweismeldung wenn keine Ergebnisse vorliegen
+        final TextView message = (TextView) mLayout.findViewById(R.id.message_info);
+        message.setText(R.string.exams_result_no_results);
+
         // Adapter erstellen und an Liste anhängen
-        final ExamStatsAdapter adapter = new ExamStatsAdapter(getActivity());
+        final ExamStatsAdapter adapter = new ExamStatsAdapter(getActivity(), realm);
         final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
-        // Daten aus Datenbank laden
-        final Realm realm = Realm.getDefaultInstance();
-        final long countExamResults = realm.where(ExamResult.class).count();
+        listView.setEmptyView(message);
 
         // Auf Änderungen an der Datenbank hören
-        realm.where(ExamResult.class).findAll().addChangeListener(new RealmChangeListener<RealmResults<ExamResult>>() {
+        realmChangeListener = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
             public void onChange(final RealmResults<ExamResult> element) {
                 adapter.notifyDataSetChanged();
-                showMessageNoResults(element.size() > 0);
             }
-        });
-        showMessageNoResults(countExamResults > 0);
+        };
+        allExamResults = realm.where(ExamResult.class).findAll();
+        allExamResults.addChangeListener(realmChangeListener);
 
         return mLayout;
     }
 
-    /**
-     * Hinweismeldung anzeigen wenn keine Noten vorhanden sind
-     *
-     * @param examsAvailable Sind Noten vorhanden?
-     */
-    private void showMessageNoResults(final boolean examsAvailable) {
-        final TextView message = (TextView) mLayout.findViewById(R.id.message_info);
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
 
-        if (examsAvailable) {
-            message.setText(null);
-            listView.setVisibility(View.VISIBLE);
-        } else {
-            message.setText(R.string.exams_result_no_results);
-            listView.setVisibility(View.GONE);
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        allExamResults.removeChangeListener(realmChangeListener);
+        realm.close();
     }
 }

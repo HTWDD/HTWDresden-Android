@@ -22,6 +22,7 @@ public class LessonUser extends RealmObject implements ILesson {
     @Required
     private String id;
     private String moduleId;
+    @Nullable
     private String lessonTag;
     private String name;
     private String type;
@@ -31,6 +32,7 @@ public class LessonUser extends RealmObject implements ILesson {
     private int week;
     private int beginTime;
     private int endTime;
+    @Nullable
     private String professor;
     private RealmList<LessonWeek> weeksOnly;
     private RealmList<Room> rooms;
@@ -44,6 +46,7 @@ public class LessonUser extends RealmObject implements ILesson {
     }
 
     @Override
+    @Nullable
     public String getLessonTag() {
         return lessonTag;
     }
@@ -101,6 +104,7 @@ public class LessonUser extends RealmObject implements ILesson {
         this.endTime = endTime;
     }
 
+    @Nullable
     public String getProfessor() {
         return professor;
     }

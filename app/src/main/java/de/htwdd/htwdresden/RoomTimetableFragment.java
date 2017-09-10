@@ -164,6 +164,11 @@ public class RoomTimetableFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         realm.close();
     }
 
