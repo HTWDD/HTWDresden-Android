@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.types.studyGroups;
 
+import de.htwdd.htwdresden.interfaces.ISpinnerEntity;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -9,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
  *
  * @author Kay Förster
  */
-public class StudyYear extends RealmObject {
+public class StudyYear extends RealmObject implements ISpinnerEntity {
     @PrimaryKey
     private int studyYear;
     private RealmList<StudyCourse> studyCourses;
@@ -28,5 +29,10 @@ public class StudyYear extends RealmObject {
 
     public void setStudyCourses(final RealmList<StudyCourse> studyCourses) {
         this.studyCourses = studyCourses;
+    }
+
+    @Override
+    public String getSpinnerName() {
+        return String.valueOf(2000 + studyYear);
     }
 }
