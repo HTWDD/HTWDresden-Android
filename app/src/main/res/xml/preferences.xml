@@ -17,12 +17,6 @@
             android:title="@string/settings_rzLogin" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_study">
-        <ListPreference
-            android:entries="@array/abschluss_list"
-            android:entryValues="@array/abschluss_values"
-            android:key="abschluss"
-            android:summary="@string/settings_abschluss_summary"
-            android:title="@string/settings_abschluss" />
         <de.htwdd.htwdresden.SettingsStudiengruppePreference
             android:summary="@string/settings_studiengang_summary"
             android:title="@string/settings_studiengruppe" />

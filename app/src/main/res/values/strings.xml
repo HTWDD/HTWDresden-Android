@@ -10,6 +10,7 @@
     <string name="general_add">Hinzufügen</string>
     <string name="general_update">Aktualisieren</string>
     <string name="general_delete">Löschen</string>
+    <string name="general_select_option">Bitte auswählen</string>
 
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>
@@ -49,13 +50,9 @@
     <string name="settings_rzLogin">RZLogin</string>
     <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
-    <string name="settings_abschluss">Abschluss</string>
-    <string name="settings_abschluss_summary">Wird für die Abfrage der Prüfungen benötigt</string>
     <string name="settings_jahrgang">Jahrgang</string>
     <string name="settings_studiengang">Studiengang</string>
-    <string name="settings_studiengang_split" translatable="false">/</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
-    <string name="settings_studiengang_dialogMessage">Beispiel: 15/021/61</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
     <string name="settings_studienrichtung">Studienrichtung</string>
     <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
@@ -138,7 +135,7 @@
     <string name="exams_grade">Noten</string>
     <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
-    <string name="exams_no_settings">Bitte Abschluss und Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_settings">Bitte Studiengruppe in den Einstellungen richtig setzen!</string>
     <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
     <string name="exams_type">Art</string>
     <string name="exams_studyBranch">Richtung</string>

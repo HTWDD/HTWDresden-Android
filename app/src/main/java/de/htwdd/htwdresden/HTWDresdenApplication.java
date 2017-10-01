@@ -1,8 +1,6 @@
 package de.htwdd.htwdresden;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -10,6 +8,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import de.htwdd.htwdresden.classes.DatabaseMigrations;
+import de.htwdd.htwdresden.classes.PreferencesMigrations;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -37,14 +36,9 @@ public class HTWDresdenApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Setze Einstellungen beim ersten Starten der App
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("FIRST_RUN", true)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("FIRST_RUN", false);
-            editor.putBoolean("acra.enable", true);
-            editor.apply();
-        }
+        // Migrationen durchführen
+        final PreferencesMigrations preferencesMigrations = new PreferencesMigrations(getApplicationContext());
+        preferencesMigrations.migrate();
 
         // ACRA starten
         ACRA.init(this);

@@ -2,6 +2,7 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,15 +29,19 @@ import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.ExamListAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.StudyGroupHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.Exam;
+import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
+import io.realm.Realm;
 
 /**
  * Fragment zur Anzeige vorhandener Prüfungen
  */
 public class ExamsListFragment extends Fragment {
     private final static String LOG_TAG = "ExamsListFragment";
+    private Realm realm;
     private View mLayout;
     private View footer;
     private int stgJhr;
@@ -57,18 +62,19 @@ public class ExamsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_exams_list, container, false);
+        realm = Realm.getDefaultInstance();
 
         // Studienjahr wiederherstellen, benötigt um zwischen den Jahrgängen wechseln zu können
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             stgJhr = savedInstanceState.getInt("stgJhr", GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
+        }
         else {
-            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            final String value = sharedPreferences.getString("StgJhr", "");
-            stgJhr = value.isEmpty() ? GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000 : Integer.valueOf(sharedPreferences.getString("StgJhr", ""));
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mLayout.getContext());
+            stgJhr = sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
         }
 
         // Handler für SwipeRefresh
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -77,16 +83,16 @@ public class ExamsListFragment extends Fragment {
         });
 
         // ListView zusammenbauen
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = mLayout.findViewById(R.id.listView);
         footer = inflater.inflate(R.layout.fragment_exams_footer, listView, false);
         listView.setAdapter(adapter);
         listView.addFooterView(footer);
 
         // Buttons zum wechseln des Imma-Jahres
-        final Button buttonAdd = (Button) mLayout.findViewById(R.id.Button2);
-        final Button buttonSub = (Button) mLayout.findViewById(R.id.Button1);
-        final Button buttonFooterAdd = (Button) mLayout.findViewById(R.id.examButtonAdd);
-        final Button buttonFooterSub = (Button) mLayout.findViewById(R.id.examButtonSub);
+        final Button buttonAdd = mLayout.findViewById(R.id.Button2);
+        final Button buttonSub = mLayout.findViewById(R.id.Button1);
+        final Button buttonFooterAdd = mLayout.findViewById(R.id.examButtonAdd);
+        final Button buttonFooterSub = mLayout.findViewById(R.id.examButtonSub);
         View.OnClickListener clickListenerAdd = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +128,12 @@ public class ExamsListFragment extends Fragment {
         outState.putInt("stgJhr", stgJhr);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realm.close();
+    }
+
     /**
      * Buttons zum wechseln der Jahrgänge beschriften und ggf. ausblenden
      *
@@ -145,16 +157,16 @@ public class ExamsListFragment extends Fragment {
      * Lädt den Prüfungsplan anhand der Einstellungen und des gesetzten Jahrgangs vom Webservice
      */
     private void loadData() {
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
-        final TextView info = (TextView) mLayout.findViewById(R.id.message_info);
-        final Button localButton1 = (Button) mLayout.findViewById(R.id.Button1);
-        final Button localButton2 = (Button) mLayout.findViewById(R.id.Button2);
-        String url;
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
+        final TextView info = mLayout.findViewById(R.id.message_info);
+        final Button localButton1 = mLayout.findViewById(R.id.Button1);
+        final Button localButton2 = mLayout.findViewById(R.id.Button2);
+        String url = null;
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError error) {
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
                 if (!isAdded()) {
                     return;
                 }
@@ -192,7 +204,7 @@ public class ExamsListFragment extends Fragment {
         Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beeenden
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
                 if (!isAdded()) {
                     return;
                 }
@@ -205,7 +217,7 @@ public class ExamsListFragment extends Fragment {
                 if (count == 0) {
                     // Zusätzliche Buttons zum Wechseln des Jahrganges anzeigen
                     changeButtonName(localButton2, localButton1);
-                    // Beldung anzeigen
+                    // Meldung anzeigen
                     info.setText(R.string.exams_no_exams);
                     return;
                 } else {
@@ -254,16 +266,35 @@ public class ExamsListFragment extends Fragment {
         localButton2.setVisibility(View.GONE);
 
         // Überprüfe ob Daten zur Abfrage vorhanden sind.
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (sharedPreferences.getString("abschluss", "").length() > 0 && sharedPreferences.getString("StgJhr", "").length() > 0 && sharedPreferences.getString("Stg", "").length() > 0) {
-            url = "GetExams.php?StgJhr=" + stgJhr
-                    + "&Stg=" + sharedPreferences.getString("Stg", "")
-                    + "&AbSc=" + sharedPreferences.getString("abschluss", "")
-                    + "&Stgri=" + sharedPreferences.getString("StgRi", "");
-        } else if (sharedPreferences.getString("ProfName", "").length() > 0) {
-            url = "GetExams.phpetExams.php?Prof=" + sharedPreferences.getString("ProfName", "");
-        } else {
-            // Zeige Hinweis ein
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mLayout.getContext());
+        final String studyCoursePreferences = sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "");
+
+        // Überprüfung für Studenten
+        if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
+                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() > 0
+                && studyCoursePreferences.length() > 0) {
+
+            final StudyGroup studyGroup = realm
+                    .where(StudyGroup.class)
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, studyCoursePreferences)
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
+                    .findFirst();
+
+            if (studyGroup != null) {
+                url = "GetExams.php?StgJhr=" + stgJhr
+                        + "&Stg=" + studyGroup.getStudyGroup()
+                        + "&AbSc=" + StudyGroupHelper.getGraduationChar(studyGroup)
+                        + "&Stgri=" + studyGroup.getStudyCourses().first().getStudyCourse();
+            }
+        }
+        // Überprüfung für Professoren
+        else if (sharedPreferences.getString("ProfName", "").length() > 0) {
+            url = "GetExams.php?Prof=" + sharedPreferences.getString("ProfName", "");
+        }
+
+        // Wenn keine Einstellungen gefunden wurden, Fehlermeldung anzeigen
+        if (url == null) {
             info.setText(R.string.exams_no_settings);
 
             Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
@@ -286,7 +317,8 @@ public class ExamsListFragment extends Fragment {
         }
 
         // Überprüfe Internetverbindung
-        if (!VolleyDownloader.CheckInternet(getActivity())) {
+        final Context context = mLayout.getContext();
+        if (!VolleyDownloader.CheckInternet(context)) {
             // Refresh ausschalten
             swipeRefreshLayout.post(new Runnable() {
                 @Override
@@ -302,7 +334,7 @@ public class ExamsListFragment extends Fragment {
         }
 
         // Download der Informationen
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL + url, jsonArrayListener, errorListener);
-        VolleyDownloader.getInstance(getActivity()).addToRequestQueue(arrayRequest);
+        final JsonArrayRequest arrayRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL + url, jsonArrayListener, errorListener);
+        VolleyDownloader.getInstance(context).addToRequestQueue(arrayRequest);
     }
 }

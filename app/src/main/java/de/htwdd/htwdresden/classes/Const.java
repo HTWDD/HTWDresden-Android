@@ -35,7 +35,7 @@ public final class Const {
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
         public static final String PREFERENCES_STUDY_GROUP_LAST_UPDATE = "studyGroupsLastUpdate";
         public static final String PREFERENCES_AUTO_EXAM_UPDATE = "autoExamUpdate";
-        public static final String PREFERENCES_TIMETABLE_STUDIENJAHR = "StgJhr";
+        public static final String PREFERENCES_TIMETABLE_STUDIENJAHR = "studyGroupYear";
         public static final String PREFERENCES_TIMETABLE_STUDIENGANG = "Stg";
         public static final String PREFERENCES_TIMETABLE_STUDIENGRUPPE = "StgGrp";
     }

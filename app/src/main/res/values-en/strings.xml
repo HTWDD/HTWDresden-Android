@@ -39,4 +39,7 @@
     <string name="academic_year_summer">Summer semester</string>
     <string name="academic_year_winter">Winter semester</string>
     <string name="mensa_no_offer">No offer available!</string>
+    <string name="general_select_option">Please select</string>
+    <string name="general_delete">Delete</string>
+    <string name="general_close">Close</string>
 </resources>

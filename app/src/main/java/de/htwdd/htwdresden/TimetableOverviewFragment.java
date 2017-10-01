@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -60,7 +61,7 @@ public class TimetableOverviewFragment extends Fragment {
                 final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
                 // Überprüfe Einstellungen, ansonsten
-                if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, "").length() < 2
+                if (!sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
                         || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() != 3
                         || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() == 0) {
                     // Zeige Toast mit Link zu Einstellungen an
@@ -103,7 +104,7 @@ public class TimetableOverviewFragment extends Fragment {
         // Benachrichtigung über geänderte Daten
         realmChangeListener = new RealmChangeListener<RealmResults<LessonUser>>() {
             @Override
-            public void onChange(final RealmResults<LessonUser> element) {
+            public void onChange(@NonNull final RealmResults<LessonUser> element) {
                 gridAdapter.notifyDataSetChanged();
             }
         };

@@ -45,9 +45,9 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
     protected void onHandleIntent(@Nullable final Intent intent) {
         Log.d(LOG_TAG, "Starte TimetableStudentSyncService");
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final String studienjahr = sharedPreferences.getString("StgJhr", "");
-        final String studiengang = sharedPreferences.getString("Stg", "");
-        final String studiengruppe = sharedPreferences.getString("StgGrp", "");
+        final int studienjahr = sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18);
+        final String studiengang = sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "");
+        final String studiengruppe = sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "");
 
         // Stundenplan vom Webservice laden
         getTimetableFromWeb(studienjahr, studiengang, studiengruppe);
@@ -76,11 +76,11 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
     /**
      * Lädt den Stundenplan vom Webservice herunter und speichert des Response in {@link #results}
      *
-     * @param studienjahr   Immatrikulationsjahr des Studenten
+     * @param studienjahr   Jahr der Immatrikulation des Studenten
      * @param studiengang   Studiengang des Studenten
      * @param studiengruppe Studiengruppe des Studenten
      */
-    private void getTimetableFromWeb(@NonNull final String studienjahr, @NonNull final String studiengang, @NonNull final String studiengruppe) {
+    private void getTimetableFromWeb(final int studienjahr, @NonNull final String studiengang, @NonNull final String studiengruppe) {
         final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {

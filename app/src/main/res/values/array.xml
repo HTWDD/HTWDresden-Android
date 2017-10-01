@@ -13,18 +13,6 @@
         <item>gerade KW</item>
     </string-array>
 
-    <string-array name="abschluss_list">
-        <item>Bachelor</item>
-        <item>Master</item>
-        <item>Diplom</item>
-    </string-array>
-
-    <string-array name="abschluss_values">
-        <item>B</item>
-        <item>M</item>
-        <item>D</item>
-    </string-array>
-
     <string-array name="autoExamsUpdateInterval">
         <item>Aus</item>
         <item>jede Stunde</item>
