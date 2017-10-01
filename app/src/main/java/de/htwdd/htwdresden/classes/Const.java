@@ -135,5 +135,13 @@ public final class Const {
             public static final String SEMESTER_START = "period.beginDay";
             public static final String SEMESTER_END = "period.endDay";
         }
+
+        public static class StudyGroups {
+            public static final String STUDY_YEAR = "studyYear";
+            public static final String STUDY_COURSE = "studyCourse";
+            public static final String STUDY_GROUP = "studyGroup";
+            public static final String STUDY_GROUP_COURSE = "studyCourses.studyCourse";
+            public static final String STUDY_GROUP_COURSE_YEAR = "studyCourses.studyYears.studyYear";
+        }
     }
 }
