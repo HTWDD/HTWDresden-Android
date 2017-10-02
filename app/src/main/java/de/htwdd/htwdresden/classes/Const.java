@@ -38,6 +38,7 @@ public final class Const {
         public static final String PREFERENCES_TIMETABLE_STUDIENJAHR = "studyGroupYear";
         public static final String PREFERENCES_TIMETABLE_STUDIENGANG = "Stg";
         public static final String PREFERENCES_TIMETABLE_STUDIENGRUPPE = "StgGrp";
+        public static final String PREFERENCES_TIMETABLE_PROFESSOR = "professorKey";
     }
 
     public static final class internet {

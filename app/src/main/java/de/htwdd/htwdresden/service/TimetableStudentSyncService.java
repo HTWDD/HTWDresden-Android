@@ -34,8 +34,8 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class TimetableStudentSyncService extends AbstractSyncHelper {
-    private final static String LOG_TAG = "TimetableSyncService";
-    private final Stack<JSONArray> results = new Stack<>();
+    protected final static String LOG_TAG = "TimetableSyncService";
+    protected final Stack<JSONArray> results = new Stack<>();
 
     public TimetableStudentSyncService() {
         super("TimetableSyncService", Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
@@ -107,7 +107,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
      *
      * @return true wenn erfolgreich gespeichert, sonst false
      */
-    private boolean saveTimetable() {
+    protected boolean saveTimetable() {
         final Realm realm = Realm.getDefaultInstance();
         final HashMap<String, Date> stateDatabase = new HashMap<>((int) realm.where(LessonUser.class).count());
         final RealmResults<LessonUser> results = realm.where(LessonUser.class).equalTo(Const.database.Lesson.CREATED_BY_USER, false).findAll();

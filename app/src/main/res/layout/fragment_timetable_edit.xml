@@ -321,7 +321,7 @@
                 android:layout_column="1"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:text="@string/timetable_edit_delete"/>
+                android:text="@string/general_delete"/>
 
             <Button
                 android:id="@+id/timetable_edit_lessonSave"

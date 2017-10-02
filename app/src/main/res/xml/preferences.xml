@@ -34,8 +34,8 @@
             android:summary="@string/settings_prof_name_summary"
             android:title="@string/settings_prof_name" />
         <EditTextPreference
-            android:dialogMessage="@string/settings_prof_only"
-            android:key="prof_kennung"
+            android:dialogMessage="@string/settings_prof_id_message"
+            android:key="professorKey"
             android:summary="@string/settings_prof_id_summary"
             android:title="@string/settings_prof_id" />
     </PreferenceCategory>

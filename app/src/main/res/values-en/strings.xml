@@ -42,4 +42,7 @@
     <string name="general_select_option">Please select</string>
     <string name="general_delete">Delete</string>
     <string name="general_close">Close</string>
+    <string name="settings_prof_id_message">You can get your individual professor-ID by request! Just write us: app@htw-dresden.de!</string>
+    <string name="settings_prof_name_summary">Use: Timetable</string>
+    <string name="settings_prof_id">Professor identification</string>
 </resources>

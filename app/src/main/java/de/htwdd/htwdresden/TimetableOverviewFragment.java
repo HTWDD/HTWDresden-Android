@@ -26,6 +26,7 @@ import android.widget.Toast;
 import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.service.TimetableProfessorSyncService;
 import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
@@ -53,17 +54,25 @@ public class TimetableOverviewFragment extends Fragment {
         arguments = new Bundle(getArguments());
 
         // SwipeRefreshLayout Listener
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 final Context context = getActivity();
                 final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-                // Überprüfe Einstellungen, ansonsten
-                if (!sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
-                        || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() != 3
-                        || sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() == 0) {
+                // Überprüfe Einstellungen für Professoren
+                if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR, "").length() != 0) {
+                    Log.d("Time", "Starte Service");
+                    context.startService(new Intent(context, TimetableProfessorSyncService.class));
+                }
+                // Überprüfe Einstellungen für Studenten
+                else if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
+                        && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
+                        && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0) {
+                    Log.d("Time", "Starte Service");
+                    context.startService(new Intent(context, TimetableStudentSyncService.class));
+                } else {
                     // Zeige Toast mit Link zu Einstellungen an
                     Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                             .setAction(R.string.navi_settings, new View.OnClickListener() {
@@ -84,12 +93,7 @@ public class TimetableOverviewFragment extends Fragment {
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     });
-                    return;
                 }
-
-                // Service starten
-                Log.d("Time", "Starte Service");
-                context.startService(new Intent(context, TimetableStudentSyncService.class));
             }
         });
 
@@ -112,7 +116,7 @@ public class TimetableOverviewFragment extends Fragment {
         lessons.addChangeListener(realmChangeListener);
 
         // GridView
-        final GridView gridView = (GridView) mLayout.findViewById(R.id.timetable);
+        final GridView gridView = mLayout.findViewById(R.id.timetable);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -172,7 +176,7 @@ public class TimetableOverviewFragment extends Fragment {
     private class ResponseReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+            final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
