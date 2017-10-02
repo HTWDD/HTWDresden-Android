@@ -16,7 +16,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
-import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import de.htwdd.htwdresden.types.LessonRoom;
 import io.realm.Realm;
 
@@ -63,7 +61,7 @@ public class RoomTimetableFragment extends Fragment {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_room_timetable, container, false);
         realm = Realm.getDefaultInstance();
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
 
         // Setze Titel der Toolbar
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_room_timetable));
@@ -72,7 +70,7 @@ public class RoomTimetableFragment extends Fragment {
         roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM));
 
         // ListView
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = mLayout.findViewById(R.id.listView);
         listView.setAdapter(roomTimetableAdapter);
         listView.addFooterView(inflater.inflate(R.layout.fragment_room_timetable_footer, listView, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,7 +124,7 @@ public class RoomTimetableFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+                final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
                 final Context context = mLayout.getContext();
 
                 // Überprüfe Internetverbindung
@@ -142,7 +140,7 @@ public class RoomTimetableFragment extends Fragment {
                 } else {
                     // Service starten
                     Log.d(LOG_TAG, "Starte Service");
-                    context.startService(new Intent(context, TimetableStudentSyncService.class));
+                    context.startService(new Intent(context, TimetableRoomSyncService.class));
                 }
             }
         });
@@ -175,8 +173,7 @@ public class RoomTimetableFragment extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.context_menu_room_timetable, menu);
+        getActivity().getMenuInflater().inflate(R.menu.context_menu_room_timetable, menu);
     }
 
     @Override
@@ -227,7 +224,7 @@ public class RoomTimetableFragment extends Fragment {
     private class ResponseReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+            final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
