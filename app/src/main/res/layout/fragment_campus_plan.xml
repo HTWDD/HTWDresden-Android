@@ -53,14 +53,12 @@
                         android:shrinkColumns="2">
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_a"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -70,14 +68,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_b"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -87,14 +83,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_g"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -104,14 +98,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_h"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -121,14 +113,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_l"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -138,14 +128,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_m"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -160,9 +148,24 @@
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
+                                android:text="@string/campus_plan_building_n"
+                                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_column="2"
+                                android:text="@string/campus_plan_building_n_name"
+                                android:textAppearance="?android:attr/textAppearanceSmall"/>
+                        </TableRow>
+
+                        <TableRow>
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
                                 android:text="@string/campus_plan_building_s"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -172,14 +175,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_t"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -189,14 +190,12 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_w"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -206,36 +205,17 @@
                         </TableRow>
 
                         <TableRow>
-
                             <TextView
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
                                 android:text="@string/campus_plan_building_z"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_column="2"
                                 android:text="@string/campus_plan_building_z_name"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="30dp"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="@string/campus_plan_building_a"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="2"
-                                android:text="@string/campus_plan_building_a_name"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
                         </TableRow>
                     </TableLayout>
@@ -429,6 +409,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:contentDescription="@string/campus_plan_dresden"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
 </FrameLayout>
