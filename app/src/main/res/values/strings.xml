@@ -6,6 +6,7 @@
     <string name="app_github" translatable="false">github.com/HTWDD/HTWDresden</string>
 
     <string name="general_repeat">Wiederholen</string>
+    <string name="general_cancel">Abbrechen</string>
     <string name="general_close">Schließen</string>
     <string name="general_add">Hinzufügen</string>
     <string name="general_update">Aktualisieren</string>
@@ -80,6 +81,8 @@
     <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
     <string name="timetable_overview_options_menu_filter_week">Wochenfilter</string>
     <string name="timetable_overview_options_menu_filter_hidden">versteckte Stunden</string>
+    <string name="timetable_overview_options_menu_timetable_reset">Stundenplan zurücksetzen</string>
+    <string name="timetable_overview_options_menu_timetable_reset_message">Bei diesem Schritt werden alle individuellen Änderungen verworfen und der Stundenplan neu synchronisiert.</string>
     <string name="timetable_sync_success">Stundenplan erfolgreich aktualisiert!</string>
     <string name="timetable_sync_notFound">Studiengruppe oder Webservice nicht gefunden.</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>

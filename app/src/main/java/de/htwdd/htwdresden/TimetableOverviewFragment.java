@@ -2,20 +2,16 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +21,8 @@ import android.widget.Toast;
 
 import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.service.TimetableProfessorSyncService;
-import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -58,21 +53,9 @@ public class TimetableOverviewFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                final Context context = getActivity();
-                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                final boolean result = TimetableHelper.startSyncService(getActivity());
 
-                // Überprüfe Einstellungen für Professoren
-                if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR, "").length() != 0) {
-                    Log.d("Time", "Starte Service");
-                    context.startService(new Intent(context, TimetableProfessorSyncService.class));
-                }
-                // Überprüfe Einstellungen für Studenten
-                else if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
-                        && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
-                        && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0) {
-                    Log.d("Time", "Starte Service");
-                    context.startService(new Intent(context, TimetableStudentSyncService.class));
-                } else {
+                if (!result) {
                     // Zeige Toast mit Link zu Einstellungen an
                     Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                             .setAction(R.string.navi_settings, new View.OnClickListener() {
@@ -81,8 +64,7 @@ public class TimetableOverviewFragment extends Fragment {
                                     // Navigation ändern
                                     ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
                                     // Fragment "Einstellungen" anzeigen
-                                    final FragmentManager fragmentManager = getActivity().getFragmentManager();
-                                    fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                                    getActivity().getFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
                                 }
                             })
                             .show();

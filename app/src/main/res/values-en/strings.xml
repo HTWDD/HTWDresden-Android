@@ -45,4 +45,7 @@
     <string name="settings_prof_id_message">You can get your individual professor-ID by request! Just write us: app@htw-dresden.de!</string>
     <string name="settings_prof_name_summary">Use: Timetable</string>
     <string name="settings_prof_id">Professor identification</string>
+    <string name="timetable_overview_options_menu_timetable_reset">Reset timetable</string>
+    <string name="general_cancel">Cancel</string>
+    <string name="timetable_overview_options_menu_timetable_reset_message">In this step, all individual changes are discarded and the schedule re-synchronized.</string>
 </resources>

@@ -11,4 +11,7 @@
         android:id="@+id/menu_filter_hidden"
         android:checkable="true"
         android:title="@string/timetable_overview_options_menu_filter_hidden"/>
+    <item
+        android:id="@+id/menu_timetable_reset"
+        android:title="@string/timetable_overview_options_menu_timetable_reset"/>
 </menu>

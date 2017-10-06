@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import de.htwdd.htwdresden.service.TimetableRoomSyncService;
 import de.htwdd.htwdresden.types.LessonRoom;
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -23,6 +25,11 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class TimetableRoomHelper extends AbstractTimetableHelper {
+
+    public static boolean startSyncService(@NonNull final Context context) {
+        context.startService(new Intent(context, TimetableRoomSyncService.class));
+        return true;
+    }
 
     @NonNull
     public static JSONObject convertTimetableJsonObject(@NonNull final JSONObject lesson) throws JSONException {

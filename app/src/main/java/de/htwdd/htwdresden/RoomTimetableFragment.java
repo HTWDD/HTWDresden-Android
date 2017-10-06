@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.TimetableRoomHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
@@ -140,7 +141,7 @@ public class RoomTimetableFragment extends Fragment {
                 } else {
                     // Service starten
                     Log.d(LOG_TAG, "Starte Service");
-                    context.startService(new Intent(context, TimetableRoomSyncService.class));
+                    TimetableRoomHelper.startSyncService(context);
                 }
             }
         });

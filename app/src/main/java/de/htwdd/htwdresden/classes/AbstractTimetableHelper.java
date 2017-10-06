@@ -1,9 +1,13 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
+import de.htwdd.htwdresden.service.TimetableProfessorSyncService;
+import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
@@ -113,6 +119,32 @@ abstract class AbstractTimetableHelper {
         lesson.put("rooms", convertPrimitivTypToJsonObject(lesson.getJSONArray("rooms"), "roomName"));
 
         return lesson;
+    }
+
+    /**
+     * Überprüft Einstellungen und startet dann den jeweiligen Stundenplan-SyncService
+     *
+     * @param context Aktueller App-Context
+     * @return true wenn SyncService gestartet, false bei fehlenden Einstellungen
+     */
+    public static boolean startSyncService(@NonNull final Context context) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Überprüfe Einstellungen für Professoren (zuerst, da Studenten ihre Entscheidung nicht mehr löschen können)
+        if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR, "").length() != 0) {
+            Log.d("AbstractTimetableHelper", "Starte TimetableProfessorSyncService");
+            context.startService(new Intent(context, TimetableProfessorSyncService.class));
+            return true;
+        }
+        // Überprüfe Einstellungen für Studenten
+        else if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
+                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
+                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0) {
+            Log.d("AbstractTimetableHelper", "Starte TimetableStudentSyncService");
+            context.startService(new Intent(context, TimetableStudentSyncService.class));
+            return true;
+        }
+        return false;
     }
 
     /**

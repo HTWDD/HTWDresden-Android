@@ -54,7 +54,7 @@ public class TimetableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        final ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         // Setze Title der Toolbar
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
@@ -73,7 +73,7 @@ public class TimetableFragment extends Fragment {
         viewPager.setAdapter(pagerAdapter);
 
         // TabLayout "stylen"
-        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         // Setze feste Anzahl an Tabs (Tabs wirken nicht abgeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // Tabs nahmen immer die ganze Breite ein
@@ -120,6 +120,9 @@ public class TimetableFragment extends Fragment {
                 // Tabs ersetzen
                 replaceTabs();
                 pagerAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.menu_timetable_reset:
+                TimetableResetDialogFragment.newInstance().show(getFragmentManager(), "timetableResetDialog");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

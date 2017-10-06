@@ -14,8 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
@@ -36,6 +39,7 @@ import io.realm.RealmResults;
 public class TimetableStudentSyncService extends AbstractSyncHelper {
     protected final static String LOG_TAG = "TimetableSyncService";
     protected final Stack<JSONArray> results = new Stack<>();
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.GERMANY);
 
     public TimetableStudentSyncService() {
         super("TimetableSyncService", Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
@@ -118,6 +122,7 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         realm.beginTransaction();
         try {
             // Speichere einzelne Results
+            String id;
             int countResults;
             LessonUser lesson;
             JSONArray jsonResults;
@@ -129,9 +134,23 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
 
                 // einzelne Lehrveranstaltungen durchgehen und überprüfen ob diese gespeichert werde sollen
                 for (int i = 0; i < countResults; i++) {
-                    jsonResult = jsonResults.getJSONObject(i);
+                    jsonResult = TimetableHelper.convertTimetableJsonObject(jsonResults.getJSONObject(i));
 
-                    lesson = realm.createOrUpdateObjectFromJson(LessonUser.class, TimetableHelper.convertTimetableJsonObject(jsonResult));
+                    try {
+                        // Überprüfe ob Lehrveranstaltung übersprungen werden kann
+                        id = jsonResult.getString("id");
+                        if (stateDatabase.containsKey(id)) {
+                            if (stateDatabase.get(id).equals(dateFormat.parse(jsonResult.getString("lastChanged")))) {
+                                stateDatabase.remove(id);
+                                Log.d(LOG_TAG, "Überspringe Lehrveranstaltung: " + id);
+                                continue;
+                            }
+                        }
+                    } catch (final ParseException e) {
+                        Log.e(LOG_TAG, "[Fehler] Beim Verarbeiten des lastChanged Attributs", e);
+                    }
+
+                    lesson = realm.createOrUpdateObjectFromJson(LessonUser.class, jsonResult);
                     stateDatabase.remove(lesson.getId());
                 }
             }
