@@ -283,9 +283,9 @@ public class ExamsListFragment extends Fragment {
 
             if (studyGroup != null) {
                 url = "GetExams.php?StgJhr=" + stgJhr
-                        + "&Stg=" + studyGroup.getStudyGroup()
+                        + "&Stg=" + studyGroup.getStudyCourses().first().getStudyCourse()
                         + "&AbSc=" + StudyGroupHelper.getGraduationChar(studyGroup)
-                        + "&Stgri=" + studyGroup.getStudyCourses().first().getStudyCourse();
+                        + "&Stgri=" + sharedPreferences.getString("StgRi", "");
             }
         }
         // Überprüfung für Professoren
