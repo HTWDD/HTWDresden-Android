@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="campus_plan_dresden">Friedrich-List-Platz</string>
+    <string name="campus_plan_dresden" translatable="false">Friedrich-List-Platz</string>
     <string name="campus_plan_building_a" translatable="false">A</string>
-    <string name="campus_plan_building_a_name">Gebäude Andreas-Schubert-Straße 23</string>
+    <string name="campus_plan_building_a_name" translatable="false">Gebäude Andreas-Schubert-Straße 23</string>
     <string name="campus_plan_building_b" translatable="false">B</string>
-    <string name="campus_plan_building_b_name">Bibliothek, Andreas-Schubert-Straße 8</string>
+    <string name="campus_plan_building_b_name" translatable="false">Bibliothek, Andreas-Schubert-Straße 8</string>
     <string name="campus_plan_building_g" translatable="false">G</string>
-    <string name="campus_plan_building_g_name">Lehrgebäude Fahrzeugtechnik, Gutzkowstraße 22</string>
+    <string name="campus_plan_building_g_name" translatable="false">Lehrgebäude Fahrzeugtechnik, Gutzkowstraße 22</string>
     <string name="campus_plan_building_h" translatable="false">H</string>
-    <string name="campus_plan_building_h_name">Lehrgebäude Schnorrstraße 56</string>
+    <string name="campus_plan_building_h_name" translatable="false">Lehrgebäude Schnorrstraße 56</string>
     <string name="campus_plan_building_l" translatable="false">L</string>
-    <string name="campus_plan_building_l_name">Laborgebäude Schnorrstraße 29 (LGS)</string>
+    <string name="campus_plan_building_l_name" translatable="false">Laborgebäude Schnorrstraße 29 (LGS)</string>
     <string name="campus_plan_building_m" translatable="false">M</string>
-    <string name="campus_plan_building_m_name">Mensa Reichenbachstraße / Fakultät Geoinformation</string>
+    <string name="campus_plan_building_m_name" translatable="false">Mensa Reichenbachstraße / Fakultät Geoinformation</string>
     <string name="campus_plan_building_n" translatable="false">N</string>
-    <string name="campus_plan_building_n_name">Laborgebäude Natur- und Ingenieurwissenschaften, Andreas-Schubert-Str. 10</string>
+    <string name="campus_plan_building_n_name" translatable="false">Laborgebäude Natur- und Ingenieurwissenschaften, Andreas-Schubert-Str. 10</string>
     <string name="campus_plan_building_s" translatable="false">S</string>
-    <string name="campus_plan_building_s_name">Seminargebäude</string>
+    <string name="campus_plan_building_s_name" translatable="false">Seminargebäude</string>
     <string name="campus_plan_building_t" translatable="false">T</string>
-    <string name="campus_plan_building_t_name">Technikgebäude, Andreas-Schubert-Straße 19</string>
+    <string name="campus_plan_building_t_name" translatable="false">Technikgebäude, Andreas-Schubert-Straße 19</string>
     <string name="campus_plan_building_w" translatable="false">W</string>
-    <string name="campus_plan_building_w_name">Modellwerkstatt Fakultät Gestaltung, Andreas-Schubert-Straße 21</string>
+    <string name="campus_plan_building_w_name" translatable="false">Modellwerkstatt Fakultät Gestaltung, Andreas-Schubert-Straße 21</string>
     <string name="campus_plan_building_z" translatable="false">Z</string>
-    <string name="campus_plan_building_z_name">Zentralgebäude Friedrich-List-Platz 1</string>
-    <string name="campus_plan_pillnitz">Pillnitz</string>
+    <string name="campus_plan_building_z_name" translatable="false">Zentralgebäude Friedrich-List-Platz 1</string>
+    <string name="campus_plan_pillnitz" translatable="false">Pillnitz</string>
     <string name="campus_plan_building_p1" translatable="false">P1</string>
-    <string name="campus_plan_building_p1_name">Lehrgebäude Pillnitzer Platz 1</string>
+    <string name="campus_plan_building_p1_name" translatable="false">Lehrgebäude Pillnitzer Platz 1</string>
     <string name="campus_plan_building_p2" translatable="false">P2</string>
-    <string name="campus_plan_building_p2_name">Laborgebäude Mitschurinbau, Pillnitzer Platz 2</string>
+    <string name="campus_plan_building_p2_name" translatable="false">Laborgebäude Mitschurinbau, Pillnitzer Platz 2</string>
     <string name="campus_plan_building_pd" translatable="false">PD</string>
-    <string name="campus_plan_building_pd_name">Technikzentrum Dampfschiffstraße</string>
+    <string name="campus_plan_building_pd_name" translatable="false">Technikzentrum Dampfschiffstraße</string>
     <string name="campus_plan_building_pw" translatable="false">PW</string>
-    <string name="campus_plan_building_pw_name">Tierökologie GaLaBau</string>
+    <string name="campus_plan_building_pw_name" translatable="false">Tierökologie GaLaBau</string>
     <string name="campus_plan_building_pn" translatable="false">PN</string>
-    <string name="campus_plan_building_pn_name">Hörsaalgebäude</string>
+    <string name="campus_plan_building_pn_name" translatable="false">Hörsaalgebäude</string>
     <string name="campus_plan_building_ps" translatable="false">PS</string>
-    <string name="campus_plan_building_ps_name">Gewächshausanlage Söbrigener Straße 5</string>
+    <string name="campus_plan_building_ps_name" translatable="false">Gewächshausanlage Söbrigener Straße 5</string>
     <string name="campus_plan_building_pb" translatable="false">PB</string>
-    <string name="campus_plan_building_pb_name">Lehrgebäude Bergweg 23</string>
+    <string name="campus_plan_building_pb_name" translatable="false">Lehrgebäude Bergweg 23</string>
     <string name="campus_plan_building_gb" translatable="false">GB</string>
-    <string name="campus_plan_building_gb_name">Gemeinschaftsbibliothek HTW Dresden und LfULG</string>
+    <string name="campus_plan_building_gb_name" translatable="false">Gemeinschaftsbibliothek HTW Dresden und LfULG</string>
 </resources>

@@ -47,7 +47,7 @@
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
-    <string name="settings_rzLogin">RZLogin</string>
+    <string name="settings_rzLogin" translatable="false">RZLogin</string>
     <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
     <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
     <string name="settings_jahrgang">Jahrgang</string>
@@ -61,13 +61,13 @@
     <string name="settings_prof_name_summary">Verwendung: Prüfungen</string>
     <string name="settings_prof_id">Professoren-Kennung</string>
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
-    <string name="settings_prof_id_message">Ihre individuelle Professoren-Kennung erhalten Sie nach Anfrage! Schreiben Sie uns einfach: app@htw-dresden.de!</string>
+    <string name="settings_prof_id_message">Ihre individuelle Professoren-Kennung erhalten Sie nach Anfrage! Schreiben Sie uns einfach: app@htw-dresden.de</string>
     <string name="settings_audio">Automatisches Stummschalten</string>
     <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet.</string>
     <string name="settings_audio_request_permission">Berechtigung wird benötigt zum ändern der Benachrichtigungseinstellungen</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
     <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
-    <string name="settings_acra">Bug-Reporting</string>
+    <string name="settings_acra" translatable="false">Bug-Reporting</string>
     <string name="settings_acra_disabled">Eingeschaltet</string>
     <string name="settings_acra_enabled">Ausgeschaltet</string>
 
@@ -75,7 +75,7 @@
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
-    <string name="mensa_price">%s €</string>
+    <string name="mensa_price" translatable="false">%s €</string>
 
     <string name="timetable_overview_today">Heute</string>
     <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
@@ -95,9 +95,9 @@
     <string name="timetable_moreLessons">mehrere Stunden</string>
     <string name="timetable_moreLessonsPoints" translatable="false">***</string>
     <string name="timetable_only_KW">einige KW</string>
-    <string name="timetable_ds_grid">%1$s\n-\n%2$s</string>
+    <string name="timetable_ds_grid" translatable="false">%1$s\n-\n%2$s</string>
     <string name="timetable_ds_list">%1$d. DS (%2$s - %3$s)</string>
-    <string name="timetable_ds_list_simple">%1$s - %2$s</string>
+    <string name="timetable_ds_list_simple" translatable="false">%1$s - %2$s</string>
     <string name="timetable_calendar_week">%d. KW</string>
     <string name="timetable_edit_activity_titel">Stunde bearbeiten</string>
     <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung</string>
@@ -120,7 +120,7 @@
     <string name="timetable_edit_show">Einblenden</string>
     <string name="timetable_edit_lessonSaveSuccess">Stunde erfolgreich gespeichert!</string>
     <string name="timetable_edit_lessonDeleteSuccess">Stunde erfolgreich gelöscht!</string>
-    <string name="timetable_details_title">(%1$s) %2$s</string>
+    <string name="timetable_details_title" translatable="false">(%1$s) %2$s</string>
     <string name="timetable_details_subtitle">%1$s von %2$s</string>
 
     <string name="room_timetable_no_rooms">Du hast noch keine Räume hinzugefügt!</string>
@@ -143,7 +143,7 @@
     <string name="exams_studyBranch">Richtung</string>
     <string name="exams_day">Datum</string>
     <string name="exams_time">Zeit</string>
-    <string name="exams_time_value">%1$s - %2$s</string>
+    <string name="exams_time_value" translatable="false">%1$s - %2$s</string>
     <string name="exams_room">Raum</string>
     <string name="exams_note">Hinweis</string>
     <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
@@ -156,7 +156,7 @@
     <string name="exams_result_sign_off">Abgemeldet</string>
     <string name="exams_result_ill">Krankgeschrieben</string>
     <string name="exams_result_not_allowed">Nicht zugelassen</string>
-    <string name="exams_result_credits">Credits: %.1f</string>
+    <string name="exams_result_credits" translatable="false">Credits: %.1f</string>
     <string name="exams_result_grade">Note: %.1f</string>
     <string name="exams_result_grade_empty">Note:</string>
     <string name="exams_stats_study">Studium</string>
@@ -165,7 +165,7 @@
         <item quantity="one">%s Note</item>
         <item quantity="other">%d Noten</item>
     </plurals>
-    <string name="exams_stats_count_credits">%.0f Credits</string>
+    <string name="exams_stats_count_credits" translatable="false">%.0f Credits</string>
     <string name="exams_stats_gradeBest">beste Note: %.1f</string>
     <string name="exams_stats_gradeWorst">schlechteste Note: %.1f</string>
     <string name="exams_notification_contentText">Zum Anzeigen berühren</string>
@@ -196,7 +196,7 @@
     <string name="overview_lessons_remaining_final">Ende seit %1$d Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
     <string name="overview_lessons_tomorrow">Morgen</string>
-    <string name="overview_lessons_future">%1$s %2$s</string>
+    <string name="overview_lessons_future" translatable="false">%1$s %2$s</string>
     <string name="overview_mensa_load">Lade Daten</string>
     <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
