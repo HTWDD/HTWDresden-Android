@@ -1,9 +1,15 @@
 package de.htwdd.htwdresden.classes;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+
+import de.htwdd.htwdresden.R;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Klasse um verschiedene Einstellungen zu migrieren
@@ -11,11 +17,13 @@ import android.support.annotation.NonNull;
  * @author Kay Förster
  */
 public class PreferencesMigrations {
-    private final SharedPreferences sharedPreferences;
     private final static int newVersion = 1;
+    private final Context context;
+    private final SharedPreferences sharedPreferences;
 
     public PreferencesMigrations(@NonNull final Context context) {
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.context = context;
     }
 
     public void migrate() {
@@ -31,16 +39,32 @@ public class PreferencesMigrations {
             editor.putBoolean("acra.enable", true);
         }
 
-
         // Erste Migration
         if (oldVersion == 0) {
             if (sharedPreferences.contains("StgJhr")) {
                 editor.putInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, Integer.parseInt(sharedPreferences.getString("StgJhr", "17")));
             }
+            createNotificationChannel();
 //            oldVersion++;
         }
 
-        editor.putInt("version", newVersion);
+        editor.putInt("version", 1);
         editor.apply();
+    }
+
+    /**
+     * Erstellt Notification Channel
+     */
+    private void createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            return;
+        }
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        final NotificationChannel notificationChannel = new NotificationChannel(
+                Const.NOTIFICATION_CHANNEL_EXAMS,
+                context.getString(R.string.settings_exam_results),
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        notificationManager.createNotificationChannel(notificationChannel);
     }
 }

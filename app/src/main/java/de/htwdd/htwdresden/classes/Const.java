@@ -5,6 +5,7 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public final class Const {
+    public static final String NOTIFICATION_CHANNEL_EXAMS = "examResults";
 
     public static final class BundleParams {
         public static final String MENSA_DETAIL_MODE = "MENSA_DETAIL_MODE";

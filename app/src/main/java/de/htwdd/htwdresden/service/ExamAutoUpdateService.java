@@ -1,7 +1,6 @@
 package de.htwdd.htwdresden.service;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -11,6 +10,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -58,7 +58,6 @@ public final class ExamAutoUpdateService extends ExamSyncService {
         final boolean result = saveGrades();
 
         if (result) {
-            final Notification.Builder builder = new Notification.Builder(this);
             final ArrayList<ExamResult> newResults = new ArrayList<>();
             // Alle Noten durchgehen und neue herauspicken
             examResults = realm.where(ExamResult.class).findAll();
@@ -72,7 +71,7 @@ public final class ExamAutoUpdateService extends ExamSyncService {
             if (countNewResults != 0) {
                 final Intent startIntent = new Intent(context, MainActivity.class);
                 startIntent.setAction(Const.IntentParams.START_ACTION_EXAM_RESULTS);
-                final Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
+                final NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                 final PendingIntent pendingIntent = PendingIntent.getActivity(this, 645, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 // Vorschau der ersten beiden Noten
@@ -91,6 +90,7 @@ public final class ExamAutoUpdateService extends ExamSyncService {
                 }
 
                 // Allgemeine Notifikation-Einstellungen
+                final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Const.NOTIFICATION_CHANNEL_EXAMS);
                 builder.setContentTitle(getResources().getQuantityString(R.plurals.exams_notification_title, countNewResults, countNewResults))
                         .setContentText(getText(R.string.exams_notification_contentText))
                         .setSmallIcon(R.drawable.ic_htw_logo_bildmarke_gray_android)
