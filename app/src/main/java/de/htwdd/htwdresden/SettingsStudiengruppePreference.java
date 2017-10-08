@@ -46,7 +46,7 @@ public class SettingsStudiengruppePreference extends DialogPreference {
         // Finde aktuell ausgewählte Position
         int yearPosition = 0;
         if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)) {
-            yearPosition = realmResultsYear.indexOf(realm.where(StudyYear.class)
+            yearPosition = 1 + realmResultsYear.indexOf(realm.where(StudyYear.class)
                     .equalTo(Const.database.StudyGroups.STUDY_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
                     .findFirst()
             );
@@ -119,21 +119,21 @@ public class SettingsStudiengruppePreference extends DialogPreference {
                 final RealmList<StudyCourse> studyCourses = studyYearObject.getStudyCourses();
                 // Finde ausgewählte Position
                 if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG)) {
-                    position = studyCourses.indexOf(studyCourses
+                    position = 1 + studyCourses.indexOf(studyCourses
                             .where()
                             .equalTo(Const.database.StudyGroups.STUDY_COURSE, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""))
                             .findFirst()
                     );
                 }
                 studyCourseSpinner.setAdapter(new SpinnerAdapter<>(studyCourses, pleaseSelectString));
-                studyCourseSpinner.setSelection(position + 1);
+                studyCourseSpinner.setSelection(position);
             }
 
             @Override
             public void onNothingSelected(final AdapterView<?> adapterView) {
             }
         });
-        studyYearSpinner.setSelection(yearPosition + 1);
+        studyYearSpinner.setSelection(yearPosition);
     }
 
     @Override
