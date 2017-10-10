@@ -54,8 +54,10 @@ abstract class AbstractTimetableHelper {
      * @return die aktuelle DS, 0 falls vor der ersten DS oder -1 nach der letzten DS
      */
     public static int getCurrentDS(long currentTime) {
-        if (currentTime >= endDS[6])
+        if (currentTime >= endDS[7])
             return -1;
+        else if (currentTime >= beginDS[7])
+            return 8;
         else if (currentTime >= beginDS[6])
             return 7;
         else if (currentTime >= beginDS[5])
