@@ -96,14 +96,14 @@ public class TimetableEditFragment extends Fragment {
         if (!bundle.containsKey(Const.BundleParams.TIMETABLE_LESSON_ID))
             return mLayout;
 
-        lesson = realm.where(LessonUser.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID)).findFirst();
+        lesson = realm.where(LessonUser.class).endsWith(Const.database.Lesson.ID, bundle.getString(Const.BundleParams.TIMETABLE_LESSON_ID, "")).findFirst();
 
         if (lesson != null) {
             // Formular mit Daten füllen
             fillForms(lesson);
 
             // Button zum Löschen / Ausblenden einer Lehrveranstaltung
-            final Button buttonDelete = (Button) mLayout.findViewById(R.id.timetable_edit_LessonDelete);
+            final Button buttonDelete = mLayout.findViewById(R.id.timetable_edit_LessonDelete);
             buttonDelete.setEnabled(true);
 
             // Lehrveranstaltung wurde vom Nutzer erstellt und kann gelöscht werden
@@ -161,17 +161,17 @@ public class TimetableEditFragment extends Fragment {
         final Context context = getActivity();
 
         // Views finden
-        lesson_name = (TextInputEditText) mLayout.findViewById(R.id.timetable_edit_lessonName);
-        lesson_tag = (TextInputEditText) mLayout.findViewById(R.id.timetable_edit_lessonTag);
-        lesson_prof = (TextInputEditText) mLayout.findViewById(R.id.timetable_edit_lessonProf);
-        lesson_type = (Spinner) mLayout.findViewById(R.id.timetable_edit_lessonType);
-        lesson_rooms = (TextInputEditText) mLayout.findViewById(R.id.timetable_edit_lessonRooms);
-        lesson_week = (Spinner) mLayout.findViewById(R.id.timetable_edit_lessonWeek);
-        lesson_day = (Spinner) mLayout.findViewById(R.id.timetable_edit_lessonDay);
-        lesson_ds = (Spinner) mLayout.findViewById(R.id.timetable_edit_lessonDS);
-        lesson_weeksOnly = (TextInputEditText) mLayout.findViewById(R.id.timetable_edit_lessonWeeksOnly);
-        lesson_beginTime = (EditText) mLayout.findViewById(R.id.timetable_edit_startTime);
-        lesson_endTime = (EditText) mLayout.findViewById(R.id.timetable_edit_endTime);
+        lesson_name = mLayout.findViewById(R.id.timetable_edit_lessonName);
+        lesson_tag = mLayout.findViewById(R.id.timetable_edit_lessonTag);
+        lesson_prof = mLayout.findViewById(R.id.timetable_edit_lessonProf);
+        lesson_type = mLayout.findViewById(R.id.timetable_edit_lessonType);
+        lesson_rooms = mLayout.findViewById(R.id.timetable_edit_lessonRooms);
+        lesson_week = mLayout.findViewById(R.id.timetable_edit_lessonWeek);
+        lesson_day = mLayout.findViewById(R.id.timetable_edit_lessonDay);
+        lesson_ds = mLayout.findViewById(R.id.timetable_edit_lessonDS);
+        lesson_weeksOnly = mLayout.findViewById(R.id.timetable_edit_lessonWeeksOnly);
+        lesson_beginTime = mLayout.findViewById(R.id.timetable_edit_startTime);
+        lesson_endTime = mLayout.findViewById(R.id.timetable_edit_endTime);
         setTimeAndUpdateView(getMinutes(true), getMinutes(false));
 
         // DS-Spinner mit Daten füllen
@@ -378,7 +378,7 @@ public class TimetableEditFragment extends Fragment {
             lesson.setEditedByUser(true);
 
             // Wenn keine Kurzform gesetzt ist, diese automatisch erzeugen
-            if (lesson.getLessonTag().isEmpty()) {
+            if (lesson.getLessonTag() == null || lesson.getLessonTag().isEmpty()) {
                 lesson.setLessonTag(lesson.getName().substring(0, Math.min(lesson.getName().length(), 5)));
             }
 
