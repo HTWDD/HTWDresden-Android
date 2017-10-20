@@ -255,14 +255,14 @@ public class TimetableEditFragment extends Fragment {
                 final boolean[] selectedKwsMinimal = new boolean[53 / increment];
                 for (int kw = 0; kw < 53 / increment; kw++) {
                     kws[kw] = view.getResources().getString(R.string.timetable_calendar_week, kw * increment + startWeek);
-                    selectedKwsMinimal[kw] = selectedKws[kw * increment];
+                    selectedKwsMinimal[kw] = selectedKws[(startWeek - 1) + kw * increment];
                 }
 
                 new AlertDialog.Builder(getActivity())
                         .setMultiChoiceItems(kws, selectedKwsMinimal, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialog, final int which, final boolean isChecked) {
-                                selectedKws[which * increment] = isChecked;
+                                selectedKws[(startWeek - 1) + which * increment] = isChecked;
                                 // Auswahl in Textbox neu anzeigen
                                 String listOfWeeks = "";
                                 for (int i = 0; i < selectedKws.length; i++) {
