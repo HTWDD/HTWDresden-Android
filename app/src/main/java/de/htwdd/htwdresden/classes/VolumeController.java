@@ -34,7 +34,7 @@ public class VolumeController {
         final int currentDs = TimetableHelper.getCurrentDS(TimetableHelper.getMinutesSinceMidnight(calendar));
 
         // Aktuell Vorlesungszeit?, wenn nein return
-        if (currentDs <= 0 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+        if (currentDs <= 0 || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
             return;
 
         // Lautstärke ist bereits ausgeschaltet
