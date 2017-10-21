@@ -1,25 +1,23 @@
 package de.htwdd.htwdresden;
 
 
-import android.Manifest;
-import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
@@ -33,7 +31,7 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
  * @author Kay Förster
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+    private final static String LOG_TAG = "SettingsFragment";
     private final static int PERMISSIONS_REQUEST_NOTIFICATION_SERVICE = 1;
 
     public SettingsFragment() {
@@ -78,17 +76,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             // Automatisches Muten bei Lehrveranstaltungen
             case Const.preferencesKey.PREFERENCES_AUTO_MUTE:
                 // Aber Android 7.0 muss nach den access notification policy gefragt werden
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                        && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
-                    final Activity activity = getActivity();
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
-                        // Kurze Erklärung anzeigen
-                        Toast.makeText(context, R.string.settings_audio_request_permission, Toast.LENGTH_SHORT).show();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    final NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (!mNotificationManager.isNotificationPolicyAccessGranted() && sharedPreferences.getBoolean(key, false)) {
+                        Log.d(LOG_TAG, "Fehlende Berechtigung anfordern");
+                        sharedPreferences.edit().putBoolean(key, false).apply();
+                        ((CheckBoxPreference) findPreference(key)).setChecked(false);
+
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS), PERMISSIONS_REQUEST_NOTIFICATION_SERVICE);
+                        return;
                     }
-                    // Berechtigung anfragen
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY}, PERMISSIONS_REQUEST_NOTIFICATION_SERVICE);
-                    return;
                 }
                 manageVolumeService();
                 break;
@@ -104,19 +101,30 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_NOTIFICATION_SERVICE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    manageVolumeService();
-                } else {
-                    final Preference preference = findPreference(Const.preferencesKey.PREFERENCES_AUTO_MUTE);
-                    if (preference != null) {
-                        preference.setEnabled(false);
+            case PERMISSIONS_REQUEST_NOTIFICATION_SERVICE:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    final Context context = getActivity();
+                    final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                    // Überprüfe ob Berechtigung gesetzt wurde
+                    final NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (mNotificationManager.isNotificationPolicyAccessGranted()) {
+                        manageVolumeService();
+                        editor.putBoolean(Const.preferencesKey.PREFERENCES_AUTO_MUTE, true);
+                        ((CheckBoxPreference) findPreference(Const.preferencesKey.PREFERENCES_AUTO_MUTE)).setChecked(true);
+
+                        Log.d(LOG_TAG, "onActivityResult - Berechtigung erhalten");
+                    } else {
+                        Log.d(LOG_TAG, "onActivityResult - keine Berechtigung");
+                        editor.putBoolean(Const.preferencesKey.PREFERENCES_AUTO_MUTE, false);
                     }
+                    editor.apply();
                 }
-            }
+
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -131,12 +139,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Const.preferencesKey.PREFERENCES_AUTO_MUTE, false)) {
             // Starte Background Service
+            Log.d(LOG_TAG, "Starte Background Service");
             volumeControllerService.startMultiAlarmVolumeController(context);
 
             //enable a receiver -> starts alarms on reboot
             packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         } else {
             // Beende Background Service
+            Log.d(LOG_TAG, "Beende Service");
             volumeControllerService.cancelMultiAlarmVolumeController(context);
             volumeControllerService.resetSettingsFile(context);
 
