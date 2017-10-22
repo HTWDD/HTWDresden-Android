@@ -97,8 +97,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_marginEnd="@dimen/app_table_margin"
-                                android:singleLine="true"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:maxLines="1"/>
 
                             <TextView
                                 android:id="@+id/overview_lessons_current_type"
@@ -109,9 +109,9 @@
                                 android:layout_gravity="end"
 
                                 android:layout_toEndOf="@+id/overview_lessons_current_tag"
-                                android:singleLine="true"
                                 android:text="@string/overview_lessons_noLesson"
-                                android:textAppearance="@android:style/TextAppearance.Small" />
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:maxLines="1"/>
 
                             <TextView
                                 android:id="@+id/overview_lessons_current_remaining"
@@ -159,8 +159,8 @@
                                 android:layout_gravity="end"
                                 android:layout_marginStart="@dimen/app_table_margin"
                                 android:layout_toEndOf="@+id/overview_lessons_next_tag"
-                                android:singleLine="true"
-                                android:textAppearance="@android:style/TextAppearance.Small" />
+                                android:textAppearance="@android:style/TextAppearance.Small"
+                                android:maxLines="1"/>
 
                             <TextView
                                 android:id="@+id/overview_lessons_next_remaining"

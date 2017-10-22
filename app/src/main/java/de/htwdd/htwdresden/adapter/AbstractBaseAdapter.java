@@ -15,9 +15,9 @@ import java.util.ArrayList;
  * @author Kay Förster
  */
 abstract class AbstractBaseAdapter<T> extends BaseAdapter {
-    ArrayList<T> data;
-    LayoutInflater mLayoutInflater;
-    Context context;
+    final ArrayList<T> data;
+    final LayoutInflater mLayoutInflater;
+    final Context context;
 
     AbstractBaseAdapter(@NonNull final Context context, @NonNull final ArrayList<T> data) {
         this.data = data;

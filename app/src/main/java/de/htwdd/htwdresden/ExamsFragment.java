@@ -22,7 +22,7 @@ import de.htwdd.htwdresden.types.TabItem;
  * @author Kay Förster
  */
 public class ExamsFragment extends Fragment {
-    private List<TabItem> mTabs = new ArrayList<>();
+    private final List<TabItem> mTabs = new ArrayList<>();
 
     public ExamsFragment() {
         // Required empty public constructor
@@ -58,11 +58,11 @@ public class ExamsFragment extends Fragment {
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_exams));
 
         // Adapter für Tabs erstellen und an view hängen
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        final ViewPager viewPager = view.findViewById(R.id.viewpager);
         viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mTabs));
 
         // TabLayout "stylen"
-        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         // Setze feste Anzahl an Tabs (Tabs wirken nicht angeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // Tabs nehmen immer die ganze Breite ein

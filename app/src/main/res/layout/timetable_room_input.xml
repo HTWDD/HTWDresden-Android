@@ -12,5 +12,5 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:hint="@string/room_timetable_addDialog_hint"
         android:inputType="text"
-        android:singleLine="true" />
+        android:maxLines="1"/>
 </FrameLayout>

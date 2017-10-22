@@ -71,9 +71,15 @@ public final class ExamsHelper {
         }
 
         final float credits = realmQuery.sum(Const.database.ExamResults.CREDITS).floatValue();
+        final Number bestGrade = realmQuery.min(Const.database.ExamResults.GRADE);
+        final Number worstGrade = realmQuery.max(Const.database.ExamResults.GRADE);
+        if (bestGrade != null) {
+            stats.setGradeBest(bestGrade.floatValue());
+        }
+        if (worstGrade != null) {
+            stats.setGradeWorst(worstGrade.floatValue());
+        }
         stats.gradeCount = realmQuery.count();
-        stats.setGradeBest(realmQuery.min(Const.database.ExamResults.GRADE).floatValue());
-        stats.setGradeWorst(realmQuery.max(Const.database.ExamResults.GRADE).floatValue());
         stats.setCredits(credits);
         // Berechne Durchschnitt
         if (credits > 0) {

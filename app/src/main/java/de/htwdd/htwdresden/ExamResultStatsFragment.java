@@ -36,23 +36,23 @@ public class ExamResultStatsFragment extends Fragment {
         realm = Realm.getDefaultInstance();
 
         // Refresh ausschalten
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setEnabled(false);
 
         // Hinweismeldung wenn keine Ergebnisse vorliegen
-        final TextView message = (TextView) mLayout.findViewById(R.id.message_info);
+        final TextView message = mLayout.findViewById(R.id.message_info);
         message.setText(R.string.exams_result_no_results);
 
         // Adapter erstellen und an Liste anhängen
         final ExamStatsAdapter adapter = new ExamStatsAdapter(getActivity(), realm);
-        final ListView listView = (ListView) mLayout.findViewById(R.id.listView);
+        final ListView listView = mLayout.findViewById(R.id.listView);
         listView.setAdapter(adapter);
         listView.setEmptyView(message);
 
         // Auf Änderungen an der Datenbank hören
         realmChangeListener = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
-            public void onChange(final RealmResults<ExamResult> element) {
+            public void onChange(@NonNull final RealmResults<ExamResult> element) {
                 adapter.notifyDataSetChanged();
             }
         };

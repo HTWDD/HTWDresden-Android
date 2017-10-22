@@ -27,9 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/htw_orange" />
+            android:textColor="@color/htw_orange"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/widget_timetable_room"
@@ -61,9 +61,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/htw_orange" />
+            android:textColor="@color/htw_orange"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/widget_timetable_room_next"

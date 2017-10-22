@@ -14,8 +14,8 @@
             android:id="@+id/headerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/abc_dropdownitem_text_padding_right"
-            android:paddingStart="@dimen/abc_dropdownitem_text_padding_left"
+            android:paddingEnd="@dimen/space_between_content"
+            android:paddingStart="@dimen/space_between_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <View

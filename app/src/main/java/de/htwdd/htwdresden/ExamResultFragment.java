@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,7 +56,7 @@ public class ExamResultFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         adapter = new ExamResultAdapter(context, realm);
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -98,14 +99,14 @@ public class ExamResultFragment extends Fragment {
         // Auf Änderungen an der Datenbank hören
         realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
             @Override
-            public void onChange(final RealmResults<ExamResult> element) {
+            public void onChange(@NonNull final RealmResults<ExamResult> element) {
                 adapter.notifyDataSetChanged();
             }
         };
         examResults = realm.where(ExamResult.class).findAll();
         examResults.addChangeListener(realmListenerExams);
 
-        final ExpandableListView expandableListView = (ExpandableListView) mLayout.findViewById(R.id.expandableListView);
+        final ExpandableListView expandableListView = mLayout.findViewById(R.id.expandableListView);
         expandableListView.setAdapter(adapter);
         expandableListView.setEmptyView(mLayout.findViewById(R.id.info_message));
 
@@ -133,7 +134,7 @@ public class ExamResultFragment extends Fragment {
     private class ResponseReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout);
+            final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {

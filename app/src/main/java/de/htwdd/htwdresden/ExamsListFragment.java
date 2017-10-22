@@ -45,7 +45,7 @@ public class ExamsListFragment extends Fragment {
     private View mLayout;
     private View footer;
     private int stgJhr;
-    private ArrayList<Exam> exams = new ArrayList<>();
+    private final ArrayList<Exam> exams = new ArrayList<>();
     private ExamListAdapter adapter;
 
     public ExamsListFragment() {
