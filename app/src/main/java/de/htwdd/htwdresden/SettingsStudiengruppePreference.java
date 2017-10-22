@@ -92,7 +92,7 @@ public class SettingsStudiengruppePreference extends DialogPreference {
                             .findFirst()
                     );
                 }
-                studyGroupSpinner.setAdapter(new SpinnerAdapter<>(((StudyCourse) adapterView.getAdapter().getItem(i)).getStudyGroups()));
+                studyGroupSpinner.setAdapter(new SpinnerAdapter<>(((StudyCourse) adapterView.getAdapter().getItem(i)).getStudyGroups(), pleaseSelectString));
                 studyGroupSpinner.setSelection(position);
             }
 
