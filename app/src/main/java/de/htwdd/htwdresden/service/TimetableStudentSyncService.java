@@ -39,7 +39,7 @@ import io.realm.RealmResults;
 public class TimetableStudentSyncService extends AbstractSyncHelper {
     protected final static String LOG_TAG = "TimetableSyncService";
     protected final Stack<JSONArray> results = new Stack<>();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.GERMANY);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.GERMANY);
 
     public TimetableStudentSyncService() {
         super("TimetableSyncService", Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
