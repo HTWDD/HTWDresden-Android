@@ -198,6 +198,5 @@
     <string name="management_examination_office">Principal exam office</string>
     <string name="management_office">Student administration</string>
     <string name="management_opening_hours">Office hours</string>
-    <string name="management_printing">Print &amp; Copy</string>
     <string name="management_services">offered services</string>
 </resources>

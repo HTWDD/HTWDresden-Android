@@ -13,11 +13,6 @@
     <string name="management_services_office_services2">12:30 – 15:00 Uhr</string>
     <string name="management_services_office_services3">Di.</string>
     <string name="management_services_office_services4">08.30 – 11.00 Uhr &amp;\n12.30 – 17.00 Uhr</string>
-    <string name="management_printing">Drucken &amp; Kopieren</string>
-    <string name="management_printing_room" translatable="false">S 125 a</string>
-    <string name="management_printing_services">&#8226; Druck und Kopie A3-A4 in Farbe und Schwarz/Weiß\n&#8226; Broschürenherstellung\n&#8226; Druckweiterverarbeitung\n&#8226; Scannen\n&#8226; Posterdruck\n&#8226; Laminieren\n&#8226; Schneidearbeiten\n&#8226; Fotoarbeiten</string>
-    <string name="management_printing_office_services1">Mo. bis Fr.</string>
-    <string name="management_printing_office_services2">07:15 – 08:00 Uhr &amp;\n12.00 – 13.00 Uhr</string>
     <string name="management_examination_office">Zentrales Prüfungsamt</string>
     <string name="management_examination_office_room" translatable="false">Z 223, Z 224</string>
     <string name="management_examination_office_services">&#8226; Noten: Erfassung und Verwaltung\n&#8226; Ausdruck von Notenbescheinigungen\n&#8226; Erstellung von Zeugnissen, Urkunden und Diploma Supplement\n&#8226; Planung der Prüfungstermine (Februar und Juli)\n&#8226; BAföG-Bescheinigungen nach § 48\n&#8226; Erfassungsbelege für den Darlehens-Teilerlass (BAföG)</string>
