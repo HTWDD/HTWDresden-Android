@@ -86,7 +86,7 @@ public class SettingsStudiengruppePreference extends DialogPreference {
                 int position = 0;
                 final RealmList<StudyGroup> studyGroups = studyCourseObject.getStudyGroups();
                 if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE)) {
-                    position = studyGroups.indexOf(studyGroups
+                    position = 1 + studyGroups.indexOf(studyGroups
                             .where()
                             .equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
                             .findFirst()
