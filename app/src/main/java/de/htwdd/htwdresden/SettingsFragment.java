@@ -78,7 +78,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 // Aber Android 7.0 muss nach den access notification policy gefragt werden
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     final NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    if (!mNotificationManager.isNotificationPolicyAccessGranted() && sharedPreferences.getBoolean(key, false)) {
+                    if (mNotificationManager == null) {
+                        Log.d(LOG_TAG, "NotificationManager is null");
+                        return;
+                    } else if (!mNotificationManager.isNotificationPolicyAccessGranted() && sharedPreferences.getBoolean(key, false)) {
                         Log.d(LOG_TAG, "Fehlende Berechtigung anfordern");
                         sharedPreferences.edit().putBoolean(key, false).apply();
                         ((CheckBoxPreference) findPreference(key)).setChecked(false);
@@ -109,7 +112,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
                     // Überprüfe ob Berechtigung gesetzt wurde
                     final NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    if (mNotificationManager.isNotificationPolicyAccessGranted()) {
+                    if (mNotificationManager == null) {
+                        Log.d(LOG_TAG, "NotificationManager is null");
+                        return;
+                    } else if (mNotificationManager.isNotificationPolicyAccessGranted()) {
                         manageVolumeService();
                         editor.putBoolean(Const.preferencesKey.PREFERENCES_AUTO_MUTE, true);
                         ((CheckBoxPreference) findPreference(Const.preferencesKey.PREFERENCES_AUTO_MUTE)).setChecked(true);
