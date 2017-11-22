@@ -185,12 +185,10 @@
     <string name="exams_no_settings">Please correct the study group in the settings!</string>
     <string name="crash_dialog_text">An unexpected error occurred, that forces, to end the application.\n\nPlease help us, to fix this problem, by submitting the error data to us.\n\nIf you want to do so, please press OK.</string>
     <string name="room_timetable_info">The room timetable does not consider additional events or changes. Please ask Mrs. Neumann (Z 228 A) for room reservations.</string>
-    <string name="management_printing_office_services1">Mon. to Fri.</string>
     <string name="management_services_office_services1">Mon., Thu.</string>
     <string name="management_stura_office_services1">Mon., Thu.</string>
     <string name="management_stura_office_services3">Tue.</string>
     <string name="management_services_office_services3">Tue.</string>
-    <string name="management_printing_office_services2">7.15am – 8.00am&amp;\n12.00pm – 1.00pm</string>
     <string name="management_services_office_services2">12.30pm – 3.00pm</string>
     <string name="management_services_office_services4">8.30am – 11.00am &amp;\n12.30pm – 5.00pm</string>
     <string name="management_stura_office_services4">9.00am – 3.00pm</string>

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,52 +56,41 @@ public class ExamResultFragment extends Fragment {
         adapter = new ExamResultAdapter(context, realm);
 
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                final Context context = getActivity();
-                // Überprüfe ob Internetverbindung besteht
-                if (!VolleyDownloader.CheckInternet(context)) {
-                    // Refresh ausschalten
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                // Überprüfe ob Einstellungen richtig gesetzt sind
-                if (!ExamsHelper.checkPreferences(context)) {
-                    // Refresh ausschalten
-                    swipeRefreshLayout.setRefreshing(false);
-                    // Snackbar mit Information anzeigen
-                    Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.navi_settings, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // Navigation ändern
-                                    ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
-                                    // Fragment für die Einstellungen öffnen
-                                    final FragmentManager fragmentManager = getActivity().getFragmentManager();
-                                    fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
-                                }
-                            })
-                            .show();
-                    return;
-                }
-
-                // Service zum Updaten starten
-                context.startService(new Intent(context, ExamSyncService.class));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            final Context context1 = getActivity();
+            // Überprüfe ob Internetverbindung besteht
+            if (!VolleyDownloader.CheckInternet(context1)) {
+                // Refresh ausschalten
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(context1, R.string.info_no_internet, Toast.LENGTH_LONG).show();
+                return;
             }
+            // Überprüfe ob Einstellungen richtig gesetzt sind
+            if (!ExamsHelper.checkPreferences(context1)) {
+                // Refresh ausschalten
+                swipeRefreshLayout.setRefreshing(false);
+                // Snackbar mit Information anzeigen
+                Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.navi_settings, view -> {
+                            // Navigation ändern
+                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
+                            // Fragment für die Einstellungen öffnen
+                            final FragmentManager fragmentManager = getActivity().getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                        })
+                        .show();
+                return;
+            }
+
+            // Service zum Updaten starten
+            context1.startService(new Intent(context1, ExamSyncService.class));
         });
 
         // Daten aus Datenbank laden
         countExamResults = realm.where(ExamResult.class).count();
 
         // Auf Änderungen an der Datenbank hören
-        realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<ExamResult> element) {
-                adapter.notifyDataSetChanged();
-            }
-        };
+        realmListenerExams = element -> adapter.notifyDataSetChanged();
         examResults = realm.where(ExamResult.class).findAll();
         examResults.addChangeListener(realmListenerExams);
 
@@ -135,12 +123,7 @@ public class ExamResultFragment extends Fragment {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
 
             if (intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1) == 0) {
                 final long newCountExamResults = realm.where(ExamResult.class).count();

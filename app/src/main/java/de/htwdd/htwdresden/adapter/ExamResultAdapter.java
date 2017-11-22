@@ -51,7 +51,9 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         if (examHeaders.size() < i) {
             return 0;
         }
-        return (int) getChildren(examHeaders.get(i).semester).count();
+
+        final ExamResult examResult = examHeaders.get(i);
+        return examResult != null ? (int) getChildren(examResult.semester).count() : 0;
     }
 
     @Override
@@ -60,13 +62,20 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public ExamResult getChild(int i, int i1) {
-        if (examHeaders.size() < i)
+    @Nullable
+    public ExamResult getChild(final int i, final int i1) {
+        if (examHeaders.size() < i) {
             return null;
-        final RealmQuery<ExamResult> examResults = getChildren(examHeaders.get(i).semester);
-        if (examResults.count() < i1)
-            return null;
-        return examResults.findAll().get(i1);
+        }
+        final ExamResult examResult = examHeaders.get(i);
+        if (examResult != null) {
+            final RealmQuery<ExamResult> examResults = getChildren(examResult.semester);
+            if (examResults.count() >= i1) {
+                return examResults.findAll().get(i1);
+            }
+
+        }
+        return null;
     }
 
     @Override
@@ -91,7 +100,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             viewHolder = new ViewHolder();
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_group, viewGroup, false);
             view.setTag(viewHolder);
-            viewHolder.textView1 = (TextView) view.findViewById(R.id.listHeader);
+            viewHolder.textView1 = view.findViewById(R.id.listHeader);
         } else viewHolder = (ViewHolder) view.getTag();
 
         viewHolder.textView1.setText(ExamsHelper.getSemesterName(view.getResources(), getGroup(i).semester));
@@ -106,13 +115,16 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             viewHolder = new ViewHolder();
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_item, viewGroup, false);
             view.setTag(viewHolder);
-            viewHolder.textView1 = (TextView) view.findViewById(R.id.modulName);
-            viewHolder.textView2 = (TextView) view.findViewById(R.id.vermerk);
-            viewHolder.textView3 = (TextView) view.findViewById(R.id.note);
-            viewHolder.textView4 = (TextView) view.findViewById(R.id.credits);
+            viewHolder.textView1 = view.findViewById(R.id.modulName);
+            viewHolder.textView2 = view.findViewById(R.id.vermerk);
+            viewHolder.textView3 = view.findViewById(R.id.note);
+            viewHolder.textView4 = view.findViewById(R.id.credits);
         } else viewHolder = (ViewHolder) view.getTag();
 
         final ExamResult examResult = getChild(i, i1);
+        if (examResult == null) {
+            return view;
+        }
         final Float note = examResult.getGrade();
 
         // Modulnamen setzen
