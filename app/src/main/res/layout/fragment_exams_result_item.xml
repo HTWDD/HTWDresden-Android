@@ -1,43 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:id="@+id/linearLayout"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:paddingEnd="0dp"
+                                             android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft">
 
     <TextView
         android:id="@+id/modulName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/space_between_content"
-        android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/modulName"
-        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/labelNote"
+        app:layout_constraintTop_toBottomOf="@+id/credits"/>
 
-        <TextView
-            android:id="@+id/note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_between_content"
-            android:layout_marginStart="?android:attr/expandableListPreferredChildPaddingLeft"
-            android:minWidth="60dp"/>
+    <TextView
+        android:id="@+id/credits"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/grade"
+        app:layout_constraintTop_toBottomOf="@+id/modulName"/>
 
-        <TextView
-            android:id="@+id/credits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/space_between_content"
-            android:paddingStart="@dimen/space_between_content"/>
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/credits"
+        app:layout_constraintStart_toEndOf="@+id/labelGrade"
+        app:layout_constraintTop_toBottomOf="@+id/modulName"/>
 
-        <TextView
-            android:id="@+id/vermerk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/space_between_content"
-            android:paddingStart="@dimen/space_between_content"/>
-    </LinearLayout>
-</RelativeLayout>
+    <TextView
+        android:id="@+id/labelGrade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/exams_result_grade"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modulName"/>
+
+    <TextView
+        android:id="@+id/labelNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/exams_result_note"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelGrade"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -69,12 +69,12 @@
         <item quantity="one">New exam result</item>
         <item quantity="other">%d new exam results</item>
     </plurals>
-    <string name="exams_result_grade_empty">Grade:</string>
-    <string name="exams_result_grade">Grade: %.1f</string>
-    <string name="exams_result_ill">Certified sick</string>
+    <string name="exams_result_grade">Grade:</string>
+    <string name="exams_result_note">Note:</string>
+    <string name="exams_result_note_ill">Certified sick</string>
     <string name="exams_result_no_results">No grades yet.</string>
-    <string name="exams_result_not_allowed">Not admitted</string>
-    <string name="exams_result_sign_off">Logged out</string>
+    <string name="exams_result_note_not_allowed">Not admitted</string>
+    <string name="exams_result_note_sign_off">Logged out</string>
     <string name="exams_result_update_newGrades">New grades added.</string>
     <string name="exams_result_update_noNewGrades">No new grades available.</string>
     <string name="exams_result_wrong_auth">Authentifikation error! Please check your data.</string>
@@ -197,4 +197,16 @@
     <string name="management_office">Student administration</string>
     <string name="management_opening_hours">Office hours</string>
     <string name="management_services">offered services</string>
+    <string name="exams_result_note_accepted">accepted</string>
+    <string name="exams_result_note_blocked">blocked</string>
+    <string name="exams_result_note_unexcused_missing">Unexcused missing</string>
+    <string name="exams_result_note_not_started">Not started, deadline exceeded</string>
+    <string name="exams_result_note_no_retest">No application 2nd retest</string>
+    <string name="exams_result_note_free_trails">Free trial</string>
+    <string name="exams_result_note_with_success">with success</string>
+    <string name="exams_result_note_failed">failed (ungraded performance)</string>
+    <string name="exams_result_note_pre_placement">Pre-placement open</string>
+    <string name="exams_result_note_voluntary_appointment">Voluntary appointment not noticed</string>
+    <string name="exams_result_note_conditional">Conditional</string>
+    <string name="exams_result_note_attempt">Attempt to deceive</string>
 </resources>

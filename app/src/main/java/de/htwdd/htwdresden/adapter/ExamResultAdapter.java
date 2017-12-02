@@ -23,7 +23,7 @@ import io.realm.Sort;
 
 
 /**
- * Adapter für die Notenübersichtsseite
+ * Adapter für die Übersichtsseite der Prüfungsergebnisse
  *
  * @author Kay Förster
  */
@@ -116,8 +116,8 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_item, viewGroup, false);
             view.setTag(viewHolder);
             viewHolder.textView1 = view.findViewById(R.id.modulName);
-            viewHolder.textView2 = view.findViewById(R.id.vermerk);
-            viewHolder.textView3 = view.findViewById(R.id.note);
+            viewHolder.textView2 = view.findViewById(R.id.note);
+            viewHolder.textView3 = view.findViewById(R.id.grade);
             viewHolder.textView4 = view.findViewById(R.id.credits);
         } else viewHolder = (ViewHolder) view.getTag();
 
@@ -125,35 +125,17 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         if (examResult == null) {
             return view;
         }
-        final Float note = examResult.getGrade();
 
         // Modulnamen setzen
         viewHolder.textView1.setText(examResult.text);
         viewHolder.textView1.setTypeface(null, Typeface.NORMAL);
         viewHolder.textView1.setTextColor(Color.BLACK);
 
-        // Vermerk leeren
-        viewHolder.textView2.setText("");
-
         // Genauen Status setzen
         switch (examResult.state != null ? examResult.state : "") {
             case "AN":
                 viewHolder.textView1.setTypeface(null, Typeface.ITALIC);
-                viewHolder.textView1.setTextColor(Color.GRAY);
-                switch (examResult.note != null ? examResult.note : "") {
-                    // Student hat sich abgemeldet
-                    case "e":
-                        viewHolder.textView2.setText(R.string.exams_result_sign_off);
-                        break;
-                    // Student war krank
-                    case "k":
-                        viewHolder.textView2.setText(R.string.exams_result_ill);
-                        break;
-                    // Student wurde nicht zugelassen
-                    case "nz":
-                        viewHolder.textView2.setText(R.string.exams_result_not_allowed);
-                        break;
-                }
+                viewHolder.textView1.setTextColor(Color.DKGRAY);
                 break;
             // Student hat bestanden
             case "BE":
@@ -170,10 +152,66 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
                 break;
         }
 
+        // Vermerk setzten
+        switch (examResult.note != null ? examResult.note : "") {
+            // Leistung wurde anerkannt
+            case "a":
+                viewHolder.textView2.setText(R.string.exams_result_note_accepted);
+                break;
+            // Student hat sich abgemeldet
+            case "e":
+                viewHolder.textView2.setText(R.string.exams_result_note_sign_off);
+                break;
+            // Student ist gesperrt
+            case "g":
+                viewHolder.textView2.setText(R.string.exams_result_note_blocked);
+                break;
+            // Student war krank
+            case "k":
+                viewHolder.textView2.setText(R.string.exams_result_note_ill);
+                break;
+            // Student wurde nicht zugelassen
+            case "nz":
+                viewHolder.textView2.setText(R.string.exams_result_note_not_allowed);
+                break;
+            case "5ue":
+                viewHolder.textView2.setText(R.string.exams_result_note_unexcused_missing);
+                break;
+            case "5na":
+                viewHolder.textView2.setText(R.string.exams_result_note_not_started);
+                break;
+            case "kA":
+                viewHolder.textView2.setText(R.string.exams_result_note_no_retest);
+                break;
+            case "PFV":
+                viewHolder.textView2.setText(R.string.exams_result_note_free_trails);
+                break;
+            case "mE":
+                viewHolder.textView2.setText(R.string.exams_result_note_with_success);
+                break;
+            case "N":
+                viewHolder.textView2.setText(R.string.exams_result_note_failed);
+                break;
+            case "VPo":
+                viewHolder.textView2.setText(R.string.exams_result_note_pre_placement);
+                break;
+            case "f":
+                viewHolder.textView2.setText(R.string.exams_result_note_voluntary_appointment);
+                break;
+            case "uV":
+                viewHolder.textView2.setText(R.string.exams_result_note_conditional);
+                break;
+            case "TA":
+                viewHolder.textView2.setText(R.string.exams_result_note_attempt);
+                break;
+            default:
+                viewHolder.textView2.setText("");
+                break;
+        }
+
         // Note anzeigen
-        if (note != 0.0) {
-            viewHolder.textView3.setText(context.getString(R.string.exams_result_grade, note));
-        } else viewHolder.textView3.setText(R.string.exams_result_grade_empty);
+        final Float note = examResult.getGrade();
+        viewHolder.textView3.setText(note != 0.0 ? Float.toString(note) : "");
         // Credits anzeigen
         viewHolder.textView4.setText(context.getString(R.string.exams_result_credits, examResult.credits));
 

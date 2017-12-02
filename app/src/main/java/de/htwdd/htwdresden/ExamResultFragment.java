@@ -97,6 +97,7 @@ public class ExamResultFragment extends Fragment {
         final ExpandableListView expandableListView = mLayout.findViewById(R.id.expandableListView);
         expandableListView.setAdapter(adapter);
         expandableListView.setEmptyView(mLayout.findViewById(R.id.info_message));
+        expandableListView.addHeaderView(inflater.inflate(R.layout.exams_header, expandableListView, false));
 
         // IntentReceiver erstellen
         final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
