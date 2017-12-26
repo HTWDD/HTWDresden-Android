@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -38,16 +37,13 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private MenuItem mPreviousMenuItem;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionBar;
-    private NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            // Markiere im NavigationDrawer
-            setNavigationItem(item);
-            // Ändere Inhalt
-            selectFragment(item.getItemId());
+    private final NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = item -> {
+        // Markiere im NavigationDrawer
+        setNavigationItem(item);
+        // Ändere Inhalt
+        selectFragment(item.getItemId());
 
-            return false;
-        }
+        return false;
     };
 
     @Override
@@ -90,10 +86,14 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             public void onDrawerOpened(View drawerView) {
                 title = actionBar.getTitle();
                 actionBar.setTitle(R.string.app_name);
+
                 // Schließe Tastatur
-                if (getCurrentFocus() != null && getCurrentFocus() instanceof EditText) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                final View currentFocus = getCurrentFocus();
+                if (currentFocus != null && currentFocus instanceof EditText) {
+                    final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
                 }
 
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // Beim App-Start ein spezielles Fragment öffnen?
         final Intent intent = getIntent();
-        if (intent != null) {
+        if (intent != null && intent.getAction() != null) {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
                     goToNavigationItem(R.id.navigation_timetable);

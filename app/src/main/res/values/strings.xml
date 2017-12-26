@@ -12,6 +12,7 @@
     <string name="general_update">Aktualisieren</string>
     <string name="general_delete">Löschen</string>
     <string name="general_select_option">Bitte auswählen</string>
+    <string name="general_concat">%1$s %2$s</string>
 
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>

@@ -33,7 +33,7 @@ public class MensaFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle_1 = new Bundle();
@@ -60,17 +60,15 @@ public class MensaFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
+        final ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         // Setze Title Toolbar
         ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_mensa));
 
-        ViewPager viewPager = view.findViewById(R.id.viewpager);
-
         // Adapter für Tabs erstellen und an view hängen
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mTabs));
 
         // TabLayout "stylen"
         final TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
