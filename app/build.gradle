@@ -39,6 +39,8 @@ dependencies {
     // https://github.com/ACRA/acra
     implementation 'ch.acra:acra:4.9.2'
     // https://github.com/realm/realm-android-adapters
-    implementation 'io.realm:android-adapters:2.1.0'
+    implementation 'io.realm:android-adapters:2.1.1'
+    // https://github.com/heinrichreimer/android-canteen-balance
+    compile 'com.heinrichreimersoftware:android-canteen-balance:0.1.2'
     apply plugin: 'realm-android'
 }

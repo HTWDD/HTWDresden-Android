@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="de.htwdd.htwdresden">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
     <application
         android:name=".HTWDresdenApplication"
@@ -14,22 +14,25 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <!--Activities-->
+        <!-- Activities -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
                 <!-- Accepts URIs that begin with "https://www.htw-dresden.de/app” -->
-                <data android:scheme="https"
-                      android:host="www.htw-dresden.de/app" />
+                <data
+                    android:host="www.htw-dresden.de/app"
+                    android:scheme="https"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts"/>
@@ -40,7 +43,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
+                android:value="de.htwdd.htwdresden.MainActivity"/>
         </activity>
         <activity
             android:name=".RoomTimetableDetailsActivity"
@@ -48,13 +51,19 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
+                android:value="de.htwdd.htwdresden.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".MensaCreditActivity"
+            android:label="@string/mensa_credit_title"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert">
         </activity>
 
-        <!-- Services-->
+        <!-- Services -->
         <service
             android:name=".service.VolumeControllerService"
-            android:exported="false" />
+            android:exported="false"/>
         <service
             android:name=".service.TimetableWidgetService"
             android:enabled="true"/>
@@ -74,12 +83,12 @@
             android:name=".service.TimetableProfessorSyncService"
             android:enabled="true"/>
 
-        <!-- Receiver-->
+        <!-- Receiver -->
         <receiver
             android:name=".service.VolumeControllerService$HtwddBootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <receiver
@@ -93,23 +102,23 @@
             android:name=".MensaWidget"
             android:label="@string/navi_mensa">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/mensa_widget_info" />
+                android:resource="@xml/mensa_widget_info"/>
         </receiver>
         <receiver
             android:name=".TimetableWidget"
             android:label="@string/navi_timetable">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/timetable_widget_info" />
+                android:resource="@xml/timetable_widget_info"/>
         </receiver>
 
     </application>

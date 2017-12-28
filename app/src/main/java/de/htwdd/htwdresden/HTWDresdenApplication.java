@@ -1,6 +1,9 @@
 package de.htwdd.htwdresden;
 
 import android.app.Application;
+import android.content.IntentFilter;
+
+import com.heinrichreimer.canteenbalance.cardreader.CardBalance;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -9,6 +12,7 @@ import org.acra.annotation.ReportsCrashes;
 
 import de.htwdd.htwdresden.classes.DatabaseMigrations;
 import de.htwdd.htwdresden.classes.PreferencesMigrations;
+import de.htwdd.htwdresden.service.MensaCreditReceiver;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -32,6 +36,8 @@ import io.realm.RealmConfiguration;
         sharedPreferencesName = "de.htwdd.htwdresden_preferences"
 )
 public class HTWDresdenApplication extends Application {
+    private MensaCreditReceiver mensaCreditReceiver;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,5 +61,15 @@ public class HTWDresdenApplication extends Application {
         final Thread thread = new Thread(new CheckUpdates(getApplicationContext()));
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
+
+        // Mensa Guthaben
+        mensaCreditReceiver = new MensaCreditReceiver();
+        registerReceiver(mensaCreditReceiver, new IntentFilter(CardBalance.ACTION_CARD_BALANCE));
+    }
+
+    @Override
+    public void onTerminate() {
+        unregisterReceiver(mensaCreditReceiver);
+        super.onTerminate();
     }
 }
