@@ -17,8 +17,8 @@ import android.widget.Toast;
 import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
+import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
@@ -53,19 +53,17 @@ public class MensaDetailDayFragment extends Fragment implements IRefreshing {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             final Context context = getActivity();
             // Überprüfe Internetverbindung
-            if (!VolleyDownloader.CheckInternet(context)) {
+            if (!ConnectionHelper.checkInternetConnection(context)) {
                 onCompletion();
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
-            mensaHelper.loadAndSaveMeals(0);
+            mensaHelper.updateMeals(this);
         });
 
         // Setze Adapter
         final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
-        // Bei Änderungen an der Datenbasis Hinweismeldung überprüfen
-        realmResults.addChangeListener(element -> onCompletion());
         final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));

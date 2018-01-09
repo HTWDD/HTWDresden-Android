@@ -17,9 +17,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
+import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
@@ -57,13 +57,13 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             final Context context = getActivity();
             // Überprüfe Internetverbindung
-            if (!VolleyDownloader.CheckInternet(context)) {
+            if (!ConnectionHelper.checkInternetConnection(context)) {
                 onCompletion();
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
-            mensaHelper.loadAndSaveMeals(modus);
+            mensaHelper.updateMeals(this);
         });
 
         // Setze Kalender auf Montag der ausgewählten Woche

@@ -10,17 +10,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
-
-import java.nio.charset.Charset;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -104,22 +99,13 @@ public class MensaWidget extends AppWidgetProvider {
 
         // Während der Mensa Öffnungszeiten, Speisepläne vorher aktualisieren
         if (hour_of_Day >= 10 && hour_of_Day <= 15 && calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.MONDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
-            final Response.Listener<String> stringListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
-                    // Parse und speichere Ergebnis
-                    response = new String(response.getBytes(Charset.forName("iso-8859-1")), Charset.forName("UTF-8"));
-                    MensaHelper.updateMealsByDay(GregorianCalendar.getInstance(), mensaHelper.parseCurrentDay(response));
-                    // Widgets updaten
-                    for (final int appWidgetId : appWidgetIds) {
-                        updateAppWidget(context, appWidgetManager, appWidgetId);
-                    }
+            final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
+            mensaHelper.updateMeals(() -> {
+                // Widgets updaten
+                for (final int appWidgetId : appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
                 }
-            };
-            // Download der Informationen
-            final StringRequest stringRequest = new StringRequest(MensaHelper.getMensaUrl(0), stringListener, null);
-            VolleyDownloader.getInstance(context).addToRequestQueue(stringRequest);
+            });
             return;
         }
 
