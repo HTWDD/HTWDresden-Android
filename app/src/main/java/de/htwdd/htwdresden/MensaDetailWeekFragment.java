@@ -21,7 +21,7 @@ import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 
 

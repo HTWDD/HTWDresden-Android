@@ -18,9 +18,10 @@ import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -63,15 +64,15 @@ public class MensaDetailDayFragment extends Fragment implements IRefreshing {
         });
 
         // Setze Adapter
-        final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
+        final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
         final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));
         // Setze Link für Details
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             final Meal meal = mensaArrayAdapter.getItem(i);
-            if (meal != null && meal.getId() != 0) {
-                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.studentenwerk-dresden.de/mensen/speiseplan/details-" + meal.getId() + ".html?pni=1"));
+            if (meal != null) {
+                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(meal.getDetailURL()));
                 getActivity().startActivity(browserIntent);
             }
         });

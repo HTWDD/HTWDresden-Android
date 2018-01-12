@@ -14,8 +14,9 @@ import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
@@ -45,38 +46,28 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item, viewGroup, false);
-
             viewHolder = new ViewHolder();
-            viewHolder.title = (TextView) view.findViewById(R.id.mensa_title);
-            viewHolder.price = (TextView) view.findViewById(R.id.mensa_price);
-            viewHolder.imageView = (NetworkImageView) view.findViewById(R.id.mensa_image);
+            viewHolder.title = view.findViewById(R.id.mensa_title);
+            viewHolder.price = view.findViewById(R.id.mensa_price);
+            viewHolder.imageView = view.findViewById(R.id.mensa_image);
             viewHolder.imageView.setVisibility(View.GONE);
             view.setTag(viewHolder);
-        } else viewHolder = (ViewHolder) view.getTag();
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
 
         // Bestimme Tag
         final Calendar calendar = (Calendar) beginOfWeek.clone();
         calendar.roll(Calendar.DAY_OF_WEEK, i);
 
         // Gerichte für den jeweiligen Tag laden
-        if (adapterData == null)
+        if (adapterData == null) {
             return view;
-
-        final RealmResults<Meal> realmResults = adapterData.where().equalTo("date", MensaHelper.getDate(calendar)).findAll();
-        final StringBuilder stringBuilder = new StringBuilder();
-        final int realmResultsCount = realmResults.size();
-        for (int index = 0; index < realmResultsCount - 1; index++) {
-            stringBuilder.append(realmResults.get(index).getTitle());
-            stringBuilder.append("\n\n");
         }
 
-        // Aktuell kein Angebot vorhanden
-        if (realmResultsCount == 0)
-            stringBuilder.append(context.getString(R.string.mensa_no_offer));
-        else stringBuilder.append(realmResults.get(realmResultsCount - 1).getTitle());
-
+        final RealmResults<Meal> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
         viewHolder.title.setText(nameOfDays[i + 2]);
-        viewHolder.price.setText(stringBuilder);
+        viewHolder.price.setText(MensaHelper.concatTitels(context, realmResults));
 
         return view;
     }

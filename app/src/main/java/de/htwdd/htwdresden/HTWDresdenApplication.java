@@ -53,7 +53,7 @@ public class HTWDresdenApplication extends Application {
         Realm.init(this);
         final RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .migration(new DatabaseMigrations())
-                .schemaVersion(3)
+                .schemaVersion(4)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 

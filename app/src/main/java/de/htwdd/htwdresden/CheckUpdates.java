@@ -24,7 +24,7 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.SemesterHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
 import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;

@@ -1,30 +1,40 @@
 package de.htwdd.htwdresden.types.canteen;
 
+import android.support.annotation.Nullable;
+
 import java.util.Date;
-import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Beschreibung einer Mahlzeit
  *
  * @author Kay Förster
  */
-public class Meal {
-    private float studentPrice;
-    private float employeePrice;
+public class Meal extends RealmObject {
+    @Nullable
+    private Float studentPrice;
+    @Nullable
+    private Float employeePrice;
     private String title;
     private boolean isSoldOut;
-    private List<String> additives;
-    private List<String> ingredients;
-    private List<String> allergens;
+    private RealmList<String> additives;
+    private RealmList<String> ingredients;
+    private RealmList<String> allergens;
     private Date date;
     private String detailURL;
+    @Nullable
     private String image;
+    private short mensaId;
 
-    public float getStudentPrice() {
+    @Nullable
+    public Float getStudentPrice() {
         return studentPrice;
     }
 
-    public float getEmployeePrice() {
+    @Nullable
+    public Float getEmployeePrice() {
         return employeePrice;
     }
 
@@ -36,15 +46,15 @@ public class Meal {
         return isSoldOut;
     }
 
-    public List<String> getAdditives() {
+    public RealmList<String> getAdditives() {
         return additives;
     }
 
-    public List<String> getIngredients() {
+    public RealmList<String> getIngredients() {
         return ingredients;
     }
 
-    public List<String> getAllergens() {
+    public RealmList<String> getAllergens() {
         return allergens;
     }
 
@@ -56,7 +66,12 @@ public class Meal {
         return detailURL;
     }
 
+    @Nullable
     public String getImage() {
         return image;
+    }
+
+    public void setMensaId(final short mensaId) {
+        this.mensaId = mensaId;
     }
 }

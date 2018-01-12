@@ -110,6 +110,11 @@ public final class Const {
     }
 
     public static final class database {
+        public static class Canteen {
+            public static final String MENSA_ID = "mensaId";
+            public static final String MENSA_DATE = "date";
+            public static final String MENSA_IS_SOLDOUT = "isSoldOut";
+        }
 
         public static class ExamResults {
             public static final String id = "id";

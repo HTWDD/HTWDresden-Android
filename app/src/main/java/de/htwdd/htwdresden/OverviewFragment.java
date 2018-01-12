@@ -42,7 +42,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.LessonUser;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -77,71 +77,39 @@ public class OverviewFragment extends Fragment {
 
         // Update verfügbar
         final CardView cardUpdate = mLayout.findViewById(R.id.overview_app_update);
-        cardUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www2.htw-dresden.de/~app/android/HTWDresden-latest.apk"));
-                startActivity(browserIntent);
-            }
+        cardUpdate.setOnClickListener(view -> {
+            final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www2.htw-dresden.de/~app/android/HTWDresden-latest.apk"));
+            startActivity(browserIntent);
         });
-        if (sharedPreferences.getBoolean("appUpdate", false))
+        if (sharedPreferences.getBoolean("appUpdate", false)) {
             cardUpdate.setVisibility(View.VISIBLE);
+        }
 
         // Stundenplan
-        mLayout.findViewById(R.id.overview_timetable).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable);
-            }
-        });
+        mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable));
 
         // Navigation zur Mensa
-        mLayout.findViewById(R.id.overview_mensa).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa);
-            }
-        });
+        mLayout.findViewById(R.id.overview_mensa).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa));
 
         // Noten
-        mLayout.findViewById(R.id.overview_examResultStats).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_exams);
-            }
-        });
+        mLayout.findViewById(R.id.overview_examResultStats).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_exams));
 
         // Daten für Mensa laden und anzeigen
         final Calendar calendar = GregorianCalendar.getInstance();
         realm = Realm.getDefaultInstance();
-        realmListenerMensa = new RealmChangeListener<RealmResults<Meal>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<Meal> element) {
-                showMensaInfo(meals);
-            }
-        };
-        meals = realm.where(Meal.class).equalTo("date", MensaHelper.getDate(calendar)).findAll();
+        realmListenerMensa = element -> showMensaInfo(meals);
+        meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 1).findAll();
         meals.addChangeListener(realmListenerMensa);
         showMensaInfo(meals);
 
         // Übersicht über Noten
-        realmListenerExams = new RealmChangeListener<RealmResults<ExamResult>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<ExamResult> element) {
-                showExamStats(element.size() > 0);
-            }
-        };
+        realmListenerExams = element -> showExamStats(element.size() > 0);
         examResults = realm.where(ExamResult.class).findAll();
         examResults.addChangeListener(realmListenerExams);
         showExamStats(realm.where(ExamResult.class).count() > 0);
 
         // Change Listener für Lehrveranstaltungen
-        realmListenerLessons = new RealmChangeListener<RealmResults<LessonUser>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<LessonUser> element) {
-                showUserTimetableOverview();
-            }
-        };
+        realmListenerLessons = element -> showUserTimetableOverview();
         lessons = realm.where(LessonUser.class).findAll();
         lessons.addChangeListener(realmListenerLessons);
 
@@ -312,26 +280,17 @@ public class OverviewFragment extends Fragment {
     private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
         final TextView message = mLayout.findViewById(R.id.overview_mensaMessage);
         final TextView content = mLayout.findViewById(R.id.overview_mensaContent);
-        final int countMeals = meals.size();
 
         // Aktuell kein Angebot vorhanden
-        if (countMeals == 0) {
+        if (meals.size() == 0) {
             message.setText(R.string.mensa_no_offer);
             message.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
             return;
         }
 
-        // Anzeige zusammenbauen
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < countMeals - 1; i++) {
-            stringBuilder.append(meals.get(i).getTitle());
-            stringBuilder.append("\n\n");
-        }
-        stringBuilder.append(meals.get(countMeals - 1).getTitle());
-
         // Inhalt anzeigen
-        content.setText(stringBuilder);
+        content.setText(MensaHelper.concatTitels(getActivity(), meals));
         message.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
     }

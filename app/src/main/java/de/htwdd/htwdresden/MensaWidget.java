@@ -11,12 +11,13 @@ import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import java.text.DateFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.types.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -26,7 +27,7 @@ import io.realm.RealmResults;
  * @author Kay Förster
  */
 public class MensaWidget extends AppWidgetProvider {
-    private static final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
+    private final static String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
 
     static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId) {
         // Construct the RemoteViews object
@@ -34,6 +35,7 @@ public class MensaWidget extends AppWidgetProvider {
         final int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         final RemoteViews views = getRemoteViews(context, minHeight);
         final Calendar calendar = GregorianCalendar.getInstance();
+        final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
         // Erstelle Intent zum Starten der App
         final Intent intent = new Intent(context, MainActivity.class);
@@ -58,15 +60,15 @@ public class MensaWidget extends AppWidgetProvider {
         // Lade Daten aus der Datenbank
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Meal> meals = realm.where(Meal.class)
-                .equalTo("date", MensaHelper.getDate(calendar))
-                .notEqualTo("title", ".*kombinierBAR:.*")
-                .notEqualTo("price", "ausverkauft")
-                .isNotNull("price").findAll();
+                .equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar))
+                .equalTo(Const.database.Canteen.MENSA_IS_SOLDOUT, false)
+                .findAll();
 
         // Anzeigen der Gerichte
         final Resources ressource = context.getResources();
         final String packageName = context.getPackageName();
         final int cells = minHeight <= 65 ? 4 : 8;
+        Meal meal;
 
         for (int i = 1; i < cells + 1; i++) {
             final int mealName = ressource.getIdentifier("widget_mensa_item_meal_" + i, "id", packageName);
@@ -78,14 +80,18 @@ public class MensaWidget extends AppWidgetProvider {
                 continue;
             }
 
-            final Meal meal = meals.get(i - 1);
+            // Gericht anzeigen
+            meal = meals.get(i - 1);
+            if (meal == null){
+                continue;
+            }
+
             views.setTextViewText(mealName, meal.getTitle());
-            views.setTextViewText(mealPrice, context.getString(R.string.mensa_price, meal.getPrice()));
+            views.setTextViewText(mealPrice, context.getString(R.string.mensa_price, numberFormat.format(meal.getStudentPrice())));
         }
 
-        if (meals.size() != 0)
-            views.setTextViewText(R.id.info_message, null);
-        else views.setTextViewText(R.id.info_message, ressource.getText(R.string.mensa_no_offer));
+        // Info setzen
+        views.setTextViewText(R.id.info_message, meals.size() == 0 ? ressource.getText(R.string.mensa_no_offer) : null);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
