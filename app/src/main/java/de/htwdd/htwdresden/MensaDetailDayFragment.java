@@ -3,6 +3,7 @@ package de.htwdd.htwdresden;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 /**
@@ -64,10 +66,17 @@ public class MensaDetailDayFragment extends Fragment implements IRefreshing {
         });
 
         // Setze Adapter
-        final RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(GregorianCalendar.getInstance())).findAll();
+        final RealmResults<Meal> realmResults = realm.where(Meal.class)
+                .equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(GregorianCalendar.getInstance()))
+                .sort(Const.database.Canteen.MENSA_IS_SOLDOUT, Sort.ASCENDING, Const.database.Canteen.MENSA_IMAGE, Sort.DESCENDING)
+                .findAll();
         final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));
+        // Default Divider
+        final TypedArray typedArray = mLayout.getContext().obtainStyledAttributes(new int[]{ android.R.attr.listDivider });
+        listView.setDivider(typedArray.getDrawable(0));
+        typedArray.recycle();
         // Setze Link für Details
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             final Meal meal = mensaArrayAdapter.getItem(i);

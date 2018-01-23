@@ -114,6 +114,7 @@ public final class Const {
             public static final String MENSA_ID = "mensaId";
             public static final String MENSA_DATE = "date";
             public static final String MENSA_IS_SOLDOUT = "isSoldOut";
+            public static final String MENSA_IMAGE = "image";
         }
 
         public static class ExamResults {

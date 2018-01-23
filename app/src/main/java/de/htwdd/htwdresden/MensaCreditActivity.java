@@ -45,9 +45,9 @@ public class MensaCreditActivity extends AppCompatActivity {
             return;
         }
 
-        ((TextView) findViewById(R.id.mensa_credit_current)).setText(getString(R.string.mensa_price, bundle.getString(MENSA_CREDIT, "")));
+        ((TextView) findViewById(R.id.mensa_credit_current)).setText(getString(R.string.mensa_euro, Float.valueOf(bundle.getString(MENSA_CREDIT, "0"))));
         if (bundle.getBoolean(MENSA_HAS_MENSA_LAST_TRANSACTION, false)) {
-            ((TextView) findViewById(R.id.mensa_last_transaction)).setText(getString(R.string.mensa_price, bundle.getString(MENSA_LAST_TRANSACTION, "")));
+            ((TextView) findViewById(R.id.mensa_last_transaction)).setText(getString(R.string.mensa_euro, Float.valueOf(bundle.getString(MENSA_LAST_TRANSACTION, "0"))));
         } else {
             ((TextView) findViewById(R.id.mensa_last_transaction)).setText("-");
         }

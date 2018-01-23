@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
@@ -45,12 +43,10 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
         final Context context = viewGroup.getContext();
         final ViewHolder viewHolder;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item, viewGroup, false);
+            view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item_week, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.title = view.findViewById(R.id.mensa_title);
             viewHolder.price = view.findViewById(R.id.mensa_price);
-            viewHolder.imageView = view.findViewById(R.id.mensa_image);
-            viewHolder.imageView.setVisibility(View.GONE);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -76,6 +72,5 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
     private static class ViewHolder {
         TextView title;
         TextView price;
-        NetworkImageView imageView;
     }
 }

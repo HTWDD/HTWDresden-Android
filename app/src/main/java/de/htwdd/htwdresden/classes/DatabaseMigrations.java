@@ -27,7 +27,7 @@ public class DatabaseMigrations implements RealmMigration {
                     .addField("title", String.class)
                     .addField("isSoldOut", boolean.class)
                     .addRealmListField("additives", String.class)
-                    .addRealmListField("ingredients", String.class)
+                    .addRealmListField("information", String.class)
                     .addRealmListField("allergens", String.class)
                     .addField("date", Date.class)
                     .addField("detailURL", String.class)

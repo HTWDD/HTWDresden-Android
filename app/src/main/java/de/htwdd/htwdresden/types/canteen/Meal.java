@@ -20,7 +20,7 @@ public class Meal extends RealmObject {
     private String title;
     private boolean isSoldOut;
     private RealmList<String> additives;
-    private RealmList<String> ingredients;
+    private RealmList<String> information;
     private RealmList<String> allergens;
     private Date date;
     private String detailURL;
@@ -50,8 +50,8 @@ public class Meal extends RealmObject {
         return additives;
     }
 
-    public RealmList<String> getIngredients() {
-        return ingredients;
+    public RealmList<String> getInformation() {
+        return information;
     }
 
     public RealmList<String> getAllergens() {

@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import java.text.DateFormatSymbols;
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -35,7 +34,6 @@ public class MensaWidget extends AppWidgetProvider {
         final int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         final RemoteViews views = getRemoteViews(context, minHeight);
         final Calendar calendar = GregorianCalendar.getInstance();
-        final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
         // Erstelle Intent zum Starten der App
         final Intent intent = new Intent(context, MainActivity.class);
@@ -87,7 +85,7 @@ public class MensaWidget extends AppWidgetProvider {
             }
 
             views.setTextViewText(mealName, meal.getTitle());
-            views.setTextViewText(mealPrice, context.getString(R.string.mensa_price, numberFormat.format(meal.getStudentPrice())));
+            views.setTextViewText(mealPrice, context.getString(R.string.mensa_euro, meal.getStudentPrice()));
         }
 
         // Info setzen
