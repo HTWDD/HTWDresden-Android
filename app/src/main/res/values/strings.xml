@@ -12,7 +12,7 @@
     <string name="general_update">Aktualisieren</string>
     <string name="general_delete">Löschen</string>
     <string name="general_select_option">Bitte auswählen</string>
-    <string name="general_concat">%1$s %2$s</string>
+    <string name="general_concat" translatable="false">%1$s %2$s</string>
 
     <string name="navi_overview">Übersicht</string>
     <string name="navi_mensa">Mensa</string>
@@ -165,7 +165,7 @@
     <string name="exams_result_wrong_auth">Fehler bei der Authentifikation! Bitte überprüfe deine Zugangsdaten.</string>
     <string name="exams_result_info_5ue">Die Korrektur von 5ue bei vorliegenden Krankenscheinen erfolgt mit Zeitverzug. Bitte von Nachfragen absehen.</string>
     <string name="exams_result_info_qis">Die Rechtsbehelfsbelehrung und den Beginn der Widerspruchsfrist (Veröffentlichungsdatum) bitte dem QIS-Portal entnehmen.</string>
-    <string name="exams_result_note_accepted">Anerkannt</string>
+    <string name="exams_result_note_recognized">Anerkannt</string>
     <string name="exams_result_note_ill">Krankgeschrieben</string>
     <string name="exams_result_note_blocked">Gesperrt</string>
     <string name="exams_result_note_sign_off">Abgemeldet</string>
@@ -173,7 +173,7 @@
     <string name="exams_result_note_unexcused_missing">Unentschuldigt gefehlt</string>
     <string name="exams_result_note_not_started">nicht angetreten, Fristüberschreitung</string>
     <string name="exams_result_note_no_retest">kein Antrag 2. Wdh.-Prüfung gestellt</string>
-    <string name="exams_result_note_free_trails">Freiversuch</string>
+    <string name="exams_result_note_free_try">Freiversuch</string>
     <string name="exams_result_note_with_success">mit Erfolg</string>
     <string name="exams_result_note_failed">nicht bestanden (unbenotete Leistung)</string>
     <string name="exams_result_note_pre_placement">Vorprakt. offen</string>

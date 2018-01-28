@@ -38,7 +38,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         this.realm = realm;
         this.context = context;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
+        this.examHeaders = realm.where(ExamResult.class).distinctValues(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
     }
 
     @Override
@@ -156,7 +156,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         switch (examResult.note != null ? examResult.note : "") {
             // Leistung wurde anerkannt
             case "a":
-                viewHolder.textView2.setText(R.string.exams_result_note_accepted);
+                viewHolder.textView2.setText(R.string.exams_result_note_recognized);
                 break;
             // Student hat sich abgemeldet
             case "e":
@@ -184,7 +184,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
                 viewHolder.textView2.setText(R.string.exams_result_note_no_retest);
                 break;
             case "PFV":
-                viewHolder.textView2.setText(R.string.exams_result_note_free_trails);
+                viewHolder.textView2.setText(R.string.exams_result_note_free_try);
                 break;
             case "mE":
                 viewHolder.textView2.setText(R.string.exams_result_note_with_success);
