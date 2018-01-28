@@ -37,7 +37,9 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.android.volley:volley:1.0.0'
     // https://github.com/ACRA/acra
-    implementation 'ch.acra:acra:4.9.2'
+    implementation "ch.acra:acra-mail:5.0.1"
+    implementation "ch.acra:acra-notification:5.0.1"
+    implementation "ch.acra:acra-dialog:5.0.1"
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
     // https://github.com/square/retrofit
