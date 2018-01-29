@@ -61,7 +61,7 @@ public class MensaDetailDayFragment extends Fragment implements IRefreshing {
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
-            final MensaHelper mensaHelper = new MensaHelper(context, (short) 9);
+            final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
             mensaHelper.updateMeals(this);
         });
 
