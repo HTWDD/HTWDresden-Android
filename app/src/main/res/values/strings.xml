@@ -77,6 +77,7 @@
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
     <string name="mensa_euro" translatable="false">%.2f€</string>
+    <string name="mensa_euro_string" translatable="false">%s€</string>
     <string name="mensa_credit_title">Mensa Guthaben</string>
     <string name="mensa_credit_current">Aktuelles Guthaben:</string>
     <string name="mensa_credit_last_transaction">letzte Abbuchung:</string>
