@@ -7,34 +7,29 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.List;
 import java.util.Stack;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
+import de.htwdd.htwdresden.classes.API.IExamResultsService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Qis;
 import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.Course;
 import io.realm.Realm;
+import okhttp3.Credentials;
+import retrofit2.Call;
 
 /**
- * Service zum Aktualisieren der Prüfungsergebnisse
+ * Service zum Aktualisieren der PrüfungsergebnisNse
  *
  * @author Kay Förster
  */
 public class ExamSyncService extends AbstractSyncHelper {
     public final static String INTENT_SYNC_EXAMS = "de.htwdd.htwdresden.exams";
     private final static String LOG_TAG = "ExamSyncService";
-    private final Stack<JSONArray> results = new Stack<>();
-    // Zugangsdaten
-    String sNummer;
-    String rzLogin;
+    private final Stack<ExamResult> results = new Stack<>();
+    protected String credentials;
+    protected IExamResultsService examResultsService;
 
     public ExamSyncService() {
         super("ExamSyncService", INTENT_SYNC_EXAMS);
@@ -43,8 +38,8 @@ public class ExamSyncService extends AbstractSyncHelper {
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sNummer = sharedPreferences.getString("sNummer", "");
-        rzLogin = sharedPreferences.getString("RZLogin", "");
+        credentials = Credentials.basic("s" + sharedPreferences.getString("sNummer", ""), sharedPreferences.getString("RZLogin", ""));
+        examResultsService = Retrofit2Qis.getInstance(context).getRetrofit().create(IExamResultsService.class);
 
         // Alle Noten laden
         getGradeResults();
@@ -63,70 +58,46 @@ public class ExamSyncService extends AbstractSyncHelper {
     void setError(@NonNull final String errorMessage, final int errorCode) {
         // Synchronisation abbrechen
         setCancelToTrue();
-        // Downloads abbrechen
-        VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_EXAM_RESULTS);
         // Benachrichtigung senden
-        if (broadcastNotifier != null)
+        if (broadcastNotifier != null) {
             broadcastNotifier.notifyStatus(errorCode, errorMessage);
+        }
     }
 
     /**
      * Fordert alle Noten eines Studenten vom Webservice an
      */
     void getGradeResults() {
-        final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
+        final Call<List<Course>> courses = examResultsService.getCourses(credentials);
+        courses.enqueue(new GenericCallback<List<Course>>() {
             @Override
-            public void onResponse(final JSONArray response) {
-                JSONObject jsonObject;
-                final int responseCount = response.length();
-                try {
-                    for (int i = 0; i < responseCount; i++) {
-                        jsonObject = response.getJSONObject(i);
-                        getGrades(jsonObject.getString("AbschlNr"), jsonObject.getString("StgNr"), jsonObject.getString("POVersion"));
-                    }
-                } catch (final JSONException e) {
-                    Log.e(LOG_TAG, "[Fehler] Beim Verarbeiten der verfügbaren Studiengänge", e);
-                    setError("Fehler beim Verarbeiten der verfügbaren Studiengänge", -1);
+            void onSuccess(final List<Course> response) {
+                // Download der Noten je Studiengang
+                for (final Course course : response) {
+                    getGrades(course.getAbschlNr(), course.getStgNr(), course.getPOVersion());
                 }
                 queueCount.decrementCountQueue();
             }
-        };
-        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(
-                Request.Method.GET,
-                Const.internet.WEBSERVICE_URL_HISQIS + "getcourses",
-                null,
-                response,
-                errorListener
-        );
-        request.authentifikation("s" + sNummer, rzLogin);
-
-        // Request markieren und absenden
-        request.setTag(Const.internet.TAG_EXAM_RESULTS);
+        });
         queueCount.incrementCountQueue();
-        VolleyDownloader.getInstance(context).addToRequestQueue(request);
     }
 
     /**
      * Lädt Noten vom Webservice herunter und speichert des Response in {@link #results}
-     *
      * @param abschlussNummer    interne Nummer des Abschlusses
      * @param studiengangsnummer interne Nummer des Studienganges
      * @param poVersion          Version der Prüfungsordnung
      */
-    private void getGrades(@NonNull final String abschlussNummer, @NonNull final String studiengangsnummer, @NonNull final String poVersion) {
-        final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
+    private void getGrades(@NonNull final String abschlussNummer, @NonNull final String studiengangsnummer, final int poVersion) {
+        final Call<List<ExamResult>> grades = examResultsService.getGrades(credentials, abschlussNummer, studiengangsnummer, String.valueOf(poVersion));
+        grades.enqueue(new GenericCallback<List<ExamResult>>() {
             @Override
-            public void onResponse(final JSONArray response) {
-                results.add(response);
+            void onSuccess(final List<ExamResult> response) {
+                results.addAll(response);
                 queueCount.decrementCountQueue();
             }
-        };
-        final String url = Const.internet.WEBSERVICE_URL_HISQIS + "getgrades?AbschlNr=" + abschlussNummer + "&StgNr=" + studiengangsnummer + "&POVersion=" + poVersion;
-        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(Request.Method.GET, url, null, response, errorListener);
-        request.authentifikation("s" + sNummer, rzLogin);
-        request.setTag(Const.internet.TAG_EXAM_RESULTS);
+        });
         queueCount.incrementCountQueue();
-        VolleyDownloader.getInstance(context).addToRequestQueue(request);
     }
 
     /**
@@ -139,9 +110,7 @@ public class ExamSyncService extends AbstractSyncHelper {
         realm.beginTransaction();
         try {
             realm.delete(ExamResult.class);
-            for (final JSONArray jsonArray : results) {
-                realm.createAllFromJson(ExamResult.class, jsonArray);
-            }
+            realm.copyToRealmOrUpdate(results);
             realm.commitTransaction();
         } catch (final Exception e) {
             Log.e(LOG_TAG, "[Fehler] Beim Speichern der Noten", e);

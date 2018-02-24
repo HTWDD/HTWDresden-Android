@@ -10,7 +10,7 @@ import java.util.List;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.API.ICanteenService;
-import de.htwdd.htwdresden.classes.API.Retrofit2Client;
+import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
@@ -86,7 +86,7 @@ public class MensaHelper {
      * @param successFinish Callback welches nach erfolgreichen Abschluss aufgerufen wird
      */
     public void updateMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
-        final ICanteenService canteenService = Retrofit2Client.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final ICanteenService canteenService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ICanteenService.class);
         final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId));
         mealCall.enqueue(new Callback<List<Meal>>() {
             @Override

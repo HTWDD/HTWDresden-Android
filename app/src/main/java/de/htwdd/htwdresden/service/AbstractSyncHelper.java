@@ -13,6 +13,8 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.QueueCount;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Basisfunktionalitäten für Sync-Prozesse bereitstellen
@@ -20,6 +22,7 @@ import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
  * @author Kay Förster
  */
 public abstract class AbstractSyncHelper extends IntentService {
+    private final static String TAG = "AbstractSyncHelper";
     final QueueCount queueCount;
     final Context context = this;
     private boolean cancel = false;
@@ -94,4 +97,37 @@ public abstract class AbstractSyncHelper extends IntentService {
      * @param errorCode Fehlercode zur genaueren Differenzierung
      */
     abstract void setError(@NonNull final String errorMessage, final int errorCode);
+
+
+    abstract class GenericCallback<T> implements Callback<T> {
+        @Override
+        public void onResponse(@NonNull final Call<T> call, @NonNull final retrofit2.Response<T> response) {
+            if (response.isSuccessful()) {
+                onSuccess(response.body());
+            } else {
+                final int responseCode = response.code();
+                String message;
+                switch (responseCode) {
+                    case 401:
+                        message = getString(R.string.exams_result_wrong_auth);
+                        break;
+                    case 404:
+                        message = getString(R.string.info_internet_no_connection);
+                        break;
+                    default:
+                        message = getString(R.string.info_internet_error);
+                        break;
+                }
+                setError(message, responseCode);
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull final Call<T> call, @NonNull final Throwable t) {
+            setError("Sync Error", Const.internet.HTTP_DOWNLOAD_ERROR);
+            Log.d(TAG, "Fehler beim Ausführen des Requests ", t);
+        }
+
+        abstract void onSuccess(T response);
+    }
 }

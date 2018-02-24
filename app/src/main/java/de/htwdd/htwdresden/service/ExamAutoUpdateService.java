@@ -18,11 +18,14 @@ import java.util.HashSet;
 
 import de.htwdd.htwdresden.MainActivity;
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.classes.API.IExamResultsService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Qis;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.types.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.Credentials;
 
 /**
  * Service zum automatischen aktualisieren von Prüfungsergebnissen und senden einer Benachrichtigung
@@ -35,8 +38,8 @@ public final class ExamAutoUpdateService extends ExamSyncService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sNummer = sharedPreferences.getString("sNummer", "");
-        rzLogin = sharedPreferences.getString("RZLogin", "");
+        credentials = Credentials.basic("s" + sharedPreferences.getString("sNummer", ""), sharedPreferences.getString("RZLogin", ""));
+        examResultsService = Retrofit2Qis.getInstance(context).getRetrofit().create(IExamResultsService.class);
 
         // Alle IDs der aktuell gespeicherten Noten zwischenspeichern um später zu erkennen welche Noten neu sind.
         final Realm realm = Realm.getDefaultInstance();
