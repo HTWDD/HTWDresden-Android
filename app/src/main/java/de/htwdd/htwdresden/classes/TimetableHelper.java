@@ -16,7 +16,6 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.LessonWeek;
-import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
@@ -138,7 +137,8 @@ public class TimetableHelper extends AbstractTimetableHelper {
                     .isEmpty(Const.database.Lesson.WEEKS_ONLY)
                     .or().equalTo(Const.database.Lesson.WEEKS_ONLY + ".weekOfYear", lessonResult.getOnNextDay().get(Calendar.WEEK_OF_YEAR))
                     .endGroup()
-                    .findAllSorted(new String[]{Const.database.Lesson.DAY, Const.database.Lesson.BEGIN_TIME}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING});
+                    .sort(new String[]{Const.database.Lesson.DAY, Const.database.Lesson.BEGIN_TIME}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING})
+                    .findAll();
             lessonResult.setResults(results);
         }
         return lessonResult;
@@ -211,13 +211,13 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @return verkette Räume
      */
     public static String getStringOfRooms(@NonNull final ILesson lesson) {
-        String roomsString = "";
+        final StringBuilder roomsString = new StringBuilder();
+        final RealmList<String> rooms = lesson.getRooms();
 
-        final RealmList<Room> rooms = lesson.getRooms();
-        for (final Room room : rooms) {
-            roomsString += room.getRoomName() + "; ";
+        for (final String room : rooms) {
+            roomsString.append(room).append("; ");
         }
-        return removeLastComma(roomsString);
+        return removeLastComma(roomsString.toString());
     }
 
     /**
@@ -227,13 +227,13 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @return verkettete Kalenderwochen
      */
     public static String getStringOfKws(@NonNull final LessonUser lesson) {
-        String weeks = "";
-
+        final StringBuilder weeks = new StringBuilder();
         final RealmList<LessonWeek> lessonWeeks = lesson.getWeeksOnly();
+
         for (final LessonWeek lessonWeek : lessonWeeks) {
-            weeks += lessonWeek.getWeekOfYear() + "; ";
+            weeks.append(lessonWeek.getWeekOfYear()).append("; ");
         }
-        return removeLastComma(weeks);
+        return removeLastComma(weeks.toString());
     }
 
     /**
@@ -312,7 +312,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
         realmQuery.endGroup();
 
         // Ergebnisse sortieren und erste Stunde bestimmen
-        final RealmResults<LessonUser> results = realmQuery.findAllSorted(Const.database.Lesson.DAY, Sort.ASCENDING, Const.database.Lesson.BEGIN_TIME, Sort.ASCENDING);
+        final RealmResults<LessonUser> results = realmQuery.sort(Const.database.Lesson.DAY, Sort.ASCENDING, Const.database.Lesson.BEGIN_TIME, Sort.ASCENDING).findAll();
         return results.size() > 0 ? results.first() : null;
     }
 }

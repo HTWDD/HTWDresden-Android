@@ -35,7 +35,7 @@ public class LessonUser extends RealmObject implements ILesson {
     @Nullable
     private String professor;
     private RealmList<LessonWeek> weeksOnly;
-    private RealmList<Room> rooms;
+    private RealmList<String> rooms = new RealmList<>();
     private Date lastChanged;
     private boolean editedByUser;
     private boolean createdByUser;
@@ -124,11 +124,11 @@ public class LessonUser extends RealmObject implements ILesson {
 
     @NonNull
     @Override
-    public RealmList<Room> getRooms() {
+    public RealmList<String> getRooms() {
         return rooms;
     }
 
-    public void setRooms(@Nullable final RealmList<Room> rooms) {
+    public void setRooms(@Nullable final RealmList<String> rooms) {
         this.rooms = rooms;
     }
 

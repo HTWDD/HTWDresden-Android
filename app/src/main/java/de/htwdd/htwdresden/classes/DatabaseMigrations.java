@@ -6,7 +6,10 @@ import android.util.Log;
 import java.util.Date;
 
 import io.realm.DynamicRealm;
+import io.realm.DynamicRealmObject;
+import io.realm.RealmList;
 import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
 /**
@@ -33,6 +36,39 @@ public class DatabaseMigrations implements RealmMigration {
                     .addField("detailURL", String.class)
                     .addField("image", String.class)
                     .addField("mensaId", short.class);
+            oldVersion++;
         }
+
+        if (oldVersion == 4) {
+            final RealmObjectSchema lessonUserSchema = schema.get("LessonUser");
+            if (lessonUserSchema != null) {
+                // Room in primitiven Datentyp umwandeln
+                lessonUserSchema.addRealmListField("rooms_tmp", String.class)
+                        .transform(obj -> {
+                            final RealmList<DynamicRealmObject> rooms = obj.getList("rooms");
+                            final RealmList<String> migratedRooms = obj.getList("rooms_tmp", String.class);
+                            for (final DynamicRealmObject week : rooms) {
+                                migratedRooms.add(week.getString("roomName"));
+                            }
+                        })
+                        .removeField("children")
+                        .renameField("rooms_tmp", "rooms");
+                schema.remove("Room");
+            }
+        }
+
+        // weeksOnly in primitiven Datentyp umwandeln
+        // TODO Wartet auf Umsetzung https://github.com/realm/realm-java/issues/5361
+//        lessonUserSchema.addRealmListField("weeksOnly_tmp", Integer.class)
+//                .transform(obj -> {
+//                    final RealmList<DynamicRealmObject> weeksOnly = obj.getList("weeksOnly");
+//                    final RealmList<Integer> migratedWeeksOnly = obj.getList("weeksOnly_tmp", Integer.class);
+//                    for (final DynamicRealmObject week : weeksOnly) {
+//                        migratedWeeksOnly.add(week.getInt("weekOfYear"));
+//                    }
+//                })
+//                .removeField("children")
+//                .renameField("weeksOnly_tmp", "weeksOnly");
+//        lessonUserSchema.removeField("LessonWeek");
     }
 }

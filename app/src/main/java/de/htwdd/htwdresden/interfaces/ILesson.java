@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import de.htwdd.htwdresden.types.LessonWeek;
-import de.htwdd.htwdresden.types.Room;
 import io.realm.RealmList;
 
 /**
@@ -17,5 +16,5 @@ public interface ILesson {
     String getType();
     RealmList<LessonWeek> getWeeksOnly();
     @NonNull
-    RealmList<Room> getRooms();
+    RealmList<String> getRooms();
 }

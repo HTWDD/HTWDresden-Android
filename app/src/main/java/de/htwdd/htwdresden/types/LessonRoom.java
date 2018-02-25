@@ -123,7 +123,7 @@ public class LessonRoom extends RealmObject implements ILesson {
 
     @NonNull
     @Override
-    public RealmList<Room> getRooms() {
+    public RealmList<String> getRooms() {
         return new RealmList<>();
     }
 

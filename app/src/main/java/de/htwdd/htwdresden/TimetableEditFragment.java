@@ -36,7 +36,6 @@ import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.LessonWeek;
-import de.htwdd.htwdresden.types.Room;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -397,18 +396,10 @@ public class TimetableEditFragment extends Fragment {
             lesson.setWeeksOnly(lessonWeeks);
 
             // Liste von Räumen erstellen
-            String[] rooms = lesson_rooms.getText().toString().split(";");
-            Room room;
-            final RealmList<Room> roomsList = new RealmList<>();
-            for (final String roomName : rooms) {
-                room = realm.where(Room.class).equalTo("roomName", roomName).findFirst();
-                if (room == null) {
-                    room = realm.createObject(Room.class, roomName);
-                }
-                roomsList.add(room);
-            }
-            lesson.setRooms(roomsList);
-
+            final String[] rooms = lesson_rooms.getText().toString().split(";");
+            final RealmList<String> lessonRooms = lesson.getRooms();
+            lessonRooms.deleteAllFromRealm();
+            lessonRooms.addAll(Arrays.asList(rooms));
 
             realm.commitTransaction();
         } catch (final Exception e) {

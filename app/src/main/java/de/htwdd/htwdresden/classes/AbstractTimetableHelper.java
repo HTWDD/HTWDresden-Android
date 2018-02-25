@@ -118,7 +118,6 @@ abstract class AbstractTimetableHelper {
 
         // Array von primitiven Typen in Objekte umwandeln
         lesson.put("weeksOnly", convertPrimitivTypToJsonObject(lesson.getJSONArray("weeksOnly"), "weekOfYear"));
-        lesson.put("rooms", convertPrimitivTypToJsonObject(lesson.getJSONArray("rooms"), "roomName"));
 
         return lesson;
     }
