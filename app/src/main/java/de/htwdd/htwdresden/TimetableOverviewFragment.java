@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,7 +14,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -50,32 +48,21 @@ public class TimetableOverviewFragment extends Fragment {
 
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                final boolean result = TimetableHelper.startSyncService(getActivity());
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            final boolean result = TimetableHelper.startSyncService(getActivity());
 
-                if (!result) {
-                    // Zeige Toast mit Link zu Einstellungen an
-                    Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.navi_settings, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // Navigation ändern
-                                    ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
-                                    // Fragment "Einstellungen" anzeigen
-                                    getActivity().getFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
-                                }
-                            })
-                            .show();
-                    // Refresh ausschalten
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
+            if (!result) {
+                // Zeige Toast mit Link zu Einstellungen an
+                Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.navi_settings, view -> {
+                            // Navigation ändern
+                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
+                            // Fragment "Einstellungen" anzeigen
+                            getActivity().getFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                        })
+                        .show();
+                // Refresh ausschalten
+                swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
             }
         });
 
@@ -88,31 +75,18 @@ public class TimetableOverviewFragment extends Fragment {
         );
 
         // Benachrichtigung über geänderte Daten
-        realmChangeListener = new RealmChangeListener<RealmResults<LessonUser>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<LessonUser> element) {
-                gridAdapter.notifyDataSetChanged();
-            }
-        };
+        realmChangeListener = element -> gridAdapter.notifyDataSetChanged();
         lessons = realm.where(LessonUser.class).findAll();
         lessons.addChangeListener(realmChangeListener);
 
         // GridView
         final GridView gridView = mLayout.findViewById(R.id.timetable);
         gridView.setAdapter(gridAdapter);
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                startEditActivity(i, true);
-                return true;
-            }
+        gridView.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            startEditActivity(i, true);
+            return true;
         });
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                startEditActivity(i, false);
-            }
-        });
+        gridView.setOnItemClickListener((adapterView, view, i, l) -> startEditActivity(i, false));
 
         // IntentReceiver erstellen
         final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);
@@ -159,29 +133,22 @@ public class TimetableOverviewFragment extends Fragment {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
 
             final int intentResponse = intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1);
             switch (intentResponse) {
                 case 0:
                     Toast.makeText(context, R.string.timetable_sync_success, Toast.LENGTH_LONG).show();
                     break;
-                case Const.internet.HTTP_NOT_FOUND:
+                case 404:
                     Toast.makeText(context, R.string.timetable_sync_notFound, Toast.LENGTH_SHORT).show();
                     break;
-                case Const.internet.HTTP_TIMEOUT:
-                case Const.internet.HTTP_UNAUTHORIZED:
-                case Const.internet.HTTP_NO_CONNECTION:
-                    Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_SHORT).show();
-                    break;
-                case -1:
                 default:
-                    Toast.makeText(context, R.string.timetable_save_error, Toast.LENGTH_LONG).show();
+                    if (intent.hasExtra(Const.IntentParams.BROADCAST_MESSAGE)) {
+                        Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.timetable_save_error, Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }

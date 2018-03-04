@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -68,81 +67,61 @@ public class RoomTimetableFragment extends Fragment {
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_room_timetable));
 
         // Adapter für Liste erzeugen
-        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM));
+        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinctValues(Const.database.LessonRoom.ROOM).findAll());
 
         // ListView
         final ListView listView = mLayout.findViewById(R.id.listView);
         listView.setAdapter(roomTimetableAdapter);
         listView.addFooterView(inflater.inflate(R.layout.fragment_room_timetable_footer, listView, false), null, false);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final LessonRoom lessonRoom = roomTimetableAdapter.getItem(i);
-                if (lessonRoom == null) {
-                    return;
-                }
-
-                final Bundle bundle = new Bundle();
-                final Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
-                bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, lessonRoom.getRoom());
-                intent.putExtras(bundle);
-                startActivity(intent);
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            final LessonRoom lessonRoom = roomTimetableAdapter.getItem(i);
+            if (lessonRoom == null) {
+                return;
             }
+
+            final Bundle bundle = new Bundle();
+            final Intent intent = new Intent(getActivity(), RoomTimetableDetailsActivity.class);
+            bundle.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, lessonRoom.getRoom());
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
         listView.setEmptyView(mLayout.findViewById(R.id.info));
 
         // FloatingActionButton Aktion setzen
-        mLayout.findViewById(R.id.fab_add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.room_timetable_add)
-                        .setMessage(R.string.room_timetable_addDialog_message)
-                        .setView(R.layout.timetable_room_input)
-                        .setPositiveButton(R.string.general_add, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                final String room = ((EditText) ((AlertDialog) dialogInterface).findViewById(R.id.textView)).getText().toString();
+        mLayout.findViewById(R.id.fab_add).setOnClickListener(view -> new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.room_timetable_add)
+                .setMessage(R.string.room_timetable_addDialog_message)
+                .setView(R.layout.timetable_room_input)
+                .setPositiveButton(R.string.general_add, (dialogInterface, i) -> {
+                    final String room = ((EditText) ((AlertDialog) dialogInterface).findViewById(R.id.textView)).getText().toString();
 
-                                if (room.isEmpty())
-                                    Toast.makeText(mLayout.getContext(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
-                                else {
-                                    startUpdateService(room);
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.general_close, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        })
-                        .show();
-            }
-        });
+                    if (room.isEmpty())
+                        Toast.makeText(mLayout.getContext(), R.string.room_timetable_addDialog_message, Toast.LENGTH_LONG).show();
+                    else {
+                        startUpdateService(room);
+                    }
+                })
+                .setNegativeButton(R.string.general_close, (dialogInterface, i) -> dialogInterface.cancel())
+                .show());
 
         // SwipeRefresh Action setzen
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-                final Context context = mLayout.getContext();
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            final Context context = mLayout.getContext();
 
-                // Überprüfe Internetverbindung
-                if (!VolleyDownloader.CheckInternet(getActivity())) {
-                    // Meldung anzeigen
-                    Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                // Überprüfe ob Räume vorhanden sind
-                else if (roomTimetableAdapter.getCount() == 0) {
-                    Toast.makeText(context, R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
-                } else {
-                    // Service starten
-                    Log.d(LOG_TAG, "Starte Service");
-                    TimetableRoomHelper.startSyncService(context);
-                }
+            // Überprüfe Internetverbindung
+            if (!VolleyDownloader.CheckInternet(getActivity())) {
+                // Meldung anzeigen
+                Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            // Überprüfe ob Räume vorhanden sind
+            else if (roomTimetableAdapter.getCount() == 0) {
+                Toast.makeText(context, R.string.room_timetable_no_rooms, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            } else {
+                // Service starten
+                Log.d(LOG_TAG, "Starte Service");
+                TimetableRoomHelper.startSyncService(context);
             }
         });
 
@@ -226,29 +205,22 @@ public class RoomTimetableFragment extends Fragment {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(false));
 
             final int intentResponse = intent.getIntExtra(Const.IntentParams.BROADCAST_CODE, -1);
             switch (intentResponse) {
                 case 0:
                     Toast.makeText(context, R.string.room_timetable_update_success, Toast.LENGTH_LONG).show();
                     break;
-                case Const.internet.HTTP_NOT_FOUND:
+                case 404:
                     Toast.makeText(context, R.string.room_timetable_add_no_Lessons, Toast.LENGTH_SHORT).show();
                     break;
-                case Const.internet.HTTP_TIMEOUT:
-                case Const.internet.HTTP_UNAUTHORIZED:
-                case Const.internet.HTTP_NO_CONNECTION:
-                    Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_SHORT).show();
-                    break;
-                case -1:
                 default:
-                    Toast.makeText(context, R.string.info_error, Toast.LENGTH_LONG).show();
+                    if (intent.hasExtra(Const.IntentParams.BROADCAST_MESSAGE)) {
+                        Toast.makeText(context, intent.getStringExtra(Const.IntentParams.BROADCAST_MESSAGE), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.info_error, Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
