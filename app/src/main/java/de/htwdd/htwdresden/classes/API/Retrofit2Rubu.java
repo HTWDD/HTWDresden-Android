@@ -3,6 +3,11 @@ package de.htwdd.htwdresden.classes.API;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import de.htwdd.htwdresden.adapter.typeadapter.LessonUserTypeAdapter;
+import de.htwdd.htwdresden.types.LessonUser;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -22,11 +27,14 @@ public class Retrofit2Rubu {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .cache(cache)
                 .build();
+        final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LessonUser.class, new LessonUserTypeAdapter())
+                .create();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://rubu2.rz.htw-dresden.de/API/")
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 

@@ -7,29 +7,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.classes.API.ITimetableService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.Call;
 
 /**
  * Service zum Aktualisieren des Stundenplans für Studenten
@@ -38,8 +29,7 @@ import io.realm.RealmResults;
  */
 public class TimetableStudentSyncService extends AbstractSyncHelper {
     protected final static String LOG_TAG = "TimetableSyncService";
-    protected final Stack<JSONArray> results = new Stack<>();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.GERMANY);
+    protected final Stack<LessonUser> results = new Stack<>();
 
     public TimetableStudentSyncService() {
         super("TimetableSyncService", Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
@@ -54,7 +44,17 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
         final String studiengruppe = sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "");
 
         // Stundenplan vom Webservice laden
-        getTimetableFromWeb(studienjahr, studiengang, studiengruppe);
+        final ITimetableService iTimetableService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ITimetableService.class);
+        final Call<List<LessonUser>> lessons = iTimetableService.getStudentTimetable(studienjahr, studiengang, studiengruppe);
+        lessons.enqueue(new GenericCallback<List<LessonUser>>() {
+            @Override
+            void onSuccess(final List<LessonUser> response) {
+                results.addAll(response);
+                queueCount.decrementCountQueue();
+            }
+        });
+        queueCount.incrementCountQueue();
+
         // Auf fertigstellung warten
         waitForFinish();
         if (!isCancel()) {
@@ -70,40 +70,10 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
     void setError(@NonNull final String errorMessage, final int errorCode) {
         // Synchronisation abbrechen
         setCancelToTrue();
-        // Downloads abbrechen
-        VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_TIMETABLE);
         // Benachrichtigung senden
-        if (broadcastNotifier != null)
+        if (broadcastNotifier != null) {
             broadcastNotifier.notifyStatus(errorCode, errorMessage);
-    }
-
-    /**
-     * Lädt den Stundenplan vom Webservice herunter und speichert des Response in {@link #results}
-     *
-     * @param studienjahr   Jahr der Immatrikulation des Studenten
-     * @param studiengang   Studiengang des Studenten
-     * @param studiengruppe Studiengruppe des Studenten
-     */
-    private void getTimetableFromWeb(final int studienjahr, @NonNull final String studiengang, @NonNull final String studiengruppe) {
-        final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(final JSONArray response) {
-                results.push(response);
-                queueCount.decrementCountQueue();
-            }
-        };
-        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(
-                Request.Method.GET,
-                Const.internet.WEBSERVICE_URL_APP + "v0/studentTimetable.php?StgJhr=" + studienjahr + "&Stg=" + studiengang + "&StgGrp=" + studiengruppe,
-                null,
-                response,
-                errorListener
-        );
-
-        // Request markieren und absenden
-        request.setTag(Const.internet.TAG_TIMETABLE);
-        queueCount.incrementCountQueue();
-        VolleyDownloader.getInstance(context).addToRequestQueue(request);
+        }
     }
 
     /**
@@ -121,38 +91,21 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
 
         realm.beginTransaction();
         try {
-            // Speichere einzelne Results
+            // einzelne Lehrveranstaltungen durchgehen und überprüfen ob diese gespeichert werde sollen
             String id;
-            int countResults;
             LessonUser lesson;
-            JSONArray jsonResults;
-            JSONObject jsonResult;
-
             while (!this.results.empty()) {
-                jsonResults = this.results.pop();
-                countResults = jsonResults.length();
+                lesson = this.results.pop();
 
-                // einzelne Lehrveranstaltungen durchgehen und überprüfen ob diese gespeichert werde sollen
-                for (int i = 0; i < countResults; i++) {
-                    jsonResult = TimetableHelper.convertTimetableJsonObject(jsonResults.getJSONObject(i));
-
-                    try {
-                        // Überprüfe ob Lehrveranstaltung übersprungen werden kann
-                        id = jsonResult.getString("id");
-                        if (stateDatabase.containsKey(id)) {
-                            if (stateDatabase.get(id).equals(dateFormat.parse(jsonResult.getString("lastChanged")))) {
-                                stateDatabase.remove(id);
-                                Log.d(LOG_TAG, "Überspringe Lehrveranstaltung: " + id);
-                                continue;
-                            }
-                        }
-                    } catch (final ParseException e) {
-                        Log.e(LOG_TAG, "[Fehler] Beim Verarbeiten des lastChanged Attributs", e);
-                    }
-
-                    lesson = realm.createOrUpdateObjectFromJson(LessonUser.class, jsonResult);
-                    stateDatabase.remove(lesson.getId());
+                // Überprüfe ob Lehrveranstaltung übersprungen werden kann
+                id = lesson.getId();
+                if (stateDatabase.containsKey(id) && stateDatabase.get(id).equals(lesson.getLastChanged())) {
+                    Log.d(LOG_TAG, "Überspringe Lehrveranstaltung: " + id);
+                } else {
+                    // Lehrveranstaltung speichern
+                    realm.copyToRealmOrUpdate(lesson);
                 }
+                stateDatabase.remove(id);
             }
 
             // Lösche alle übrig gebliebenen Stunden
@@ -163,9 +116,9 @@ public class TimetableStudentSyncService extends AbstractSyncHelper {
             realm.commitTransaction();
             return true;
 
-        } catch (final JSONException e) {
+        } catch (final Exception e) {
             realm.cancelTransaction();
-            Log.e(LOG_TAG, "[Fehler] bei der Verarbeitung des JSON-Responses", e);
+            Log.e(LOG_TAG, "[Fehler] beim Speichern des Stundenplans", e);
             setError(getString(R.string.timetable_save_error), -1);
             return false;
         } finally {

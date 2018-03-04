@@ -106,6 +106,7 @@ public abstract class AbstractSyncHelper extends IntentService {
                 onSuccess(response.body());
             } else {
                 final int responseCode = response.code();
+                Log.d(TAG, "Fehler beim Ausführen des Requests. Code: "+  response);
                 String message;
                 switch (responseCode) {
                     case 401:
