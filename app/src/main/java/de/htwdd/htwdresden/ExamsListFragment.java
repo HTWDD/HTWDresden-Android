@@ -32,7 +32,7 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.StudyGroupHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.Exam;
+import de.htwdd.htwdresden.types.exams.ExamDate;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import io.realm.Realm;
 
@@ -45,7 +45,7 @@ public class ExamsListFragment extends Fragment {
     private View mLayout;
     private View footer;
     private int stgJhr;
-    private final ArrayList<Exam> exams = new ArrayList<>();
+    private final ArrayList<ExamDate> examDates = new ArrayList<>();
     private ExamListAdapter adapter;
 
     public ExamsListFragment() {
@@ -55,7 +55,7 @@ public class ExamsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ExamListAdapter(getActivity(), exams);
+        adapter = new ExamListAdapter(getActivity(), examDates);
     }
 
     @Override
@@ -228,9 +228,9 @@ public class ExamsListFragment extends Fragment {
                 // Prüfungen einseln parsen und zur Liste hinzufügen
                 for (int i = 0; i < count; i++) {
                     try {
-                        Exam exam = new Exam();
-                        exam.parseFromJSON(response.getJSONObject(i));
-                        exams.add(exam);
+                        ExamDate examDate = new ExamDate();
+                        examDate.parseFromJSON(response.getJSONObject(i));
+                        examDates.add(examDate);
                     } catch (Exception e) {
                         // Fehler intern loggen
                         Log.e(LOG_TAG, "[Fehler] beim Parsen: Daten: " + response);
@@ -258,7 +258,7 @@ public class ExamsListFragment extends Fragment {
 
         // Liste ausblenden
         footer.setVisibility(View.GONE);
-        exams.clear();
+        examDates.clear();
         adapter.notifyDataSetChanged();
 
         // Extra Button ausblenden

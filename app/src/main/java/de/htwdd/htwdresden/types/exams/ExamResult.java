@@ -1,4 +1,4 @@
-package de.htwdd.htwdresden.types;
+package de.htwdd.htwdresden.types.exams;
 
 import android.support.annotation.Nullable;
 

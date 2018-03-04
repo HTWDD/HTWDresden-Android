@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.types.ExamResult;
-import de.htwdd.htwdresden.types.ExamStats;
+import de.htwdd.htwdresden.types.exams.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamStats;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -36,7 +36,7 @@ public final class ExamsHelper {
     public static ArrayList<ExamStats> getExamStats() {
         final Realm realm = Realm.getDefaultInstance();
         final ArrayList<ExamStats> stats = new ArrayList<>();
-        final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING);
+        final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinctValues(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
 
         for (final ExamResult result : examHeaders) {
             stats.add(getExamStatsForSemester(realm, result.semester));

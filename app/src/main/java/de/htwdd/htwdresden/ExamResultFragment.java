@@ -23,7 +23,7 @@ import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.ExamSyncService;
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;

@@ -1,4 +1,4 @@
-package de.htwdd.htwdresden.types;
+package de.htwdd.htwdresden.types.exams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +10,7 @@ import de.htwdd.htwdresden.interfaces.IParseJSON;
  * Einfache Klasse für Prüfungen,
  * Aus Performancegründen und der Einfachheit wird auf Getter/Setter verzichtet
  */
-public class Exam implements IParseJSON {
+public class ExamDate implements IParseJSON {
     public String day;
     public String endTime;
     public String examType;

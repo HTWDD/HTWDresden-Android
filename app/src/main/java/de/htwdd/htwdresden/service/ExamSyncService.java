@@ -13,7 +13,7 @@ import java.util.Stack;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.API.IExamResultsService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Qis;
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.Course;
 import io.realm.Realm;
 import okhttp3.Credentials;

@@ -8,16 +8,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.types.Exam;
+import de.htwdd.htwdresden.types.exams.ExamDate;
 
 /**
  * Adapter zur Anzeige von Prüfungen
  *
  * @author Kay Förster
  */
-public class ExamListAdapter extends AbstractBaseAdapter<Exam> {
+public class ExamListAdapter extends AbstractBaseAdapter<ExamDate> {
 
-    public ExamListAdapter(Context context, ArrayList<Exam> data) {
+    public ExamListAdapter(Context context, ArrayList<ExamDate> data) {
         super(context, data);
     }
 
@@ -38,15 +38,15 @@ public class ExamListAdapter extends AbstractBaseAdapter<Exam> {
             viewHolder.exam_room = (TextView) convertView.findViewById(R.id.exam_room);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        Exam exam = getItem(position);
-        viewHolder.exam_title.setText(exam.title);
-        viewHolder.exam_type.setText(exam.examType);
-        viewHolder.exam_branch.setText(exam.studyBranch);
-        viewHolder.exam_day.setText(exam.day);
-        viewHolder.exam_room.setText(exam.rooms);
-        if (exam.endTime.isEmpty())
-            viewHolder.exam_time.setText(exam.startTime);
-        else viewHolder.exam_time.setText(context.getString(R.string.exams_time_value, exam.startTime, exam.endTime));
+        ExamDate examDate = getItem(position);
+        viewHolder.exam_title.setText(examDate.title);
+        viewHolder.exam_type.setText(examDate.examType);
+        viewHolder.exam_branch.setText(examDate.studyBranch);
+        viewHolder.exam_day.setText(examDate.day);
+        viewHolder.exam_room.setText(examDate.rooms);
+        if (examDate.endTime.isEmpty())
+            viewHolder.exam_time.setText(examDate.startTime);
+        else viewHolder.exam_time.setText(context.getString(R.string.exams_time_value, examDate.startTime, examDate.endTime));
 
         return convertView;
     }

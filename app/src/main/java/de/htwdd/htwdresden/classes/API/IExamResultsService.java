@@ -2,7 +2,7 @@ package de.htwdd.htwdresden.classes.API;
 
 import java.util.List;
 
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.Course;
 import retrofit2.Call;
 import retrofit2.http.GET;

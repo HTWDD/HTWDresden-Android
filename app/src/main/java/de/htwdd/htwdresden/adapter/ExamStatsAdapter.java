@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.types.ExamStats;
+import de.htwdd.htwdresden.types.exams.ExamStats;
 import io.realm.Realm;
 
 /**

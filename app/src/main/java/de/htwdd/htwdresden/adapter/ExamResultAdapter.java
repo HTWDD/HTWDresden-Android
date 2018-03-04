@@ -15,7 +15,7 @@ import android.widget.TextView;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;

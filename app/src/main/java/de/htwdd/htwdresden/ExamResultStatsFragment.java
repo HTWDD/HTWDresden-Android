@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import de.htwdd.htwdresden.adapter.ExamStatsAdapter;
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -50,12 +50,7 @@ public class ExamResultStatsFragment extends Fragment {
         listView.setEmptyView(message);
 
         // Auf Änderungen an der Datenbank hören
-        realmChangeListener = new RealmChangeListener<RealmResults<ExamResult>>() {
-            @Override
-            public void onChange(@NonNull final RealmResults<ExamResult> element) {
-                adapter.notifyDataSetChanged();
-            }
-        };
+        realmChangeListener = element -> adapter.notifyDataSetChanged();
         allExamResults = realm.where(ExamResult.class).findAll();
         allExamResults.addChangeListener(realmChangeListener);
 

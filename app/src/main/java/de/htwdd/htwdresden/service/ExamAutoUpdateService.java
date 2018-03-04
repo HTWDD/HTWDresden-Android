@@ -22,7 +22,7 @@ import de.htwdd.htwdresden.classes.API.IExamResultsService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Qis;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.types.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import okhttp3.Credentials;
