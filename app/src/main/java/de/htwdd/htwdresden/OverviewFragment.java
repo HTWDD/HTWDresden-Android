@@ -19,33 +19,30 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
+import de.htwdd.htwdresden.classes.API.IGeneralService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.ExamResult;
 import de.htwdd.htwdresden.types.ExamStats;
 import de.htwdd.htwdresden.types.LessonUser;
+import de.htwdd.htwdresden.types.News;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -286,65 +283,43 @@ public class OverviewFragment extends Fragment {
     }
 
     private void showNews() {
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL_NEWS, new Response.Listener<JSONArray>() {
+        final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(getActivity()).getRetrofit().create(IGeneralService.class);
+        final Call<List<News>> news = iGeneralService.getNews();
+        news.enqueue(new Callback<List<News>>() {
             @Override
-            public void onResponse(JSONArray response) {
-                final CardView cardView = mLayout.findViewById(R.id.overview_news);
-                final TextView title = mLayout.findViewById(R.id.overview_news_title);
-                final WebView content = mLayout.findViewById(R.id.overview_news_content);
-                final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-                final Calendar tmpCalendar = GregorianCalendar.getInstance();
+            public void onResponse(@NonNull final Call<List<News>> call, @NonNull final Response<List<News>> response) {
+                final List<News> newsList = response.body();
                 final Calendar calendar = GregorianCalendar.getInstance();
-                int count = response.length();
 
-                for (int i = 0; i < count; i++) {
-                    try {
-                        final JSONObject jsonObject = response.getJSONObject(i);
-
-                        // News für Android-Plattform?
-                        if (jsonObject.optInt("plattform", 0) != 0)
+                if (response.isSuccessful() && newsList != null) {
+                    for (final News news : newsList) {
+                        // News relevant?
+                        if (news.getPlattform() != 0 || (news.getEndDay() != null && calendar.after(news.getEndDay())) || (news.getBeginDay() != null && calendar.before(news.getBeginDay()))) {
                             continue;
-
-                        // News noch aktuell?
-                        if (!jsonObject.isNull("endDay") && !jsonObject.getString("endDay").isEmpty()) {
-                            tmpCalendar.setTime(format.parse(jsonObject.getString("endDay")));
-                            if (calendar.after(tmpCalendar))
-                                continue;
                         }
 
-                        // Darf News schon angezeigt werden?
-                        if (!jsonObject.isNull("beginDay") && !jsonObject.getString("beginDay").isEmpty()) {
-                            tmpCalendar.setTime(format.parse(jsonObject.getString("beginDay")));
-                            if (tmpCalendar.after(calendar))
-                                continue;
-                        }
-
-                        // Jetzt darf News angezeigt werden
-                        title.setText(jsonObject.getString("title"));
-                        content.loadDataWithBaseURL("", jsonObject.getString("content"), "text/html", "UTF-8", "");
-
+                        final CardView cardView = mLayout.findViewById(R.id.overview_news);
                         cardView.setVisibility(View.VISIBLE);
-                        if (!jsonObject.isNull("url") && !jsonObject.getString("url").isEmpty()) {
-                            final Uri url = Uri.parse(jsonObject.getString("url"));
-                            cardView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
-                                    startActivity(browserIntent);
-                                }
+                        ((TextView) mLayout.findViewById(R.id.overview_news_title)).setText(news.getTitle());
+                        ((WebView) mLayout.findViewById(R.id.overview_news_content)).loadDataWithBaseURL("", news.getContent(), "text/html", "UTF-8", "");
+
+                        if (news.getUrl() != null) {
+                            cardView.setOnClickListener(view -> {
+                                final Uri url = Uri.parse(news.getUrl());
+                                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
+                                startActivity(browserIntent);
                             });
                         }
 
-                        // Es kann nur eine News gleichzeitig angezeigt werden, weitere werden nicht betrachtet
                         break;
-
-                    } catch (final JSONException | ParseException e) {
-                        Log.e("OverviewFragment", "[Error] beim Verarbeiten der News", e);
                     }
                 }
             }
-        }, null);
 
-        VolleyDownloader.getInstance(getActivity()).getRequestQueue().add(jsonArrayRequest);
+            @Override
+            public void onFailure(@NonNull final Call<List<News>> call, @NonNull final Throwable t) {
+                Log.i("OverviewFragment", "Fehler beim Ausführen des Requests ", t);
+            }
+        });
     }
 }
