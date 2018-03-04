@@ -75,16 +75,6 @@ public class OverviewFragment extends Fragment {
         // Setze Toolbar Titel
         ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_overview));
 
-        // Update verfügbar
-        final CardView cardUpdate = mLayout.findViewById(R.id.overview_app_update);
-        cardUpdate.setOnClickListener(view -> {
-            final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www2.htw-dresden.de/~app/android/HTWDresden-latest.apk"));
-            startActivity(browserIntent);
-        });
-        if (sharedPreferences.getBoolean("appUpdate", false)) {
-            cardUpdate.setVisibility(View.VISIBLE);
-        }
-
         // Stundenplan
         mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable));
 
