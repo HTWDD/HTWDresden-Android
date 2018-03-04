@@ -54,16 +54,6 @@ public class ExamSyncService extends AbstractSyncHelper {
         }
     }
 
-    @Override
-    void setError(@NonNull final String errorMessage, final int errorCode) {
-        // Synchronisation abbrechen
-        setCancelToTrue();
-        // Benachrichtigung senden
-        if (broadcastNotifier != null) {
-            broadcastNotifier.notifyStatus(errorCode, errorMessage);
-        }
-    }
-
     /**
      * Fordert alle Noten eines Studenten vom Webservice an
      */

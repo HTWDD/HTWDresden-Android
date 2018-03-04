@@ -55,15 +55,6 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
         }
     }
 
-    @Override
-    void setError(@NonNull final String errorMessage, final int errorCode) {
-        // Synchronisation abbrechen
-        setCancelToTrue();
-        // Benachrichtigung senden
-        if (broadcastNotifier != null)
-            broadcastNotifier.notifyStatus(errorCode, errorMessage);
-    }
-
     /**
      * Lädt den Raumplan vom Webservice herunter und speichert des Response in {@link #results}
      *
