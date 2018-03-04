@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +12,7 @@ import java.util.List;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
 import de.htwdd.htwdresden.types.LessonRoom;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -30,25 +27,6 @@ public class TimetableRoomHelper extends AbstractTimetableHelper {
         context.startService(new Intent(context, TimetableRoomSyncService.class));
         return true;
     }
-
-    @NonNull
-    public static JSONObject convertTimetableJsonObject(@NonNull final JSONObject lesson) throws JSONException {
-        final JSONObject jsonObject = AbstractTimetableHelper.convertTimetableJsonObject(lesson);
-
-        if (jsonObject.has("studyGroups")) {
-            final JSONArray jsonArray = jsonObject.getJSONArray("studyGroups");
-            final int count = jsonArray.length();
-            String room = "";
-
-            for (int i = 0; i < count; i++) {
-                room += jsonArray.getString(i) + "; ";
-            }
-            room = removeLastComma(room);
-            jsonObject.put("studyGroups", room);
-        }
-        return jsonObject;
-    }
-
 
     /**
      * Liefert eine List der Lehrveranstaltungen des übergebenen Tages und Ds für einen Raum
@@ -103,5 +81,21 @@ public class TimetableRoomHelper extends AbstractTimetableHelper {
             realmResultsList.add(getLessonsByDateAndDs(realm, day, room, i + 1, true));
         }
         createSimpleLessonOverview(context, realmResultsList, linearLayout, current_ds);
+    }
+
+    /**
+     * Liefert die Kalenderwochen verkettet als String zurück
+     *
+     * @param lesson Lehrveranstaltung aus welcher Kalenderwochen ausgegeben werden sollen
+     * @return verkettete Kalenderwochen
+     */
+    public static String getStringOfStudyGroups(@NonNull final LessonRoom lesson) {
+        final StringBuilder roomsString = new StringBuilder();
+        final RealmList<String> rooms = lesson.getStudyGroups();
+
+        for (final String room : rooms) {
+            roomsString.append(room).append("; ");
+        }
+        return removeLastComma(roomsString.toString());
     }
 }

@@ -17,22 +17,23 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import de.htwdd.htwdresden.types.LessonUser;
+import de.htwdd.htwdresden.interfaces.ILesson;
+
 
 /**
- * Konvertiert {@link LessonUser} von der Json Repräsentation in das entsprechende Java Objekt
+ * Konvertiert JSON Repräsentation in das entsprechende Java Objekt
  *
  * @author Kay Förster
  */
-public class LessonUserTypeAdapter implements JsonDeserializer<LessonUser> {
-    private static JsonArray convertPrimitivTypToJsonObject(@NonNull final JsonArray array, @NonNull final String type) {
+public class LessonUserTypeAdapter<T extends ILesson> implements JsonDeserializer<T> {
+    private static JsonArray convertPrimitivTypToJsonObject(@NonNull final JsonArray array) {
         final int count = array.size();
         final JsonArray result = new JsonArray();
 
         JsonObject jsonObject;
         for (int i = 0; i < count; i++) {
             jsonObject = new JsonObject();
-            jsonObject.add(type, array.get(i));
+            jsonObject.add("weekOfYear", array.get(i));
             result.add(jsonObject);
         }
 
@@ -40,7 +41,7 @@ public class LessonUserTypeAdapter implements JsonDeserializer<LessonUser> {
     }
 
     @Override
-    public LessonUser deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+    public T deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final JsonObject jsonObject = json.getAsJsonObject();
 
@@ -50,8 +51,8 @@ public class LessonUserTypeAdapter implements JsonDeserializer<LessonUser> {
         jsonObject.addProperty("beginTime", TimeUnit.MINUTES.convert(beginTime + calendar.getTimeZone().getOffset(beginTime), TimeUnit.MILLISECONDS));
         jsonObject.addProperty("endTime", TimeUnit.MINUTES.convert(endTime + calendar.getTimeZone().getOffset(endTime), TimeUnit.MILLISECONDS));
         // Datentyp umwandeln
-        jsonObject.add("weeksOnly", convertPrimitivTypToJsonObject(jsonObject.getAsJsonArray("weeksOnly"), "weekOfYear"));
+        jsonObject.add("weeksOnly", convertPrimitivTypToJsonObject(jsonObject.getAsJsonArray("weeksOnly")));
 
-        return new Gson().fromJson(jsonObject, LessonUser.class);
+        return new Gson().fromJson(jsonObject, typeOfT);
     }
 }

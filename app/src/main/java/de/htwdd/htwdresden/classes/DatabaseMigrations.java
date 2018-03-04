@@ -55,6 +55,11 @@ public class DatabaseMigrations implements RealmMigration {
                         .renameField("rooms_tmp", "rooms");
                 schema.remove("Room");
             }
+            final RealmObjectSchema lessonRoomSchema = schema.get("LessonRoom");
+            if (lessonRoomSchema != null) {
+                lessonRoomSchema.removeField("studyGroups");
+                lessonRoomSchema.addRealmListField("studyGroups", String.class);
+            }
         }
 
         // weeksOnly in primitiven Datentyp umwandeln

@@ -2,6 +2,7 @@ package de.htwdd.htwdresden.classes.API;
 
 import java.util.List;
 
+import de.htwdd.htwdresden.types.LessonRoom;
 import de.htwdd.htwdresden.types.LessonUser;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +19,7 @@ public interface ITimetableService {
 
     @GET("v0/professorTimetable.php")
     Call<List<LessonUser>> getProfessorTimetable(@Query("key") final String key);
+
+    @GET("v0/roomTimetable.php")
+    Call<List<LessonRoom>> getRoomTimetable(@Query("room") final String key);
 }

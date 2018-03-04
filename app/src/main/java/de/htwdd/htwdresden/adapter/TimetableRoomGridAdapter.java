@@ -33,6 +33,6 @@ public class TimetableRoomGridAdapter extends AbstractTimetableGridAdapter<Lesso
 
     @Override
     String getLessonInfo(@NonNull final LessonRoom lesson) {
-        return lesson.getStudyGroups();
+        return TimetableRoomHelper.getStringOfStudyGroups(lesson);
     }
 }

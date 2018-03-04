@@ -5,26 +5,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.classes.API.ITimetableService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.TimetableRoomHelper;
-import de.htwdd.htwdresden.classes.internet.JsonArrayRequestWithBasicAuth;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.LessonRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.Call;
 
 /**
  * Service zum Aktualisieren des Belegungsplanes
@@ -33,7 +25,7 @@ import io.realm.RealmResults;
  */
 public class TimetableRoomSyncService extends AbstractSyncHelper {
     private final static String LOG_TAG = "RTimetableSyncService";
-    private final HashMap<String, JSONArray> results = new HashMap<>();
+    private final HashMap<String, List<LessonRoom>> results = new HashMap<>();
 
     public TimetableRoomSyncService() {
         super("RoomTimetableSyncService", Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
@@ -45,7 +37,7 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
             getTimetableFromWeb(intent.getStringExtra(Const.BundleParams.ROOM_TIMETABLE_ROOM));
         } else {
             final Realm realm = Realm.getDefaultInstance();
-            final RealmResults<LessonRoom> rooms = realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM);
+            final RealmResults<LessonRoom> rooms = realm.where(LessonRoom.class).distinctValues(Const.database.LessonRoom.ROOM).findAll();
             for (final LessonRoom room : rooms) {
                 getTimetableFromWeb(room.getRoom());
             }
@@ -67,8 +59,6 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
     void setError(@NonNull final String errorMessage, final int errorCode) {
         // Synchronisation abbrechen
         setCancelToTrue();
-        // Downloads abbrechen
-        VolleyDownloader.getInstance(context).getRequestQueue().cancelAll(Const.internet.TAG_TIMETABLE);
         // Benachrichtigung senden
         if (broadcastNotifier != null)
             broadcastNotifier.notifyStatus(errorCode, errorMessage);
@@ -77,36 +67,19 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
     /**
      * Lädt den Raumplan vom Webservice herunter und speichert des Response in {@link #results}
      *
-     * @param roomName Encodierte Raumbezeichnung
+     * @param roomName Raumbezeichnung
      */
     private void getTimetableFromWeb(@NonNull final String roomName) {
-        final Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
+        final ITimetableService iTimetableService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ITimetableService.class);
+        final Call<List<LessonRoom>> lessons = iTimetableService.getRoomTimetable(roomName);
+        lessons.enqueue(new GenericCallback<List<LessonRoom>>() {
             @Override
-            public void onResponse(final JSONArray response) {
-                results.put(roomName.toUpperCase(), response);
+            void onSuccess(final List<LessonRoom> response) {
+                results.put(roomName, response);
                 queueCount.decrementCountQueue();
             }
-        };
-
-        String encodedRoomName;
-        try {
-            encodedRoomName = URLEncoder.encode(roomName, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.d(LOG_TAG, "Fehler beim Encoding des Raumes", e);
-            encodedRoomName = roomName;
-        }
-        final JsonArrayRequestWithBasicAuth request = new JsonArrayRequestWithBasicAuth(
-                Request.Method.GET,
-                Const.internet.WEBSERVICE_URL_APP + "/v0/roomTimetable.php?room=" + encodedRoomName,
-                null,
-                response,
-                errorListener
-        );
-
-        // Request markieren und absenden
-        request.setTag(Const.internet.TAG_TIMETABLE);
+        });
         queueCount.incrementCountQueue();
-        VolleyDownloader.getInstance(context).addToRequestQueue(request);
     }
 
     /**
@@ -119,31 +92,27 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
         realm.beginTransaction();
 
         try {
-            int countResults;
             String room;
-            JSONArray jsonResults;
-            JSONObject jsonObject;
-            for (Map.Entry<String, JSONArray> arrayEntry : results.entrySet()) {
+            List<LessonRoom> lessonRooms;
+            for (Map.Entry<String, List<LessonRoom>> arrayEntry : results.entrySet()) {
                 room = arrayEntry.getKey();
-                jsonResults = arrayEntry.getValue();
-                countResults = jsonResults.length();
+                lessonRooms = arrayEntry.getValue();
 
                 // Lösche alte Einträge
                 realm.where(LessonRoom.class).equalTo(Const.database.LessonRoom.ROOM, room).findAll().deleteAllFromRealm();
-
-                // Einzelne Lehrveranstaltungen speichern
-                for (int i = 0; i < countResults; i++) {
-                    jsonObject = TimetableRoomHelper.convertTimetableJsonObject(jsonResults.getJSONObject(i));
-                    jsonObject.put(Const.database.LessonRoom.ROOM, room);
-                    realm.createOrUpdateObjectFromJson(LessonRoom.class, jsonObject);
+                // Raum zuordnen
+                for (final LessonRoom lessonRoom : lessonRooms) {
+                    lessonRoom.setRoom(room);
                 }
+                // Einträge speichern
+                realm.copyToRealmOrUpdate(lessonRooms);
             }
             // Update abschließen
             realm.commitTransaction();
             return true;
-        } catch (final JSONException e) {
+        } catch (final Exception e) {
             realm.cancelTransaction();
-            Log.e(LOG_TAG, "[Fehler] bei der Verarbeitung des JSON-Responses", e);
+            Log.e(LOG_TAG, "[Fehler] Fehler beim Speichern des Raumplanes", e);
             setError(getString(R.string.room_timetable_add_save_error), -1);
             return false;
         } finally {

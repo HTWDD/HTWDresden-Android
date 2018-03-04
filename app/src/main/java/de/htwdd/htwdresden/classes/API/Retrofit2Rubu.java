@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.htwdd.htwdresden.adapter.typeadapter.LessonUserTypeAdapter;
+import de.htwdd.htwdresden.types.LessonRoom;
 import de.htwdd.htwdresden.types.LessonUser;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -28,7 +29,8 @@ public class Retrofit2Rubu {
                 .cache(cache)
                 .build();
         final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LessonUser.class, new LessonUserTypeAdapter())
+                .registerTypeAdapter(LessonUser.class, new LessonUserTypeAdapter<LessonUser>())
+                .registerTypeAdapter(LessonRoom.class, new LessonUserTypeAdapter<LessonRoom>())
                 .create();
 
         retrofit = new Retrofit.Builder()
