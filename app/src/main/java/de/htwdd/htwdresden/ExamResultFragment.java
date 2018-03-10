@@ -18,9 +18,9 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.adapter.ExamResultAdapter;
+import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.ExamSyncService;
 import de.htwdd.htwdresden.types.exams.ExamResult;
@@ -59,7 +59,7 @@ public class ExamResultFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             final Context context1 = getActivity();
             // Überprüfe ob Internetverbindung besteht
-            if (!VolleyDownloader.CheckInternet(context1)) {
+            if (!ConnectionHelper.checkInternetConnection(context1)) {
                 // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(context1, R.string.info_no_internet, Toast.LENGTH_LONG).show();

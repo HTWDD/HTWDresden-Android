@@ -24,9 +24,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
+import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableRoomHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
 import de.htwdd.htwdresden.types.LessonRoom;
@@ -109,7 +109,7 @@ public class RoomTimetableFragment extends Fragment {
             final Context context = mLayout.getContext();
 
             // Überprüfe Internetverbindung
-            if (!VolleyDownloader.CheckInternet(getActivity())) {
+            if (!ConnectionHelper.checkInternetConnection(context)) {
                 // Meldung anzeigen
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(false);
