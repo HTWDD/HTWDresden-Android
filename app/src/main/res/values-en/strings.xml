@@ -128,6 +128,7 @@
     <string name="mensa_tab_next_week">Next week</string>
     <string name="mensa_tab_this_week">Current week</string>
     <string name="mensa_wait_for_sync">Data will be retrieved soon!</string>
+    <string name="mensa_meal_info_image">preview</string>
     <string name="mensa_meal_info_pork">pork</string>
     <string name="mensa_meal_info_beef">beef</string>
     <string name="mensa_meal_info_vegetarian">vegetarian</string>

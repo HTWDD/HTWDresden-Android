@@ -83,6 +83,7 @@
     <string name="mensa_credit_last_transaction">letzte Abbuchung:</string>
     <string name="mensa_price">Student %.2f€ Mitarbeiter %.2f€</string>
     <string name="mensa_sold_out">Ausverkauft</string>
+    <string name="mensa_meal_info_image">Vorschau</string>
     <string name="mensa_meal_info_pork">Schwein</string>
     <string name="mensa_meal_info_beef">Rindfleisch</string>
     <string name="mensa_meal_info_vegetarian">Vegetarisch</string>

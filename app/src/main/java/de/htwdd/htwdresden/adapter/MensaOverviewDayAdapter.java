@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -63,8 +62,7 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         }
 
         // Vorschaubild laden
-        viewHolder.imageView.setDefaultImageResId(R.drawable.ic_meal_placeholder);
-        viewHolder.imageView.setImageUrl(meal.getImage(), VolleyDownloader.getInstance(context).getImageLoader());
+        Picasso.get().load(meal.getImage()).placeholder(R.drawable.ic_meal_placeholder).into(viewHolder.imageView);
 
         // Eigenschaften als Icon anzeigen
         viewHolder.imagePork.setVisibility(meal.getInformation().contains("pork") ? View.VISIBLE : View.GONE);
@@ -82,6 +80,6 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         ImageView imageBeef;
         ImageView imageVegetarian;
         ImageView imageVegan;
-        NetworkImageView imageView;
+        ImageView imageView;
     }
 }

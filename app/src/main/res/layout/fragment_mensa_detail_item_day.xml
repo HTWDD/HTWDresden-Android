@@ -5,7 +5,7 @@
                                              android:layout_height="wrap_content"
                                              android:background="@color/white">
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/mensa_image"
         android:layout_width="180dp"
         android:layout_height="120dp"
@@ -17,7 +17,8 @@
         android:scaleType="fitXY"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"/>
+        card_view:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/mensa_meal_info_image"/>
 
     <ImageView
         android:id="@+id/mensa_pork"
