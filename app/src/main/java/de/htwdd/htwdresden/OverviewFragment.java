@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -289,7 +290,7 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onResponse(@NonNull final Call<List<News>> call, @NonNull final Response<List<News>> response) {
                 final List<News> newsList = response.body();
-                final Calendar calendar = GregorianCalendar.getInstance();
+                final Date calendar = GregorianCalendar.getInstance().getTime();
 
                 if (response.isSuccessful() && newsList != null) {
                     for (final News news : newsList) {
