@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.QueueCount;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Basisfunktionalitäten für Sync-Prozesse bereitstellen
@@ -71,7 +71,7 @@ public abstract class AbstractSyncHelper extends IntentService {
 
     abstract class GenericCallback<T> implements Callback<T> {
         @Override
-        public void onResponse(@NonNull final Call<T> call, @NonNull final retrofit2.Response<T> response) {
+        public void onResponse(@NonNull final Call<T> call, @NonNull final Response<T> response) {
             if (response.isSuccessful()) {
                 onSuccess(response.body());
             } else {
@@ -95,10 +95,10 @@ public abstract class AbstractSyncHelper extends IntentService {
 
         @Override
         public void onFailure(@NonNull final Call<T> call, @NonNull final Throwable t) {
-            setError("Sync Error", Const.internet.HTTP_DOWNLOAD_ERROR);
+            setError("Sync Error", 999);
             Log.d(TAG, "Fehler beim Ausführen des Requests ", t);
         }
 
-        abstract void onSuccess(T response);
+        abstract void onSuccess(@Nullable final T response);
     }
 }
