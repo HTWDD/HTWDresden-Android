@@ -10,7 +10,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 /**
- * API für die Prüfungsergebnisse
+ * API für die Prüfungsergebnisse. API über {@link Retrofit2Qis}
  *
  * @author Kay Förster
  */

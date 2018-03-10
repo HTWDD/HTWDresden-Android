@@ -109,9 +109,7 @@ abstract class AbstractTimetableHelper {
             return true;
         }
         // Überprüfe Einstellungen für Studenten
-        else if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
-                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
-                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0) {
+        else if (TimetableHelper.checkPreferencesSettings(sharedPreferences)) {
             Log.d("AbstractTimetableHelper", "Starte TimetableStudentSyncService");
             context.startService(new Intent(context, TimetableStudentSyncService.class));
             return true;

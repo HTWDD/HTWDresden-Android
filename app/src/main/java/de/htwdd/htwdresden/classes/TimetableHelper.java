@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.LinearLayout;
@@ -253,6 +254,18 @@ public class TimetableHelper extends AbstractTimetableHelper {
             realmResultsList.add(getLessonsByDateAndDs(realm, day, i + 1, true, false));
         }
         createSimpleLessonOverview(context, realmResultsList, linearLayout, current_ds);
+    }
+
+    /**
+     * Überprüft ob die Einstellungen zur Studiengruppe korrekt gesetzt sind
+     *
+     * @param sharedPreferences SharedPreferences der App
+     * @return true wenn Einstellungen korrekt, sonst false
+     */
+    public static boolean checkPreferencesSettings(@NonNull final SharedPreferences sharedPreferences) {
+        return sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
+                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
+                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0;
     }
 
     /**

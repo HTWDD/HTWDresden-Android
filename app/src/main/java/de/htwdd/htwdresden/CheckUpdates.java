@@ -85,7 +85,7 @@ class CheckUpdates implements Runnable {
 
                     PreferenceManager.getDefaultSharedPreferences(context)
                             .edit()
-                            .putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, Calendar.getInstance().getTimeInMillis())
+                            .putLong(Const.preferencesKey.PREFERENCES_STUDY_GROUP_LAST_UPDATE, Calendar.getInstance().getTimeInMillis())
                             .apply();
                     Log.i(LOG_TAG, "Studiengruppen aktualisiert");
                 }
