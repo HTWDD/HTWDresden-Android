@@ -30,8 +30,8 @@ import de.htwdd.htwdresden.types.TabItem;
  * Fragment, welches verschiedene Tabs mit einzelnen Wochen enthält
  */
 public class TimetableFragment extends Fragment {
-    private List<TabItem> mTabs = new ArrayList<>();
     private ViewPagerAdapter pagerAdapter;
+    private final List<TabItem> mTabs = new ArrayList<>();
     private final Bundle bundleCurrentWeek = new Bundle();
     private final Bundle bundleNextWeek = new Bundle();
 
@@ -130,12 +130,13 @@ public class TimetableFragment extends Fragment {
     }
 
     private void replaceTabs() {
+        final int currentWeek = bundleCurrentWeek.getInt(Const.BundleParams.TIMETABLE_WEEK);
         final Resources resources = getResources();
         mTabs.clear();
 
         if (bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true)) {
             mTabs.add(new TabItem(
-                    resources.getString(R.string.timetable_tab_current_week, bundleCurrentWeek.getInt(Const.BundleParams.TIMETABLE_WEEK)),
+                    resources.getString(R.string.timetable_tab_current_week, currentWeek),
                     TimetableOverviewFragment.class,
                     bundleCurrentWeek
             ));
@@ -145,16 +146,8 @@ public class TimetableFragment extends Fragment {
                     bundleNextWeek
             ));
         } else {
-            mTabs.add(new TabItem(
-                    resources.getString(R.string.timetable_tab_even_week),
-                    TimetableOverviewFragment.class,
-                    bundleCurrentWeek
-            ));
-            mTabs.add(new TabItem(
-                    resources.getString(R.string.timetable_tab_odd_week),
-                    TimetableOverviewFragment.class,
-                    bundleNextWeek
-            ));
+            mTabs.add(new TabItem(resources.getString(R.string.timetable_tab_even_week), TimetableOverviewFragment.class, currentWeek % 2 == 0 ? bundleCurrentWeek : bundleNextWeek));
+            mTabs.add(new TabItem(resources.getString(R.string.timetable_tab_odd_week), TimetableOverviewFragment.class, currentWeek % 2 == 0 ? bundleNextWeek : bundleCurrentWeek));
         }
     }
 }
