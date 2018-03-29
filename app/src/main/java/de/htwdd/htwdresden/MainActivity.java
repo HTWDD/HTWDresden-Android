@@ -1,7 +1,5 @@
 package de.htwdd.htwdresden;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -9,11 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         setContentView(R.layout.activity_main);
 
         // Toolbar einfügen
-        final Toolbar toolbar = findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(findViewById(R.id.my_awesome_toolbar));
 
         actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -130,49 +128,56 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     }
 
     private void selectFragment(final int position) {
-        final FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment;
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment supportedFragment;
         String tag = null;
-
-        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backbutton verwendet wird.
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         switch (position) {
             case R.id.navigation_overview:
-                fragment = new OverviewFragment();
+                supportedFragment = new OverviewFragment();
+                setTitle(getString(R.string.navi_overview));
                 tag = "overview";
                 break;
             case R.id.navigation_mensa:
-                fragment = new MensaFragment();
+                supportedFragment = new MensaFragment();
+                setTitle(getString(R.string.navi_mensa));
                 break;
             case R.id.navigation_timetable:
-                fragment = new TimetableFragment();
+                supportedFragment = new TimetableFragment();
+                setTitle(getString(R.string.navi_timetable));
                 break;
             case R.id.navigation_room_timetable:
-                fragment = new RoomTimetableFragment();
+                supportedFragment = new RoomTimetableFragment();
+                setTitle(getString(R.string.navi_room_timetable));
                 break;
             case R.id.navigation_exams:
-                fragment = new ExamsFragment();
+                supportedFragment = new ExamsFragment();
+                setTitle(getString(R.string.navi_exams));
                 break;
             case R.id.navigation_campus_plan:
-                fragment = new CampusPlanFragment();
+                supportedFragment = new CampusPlanFragment();
+                setTitle(getString(R.string.navi_campus));
                 break;
             case R.id.navigation_settings:
-                fragment = new SettingsFragment();
+                supportedFragment = new SettingsFragment();
+                setTitle(getString(R.string.navi_settings));
                 break;
             case R.id.navigation_about:
-                fragment = new AboutFragment();
+                supportedFragment = new AboutFragment();
+                setTitle(getString(R.string.navi_about));
                 break;
             case R.id.navigation_uni_administration:
-                fragment = new ManagementFragment();
+                supportedFragment = new ManagementFragment();
+                setTitle(getString(R.string.navi_uni_administration));
                 break;
             default:
-                fragment = new Fragment();
+                supportedFragment = new Fragment();
                 break;
         }
 
-        // Fragment ersetzen
-        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, tag).commitAllowingStateLoss();
+        // Lösche BackStack, ansonsten kommt es zu Überblendungen wenn Menü-Auswahl und Backbutton verwendet wird.
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, supportedFragment, tag).commitAllowingStateLoss();
 
         // NavigationDrawer schließen
         mDrawerLayout.closeDrawers();
@@ -211,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
     @Override
     public void onBackPressed() {
-        final FragmentManager fragmentManager = getFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (fragmentManager.getBackStackEntryCount() == 0)
             // Wenn das Übersichtsfragment das aktuelle ist, die App beenden

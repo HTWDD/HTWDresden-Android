@@ -1,17 +1,17 @@
 package de.htwdd.htwdresden;
 
+
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -68,16 +67,17 @@ public class TimetableEditFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        final Activity activity = getActivity();
-        final Bundle bundle = getArguments();
+        final Activity activity = requireActivity();
+        final Bundle bundle = new Bundle(getArguments());
 
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_edit, container, false);
         realm = Realm.getDefaultInstance();
 
         // Titel ändern
-        if (activity instanceof INavigation)
+        if (activity instanceof INavigation) {
             ((INavigation) activity).setTitle(getResources().getString(R.string.timetable_edit_activity_titel));
+        }
 
         // Alten Zustand wiederherstellen
         if (savedInstanceState != null) {
@@ -107,29 +107,23 @@ public class TimetableEditFragment extends Fragment {
 
             // Lehrveranstaltung wurde vom Nutzer erstellt und kann gelöscht werden
             if (lesson.isCreatedByUser()) {
-                buttonDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View view) {
-                        realm.beginTransaction();
-                        lesson.deleteFromRealm();
-                        realm.commitTransaction();
-                        Toast.makeText(activity, R.string.timetable_edit_lessonDeleteSuccess, Toast.LENGTH_SHORT).show();
-                        activity.finish();
-                    }
+                buttonDelete.setOnClickListener(view -> {
+                    realm.beginTransaction();
+                    lesson.deleteFromRealm();
+                    realm.commitTransaction();
+                    Toast.makeText(activity, R.string.timetable_edit_lessonDeleteSuccess, Toast.LENGTH_SHORT).show();
+                    activity.finish();
                 });
             }
             // Lehrveranstaltung nur ausblenden
             else {
                 buttonDelete.setText(lesson.isHideLesson() ? R.string.timetable_edit_show : R.string.timetable_edit_hide);
-                buttonDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View view) {
-                        realm.beginTransaction();
-                        lesson.setHideLesson(!lesson.isHideLesson());
-                        realm.commitTransaction();
-                        Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
-                        activity.finish();
-                    }
+                buttonDelete.setOnClickListener(view -> {
+                    realm.beginTransaction();
+                    lesson.setHideLesson(!lesson.isHideLesson());
+                    realm.commitTransaction();
+                    Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
+                    activity.finish();
                 });
             }
         }
@@ -138,7 +132,7 @@ public class TimetableEditFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("startTime", startTime);
         outState.putInt("endTime", endTime);
@@ -157,7 +151,7 @@ public class TimetableEditFragment extends Fragment {
     private void createLocalResources(@NonNull final Bundle arguments) {
         final int count = listOfDs.length;
         final Resources resources = getResources();
-        final Context context = getActivity();
+        final Context context = requireContext();
 
         // Views finden
         lesson_name = mLayout.findViewById(R.id.timetable_edit_lessonName);
@@ -210,86 +204,65 @@ public class TimetableEditFragment extends Fragment {
         });
 
         // OnClick-Listener für individuelle Zeit
-        lesson_beginTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                final long minutes = getMinutes(true);
-                final int hour = (int) minutes / 60;
-                final int minute = (int) minutes % 60;
+        lesson_beginTime.setOnClickListener(view -> {
+            final long minutes = getMinutes(true);
+            final int hour = (int) minutes / 60;
+            final int minute = (int) minutes % 60;
 
-                final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(final TimePicker timePicker, final int hourOfDay, final int minute) {
-                        setTimeAndUpdateView((int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute, endTime);
-                    }
-                }, hour, minute, true);
-                timePickerDialog.show();
-            }
+            new TimePickerDialog(
+                    getActivity(),
+                    (timePicker, hourOfDay, minute1) -> setTimeAndUpdateView((int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute1, endTime), hour, minute, true
+            ).show();
         });
-        lesson_endTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                final long minutes = getMinutes(false);
-                final int hour = (int) minutes / 60;
-                final int minute = (int) minutes % 60;
+        lesson_endTime.setOnClickListener(view -> {
+            final long minutes = getMinutes(false);
+            final int hour = (int) minutes / 60;
+            final int minute = (int) minutes % 60;
 
-                final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(final TimePicker timePicker, final int hourOfDay, final int minute) {
-                        setTimeAndUpdateView(startTime, (int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute);
-                    }
-                }, hour, minute, true);
-                timePickerDialog.show();
-            }
+            new TimePickerDialog(
+                    getActivity(),
+                    (timePicker, hourOfDay, minute12) -> setTimeAndUpdateView(startTime, (int) TimeUnit.MINUTES.convert(hourOfDay, TimeUnit.HOURS) + minute12), hour, minute, true
+            ).show();
         });
 
         // OnClick-Listener für Auswahl der Wochen
-        lesson_weeksOnly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                // Liste von möglichen Kalenderwochen erstellen
-                final int increment = lesson_week.getSelectedItemPosition() == 0 ? 1 : 2;
-                final int startWeek = lesson_week.getSelectedItemPosition() == 2 ? 2 : 1;
-                final String[] kws = new String[53 / increment];
-                final boolean[] selectedKwsMinimal = new boolean[53 / increment];
-                for (int kw = 0; kw < 53 / increment; kw++) {
-                    kws[kw] = view.getResources().getString(R.string.timetable_calendar_week, kw * increment + startWeek);
-                    selectedKwsMinimal[kw] = selectedKws[(startWeek - 1) + kw * increment];
-                }
-
-                new AlertDialog.Builder(getActivity())
-                        .setMultiChoiceItems(kws, selectedKwsMinimal, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialog, final int which, final boolean isChecked) {
-                                selectedKws[(startWeek - 1) + which * increment] = isChecked;
-                                // Auswahl in Textbox neu anzeigen
-                                String listOfWeeks = "";
-                                for (int i = 0; i < selectedKws.length; i++) {
-                                    if (selectedKws[i]) {
-                                        listOfWeeks += i + 1 + "; ";
-                                    }
-                                }
-                                lesson_weeksOnly.setText(listOfWeeks);
-                            }
-                        })
-                        .setPositiveButton("OK", null)
-                        .setTitle(R.string.timetable_edit_lessonWeeks_title)
-                        .create()
-                        .show();
+        lesson_weeksOnly.setOnClickListener(view -> {
+            // Liste von möglichen Kalenderwochen erstellen
+            final int increment = lesson_week.getSelectedItemPosition() == 0 ? 1 : 2;
+            final int startWeek = lesson_week.getSelectedItemPosition() == 2 ? 2 : 1;
+            final String[] kws = new String[53 / increment];
+            final boolean[] selectedKwsMinimal = new boolean[53 / increment];
+            for (int kw = 0; kw < 53 / increment; kw++) {
+                kws[kw] = view.getResources().getString(R.string.timetable_calendar_week, kw * increment + startWeek);
+                selectedKwsMinimal[kw] = selectedKws[(startWeek - 1) + kw * increment];
             }
+
+            new AlertDialog.Builder(requireContext())
+                    .setMultiChoiceItems(kws, selectedKwsMinimal, (dialog, which, isChecked) -> {
+                        selectedKws[(startWeek - 1) + which * increment] = isChecked;
+                        // Auswahl in Textbox neu anzeigen
+                        StringBuilder listOfWeeks = new StringBuilder();
+                        for (int i = 0; i < selectedKws.length; i++) {
+                            if (selectedKws[i]) {
+                                listOfWeeks.append(i + 1).append("; ");
+                            }
+                        }
+                        lesson_weeksOnly.setText(listOfWeeks.toString());
+                    })
+                    .setPositiveButton("OK", null)
+                    .setTitle(R.string.timetable_edit_lessonWeeks_title)
+                    .create()
+                    .show();
         });
 
         // Speichern
-        mLayout.findViewById(R.id.timetable_edit_lessonSave).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Activity activity = getActivity();
-                if (saveLesson()) {
-                    Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
-                    activity.finish();
-                } else
-                    Snackbar.make(view, R.string.info_error_save, Snackbar.LENGTH_LONG).show();
-            }
+        mLayout.findViewById(R.id.timetable_edit_lessonSave).setOnClickListener(view -> {
+            final Activity activity = requireActivity();
+            if (saveLesson()) {
+                Toast.makeText(activity, R.string.timetable_edit_lessonSaveSuccess, Toast.LENGTH_SHORT).show();
+                activity.finish();
+            } else
+                Snackbar.make(view, R.string.info_error_save, Snackbar.LENGTH_LONG).show();
         });
     }
 

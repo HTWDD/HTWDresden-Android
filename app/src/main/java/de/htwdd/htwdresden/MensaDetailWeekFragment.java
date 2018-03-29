@@ -1,10 +1,11 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();
 
         // Inflate the layout for this fragment
@@ -55,7 +56,10 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         // Setze Swipe Refresh Layout
         swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            final Context context = getActivity();
+            final Context context = getContext();
+            if (context == null) {
+                return;
+            }
             // Überprüfe Internetverbindung
             if (!ConnectionHelper.checkInternetConnection(context)) {
                 onCompletion();

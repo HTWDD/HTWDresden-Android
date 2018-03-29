@@ -2,7 +2,6 @@ package de.htwdd.htwdresden;
 
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -27,7 +27,6 @@ import de.htwdd.htwdresden.adapter.RoomTimetableAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableRoomHelper;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.TimetableRoomSyncService;
 import de.htwdd.htwdresden.types.LessonRoom;
 import io.realm.Realm;
@@ -57,14 +56,11 @@ public class RoomTimetableFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_room_timetable, container, false);
         realm = Realm.getDefaultInstance();
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-
-        // Setze Titel der Toolbar
-        ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_room_timetable));
 
         // Adapter für Liste erzeugen
         roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinctValues(Const.database.LessonRoom.ROOM).findAll());
@@ -133,7 +129,7 @@ public class RoomTimetableFragment extends Fragment {
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         intentFilter.addCategory(Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
         responseReceiver = new ResponseReceiver();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(responseReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(mLayout.getContext()).registerReceiver(responseReceiver, intentFilter);
 
         return mLayout;
     }
@@ -141,7 +137,7 @@ public class RoomTimetableFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        LocalBroadcastManager.getInstance(mLayout.getContext()).unregisterReceiver(responseReceiver);
     }
 
     @Override
@@ -153,7 +149,7 @@ public class RoomTimetableFragment extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.context_menu_room_timetable, menu);
+        requireActivity().getMenuInflater().inflate(R.menu.context_menu_room_timetable, menu);
     }
 
     @Override

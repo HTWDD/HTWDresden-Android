@@ -1,14 +1,15 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public class TimetableOverviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_timetable_overview, container, false);
         realm = Realm.getDefaultInstance();
@@ -49,16 +50,16 @@ public class TimetableOverviewFragment extends Fragment {
         // SwipeRefreshLayout Listener
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            final boolean result = TimetableHelper.startSyncService(getActivity());
+            final boolean result = TimetableHelper.startSyncService(requireContext());
 
             if (!result) {
                 // Zeige Toast mit Link zu Einstellungen an
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                         .setAction(R.string.navi_settings, view -> {
                             // Navigation ändern
-                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
+                            ((INavigation) requireActivity()).setNavigationItem(R.id.navigation_settings);
                             // Fragment "Einstellungen" anzeigen
-                            getActivity().getFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
                         })
                         .show();
                 // Refresh ausschalten
@@ -93,7 +94,7 @@ public class TimetableOverviewFragment extends Fragment {
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         intentFilter.addCategory(Const.IntentParams.BROADCAST_FINISH_TIMETABLE_UPDATE);
         responseReceiver = new ResponseReceiver();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(responseReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(responseReceiver, intentFilter);
 
         return mLayout;
     }
@@ -101,7 +102,7 @@ public class TimetableOverviewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(responseReceiver);
     }
 
     @Override

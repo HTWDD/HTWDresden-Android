@@ -1,14 +1,14 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -48,16 +48,15 @@ public class ExamResultFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final Context context = getActivity();
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
         realm = Realm.getDefaultInstance();
-        adapter = new ExamResultAdapter(context, realm);
+        adapter = new ExamResultAdapter(mLayout.getContext(), realm);
 
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            final Context context1 = getActivity();
+            final Context context1 = mLayout.getContext();
             // Überprüfe ob Internetverbindung besteht
             if (!ConnectionHelper.checkInternetConnection(context1)) {
                 // Refresh ausschalten
@@ -72,11 +71,8 @@ public class ExamResultFragment extends Fragment {
                 // Snackbar mit Information anzeigen
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                         .setAction(R.string.navi_settings, view -> {
-                            // Navigation ändern
-                            ((INavigation) getActivity()).setNavigationItem(R.id.navigation_settings);
-                            // Fragment für die Einstellungen öffnen
-                            final FragmentManager fragmentManager = getActivity().getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                            ((INavigation) requireActivity()).setNavigationItem(R.id.navigation_settings);
+                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
                         })
                         .show();
                 return;
@@ -104,7 +100,7 @@ public class ExamResultFragment extends Fragment {
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
         intentFilter.addCategory(ExamSyncService.INTENT_SYNC_EXAMS);
         responseReceiver = new ResponseReceiver();
-        LocalBroadcastManager.getInstance(context).registerReceiver(responseReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(mLayout.getContext()).registerReceiver(responseReceiver, intentFilter);
 
         return mLayout;
     }
@@ -112,7 +108,7 @@ public class ExamResultFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(responseReceiver);
+        LocalBroadcastManager.getInstance(mLayout.getContext()).unregisterReceiver(responseReceiver);
         examResults.removeChangeListener(realmListenerExams);
         realm.close();
     }

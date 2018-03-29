@@ -1,9 +1,10 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ import de.htwdd.htwdresden.types.TabItem;
  * @author Kay Förster
  */
 public class RoomTimetableDetailsFragment extends Fragment {
-    private List<TabItem> mTabs = new ArrayList<>();
+    private final List<TabItem> mTabs = new ArrayList<>();
     private String room;
 
     public RoomTimetableDetailsFragment() {
@@ -46,7 +47,7 @@ public class RoomTimetableDetailsFragment extends Fragment {
         calendar.add(Calendar.WEEK_OF_YEAR, 1);
         bundleNextWeek.putInt(Const.BundleParams.TIMETABLE_WEEK, calendar.get(Calendar.WEEK_OF_YEAR));
 
-        room = bundle.getString(Const.BundleParams.ROOM_TIMETABLE_ROOM, "");
+        room = bundle != null ? bundle.getString(Const.BundleParams.ROOM_TIMETABLE_ROOM, "") : "";
         bundleCurrentWeek.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
         bundleNextWeek.putString(Const.BundleParams.ROOM_TIMETABLE_ROOM, room);
 
@@ -63,19 +64,19 @@ public class RoomTimetableDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        final ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         // Setze Title der Toolbar
-        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.room_timetable_details_title, room));
+        ((INavigation) requireActivity()).setTitle(getResources().getString(R.string.room_timetable_details_title, room));
 
         // Adapter für Tabs erstellen und an View hängen
-        viewPager.setAdapter( new ViewPagerAdapter(getFragmentManager(), mTabs));
+        viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mTabs));
 
         // TabLayout "stylen"
-        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         // Setze feste Anzahl an Tabs (Tabs wirken nicht abgeklatscht)
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // Tabs nahmen immer die ganze Breite ein

@@ -2,14 +2,14 @@ package de.htwdd.htwdresden;
 
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.Calendar;
@@ -33,11 +33,11 @@ public class TimetableDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_timetable_details, container, false);
         final Activity activity = getActivity();
-        final Bundle bundle = getArguments();
+        final Bundle bundle = new Bundle(getArguments());
 
         // Ändere Titel
         if (activity instanceof INavigation && !bundle.getBoolean(Const.BundleParams.TIMETABLE_EDIT, false)) {
@@ -57,28 +57,22 @@ public class TimetableDetailsFragment extends Fragment {
                 bundle.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
 
         // Adapter für Daten erstellen
-        final TimetableListAdapter timetableListAdapter = new TimetableListAdapter(getActivity(), lessons);
+        final TimetableListAdapter timetableListAdapter = new TimetableListAdapter(requireContext(), lessons);
 
-        final ListView listView = (ListView) view.findViewById(R.id.listView);
+        final ListView listView = view.findViewById(R.id.listView);
         listView.setAdapter(timetableListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final Bundle bundle1 = new Bundle();
-                bundle1.putString(Const.BundleParams.TIMETABLE_LESSON_ID, lessons.get(i).getId());
-                bundle1.putBoolean(Const.BundleParams.TIMETABLE_EDIT, true);
+        listView.setOnItemClickListener((adapterView, view12, i, l) -> {
+            final Bundle bundle1 = new Bundle();
+            bundle1.putString(Const.BundleParams.TIMETABLE_LESSON_ID, lessons.get(i).getId());
+            bundle1.putBoolean(Const.BundleParams.TIMETABLE_EDIT, true);
 
-                startEditFragment(bundle1);
-            }
+            startEditFragment(bundle1);
         });
 
-        final FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab_add);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, false);
-                startEditFragment(bundle);
-            }
+        final FloatingActionButton floatingActionButton = view.findViewById(R.id.fab_add);
+        floatingActionButton.setOnClickListener(view1 -> {
+            bundle.putBoolean(Const.BundleParams.TIMETABLE_EDIT, false);
+            startEditFragment(bundle);
         });
 
         return view;
@@ -98,7 +92,6 @@ public class TimetableDetailsFragment extends Fragment {
     private void startEditFragment(@NonNull final Bundle bundle) {
         final Fragment fragment = new TimetableEditFragment();
         fragment.setArguments(bundle);
-
-        getFragmentManager().beginTransaction().replace(R.id.activity_sync_FrameLayout, fragment).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.activity_sync_FrameLayout, fragment).commit();
     }
 }

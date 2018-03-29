@@ -1,10 +1,11 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.TabItem;
 
 /**
@@ -50,12 +50,9 @@ public class ExamsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
-
-        // Setze Title der Toolbar
-        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_exams));
 
         // Adapter für Tabs erstellen und an view hängen
         final ViewPager viewPager = view.findViewById(R.id.viewpager);

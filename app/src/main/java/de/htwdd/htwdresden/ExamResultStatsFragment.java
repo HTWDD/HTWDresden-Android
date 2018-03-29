@@ -1,11 +1,10 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +35,14 @@ public class ExamResultStatsFragment extends Fragment {
         realm = Realm.getDefaultInstance();
 
         // Refresh ausschalten
-        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setEnabled(false);
+        mLayout.findViewById(R.id.swipeRefreshLayout).setEnabled(false);
 
         // Hinweismeldung wenn keine Ergebnisse vorliegen
         final TextView message = mLayout.findViewById(R.id.message_info);
         message.setText(R.string.exams_result_no_results);
 
         // Adapter erstellen und an Liste anhängen
-        final ExamStatsAdapter adapter = new ExamStatsAdapter(getActivity(), realm);
+        final ExamStatsAdapter adapter = new ExamStatsAdapter(mLayout.getContext(), realm);
         final ListView listView = mLayout.findViewById(R.id.listView);
         listView.setAdapter(adapter);
         listView.setEmptyView(message);

@@ -1,14 +1,13 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,11 +32,11 @@ import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.classes.NextLessonResult;
 import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.exams.ExamResult;
-import de.htwdd.htwdresden.types.exams.ExamStats;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.News;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.exams.ExamResult;
+import de.htwdd.htwdresden.types.exams.ExamStats;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -65,22 +64,21 @@ public class OverviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_overview, container, false);
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final INavigation navigation = (INavigation) getActivity();
 
-        // Setze Toolbar Titel
-        ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_overview));
+        if (navigation != null) {
+            // Stundenplan
+            mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
 
-        // Stundenplan
-        mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_timetable));
+            // Navigation zur Mensa
+            mLayout.findViewById(R.id.overview_mensa).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_mensa));
 
-        // Navigation zur Mensa
-        mLayout.findViewById(R.id.overview_mensa).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_mensa));
-
-        // Noten
-        mLayout.findViewById(R.id.overview_examResultStats).setOnClickListener(view -> ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_exams));
+            // Noten
+            mLayout.findViewById(R.id.overview_examResultStats).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_exams));
+        }
 
         // Daten für Mensa laden und anzeigen
         final Calendar calendar = GregorianCalendar.getInstance();
@@ -161,7 +159,7 @@ public class OverviewFragment extends Fragment {
      * Übersicht über Stundenplan
      */
     private void showUserTimetableOverview() {
-        final Context context = getActivity();
+        final Context context = mLayout.getContext();
         final String[] lessonType = mLayout.getResources().getStringArray(R.array.lesson_type);
 
         // TextViews bestimmen
@@ -278,13 +276,13 @@ public class OverviewFragment extends Fragment {
         }
 
         // Inhalt anzeigen
-        content.setText(MensaHelper.concatTitels(getActivity(), meals));
+        content.setText(MensaHelper.concatTitels(mLayout.getContext(), meals));
         message.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
     }
 
     private void showNews() {
-        final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(getActivity()).getRetrofit().create(IGeneralService.class);
+        final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(mLayout.getContext()).getRetrofit().create(IGeneralService.class);
         final Call<List<News>> news = iGeneralService.getNews();
         news.enqueue(new Callback<List<News>>() {
             @Override

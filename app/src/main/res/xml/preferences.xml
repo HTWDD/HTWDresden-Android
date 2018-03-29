@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="pref_key_storage_settings"
         android:title="@string/settings_category_access_data">
@@ -17,7 +17,8 @@
             android:title="@string/settings_rzLogin" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_study">
-        <de.htwdd.htwdresden.SettingsStudiengruppePreference
+        <de.htwdd.htwdresden.SettingsStudyGroupPreference
+            android:key="studyGroup"
             android:summary="@string/settings_studiengang_summary"
             android:title="@string/settings_studiengruppe" />
         <EditTextPreference
@@ -61,4 +62,4 @@
             android:title="@string/settings_acra" />
     </PreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

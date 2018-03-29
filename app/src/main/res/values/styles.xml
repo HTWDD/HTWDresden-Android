@@ -4,6 +4,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Theme for the Preferences -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="ButtonHTWStyle" parent="Widget.AppCompat.Button.Colored">

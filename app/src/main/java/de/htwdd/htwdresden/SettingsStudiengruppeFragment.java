@@ -1,10 +1,9 @@
 package de.htwdd.htwdresden;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.DialogPreference;
-import android.support.annotation.NonNull;
-import android.util.AttributeSet;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -23,24 +22,27 @@ import io.realm.RealmResults;
  *
  * @author Kay Förster
  */
-public class SettingsStudiengruppePreference extends DialogPreference {
+public class SettingsStudiengruppeFragment extends PreferenceDialogFragmentCompat {
     private Realm realm;
     private int studyYear;
     private String studyCourse;
     private String studyGroup;
 
-    public SettingsStudiengruppePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setPersistent(false);
-        setDialogLayoutResource(R.layout.preferences_studiengruppe);
+    public static SettingsStudiengruppeFragment newInstance(@Nullable final String key) {
+        final SettingsStudiengruppeFragment fragment = new SettingsStudiengruppeFragment();
+        final Bundle b = new Bundle(1);
+        b.putString(ARG_KEY, key);
+        fragment.setArguments(b);
+
+        return fragment;
     }
 
     @Override
-    protected void onBindDialogView(@NonNull final View view) {
+    protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
         realm = Realm.getDefaultInstance();
-        final SharedPreferences sharedPreferences = getSharedPreferences();
+        final SharedPreferences sharedPreferences = getPreference().getSharedPreferences();
         final RealmResults<StudyYear> realmResultsYear = realm.where(StudyYear.class).findAll();
 
         // Finde aktuell ausgewählte Position
@@ -137,15 +139,13 @@ public class SettingsStudiengruppePreference extends DialogPreference {
     }
 
     @Override
-    protected void onDialogClosed(final boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-
+    public void onDialogClosed(final boolean positiveResult) {
         if (positiveResult) {
-            final SharedPreferences.Editor editor = getEditor();
+            final SharedPreferences.Editor editor = getPreference().getSharedPreferences().edit();
             editor.putInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
-            editor.commit();
+            editor.apply();
         }
         realm.close();
     }

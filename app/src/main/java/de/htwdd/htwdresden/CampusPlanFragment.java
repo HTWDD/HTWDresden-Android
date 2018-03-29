@@ -5,18 +5,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Fragment;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-
-import de.htwdd.htwdresden.interfaces.INavigation;
 
 
 /**
@@ -38,28 +38,12 @@ public class CampusPlanFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_campus_plan, container, false);
 
-        ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_campus));
-
-        final View viewDresden = mLayout.findViewById(R.id.campus_plan_image_dresden);
-        viewDresden.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                zoomImageFromThumb(viewDresden, R.drawable.campusplan_dresden);
-            }
-        });
-
-        final View viewPillnitz = mLayout.findViewById(R.id.campus_plan_image_pillnitz);
-        viewPillnitz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                zoomImageFromThumb(viewPillnitz, R.drawable.campusplan_pillnitz);
-            }
-        });
-
+        mLayout.findViewById(R.id.campus_plan_image_dresden).setOnClickListener(view -> zoomImageFromThumb(view, R.drawable.campusplan_dresden));
+        mLayout.findViewById(R.id.campus_plan_image_pillnitz).setOnClickListener(view -> zoomImageFromThumb(view, R.drawable.campusplan_pillnitz));
 
         // Retrieve and cache the system's default "short" animation time.
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -75,7 +59,7 @@ public class CampusPlanFragment extends Fragment {
         }
 
         // Load the high-resolution "zoomed-in" image.
-        final ImageView expandedImageView = (ImageView) mLayout.findViewById(R.id.expanded_image);
+        final ImageView expandedImageView = mLayout.findViewById(R.id.expanded_image);
         expandedImageView.setImageResource(imageResId);
 
         // Calculate the starting and ending bounds for the zoomed-in image.
@@ -154,41 +138,38 @@ public class CampusPlanFragment extends Fragment {
         // to the original bounds and show the thumbnail instead of
         // the expanded image.
         final float startScaleFinal = startScale;
-        expandedImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mCurrentAnimator != null) {
-                    mCurrentAnimator.cancel();
+        expandedImageView.setOnClickListener(view -> {
+            if (mCurrentAnimator != null) {
+                mCurrentAnimator.cancel();
+            }
+
+            // Animate the four positioning/sizing properties in parallel,
+            // back to their original values.
+            AnimatorSet set1 = new AnimatorSet();
+            set1.play(ObjectAnimator
+                    .ofFloat(expandedImageView, View.X, startBounds.left))
+                    .with(ObjectAnimator.ofFloat(expandedImageView, View.Y, startBounds.top))
+                    .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_X, startScaleFinal))
+                    .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_Y, startScaleFinal));
+            set1.setDuration(mShortAnimationDuration);
+            set1.setInterpolator(new DecelerateInterpolator());
+            set1.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    thumbView.setAlpha(1f);
+                    expandedImageView.setVisibility(View.GONE);
+                    mCurrentAnimator = null;
                 }
 
-                // Animate the four positioning/sizing properties in parallel,
-                // back to their original values.
-                AnimatorSet set = new AnimatorSet();
-                set.play(ObjectAnimator
-                        .ofFloat(expandedImageView, View.X, startBounds.left))
-                        .with(ObjectAnimator.ofFloat(expandedImageView, View.Y, startBounds.top))
-                        .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_X, startScaleFinal))
-                        .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_Y, startScaleFinal));
-                set.setDuration(mShortAnimationDuration);
-                set.setInterpolator(new DecelerateInterpolator());
-                set.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        thumbView.setAlpha(1f);
-                        expandedImageView.setVisibility(View.GONE);
-                        mCurrentAnimator = null;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        thumbView.setAlpha(1f);
-                        expandedImageView.setVisibility(View.GONE);
-                        mCurrentAnimator = null;
-                    }
-                });
-                set.start();
-                mCurrentAnimator = set;
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    thumbView.setAlpha(1f);
+                    expandedImageView.setVisibility(View.GONE);
+                    mCurrentAnimator = null;
+                }
+            });
+            set1.start();
+            mCurrentAnimator = set1;
         });
     }
 }

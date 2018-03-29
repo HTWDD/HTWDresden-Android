@@ -1,11 +1,12 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +23,6 @@ import java.util.Locale;
 
 import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.TabItem;
 
 
@@ -51,13 +51,11 @@ public class TimetableFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_tabs, container, false);
         final ViewPager viewPager = view.findViewById(R.id.viewpager);
 
-        // Setze Title der Toolbar
-        ((INavigation)getActivity()).setTitle(getResources().getString(R.string.navi_timetable));
         // Optionsmenü aktivieren
         setHasOptionsMenu(true);
 
@@ -84,7 +82,7 @@ public class TimetableFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_CURRENT_WEEK, true));
         outState.putBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, bundleCurrentWeek.getBoolean(Const.BundleParams.TIMETABLE_FILTER_SHOW_HIDDEN, false));
@@ -122,7 +120,7 @@ public class TimetableFragment extends Fragment {
                 pagerAdapter.notifyDataSetChanged();
                 return true;
             case R.id.menu_timetable_reset:
-                TimetableResetDialogFragment.newInstance().show(getFragmentManager(), "timetableResetDialog");
+                TimetableResetDialogFragment.newInstance().show(requireFragmentManager(), "timetableResetDialog");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

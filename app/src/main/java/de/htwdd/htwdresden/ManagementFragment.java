@@ -1,12 +1,12 @@
 package de.htwdd.htwdresden;
 
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
 import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
 import io.realm.Realm;
@@ -39,12 +38,9 @@ public class ManagementFragment extends Fragment {
         mLayout = inflater.inflate(R.layout.fragment_management, container, false);
         realm = Realm.getDefaultInstance();
 
-        // Setze Toolbar Titel
-        ((INavigation) getActivity()).setTitle(getResources().getString(R.string.navi_uni_administration));
-
-        mLayout.findViewById(R.id.management_office).setOnClickListener(view -> getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html"))));
-        mLayout.findViewById(R.id.management_examination_office).setOnClickListener(view -> getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html"))));
-        mLayout.findViewById(R.id.management_stura).setOnClickListener(view -> getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stura.htw-dresden.de/"))));
+        mLayout.findViewById(R.id.management_office).setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html"))));
+        mLayout.findViewById(R.id.management_examination_office).setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html"))));
+        mLayout.findViewById(R.id.management_stura).setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stura.htw-dresden.de/"))));
 
         // Semesterplan anzeigen
         showSemesterInfo();
