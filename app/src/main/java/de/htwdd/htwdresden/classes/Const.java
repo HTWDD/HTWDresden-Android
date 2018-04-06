@@ -42,20 +42,6 @@ public final class Const {
         public static final String PREFERENCES_TIMETABLE_PROFESSOR = "professorKey";
     }
 
-    public static final class internet {
-        public static final String WEBSERVICE_URL = "https://www2.htw-dresden.de/~app/API/";
-        static final String WEBSERVICE_URL_APP = "https://rubu2.rz.htw-dresden.de/API/";
-        public static final String WEBSERVICE_URL_SEMESTERPLAN = WEBSERVICE_URL + "semesterplan.json";
-        public static final String WEBSERVICE_URL_STUDYGROUPS = WEBSERVICE_URL_APP + "v0/studyGroups.php";
-        public static final String WEBSERVICE_URL_NEWS = WEBSERVICE_URL_APP + "v0/news.json";
-        public static final int HTTP_UNAUTHORIZED = 401;
-        public static final int HTTP_NOT_FOUND = 404;
-        public static final int HTTP_DOWNLOAD_ERROR = 999;
-        public static final int HTTP_TIMEOUT = 998;
-        public static final int HTTP_NO_CONNECTION = 997;
-        public static final int HTTP_NETWORK_ERROR = 996;
-    }
-
     public static final class Timetable {
         public static final int TAG_VORLESUNG = 0;
         public static final int TAG_PRAKTIKUM = 1;
