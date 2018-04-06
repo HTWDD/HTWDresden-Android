@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "de.htwdd.htwdresden"
         minSdkVersion 21
@@ -42,11 +42,11 @@ dependencies {
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
     // https://github.com/square/retrofit
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     // https://square.github.io/picasso/
     implementation 'com.squareup.picasso:picasso:2.71828'
     // https://github.com/heinrichreimer/android-canteen-balance
-    compile 'com.heinrichreimersoftware:android-canteen-balance:0.1.2'
+    implementation 'com.heinrichreimersoftware:android-canteen-balance:0.1.2'
     apply plugin: 'realm-android'
 }
