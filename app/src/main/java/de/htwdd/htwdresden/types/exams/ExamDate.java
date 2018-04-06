@@ -1,46 +1,68 @@
 package de.htwdd.htwdresden.types.exams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.annotations.SerializedName;
 
-import de.htwdd.htwdresden.interfaces.IParseJSON;
+import java.util.List;
 
 /**
- * Einfache Klasse für Prüfungen,
- * Aus Performancegründen und der Einfachheit wird auf Getter/Setter verzichtet
+ * Repräsentation eines Prüfungstermins
+ *
+ * @author Kay Förster
  */
-public class ExamDate implements IParseJSON {
-    public String day;
-    public String endTime;
-    public String examType;
-    public String examiner;
-    public String nextChance;
-    public String rooms;
-    public String startTime;
-    public String studyBranch;
-    public String title;
+public class ExamDate {
 
-    @Override
-    public void parseFromJSON(JSONObject jsonObject) throws JSONException {
-        title = jsonObject.getString("Title");
-        examType = jsonObject.getString("ExamType");
-        studyBranch = jsonObject.getString("StudyBranch");
-        day = jsonObject.getString("Day");
-        startTime = jsonObject.getString("StartTime");
-        endTime = jsonObject.getString("EndTime");
-        examiner = jsonObject.getString("Examiner");
-        nextChance = jsonObject.getString("NextChance");
-        rooms = "";
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("ExamType")
+    private String examType;
+    @SerializedName("StudyBranch")
+    private String studyBranch;
+    @SerializedName("Day")
+    private String day;
+    @SerializedName("StartTime")
+    private String startTime;
+    @SerializedName("EndTime")
+    private String endTime;
+    @SerializedName("Examiner")
+    private String examiner;
+    @SerializedName("NextChance")
+    private String nextChance;
+    @SerializedName("Rooms")
+    private List<String> rooms;
 
-        JSONArray arrayRooms = jsonObject.getJSONArray("Rooms");
-        int countRooms = arrayRooms.length();
+    public String getTitle() {
+        return title;
+    }
 
-        for (int i = 0; i < countRooms; i++) {
-            rooms += arrayRooms.getString(i);
+    public String getExamType() {
+        return examType;
+    }
 
-            if (i < countRooms - 1)
-                rooms += ", ";
-        }
+    public String getStudyBranch() {
+        return studyBranch;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getExaminer() {
+        return examiner;
+    }
+
+    public String getNextChance() {
+        return nextChance;
+    }
+
+    public List<String> getRooms() {
+        return rooms;
     }
 }

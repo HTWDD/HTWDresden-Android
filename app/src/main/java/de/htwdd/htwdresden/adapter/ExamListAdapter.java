@@ -30,33 +30,37 @@ public class ExamListAdapter extends AbstractBaseAdapter<ExamDate> {
             convertView = mLayoutInflater.inflate(R.layout.exam_list_item, parent, false);
             convertView.setTag(viewHolder);
 
-            viewHolder.exam_title = (TextView) convertView.findViewById(R.id.stats_semester);
-            viewHolder.exam_type = (TextView) convertView.findViewById(R.id.exam_type);
-            viewHolder.exam_branch = (TextView) convertView.findViewById(R.id.exam_studyBranch);
-            viewHolder.exam_day = (TextView) convertView.findViewById(R.id.exam_day);
-            viewHolder.exam_time = (TextView) convertView.findViewById(R.id.exam_time);
-            viewHolder.exam_room = (TextView) convertView.findViewById(R.id.exam_room);
+            viewHolder.exam_title = convertView.findViewById(R.id.stats_semester);
+            viewHolder.exam_type = convertView.findViewById(R.id.exam_type);
+            viewHolder.exam_branch = convertView.findViewById(R.id.exam_studyBranch);
+            viewHolder.exam_day = convertView.findViewById(R.id.exam_day);
+            viewHolder.exam_time = convertView.findViewById(R.id.exam_time);
+            viewHolder.exam_room = convertView.findViewById(R.id.exam_room);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
         ExamDate examDate = getItem(position);
-        viewHolder.exam_title.setText(examDate.title);
-        viewHolder.exam_type.setText(examDate.examType);
-        viewHolder.exam_branch.setText(examDate.studyBranch);
-        viewHolder.exam_day.setText(examDate.day);
-        viewHolder.exam_room.setText(examDate.rooms);
-        if (examDate.endTime.isEmpty())
-            viewHolder.exam_time.setText(examDate.startTime);
-        else viewHolder.exam_time.setText(context.getString(R.string.exams_time_value, examDate.startTime, examDate.endTime));
+        viewHolder.exam_title.setText(examDate.getTitle());
+        viewHolder.exam_type.setText(examDate.getExamType());
+        viewHolder.exam_branch.setText(examDate.getStudyBranch());
+        viewHolder.exam_day.setText(examDate.getDay());
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (final String room : examDate.getRooms()) {
+            stringBuilder.append(room).append("; ");
+        }
+        viewHolder.exam_room.setText(stringBuilder);
+        if (examDate.getEndTime().isEmpty()) {
+            viewHolder.exam_time.setText(examDate.getStartTime());
+        } else viewHolder.exam_time.setText(context.getString(R.string.exams_time_value, examDate.getStartTime(), examDate.getEndTime()));
 
         return convertView;
     }
 
     static class ViewHolder {
-        public TextView exam_title;
-        public TextView exam_type;
-        public TextView exam_branch;
-        public TextView exam_day;
-        public TextView exam_time;
-        public TextView exam_room;
+        TextView exam_title;
+        TextView exam_type;
+        TextView exam_branch;
+        TextView exam_day;
+        TextView exam_time;
+        TextView exam_room;
     }
 }

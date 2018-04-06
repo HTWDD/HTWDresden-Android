@@ -16,31 +16,32 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import de.htwdd.htwdresden.adapter.ExamListAdapter;
+import de.htwdd.htwdresden.classes.API.IExamService;
+import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
+import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.StudyGroupHelper;
-import de.htwdd.htwdresden.classes.internet.VolleyDownloader;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.exams.ExamDate;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Fragment zur Anzeige vorhandener Prüfungen
  */
-public class ExamsListFragment extends Fragment {
+public class ExamsListFragment extends Fragment implements IRefreshing {
     private final static String LOG_TAG = "ExamsListFragment";
     private Realm realm;
     private View mLayout;
@@ -75,13 +76,7 @@ public class ExamsListFragment extends Fragment {
         }
 
         // Handler für SwipeRefresh
-        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadData();
-            }
-        });
+        ((SwipeRefreshLayout)mLayout.findViewById(R.id.swipeRefreshLayout)).setOnRefreshListener(this::loadData);
 
         // ListView zusammenbauen
         final ListView listView = mLayout.findViewById(R.id.listView);
@@ -94,21 +89,15 @@ public class ExamsListFragment extends Fragment {
         final Button buttonSub = mLayout.findViewById(R.id.Button1);
         final Button buttonFooterAdd = mLayout.findViewById(R.id.examButtonAdd);
         final Button buttonFooterSub = mLayout.findViewById(R.id.examButtonSub);
-        View.OnClickListener clickListenerAdd = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stgJhr++;
-                changeButtonName(buttonFooterAdd, buttonFooterSub);
-                loadData();
-            }
+        final View.OnClickListener clickListenerAdd = view -> {
+            stgJhr++;
+            changeButtonName(buttonFooterAdd, buttonFooterSub);
+            loadData();
         };
-        View.OnClickListener clickListenerDec = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stgJhr--;
-                changeButtonName(buttonFooterAdd, buttonFooterSub);
-                loadData();
-            }
+        final View.OnClickListener clickListenerDec = view -> {
+            stgJhr--;
+            changeButtonName(buttonFooterAdd, buttonFooterSub);
+            loadData();
         };
 
         buttonAdd.setOnClickListener(clickListenerAdd);
@@ -158,175 +147,16 @@ public class ExamsListFragment extends Fragment {
      * Lädt den Prüfungsplan anhand der Einstellungen und des gesetzten Jahrgangs vom Webservice
      */
     private void loadData() {
-        final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
+        final Context context = mLayout.getContext();
         final TextView info = mLayout.findViewById(R.id.message_info);
-        final Button localButton1 = mLayout.findViewById(R.id.Button1);
-        final Button localButton2 = mLayout.findViewById(R.id.Button2);
-        String url = null;
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
-                if (!isAdded()) {
-                    return;
-                }
-                // Bestimme Fehlermeldung
-                int responseCode = VolleyDownloader.getResponseCode(error);
-
-                // Fehlermeldung anzeigen
-                String message;
-                switch (responseCode) {
-                    case Const.internet.HTTP_TIMEOUT:
-                        message = getString(R.string.info_internet_timeout);
-                        break;
-                    case Const.internet.HTTP_NO_CONNECTION:
-                    case Const.internet.HTTP_NOT_FOUND:
-                        message = getString(R.string.info_internet_no_connection);
-                        break;
-                    case Const.internet.HTTP_NETWORK_ERROR:
-                    default:
-                        message = getString(R.string.info_internet_error);
-                }
-                Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        loadData();
-                    }
-                }).show();
-
-                info.setText(message);
-
-                // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        };
-
-        Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(final JSONArray response) {
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
-                if (!isAdded()) {
-                    return;
-                }
-
-                // Refresh ausschalten
-                swipeRefreshLayout.setRefreshing(false);
-
-                // Meldung falls keine Prüfungen gefunden wurden
-                int count = response.length();
-                if (count == 0) {
-                    // Zusätzliche Buttons zum Wechseln des Jahrganges anzeigen
-                    changeButtonName(localButton2, localButton1);
-                    // Meldung anzeigen
-                    info.setText(R.string.exams_no_exams);
-                    return;
-                } else {
-                    info.setText(null);
-                    footer.setVisibility(View.VISIBLE);
-                }
-
-                // Prüfungen einseln parsen und zur Liste hinzufügen
-                for (int i = 0; i < count; i++) {
-                    try {
-                        ExamDate examDate = new ExamDate();
-                        examDate.parseFromJSON(response.getJSONObject(i));
-                        examDates.add(examDate);
-                    } catch (Exception e) {
-                        // Fehler intern loggen
-                        Log.e(LOG_TAG, "[Fehler] beim Parsen: Daten: " + response);
-                        Log.e(LOG_TAG, e.toString());
-
-                        // Fehlermeldung anzeigen
-                        Toast.makeText(getActivity(), R.string.info_error_parse, Toast.LENGTH_LONG).show();
-                        info.setText(R.string.info_error);
-                        return;
-                    }
-                }
-
-                // Adapter über neue Liste informieren
-                adapter.notifyDataSetChanged();
-            }
-        };
-
-        // Refresh anschalten
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        // Liste ausblenden
-        footer.setVisibility(View.GONE);
-        examDates.clear();
-        adapter.notifyDataSetChanged();
-
-        // Extra Button ausblenden
-        localButton1.setVisibility(View.GONE);
-        localButton2.setVisibility(View.GONE);
-
-        // Überprüfe ob Daten zur Abfrage vorhanden sind.
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mLayout.getContext());
-        final String studyCoursePreferences = sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "");
-
-        // Überprüfung für Studenten
-        if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
-                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() > 0
-                && studyCoursePreferences.length() > 0) {
-
-            final StudyGroup studyGroup = realm
-                    .where(StudyGroup.class)
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, studyCoursePreferences)
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
-                    .findFirst();
-
-            if (studyGroup != null) {
-                url = "GetExams.php?StgJhr=" + stgJhr
-                        + "&Stg=" + studyGroup.getStudyCourses().first().getStudyCourse()
-                        + "&AbSc=" + StudyGroupHelper.getGraduationChar(studyGroup)
-                        + "&Stgri=" + sharedPreferences.getString("StgRi", "");
-            }
-        }
-        // Überprüfung für Professoren
-        else if (sharedPreferences.getString("ProfName", "").length() > 0) {
-            url = "GetExams.php?Prof=" + sharedPreferences.getString("ProfName", "");
-        }
-
-        // Wenn keine Einstellungen gefunden wurden, Fehlermeldung anzeigen
-        if (url == null) {
-            info.setText(R.string.exams_no_settings);
-
-            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.navi_settings, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ((INavigation) getActivity()).goToNavigationItem(R.id.navigation_settings);
-                        }
-                    })
-                    .show();
-
-            // Refresh ausschalten
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
-            return;
-        }
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final IExamService iExamService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IExamService.class);
+        Call<List<ExamDate>> exams = null;
 
         // Überprüfe Internetverbindung
-        final Context context = mLayout.getContext();
-        if (!VolleyDownloader.CheckInternet(context)) {
+        if (!ConnectionHelper.checkInternetConnection(context)) {
             // Refresh ausschalten
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            onCompletion();
 
             // Meldung anzeigen
             info.setText(R.string.info_no_internet);
@@ -334,8 +164,98 @@ public class ExamsListFragment extends Fragment {
             return;
         }
 
-        // Download der Informationen
-        final JsonArrayRequest arrayRequest = new JsonArrayRequest(Const.internet.WEBSERVICE_URL + url, jsonArrayListener, errorListener);
-        VolleyDownloader.getInstance(context).addToRequestQueue(arrayRequest);
+        // Überprüfe Einstellungen
+        if (sharedPreferences.getString("ProfName", "").length() > 0) {
+            exams = iExamService.getExamSchedule(sharedPreferences.getString("ProfName", ""));
+        } else if (TimetableHelper.checkPreferencesSettings(sharedPreferences)) {
+            final StudyGroup studyGroup = realm
+                    .where(StudyGroup.class)
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
+                    .findFirst();
+
+            if (studyGroup != null && studyGroup.getStudyCourses().first() != null) {
+                exams = iExamService.getExamSchedule(
+                        stgJhr,
+                        sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""),
+                        StudyGroupHelper.getGraduationChar(studyGroup),
+                        sharedPreferences.getString("StgRi", "")
+                );
+            }
+        }
+
+        if (exams == null) {
+            info.setText(R.string.exams_no_settings);
+            onCompletion();
+
+            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.navi_settings, view -> ((INavigation) requireActivity()).goToNavigationItem(R.id.navigation_settings))
+                    .show();
+            return;
+        }
+
+        // View anpassen
+        final Button localButton1 = mLayout.findViewById(R.id.Button1);
+        final Button localButton2 = mLayout.findViewById(R.id.Button2);
+
+        footer.setVisibility(View.GONE);
+        examDates.clear();
+        adapter.notifyDataSetChanged();
+        localButton1.setVisibility(View.GONE);
+        localButton2.setVisibility(View.GONE);
+        ((SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout)).setRefreshing(true);
+
+        // API Anfrage ausführen
+        exams.enqueue(new Callback<List<ExamDate>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<ExamDate>> call, @NonNull final Response<List<ExamDate>> response) {
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
+                if (!isAdded()) {
+                    return;
+                }
+
+                if (response.isSuccessful()) {
+                    final List<ExamDate> list = response.body();
+
+                    // Meldung falls keine Prüfungen gefunden wurden
+                    if (list == null || list.isEmpty()) {
+                        // Zusätzliche Buttons zum Wechseln des Jahrganges anzeigen
+                        changeButtonName(localButton2, localButton1);
+                        // Meldung anzeigen
+                        info.setText(R.string.exams_no_exams);
+                        return;
+                    } else {
+                        info.setText(null);
+                        footer.setVisibility(View.VISIBLE);
+                    }
+
+                    examDates.addAll(list);
+                    // Adapter über neue Liste informieren
+                    adapter.notifyDataSetChanged();
+                } else {
+                    info.setText(R.string.info_internet_no_connection);
+                    Snackbar.make(mLayout, R.string.info_internet_no_connection, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
+                }
+
+                onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<ExamDate>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Ausführen des Requests ", t);
+                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
+                if (isAdded()) {
+                    info.setText(R.string.info_internet_error);
+                    onCompletion();
+                    Snackbar.make(mLayout, R.string.info_internet_error, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCompletion() {
+        ((SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout)).setRefreshing(false);
     }
 }
