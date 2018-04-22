@@ -20,7 +20,7 @@ public class MensaCreditReceiver extends AbstractCardBalanceReceiver {
         Log.i("MensaReceiver", "Mensa Guthaben erkannt: " + cardBalance);
 
         final Intent intent = new Intent(context, MensaCreditActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT + Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtras(MensaCreditActivity.setArguments(cardBalance));
         context.startActivity(intent);
     }
