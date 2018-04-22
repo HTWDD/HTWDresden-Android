@@ -20,7 +20,7 @@ import okhttp3.Credentials;
 import retrofit2.Call;
 
 /**
- * Service zum Aktualisieren der PrüfungsergebnisNse
+ * Service zum Aktualisieren der Prüfungsergebnisse
  *
  * @author Kay Förster
  */

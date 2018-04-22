@@ -104,7 +104,9 @@ public final class ExamAutoUpdateService extends ExamSyncService {
 
                 // Notifikation absenden
                 final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                notificationManager.notify(645, builder.build());
+                if (notificationManager != null) {
+                    notificationManager.notify(645, builder.build());
+                }
             }
         }
         realm.close();
@@ -122,7 +124,9 @@ public final class ExamAutoUpdateService extends ExamSyncService {
         // Create a PendingIntent to be triggered when the alarm goes off
         final PendingIntent pIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pIntent);
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pIntent);
+        }
     }
 
     /**
@@ -133,8 +137,10 @@ public final class ExamAutoUpdateService extends ExamSyncService {
     public static void cancelAutoUpdate(@NonNull final Context context) {
         final Intent intent = new Intent(context.getApplicationContext(), ExamAutoUpdateService.class);
         final PendingIntent pIntent = PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.cancel(pIntent);
+        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pIntent);
+        }
     }
 
     /**
