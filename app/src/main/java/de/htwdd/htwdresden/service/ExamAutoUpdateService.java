@@ -12,9 +12,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.LongSparseArray;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import de.htwdd.htwdresden.MainActivity;
 import de.htwdd.htwdresden.R;
@@ -44,9 +44,9 @@ public final class ExamAutoUpdateService extends ExamSyncService {
         // Alle IDs der aktuell gespeicherten Noten zwischenspeichern um später zu erkennen welche Noten neu sind.
         final Realm realm = Realm.getDefaultInstance();
         RealmResults<ExamResult> examResults = realm.where(ExamResult.class).findAll();
-        final HashSet<Long> existingExams = new HashSet<>(examResults.size());
+        final LongSparseArray<Float> existingExams = new LongSparseArray<>(examResults.size());
         for (final ExamResult examResult : examResults) {
-            existingExams.add(examResult.id);
+            existingExams.append(examResult.id, examResult.getGrade());
         }
 
         // Alle Noten laden
@@ -64,8 +64,10 @@ public final class ExamAutoUpdateService extends ExamSyncService {
             final ArrayList<ExamResult> newResults = new ArrayList<>();
             // Alle Noten durchgehen und neue herauspicken
             examResults = realm.where(ExamResult.class).findAll();
+            Float grade;
             for (final ExamResult examResult : examResults) {
-                if (!existingExams.contains(examResult.id)) {
+                grade = existingExams.get(examResult.id);
+                if (grade == null || !grade.equals(examResult.getGrade())) {
                     newResults.add(examResult);
                 }
             }
