@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
 import de.htwdd.htwdresden.service.ExamAutoUpdateService;
+import de.htwdd.htwdresden.service.TimetableProfessorSyncService;
 import de.htwdd.htwdresden.service.VolumeControllerService;
 
 /**
@@ -109,8 +110,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 final long updateInterval = ExamsHelper.getUpdateInterval(sharedPreferences.getString(key, "0"));
                 if (updateInterval == 0) {
                     ExamAutoUpdateService.cancelAutoUpdate(context);
-                } else ExamAutoUpdateService.startAutoUpdate(context, updateInterval);
-
+                } else {
+                    ExamAutoUpdateService.startAutoUpdate(context, updateInterval);
+                }
+                break;
+            case Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR:
+                // Stundenplan aktualisieren
+                context.startService(new Intent(context, TimetableProfessorSyncService.class));
                 break;
         }
     }

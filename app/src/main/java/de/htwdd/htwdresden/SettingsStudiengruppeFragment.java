@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.widget.Spinner;
 
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
@@ -141,11 +144,14 @@ public class SettingsStudiengruppeFragment extends PreferenceDialogFragmentCompa
     @Override
     public void onDialogClosed(final boolean positiveResult) {
         if (positiveResult) {
+            final Context context = requireContext();
             final SharedPreferences.Editor editor = getPreference().getSharedPreferences().edit();
             editor.putInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
             editor.apply();
+            // Stundenplan aktualisieren
+            context.startService(new Intent(context, TimetableStudentSyncService.class));
         }
         realm.close();
     }
