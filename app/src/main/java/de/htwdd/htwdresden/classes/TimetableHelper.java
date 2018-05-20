@@ -61,6 +61,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
                 .isEmpty(Const.database.Lesson.WEEKS_ONLY)
                 .or().equalTo(Const.database.Lesson.WEEKS_ONLY + ".weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
                 .endGroup()
+                .sort(Const.database.Lesson.END_TIME)
                 .findAll();
     }
 
@@ -146,20 +147,21 @@ public class TimetableHelper extends AbstractTimetableHelper {
     }
 
     /**
-     * Text wie lange die aktuelle Lehrveranstaltung noch geht
+     * Liefert Text wie lange die aktuelle Lehrveranstaltung noch geht
      *
-     * @param context aktueller App-Context
+     * @param context      aktueller App-Context
+     * @param targetLesson aktuelle Lehrveranstaltung
      * @return String wie lange eine Lehrveranstaltung noch geht
      */
-    public static String getStringRemainingTime(@NonNull final Context context) {
+    public static String getStringRemainingTime(@NonNull final Context context, @NonNull final LessonUser targetLesson) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final int currentDs = getCurrentDS(getMinutesSinceMidnight(calendar));
-        final long difference = getMinutesSinceMidnight(calendar) - endDS[currentDs - 1];
+        final long difference = getMinutesSinceMidnight(calendar) - targetLesson.getEndTime();
 
-        if (difference < 0)
+        if (difference < 0) {
             return String.format(context.getString(R.string.overview_lessons_remaining_end), -difference);
-        else
+        } else {
             return String.format(context.getString(R.string.overview_lessons_remaining_final), difference);
+        }
     }
 
     /**
@@ -172,23 +174,22 @@ public class TimetableHelper extends AbstractTimetableHelper {
     public static String getStringStartNextLesson(@NonNull final Context context, @NonNull final NextLessonResult nextLessonResult) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final int differenceDay = Math.abs(nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+        final LessonUser firstLesson = (nextLessonResult.getResults() != null && !nextLessonResult.getResults().isEmpty()) ? nextLessonResult.getResults().first() : null;
 
-        if (nextLessonResult.getResults() == null)
+        if (firstLesson == null) {
             return "";
-
-        final int nextDS = getCurrentDS(nextLessonResult.getResults().first().getBeginTime());
+        }
 
         switch (differenceDay) {
             case 0:
-                final long minuten = Const.Timetable.beginDS[nextDS - 1] - getMinutesSinceMidnight(calendar);
-                return String.format(context.getString(R.string.overview_lessons_remaining_start), minuten);
+                return String.format(context.getString(R.string.overview_lessons_remaining_start), (firstLesson.getBeginTime() - getMinutesSinceMidnight(calendar)));
             case 1:
                 return context.getString(
                         R.string.overview_lessons_tomorrow_param,
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1]))
+                                DATE_FORMAT.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
+                                DATE_FORMAT.format(Const.Timetable.getDate(firstLesson.getEndTime()))
                         )
                 );
             default:
@@ -198,8 +199,8 @@ public class TimetableHelper extends AbstractTimetableHelper {
                         nameOfDays[nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_WEEK)],
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[nextDS - 1])),
-                                DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[nextDS - 1]))
+                                DATE_FORMAT.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
+                                DATE_FORMAT.format(Const.Timetable.getDate(firstLesson.getEndTime()))
                         )
                 );
         }

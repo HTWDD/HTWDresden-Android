@@ -175,37 +175,30 @@ public class OverviewFragment extends Fragment {
 
         // Aktuelle Stunde anzeigen
         final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
-        LessonUser lesson;
+        LessonUser lesson = !currentLesson.isEmpty() ? currentLesson.first() : null;
 
-        switch (currentLesson.size()) {
-            case 0:
-                overview_lessons_current_tag.setVisibility(View.GONE);
-                overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
-                overview_lessons_current_remaining.setVisibility(View.GONE);
-                break;
-            case 1:
-                lesson = currentLesson.first();
-                overview_lessons_current_tag.setVisibility(View.VISIBLE);
+        if (lesson == null) {
+            // Aktuell keine Stunde vorhanden
+            overview_lessons_current_tag.setVisibility(View.GONE);
+            overview_lessons_current_type.setText(R.string.overview_lessons_noLesson);
+            overview_lessons_current_remaining.setVisibility(View.GONE);
+        } else {
+            // Mindestens eine Stunde vorhanden
+            overview_lessons_current_tag.setVisibility(View.VISIBLE);
+            overview_lessons_current_remaining.setVisibility(View.VISIBLE);
+            overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context, lesson));
+
+            if (currentLesson.size() == 1) {
                 overview_lessons_current_tag.setText(lesson.getLessonTag());
-                overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
                 if (lesson.getRooms().size() > 0) {
-                    overview_lessons_current_type.setText(
-                            getString(
-                                    R.string.timetable_ds_list_simple,
-                                    lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
-                                    TimetableHelper.getStringOfRooms(lesson)
-                            )
-                    );
-                } else overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
-                break;
-            default:
-                overview_lessons_current_type.setText(null);
-                overview_lessons_current_tag.setVisibility(View.VISIBLE);
+                    overview_lessons_current_type.setText(getString(R.string.timetable_ds_list_simple, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)], TimetableHelper.getStringOfRooms(lesson)));
+                } else {
+                    overview_lessons_current_type.setText(lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
+                }
+            } else {
                 overview_lessons_current_tag.setText(R.string.timetable_moreLessons);
-                overview_lessons_current_remaining.setVisibility(View.VISIBLE);
-                overview_lessons_current_remaining.setText(TimetableHelper.getStringRemainingTime(context));
-                break;
+                overview_lessons_current_type.setText(null);
+            }
         }
 
         // Nächste Stunde anzeigen

@@ -35,30 +35,31 @@ public class TimetableWidgetService extends Service {
 
         // Aktuelle Stunde anzeigen
         final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
-        switch (currentLesson.size()) {
-            case 0:
-                view.setTextViewText(R.id.widget_timetable_lesson_time, null);
-                view.setTextViewText(R.id.widget_timetable_lesson, null);
-                view.setTextViewText(R.id.widget_timetable_room, null);
-                break;
-            case 1:
-                final LessonUser lesson = currentLesson.first();
-                view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
-                view.setTextViewText(R.id.widget_timetable_lesson, lesson.getName());
-                if (lesson.getRooms().size() > 0)
+        LessonUser firstLesson = !currentLesson.isEmpty() ? currentLesson.first() : null;
+
+        if (firstLesson == null) {
+            // Aktuell keine Lehrveranstaltung
+            view.setTextViewText(R.id.widget_timetable_lesson_time, null);
+            view.setTextViewText(R.id.widget_timetable_lesson, null);
+            view.setTextViewText(R.id.widget_timetable_room, null);
+        } else if (currentLesson.size() == 1) {
+            // Aktuell nur eine Lehrveranstaltung
+            view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context, firstLesson));
+            view.setTextViewText(R.id.widget_timetable_lesson, firstLesson.getName());
+            if (firstLesson.getRooms().size() > 0) {
                     view.setTextViewText(R.id.widget_timetable_room, getString(
                             R.string.timetable_ds_list_simple,
-                            lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)],
-                            TimetableHelper.getStringOfRooms(lesson)
+                            lessonType[TimetableHelper.getIntegerTypOfLesson(firstLesson)],
+                            TimetableHelper.getStringOfRooms(firstLesson)
                     ));
-                else
-                    view.setTextViewText(R.id.widget_timetable_room, lessonType[TimetableHelper.getIntegerTypOfLesson(lesson)]);
-                break;
-            default:
-                view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context));
-                view.setTextViewText(R.id.widget_timetable_lesson, getString(R.string.timetable_moreLessons));
-                view.setTextViewText(R.id.widget_timetable_room, null);
-                break;
+            } else {
+                view.setTextViewText(R.id.widget_timetable_room, lessonType[TimetableHelper.getIntegerTypOfLesson(firstLesson)]);
+            }
+        } else {
+            // Aktuell mehrere Lehrveranstaltungen
+            view.setTextViewText(R.id.widget_timetable_lesson_time, TimetableHelper.getStringRemainingTime(context, firstLesson));
+            view.setTextViewText(R.id.widget_timetable_lesson, getString(R.string.timetable_moreLessons));
+            view.setTextViewText(R.id.widget_timetable_room, null);
         }
 
         // Nächste Stunde anzeigen
