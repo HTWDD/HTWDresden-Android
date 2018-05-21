@@ -37,11 +37,16 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionBar;
     private final NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = item -> {
-        // Markiere im NavigationDrawer
-        setNavigationItem(item);
-        // Ändere Inhalt
-        selectFragment(item.getItemId());
-
+        final int resId = item.getItemId();
+        // Activity starten
+        final boolean result = selectActivity(resId);
+        // Wenn keine Activity gestartet wurde, Fragments suchen
+        if (!result) {
+            // Markiere im NavigationDrawer
+            setNavigationItem(item);
+            // Ändere Inhalt
+            selectFragment(resId);
+        }
         return false;
     };
 
@@ -127,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         }
     }
 
-    private void selectFragment(final int position) {
+    private void selectFragment(@IdRes final int position) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment supportedFragment;
         String tag = null;
@@ -158,10 +163,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 supportedFragment = new CampusPlanFragment();
                 setTitle(getString(R.string.navi_campus));
                 break;
-            case R.id.navigation_settings:
-                supportedFragment = new SettingsFragment();
-                setTitle(getString(R.string.navi_settings));
-                break;
             case R.id.navigation_about:
                 supportedFragment = new AboutFragment();
                 setTitle(getString(R.string.navi_about));
@@ -181,6 +182,21 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // NavigationDrawer schließen
         mDrawerLayout.closeDrawers();
+    }
+
+    /**
+     * Prüft ob Auswahl eine Activity starten soll und startet diese ggf.
+     *
+     * @param position Ausgewähltes Item
+     * @return True wenn Activity gefunden wurde, sonst false
+     */
+    private boolean selectActivity(@IdRes final int position) {
+        if (position == R.id.navigation_settings) {
+            final Intent startPreferences = new Intent(this, PreferencesActivity.class);
+            startActivity(startPreferences);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -275,11 +291,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         if (title == null || title.isEmpty())
             actionBar.setTitle(R.string.app_name);
         else actionBar.setTitle(title);
-    }
-
-    @Override
-    public void setNavigationItem(final int item) {
-        setNavigationItem(getMenu(null).findItem(item));
     }
 
     @Override

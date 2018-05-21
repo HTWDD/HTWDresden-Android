@@ -106,10 +106,6 @@ public class TimetableEditActivity extends AppCompatActivity implements INavigat
     }
 
     @Override
-    public void setNavigationItem(int item) {
-    }
-
-    @Override
     public void goToNavigationItem(int item) {
     }
 }

@@ -21,7 +21,6 @@ import de.htwdd.htwdresden.adapter.ExamResultAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.ExamsHelper;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.service.ExamSyncService;
 import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
@@ -71,8 +70,8 @@ public class ExamResultFragment extends Fragment {
                 // Snackbar mit Information anzeigen
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                         .setAction(R.string.navi_settings, view -> {
-                            ((INavigation) requireActivity()).setNavigationItem(R.id.navigation_settings);
-                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                            final Context context = requireContext();
+                            context.startActivity(new Intent(context, PreferencesActivity.class));
                         })
                         .show();
                 return;

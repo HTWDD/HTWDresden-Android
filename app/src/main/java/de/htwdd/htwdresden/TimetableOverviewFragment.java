@@ -21,7 +21,6 @@ import android.widget.Toast;
 import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
-import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -56,10 +55,8 @@ public class TimetableOverviewFragment extends Fragment {
                 // Zeige Toast mit Link zu Einstellungen an
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                         .setAction(R.string.navi_settings, view -> {
-                            // Navigation ändern
-                            ((INavigation) requireActivity()).setNavigationItem(R.id.navigation_settings);
-                            // Fragment "Einstellungen" anzeigen
-                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_FrameLayout, new SettingsFragment()).addToBackStack("back").commit();
+                            final Context context = requireContext();
+                            context.startActivity(new Intent(context, PreferencesActivity.class));
                         })
                         .show();
                 // Refresh ausschalten

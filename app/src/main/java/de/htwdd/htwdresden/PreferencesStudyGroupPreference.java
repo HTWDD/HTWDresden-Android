@@ -1,18 +1,16 @@
 package de.htwdd.htwdresden;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
+import android.preference.DialogPreference;
+import android.support.annotation.NonNull;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.service.TimetableStudentSyncService;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
@@ -21,31 +19,28 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
- * Gruppierter Dialog für die Einstellung der Studiengruppe
+ * Eine individuelle Einstellung
  *
  * @author Kay Förster
  */
-public class SettingsStudiengruppeFragment extends PreferenceDialogFragmentCompat {
+public class PreferencesStudyGroupPreference extends DialogPreference {
     private Realm realm;
     private int studyYear;
     private String studyCourse;
     private String studyGroup;
 
-    public static SettingsStudiengruppeFragment newInstance(@Nullable final String key) {
-        final SettingsStudiengruppeFragment fragment = new SettingsStudiengruppeFragment();
-        final Bundle b = new Bundle(1);
-        b.putString(ARG_KEY, key);
-        fragment.setArguments(b);
-
-        return fragment;
+    public PreferencesStudyGroupPreference(final Context context, final AttributeSet attrs) {
+        super(context, attrs);
+        setPersistent(false);
+        setDialogLayoutResource(R.layout.preferences_studiengruppe);
     }
 
     @Override
-    protected void onBindDialogView(View view) {
+    protected void onBindDialogView(@NonNull final View view) {
         super.onBindDialogView(view);
 
         realm = Realm.getDefaultInstance();
-        final SharedPreferences sharedPreferences = getPreference().getSharedPreferences();
+        final SharedPreferences sharedPreferences = getSharedPreferences();
         final RealmResults<StudyYear> realmResultsYear = realm.where(StudyYear.class).findAll();
 
         // Finde aktuell ausgewählte Position
@@ -142,17 +137,17 @@ public class SettingsStudiengruppeFragment extends PreferenceDialogFragmentCompa
     }
 
     @Override
-    public void onDialogClosed(final boolean positiveResult) {
+    protected void onDialogClosed(final boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+
         if (positiveResult) {
-            final Context context = requireContext();
-            final SharedPreferences.Editor editor = getPreference().getSharedPreferences().edit();
+            final SharedPreferences.Editor editor = getEditor();
             editor.putInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
-            editor.apply();
-            // Stundenplan aktualisieren
-            context.startService(new Intent(context, TimetableStudentSyncService.class));
+            editor.commit();
         }
         realm.close();
     }
+
 }

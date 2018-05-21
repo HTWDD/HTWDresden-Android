@@ -9,14 +9,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,16 +30,17 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
  *
  * @author Kay Förster
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private final static String LOG_TAG = "SettingsFragment";
+public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private final static String LOG_TAG = "PreferencesFragment";
     private final static int PERMISSIONS_REQUEST_NOTIFICATION_SERVICE = 1;
 
-    public SettingsFragment() {
+    public PreferencesFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -68,22 +66,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onDisplayPreferenceDialog(Preference preference) {
-        final FragmentManager fragmentManager = getFragmentManager();
-        if (preference instanceof SettingsStudyGroupPreference && fragmentManager != null) {
-            // Create a new instance of TimePreferenceDialogFragment with the key of the related
-            // Preference
-            final DialogFragment dialogFragment = SettingsStudiengruppeFragment.newInstance(preference.getKey());
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG");
-        } else {
-            super.onDisplayPreferenceDialog(preference);
-        }
-    }
-
-    @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-        final Context context = requireContext();
+        final Context context = getActivity();
 
         switch (key) {
             // Automatisches Muten bei Lehrveranstaltungen
@@ -126,7 +110,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         switch (requestCode) {
             case PERMISSIONS_REQUEST_NOTIFICATION_SERVICE:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    final Context context = requireContext();
+                    final Context context = getActivity();
                     final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
                     // Überprüfe ob Berechtigung gesetzt wurde
                     final NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -156,7 +140,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
      * Service zum automatischen Muten des Gerätes starten oder beenden
      */
     private void manageVolumeService() {
-        final Context context = requireContext();
+        final Context context = getActivity();
         final PackageManager packageManager = context.getPackageManager();
         final VolumeControllerService volumeControllerService = new VolumeControllerService();
         final ComponentName receiver = new ComponentName(context, VolumeControllerService.HtwddBootReceiver.class);
