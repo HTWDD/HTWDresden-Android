@@ -36,7 +36,7 @@ public final class ExamsHelper {
     public static ArrayList<ExamStats> getExamStats() {
         final Realm realm = Realm.getDefaultInstance();
         final ArrayList<ExamStats> stats = new ArrayList<>();
-        final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinctValues(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
+        final RealmResults<ExamResult> examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
 
         for (final ExamResult result : examHeaders) {
             stats.add(getExamStatsForSemester(realm, result.semester));

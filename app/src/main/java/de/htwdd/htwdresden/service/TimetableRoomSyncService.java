@@ -37,7 +37,7 @@ public class TimetableRoomSyncService extends AbstractSyncHelper {
             getTimetableFromWeb(intent.getStringExtra(Const.BundleParams.ROOM_TIMETABLE_ROOM));
         } else {
             final Realm realm = Realm.getDefaultInstance();
-            final RealmResults<LessonRoom> rooms = realm.where(LessonRoom.class).distinctValues(Const.database.LessonRoom.ROOM).findAll();
+            final RealmResults<LessonRoom> rooms = realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM).findAll();
             for (final LessonRoom room : rooms) {
                 getTimetableFromWeb(room.getRoom());
             }

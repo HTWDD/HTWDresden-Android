@@ -63,7 +63,7 @@ public class RoomTimetableFragment extends Fragment {
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
 
         // Adapter für Liste erzeugen
-        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinctValues(Const.database.LessonRoom.ROOM).findAll());
+        roomTimetableAdapter = new RoomTimetableAdapter(realm, realm.where(LessonRoom.class).distinct(Const.database.LessonRoom.ROOM).findAll());
 
         // ListView
         final ListView listView = mLayout.findViewById(R.id.listView);

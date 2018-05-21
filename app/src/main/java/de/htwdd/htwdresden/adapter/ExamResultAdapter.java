@@ -38,7 +38,7 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
         this.realm = realm;
         this.context = context;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.examHeaders = realm.where(ExamResult.class).distinctValues(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
+        this.examHeaders = realm.where(ExamResult.class).distinct(Const.database.ExamResults.SEMESTER).sort(Const.database.ExamResults.SEMESTER, Sort.DESCENDING).findAll();
     }
 
     @Override
