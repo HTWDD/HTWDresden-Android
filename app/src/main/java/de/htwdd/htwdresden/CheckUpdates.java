@@ -41,7 +41,7 @@ class CheckUpdates implements Runnable {
     @Override
     public void run() {
         // Überprüfe Internetverbindung
-        if (!ConnectionHelper.checkInternetConnection(context)) {
+        if (ConnectionHelper.checkNoInternetConnection(context)) {
             return;
         }
 

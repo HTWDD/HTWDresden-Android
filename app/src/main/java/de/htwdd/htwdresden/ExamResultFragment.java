@@ -57,7 +57,7 @@ public class ExamResultFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             final Context context1 = mLayout.getContext();
             // Überprüfe ob Internetverbindung besteht
-            if (!ConnectionHelper.checkInternetConnection(context1)) {
+            if (ConnectionHelper.checkNoInternetConnection(context1)) {
                 // Refresh ausschalten
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(context1, R.string.info_no_internet, Toast.LENGTH_LONG).show();

@@ -105,7 +105,7 @@ public class RoomTimetableFragment extends Fragment {
             final Context context = mLayout.getContext();
 
             // Überprüfe Internetverbindung
-            if (!ConnectionHelper.checkInternetConnection(context)) {
+            if (ConnectionHelper.checkNoInternetConnection(context)) {
                 // Meldung anzeigen
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(false);

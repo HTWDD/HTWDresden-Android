@@ -60,7 +60,7 @@ public class MensaDetailDayFragment extends Fragment implements IRefreshing {
                 return;
             }
             // Überprüfe Internetverbindung
-            if (!ConnectionHelper.checkInternetConnection(context)) {
+            if (ConnectionHelper.checkNoInternetConnection(context)) {
                 onCompletion();
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;

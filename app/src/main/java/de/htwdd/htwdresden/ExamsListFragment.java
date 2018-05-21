@@ -154,7 +154,7 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         Call<List<ExamDate>> exams = null;
 
         // Überprüfe Internetverbindung
-        if (!ConnectionHelper.checkInternetConnection(context)) {
+        if (ConnectionHelper.checkNoInternetConnection(context)) {
             // Refresh ausschalten
             onCompletion();
 
