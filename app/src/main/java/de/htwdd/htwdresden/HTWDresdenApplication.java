@@ -30,7 +30,7 @@ import io.realm.RealmConfiguration;
         resTheme = R.style.AppTheme,
         resCommentPrompt = R.string.crash_dialog_comment_prompt
 )
-@AcraMailSender(mailTo = "app@htw-dresden.de", subject = R.string.app_name)
+@AcraMailSender(mailTo = "app@htw-dresden.de", resSubject = R.string.app_name)
 public class HTWDresdenApplication extends Application {
     private MensaCreditReceiver mensaCreditReceiver;
 
