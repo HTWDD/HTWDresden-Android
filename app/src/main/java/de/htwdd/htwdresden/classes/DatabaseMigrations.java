@@ -51,7 +51,7 @@ public class DatabaseMigrations implements RealmMigration {
                                 migratedRooms.add(week.getString("roomName"));
                             }
                         })
-                        .removeField("children")
+                        .removeField("rooms")
                         .renameField("rooms_tmp", "rooms");
                 schema.remove("Room");
             }
