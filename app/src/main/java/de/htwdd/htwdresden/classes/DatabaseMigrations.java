@@ -7,6 +7,7 @@ import java.util.Date;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
+import io.realm.RealmFieldType;
 import io.realm.RealmList;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
@@ -18,7 +19,7 @@ import io.realm.RealmSchema;
 public class DatabaseMigrations implements RealmMigration {
     @Override
     public void migrate(@NonNull final DynamicRealm realm, long oldVersion, final long newVersion) {
-        Log.d("Migration", "Alt: " + oldVersion + " Neu" + newVersion );
+        Log.d("Migration", "Alt: " + oldVersion + " Neu: " + newVersion);
         // DynamicRealm exposes an editable schema
         final RealmSchema schema = realm.getSchema();
 
@@ -41,7 +42,7 @@ public class DatabaseMigrations implements RealmMigration {
 
         if (oldVersion == 4) {
             final RealmObjectSchema lessonUserSchema = schema.get("LessonUser");
-            if (lessonUserSchema != null) {
+            if (lessonUserSchema != null && lessonUserSchema.getFieldType("rooms") != RealmFieldType.STRING_LIST) {
                 // Room in primitiven Datentyp umwandeln
                 lessonUserSchema.addRealmListField("rooms_tmp", String.class)
                         .transform(obj -> {
@@ -53,8 +54,12 @@ public class DatabaseMigrations implements RealmMigration {
                         })
                         .removeField("rooms")
                         .renameField("rooms_tmp", "rooms");
+            }
+            // Delete model "Room"
+            if (schema.contains("Room")) {
                 schema.remove("Room");
             }
+            // Migrate model "LessonRoom"
             final RealmObjectSchema lessonRoomSchema = schema.get("LessonRoom");
             if (lessonRoomSchema != null) {
                 lessonRoomSchema.removeField("studyGroups");
