@@ -34,7 +34,7 @@ public class TimetableWidgetService extends Service {
         final String[] lessonType = getResources().getStringArray(R.array.lesson_type);
 
         // Aktuelle Stunde anzeigen
-        final RealmResults<LessonUser> currentLesson = TimetableHelper.getCurrentLessons(realm);
+        final RealmResults<LessonUser> currentLesson = TimetableHelper.getLessonWithin(realm, 0);
         LessonUser firstLesson = !currentLesson.isEmpty() ? currentLesson.first() : null;
 
         if (firstLesson == null) {
@@ -63,7 +63,7 @@ public class TimetableWidgetService extends Service {
         }
 
         // Nächste Stunde anzeigen
-        final NextLessonResult nextLessonResult = TimetableHelper.getNextLessons(realm);
+        final NextLessonResult nextLessonResult = TimetableHelper.getLessonAfter(realm, firstLesson);
         if (nextLessonResult.getResults() == null || nextLessonResult.getResults().size() == 0) {
             view.setTextViewText(R.id.widget_timetable_lesson_time_next, null);
             view.setTextViewText(R.id.widget_timetable_lesson_next, null);

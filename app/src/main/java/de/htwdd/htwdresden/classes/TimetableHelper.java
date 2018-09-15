@@ -12,11 +12,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.interfaces.ILesson;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.LessonWeek;
+import de.htwdd.htwdresden.types.semsterPlan.Semester;
+import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
@@ -33,14 +36,35 @@ import static de.htwdd.htwdresden.classes.Const.Timetable.endDS;
  */
 public class TimetableHelper extends AbstractTimetableHelper {
 
+    @Nullable
+    public static TimePeriod getFreeDayPeriod(@NonNull final Realm realm, @NonNull final Calendar calendar) {
+        final Semester freeDays = realm.where(Semester.class)
+                .greaterThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_START, calendar.getTime())
+                .and()
+                .lessThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_END, calendar.getTime())
+                .findFirst();
+
+        if (freeDays != null){
+            return freeDays.getFreeDays()
+                    .where()
+                    .greaterThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_START, calendar.getTime())
+                    .and()
+                    .lessThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_END, calendar.getTime())
+                    .findFirst();
+        }
+
+        return null;
+    }
+
     /**
-     * Liefert eine Liste der aktuell laufenden Lehrveranstaltungen
+     * Lieferte eine Liste von Lehrveranstaltungen welche innerhalb der angeben Zeitspanne starten
      *
-     * @param realm aktuelle Datenbankverbindung
-     * @return Liste von aktuell laufenden Lehrveranstaltungen. Finden aktuell keine statt ist die Liste leer
+     * @param realm   Datenbankverbindung
+     * @param minutes Zeitspanne für startende Veranstaltungen
+     * @return Liste von Lehrveranstaltungen
      */
     @NonNull
-    public static RealmResults<LessonUser> getCurrentLessons(@NonNull final Realm realm) {
+    public static RealmResults<LessonUser> getLessonWithin(@NonNull final Realm realm, final long minutes) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final long currentTime = getMinutesSinceMidnight(calendar);
         return realm.where(LessonUser.class)
@@ -55,7 +79,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
                 .endGroup()
                 // Nach Zeit einschränken
                 .greaterThan(Const.database.Lesson.END_TIME, currentTime)
-                .lessThan(Const.database.Lesson.BEGIN_TIME, currentTime)
+                .lessThan(Const.database.Lesson.BEGIN_TIME, currentTime + minutes)
                 // Einzelne Wochen ausschließen
                 .beginGroup()
                 .isEmpty(Const.database.Lesson.WEEKS_ONLY)
@@ -64,6 +88,58 @@ public class TimetableHelper extends AbstractTimetableHelper {
                 .sort(Const.database.Lesson.END_TIME)
                 .findAll();
     }
+
+    @NonNull
+    public static NextLessonResult getLessonAfter(@NonNull final Realm realm, @Nullable final LessonUser lessonUser) {
+        final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
+        final NextLessonResult lessonResult = new NextLessonResult();
+
+        if (lessonUser != null) {
+            final int hour = (int) TimeUnit.MINUTES.toHours(lessonUser.getEndTime());
+            calendar.set(Calendar.DAY_OF_WEEK, lessonUser.getDay() + 1);
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, (int) (lessonUser.getEndTime() - TimeUnit.HOURS.toMinutes(hour)));
+        }
+
+        // Suche Veranstaltungen in der restlichen aktuellen Woche
+        LessonUser firstFoundedLesson = getStartNextLessonInWeek(realm, calendar);
+        // Suche Lehrveranstaltung in der nächsten Woche
+        if (firstFoundedLesson == null) {
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            firstFoundedLesson = getStartNextLessonInWeek(realm, calendar);
+        }
+
+        if (firstFoundedLesson != null) {
+            // passende Stunde gefunden, Zeitpunkt übernehmen
+            final int hour = (int) TimeUnit.MINUTES.toHours(firstFoundedLesson.getBeginTime());
+            calendar.set(Calendar.DAY_OF_WEEK, firstFoundedLesson.getDay() + 1);
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, (int) (firstFoundedLesson.getBeginTime() - TimeUnit.HOURS.toMinutes(hour)));
+            calendar.set(Calendar.SECOND, 0);
+
+            final int nextDs = getCurrentDS((long) firstFoundedLesson.getBeginTime());
+
+            // Da in der passenden Zeit mehrere Veranstaltungen stattfinden können, diese suchen
+            final RealmResults<LessonUser> results = realm.where(LessonUser.class)
+                    .equalTo(Const.database.Lesson.HIDE_LESSON, false)
+                    .equalTo(Const.database.Lesson.DAY, firstFoundedLesson.getDay())
+                    .greaterThanOrEqualTo(Const.database.Lesson.BEGIN_TIME, firstFoundedLesson.getBeginTime())
+                    .lessThan(Const.database.Lesson.BEGIN_TIME, endDS[nextDs > 0 ? nextDs - 1 : nextDs])
+                    .beginGroup()
+                    .isEmpty(Const.database.Lesson.WEEKS_ONLY)
+                    .or().equalTo(Const.database.Lesson.WEEKS_ONLY + ".weekOfYear", calendar.get(Calendar.WEEK_OF_YEAR))
+                    .endGroup()
+                    .sort(new String[]{Const.database.Lesson.DAY, Const.database.Lesson.BEGIN_TIME}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING})
+                    .findAll();
+            lessonResult.setResults(results);
+            lessonResult.setStartTimeOfLesson(calendar);
+        }
+        return lessonResult;
+    }
+
 
     /**
      * Liefert eine List der Lehrveranstaltungen des übergebenen Tages und Ds
@@ -105,48 +181,6 @@ public class TimetableHelper extends AbstractTimetableHelper {
     }
 
     /**
-     * Liefert die nächste stattfinde Lehrveranstaltungen
-     *
-     * @param realm aktuelle Datenbankverbindung
-     * @return {@link NextLessonResult} mit Informationen zur nächsten Lehrveranstaltung
-     */
-    public static NextLessonResult getNextLessons(@NonNull final Realm realm) {
-        final NextLessonResult lessonResult = new NextLessonResult(GregorianCalendar.getInstance(Locale.GERMANY));
-
-        // Suche Lehrveranstaltung in der aktuellen Woche
-        LessonUser startLesson = getStartNextLessonInWeek(realm, lessonResult.getOnNextDay());
-        // Suche Lehrveranstaltung in der nächsten Woche
-        if (startLesson == null) {
-            final Calendar calendar = lessonResult.getOnNextDay();
-            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-            calendar.add(Calendar.WEEK_OF_YEAR, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            startLesson = getStartNextLessonInWeek(realm, calendar);
-        }
-
-        if (startLesson != null) {
-            final int nextDs = getCurrentDS((long) startLesson.getBeginTime());
-            lessonResult.getOnNextDay().set(Calendar.DAY_OF_WEEK, startLesson.getDay() + 1);
-
-            // Da in der passenden Zeit mehrere Veranstaltungen stattfinden können, diese suchen
-            final RealmResults<LessonUser> results = realm.where(LessonUser.class)
-                    .equalTo(Const.database.Lesson.HIDE_LESSON, false)
-                    .equalTo(Const.database.Lesson.DAY, startLesson.getDay())
-                    .greaterThanOrEqualTo(Const.database.Lesson.BEGIN_TIME, startLesson.getBeginTime())
-                    .lessThan(Const.database.Lesson.BEGIN_TIME, endDS[nextDs > 0 ? nextDs - 1 : nextDs])
-                    .beginGroup()
-                    .isEmpty(Const.database.Lesson.WEEKS_ONLY)
-                    .or().equalTo(Const.database.Lesson.WEEKS_ONLY + ".weekOfYear", lessonResult.getOnNextDay().get(Calendar.WEEK_OF_YEAR))
-                    .endGroup()
-                    .sort(new String[]{Const.database.Lesson.DAY, Const.database.Lesson.BEGIN_TIME}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING})
-                    .findAll();
-            lessonResult.setResults(results);
-        }
-        return lessonResult;
-    }
-
-    /**
      * Liefert Text wie lange die aktuelle Lehrveranstaltung noch geht
      *
      * @param context      aktueller App-Context
@@ -155,12 +189,15 @@ public class TimetableHelper extends AbstractTimetableHelper {
      */
     public static String getStringRemainingTime(@NonNull final Context context, @NonNull final LessonUser targetLesson) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final long difference = getMinutesSinceMidnight(calendar) - targetLesson.getEndTime();
+        final long differenceEnd = getMinutesSinceMidnight(calendar) - targetLesson.getEndTime();
+        final long differenceStart = targetLesson.getBeginTime() - getMinutesSinceMidnight(calendar);
 
-        if (difference < 0) {
-            return String.format(context.getString(R.string.overview_lessons_remaining_end), -difference);
+        if (differenceStart > 0) {
+            return context.getString(R.string.overview_lessons_remaining_start, differenceStart);
+        } else if (differenceEnd < 0) {
+            return context.getString(R.string.overview_lessons_remaining_end, -differenceEnd);
         } else {
-            return String.format(context.getString(R.string.overview_lessons_remaining_final), difference);
+            return context.getString(R.string.overview_lessons_remaining_final, differenceEnd);
         }
     }
 
@@ -173,7 +210,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
      */
     public static String getStringStartNextLesson(@NonNull final Context context, @NonNull final NextLessonResult nextLessonResult) {
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
-        final int differenceDay = Math.abs(nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
+        final int differenceDay = Math.abs(nextLessonResult.getStartTimeOfLesson().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
         final LessonUser firstLesson = (nextLessonResult.getResults() != null && !nextLessonResult.getResults().isEmpty()) ? nextLessonResult.getResults().first() : null;
 
         if (firstLesson == null) {
@@ -182,7 +219,14 @@ public class TimetableHelper extends AbstractTimetableHelper {
 
         switch (differenceDay) {
             case 0:
-                return String.format(context.getString(R.string.overview_lessons_remaining_start), (firstLesson.getBeginTime() - getMinutesSinceMidnight(calendar)));
+                long difference = firstLesson.getBeginTime() - getMinutesSinceMidnight(calendar);
+                if (difference > 65) {
+                    final long hours = TimeUnit.HOURS.convert(difference, TimeUnit.MINUTES);
+                    final long minutes = difference - (hours * 60);
+                    return context.getString(R.string.overview_lessons_remaining_start_detail, hours, minutes);
+                } else {
+                    return String.format(context.getString(R.string.overview_lessons_remaining_start), difference);
+                }
             case 1:
                 return context.getString(
                         R.string.overview_lessons_tomorrow_param,
@@ -196,7 +240,7 @@ public class TimetableHelper extends AbstractTimetableHelper {
                 final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
                 return context.getString(
                         R.string.overview_lessons_future,
-                        nameOfDays[nextLessonResult.getOnNextDay().get(Calendar.DAY_OF_WEEK)],
+                        nameOfDays[nextLessonResult.getStartTimeOfLesson().get(Calendar.DAY_OF_WEEK)],
                         context.getString(
                                 R.string.timetable_ds_list_simple,
                                 DATE_FORMAT.format(Const.Timetable.getDate(firstLesson.getBeginTime())),

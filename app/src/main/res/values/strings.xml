@@ -218,11 +218,13 @@
     <string name="overview_lessons_noLesson">keine Veranstaltung</string>
     <string name="overview_lessons_next">Nächste</string>
     <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
+    <string name="overview_lessons_remaining_start_detail">in %1$dh %2$dmin</string>
     <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
     <string name="overview_lessons_remaining_final">Ende seit %1$d Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
     <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future" translatable="false">%1$s %2$s</string>
+    <string name="overview_lessons_no_room">kein Raum angeg.</string>
     <string name="overview_mensa_load">Lade Daten</string>
     <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
