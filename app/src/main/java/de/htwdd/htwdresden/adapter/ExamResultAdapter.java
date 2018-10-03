@@ -43,12 +43,12 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return examHeaders.size();
+        return isDataValid() ? examHeaders.size() : 0;
     }
 
     @Override
     public int getChildrenCount(final int i) {
-        if (examHeaders.size() < i) {
+        if (!isDataValid() || examHeaders.size() < i) {
             return 0;
         }
 
@@ -57,14 +57,15 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    @Nullable
     public ExamResult getGroup(final int i) {
-        return examHeaders.get(i);
+        return isDataValid() ? examHeaders.get(i) : null;
     }
 
     @Override
     @Nullable
     public ExamResult getChild(final int i, final int i1) {
-        if (examHeaders.size() < i) {
+        if (!isDataValid() || examHeaders.size() < i) {
             return null;
         }
         final ExamResult examResult = examHeaders.get(i);
@@ -101,9 +102,16 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
             view = mLayoutInflater.inflate(R.layout.fragment_exams_result_group, viewGroup, false);
             view.setTag(viewHolder);
             viewHolder.textView1 = view.findViewById(R.id.listHeader);
-        } else viewHolder = (ViewHolder) view.getTag();
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
 
-        viewHolder.textView1.setText(ExamsHelper.getSemesterName(view.getResources(), getGroup(i).semester));
+        final ExamResult examResult = getGroup(i);
+        if (examResult != null) {
+            viewHolder.textView1.setText(ExamsHelper.getSemesterName(view.getResources(), examResult.semester));
+        } else {
+            viewHolder.textView1.setText(null);
+        }
 
         return view;
     }
@@ -225,6 +233,10 @@ public class ExamResultAdapter extends BaseExpandableListAdapter {
 
     private RealmQuery<ExamResult> getChildren(@NonNull final Integer semester) {
         return realm.where(ExamResult.class).equalTo(Const.database.ExamResults.SEMESTER, semester);
+    }
+
+    private boolean isDataValid() {
+        return !realm.isClosed() && examHeaders != null && examHeaders.isValid();
     }
 
     private static class ViewHolder {
