@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import de.htwdd.htwdresden.adapter.MensaOverviewDayShortAdapter;
 import de.htwdd.htwdresden.classes.API.IGeneralService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.Const;
@@ -55,9 +57,7 @@ public class OverviewFragment extends Fragment {
     // Datenbank
     private Realm realm;
     private RealmResults<ExamResult> examResults;
-    private RealmResults<Meal> meals;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
-    private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
     private final Handler refreshHandler = new Handler();
     private Runnable runnable = new Runnable() {
         @Override
@@ -90,12 +90,15 @@ public class OverviewFragment extends Fragment {
         }
 
         // Daten für Mensa laden und anzeigen
-        final Calendar calendar = GregorianCalendar.getInstance();
         realm = Realm.getDefaultInstance();
-        realmListenerMensa = element -> showMensaInfo(meals);
-        meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 1).findAll();
-        meals.addChangeListener(realmListenerMensa);
-        showMensaInfo(meals);
+        final ListView mensaView = mLayout.findViewById(R.id.overviewMensaList);
+        final RealmResults<Meal> meals = realm.where(Meal.class)
+                .equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(GregorianCalendar.getInstance()))
+                .equalTo(Const.database.Canteen.MENSA_ID, 1)
+                .findAll();
+        mensaView.setAdapter(new MensaOverviewDayShortAdapter(meals));
+        mensaView.setClickable(false);
+        mensaView.setEmptyView(mLayout.findViewById(R.id.overviewMensaMessage));
 
         // Übersicht über Noten
         realmListenerExams = element -> showExamStats(element.size() > 0);
@@ -116,8 +119,7 @@ public class OverviewFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        final Calendar calendar = Calendar.getInstance();
-        refreshHandler.postDelayed(runnable, TimeUnit.SECONDS.toMillis(60 - calendar.get(Calendar.SECOND)));
+        refreshHandler.postDelayed(runnable, TimeUnit.SECONDS.toMillis(60 - Calendar.getInstance().get(Calendar.SECOND)));
     }
 
     @Override
@@ -130,7 +132,6 @@ public class OverviewFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         examResults.removeChangeListener(realmListenerExams);
-        meals.removeChangeListener(realmListenerMensa);
         realm.close();
     }
 
@@ -140,22 +141,21 @@ public class OverviewFragment extends Fragment {
      * @param examsAvailable Sind Noten vorhanden?
      */
     private void showExamStats(final boolean examsAvailable) {
-        final TextView message = mLayout.findViewById(R.id.overview_examResultStatsMessage);
-        final LinearLayout content = mLayout.findViewById(R.id.overview_examResultStatsContent);
+        mLayout.findViewById(R.id.overview_examResultStatsMessage).setVisibility(examsAvailable ? View.GONE : View.VISIBLE);
+        final TextView stats_average = mLayout.findViewById(R.id.stats_average);
+        final TextView stats_countGrade = mLayout.findViewById(R.id.stats_countGrade);
+        final TextView stats_countCredits = mLayout.findViewById(R.id.stats_countCredits);
+        final TextView stats_gradeBest = mLayout.findViewById(R.id.stats_gradeBest);
+        final TextView stats_gradeWorst = mLayout.findViewById(R.id.stats_gradeWorst);
 
         if (examsAvailable) {
-            message.setVisibility(View.GONE);
-            content.setVisibility(View.VISIBLE);
-
             // Erstelle Statistik
             final ExamStats examStats = ExamsHelper.getExamStatsForSemester(realm, null);
-
-            // Views holen
-            final TextView stats_average = mLayout.findViewById(R.id.stats_average);
-            final TextView stats_countGrade = mLayout.findViewById(R.id.stats_countGrade);
-            final TextView stats_countCredits = mLayout.findViewById(R.id.stats_countCredits);
-            final TextView stats_gradeBest = mLayout.findViewById(R.id.stats_gradeBest);
-            final TextView stats_gradeWorst = mLayout.findViewById(R.id.stats_gradeWorst);
+            stats_average.setVisibility(View.VISIBLE);
+            stats_countGrade.setVisibility(View.VISIBLE);
+            stats_countCredits.setVisibility(View.VISIBLE);
+            stats_gradeBest.setVisibility(View.VISIBLE);
+            stats_gradeWorst.setVisibility(View.VISIBLE);
 
             stats_average.setText(getString(R.string.exams_stats_average, String.format(Locale.getDefault(), "%.2f", examStats.getAverage())));
             stats_countGrade.setText(getResources().getQuantityString(R.plurals.exams_stats_count_grade, (int) examStats.gradeCount, (int) examStats.gradeCount));
@@ -163,8 +163,11 @@ public class OverviewFragment extends Fragment {
             stats_gradeBest.setText(getString(R.string.exams_stats_gradeBest, examStats.getGradeBest()));
             stats_gradeWorst.setText(getString(R.string.exams_stats_gradeWorst, examStats.getGradeWorst()));
         } else {
-            message.setVisibility(View.VISIBLE);
-            content.setVisibility(View.GONE);
+            stats_average.setVisibility(View.GONE);
+            stats_countGrade.setVisibility(View.GONE);
+            stats_countCredits.setVisibility(View.GONE);
+            stats_gradeBest.setVisibility(View.GONE);
+            stats_gradeWorst.setVisibility(View.GONE);
         }
     }
 
@@ -319,29 +322,6 @@ public class OverviewFragment extends Fragment {
 
         // Karte anzeigen oder ausblenden
         mLayout.findViewById(R.id.overview_timetableNew).setVisibility(showCard ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * Zeigt die Mahlzeiten als einfache Liste an
-     *
-     * @param meals Liste der Mahlzeiten
-     */
-    private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
-        final TextView message = mLayout.findViewById(R.id.overview_mensaMessage);
-        final TextView content = mLayout.findViewById(R.id.overview_mensaContent);
-
-        // Aktuell kein Angebot vorhanden
-        if (meals.size() == 0) {
-            message.setText(R.string.mensa_no_offer);
-            message.setVisibility(View.VISIBLE);
-            content.setVisibility(View.GONE);
-            return;
-        }
-
-        // Inhalt anzeigen
-        content.setText(MensaHelper.concatTitels(mLayout.getContext(), meals));
-        message.setVisibility(View.GONE);
-        content.setVisibility(View.VISIBLE);
     }
 
     private void showNews() {

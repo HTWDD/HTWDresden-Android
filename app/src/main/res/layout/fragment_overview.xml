@@ -3,7 +3,6 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             tools:context="de.htwdd.htwdresden.OverviewFragment">
 
     <LinearLayout
@@ -15,15 +14,28 @@
             android:id="@+id/overview_timetableNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_between_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/space_between_content"
             card_view:cardCornerRadius="4dp">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/overview_lesson_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/navi_mensa"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/overview_timetable"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/overview_timetable_headline"
@@ -31,18 +43,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/navi_timetable"
-                    card_view:layout_constraintStart_toStartOf="parent"
-                    card_view:layout_constraintTop_toTopOf="parent"/>
+                    card_view:layout_constraintBottom_toBottomOf="@+id/overview_lesson_image"
+                    card_view:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
                     android:id="@+id/overview_lesson_slot1_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:visibility="visible"
                     card_view:layout_constraintEnd_toStartOf="@+id/guideline2"
                     card_view:layout_constraintStart_toStartOf="parent"
@@ -78,10 +90,8 @@
                     card_view:layout_constraintTop_toBottomOf="@+id/overview_lesson_slot1_name"/>
 
                 <TextView
-                android:layout_width="0dp"
-                app:layout_constraintWidth_default="wrap"
                     android:id="@+id/overview_lesson_slot2_time"
-
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -131,10 +141,10 @@
             android:id="@+id/overview_timetable_daily_surveying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_between_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/space_between_content"
             android:visibility="gone"
             card_view:cardCornerRadius="4dp">
 
@@ -156,8 +166,8 @@
                     android:id="@+id/overview_timetable_lessons_day"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
                     card_view:layout_constraintBottom_toBottomOf="@+id/textView13"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/textView13"
@@ -167,10 +177,10 @@
                     android:id="@+id/overview_timetable_lessons_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_weight="2"
                     android:orientation="vertical"
                     card_view:layout_constraintBottom_toBottomOf="parent"
@@ -181,15 +191,85 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/overview_mensa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/space_between_content"
+            card_view:cardCornerRadius="4dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/overview_mensa_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/navi_mensa"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/overview_mensa"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/TextAppearance.AppCompat.Title.Inverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/navi_mensa"
+                    card_view:layout_constraintBottom_toBottomOf="@+id/overview_mensa_image"
+                    card_view:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/overviewMensaMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/mensa_no_offer"
+                    android:visibility="visible"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@+id/overview_mensa_image"/>
+
+                <de.htwdd.htwdresden.classes.NonScrollListView
+                    android:id="@+id/overviewMensaList"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:divider="@null"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@+id/overview_mensa_image"/>
+
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/overview_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_between_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/space_between_content"
-            card_view:cardCornerRadius="4dp"
-            android:visibility="gone">
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/space_between_content"
+            android:visibility="gone"
+            card_view:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -198,57 +278,16 @@
 
                 <TextView
                     android:id="@+id/overview_news_title"
-                    android:layout_width="match_parent"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/overview_header"
-                    android:padding="@dimen/space_between_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:layout_marginStart="@dimen/space_between_content"
+                    android:layout_marginTop="@dimen/space_between_content"/>
 
                 <WebView
+                    android:id="@+id/overview_news_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/overview_news_content" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/overview_mensa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_between_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/space_between_content"
-            card_view:cardCornerRadius="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/overview_header"
-                    android:padding="@dimen/space_between_content"
-                    android:text="@string/navi_mensa"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/overview_mensaMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="@dimen/space_between_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/overview_mensaContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="@dimen/space_between_content" />
-
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -256,81 +295,119 @@
             android:id="@+id/overview_examResultStats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_between_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/space_between_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/space_between_content"
             card_view:cardCornerRadius="4dp">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    card_view:layout_constraintGuide_percent="0.5"/>
+
+                <ImageView
+                    android:id="@+id/overview_examResultStats_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/navi_mensa"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/overview_exam_results"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/overview_examResultStats_title"
+                    style="@style/TextAppearance.AppCompat.Title.Inverse"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/overview_header"
-                    android:padding="@dimen/space_between_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/exams_grade"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    card_view:layout_constraintBottom_toBottomOf="@+id/overview_examResultStats_image"
+                    card_view:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
                     android:id="@+id/overview_examResultStatsMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/space_between_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/exams_result_no_results"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@+id/overview_examResultStats_image"/>
 
-                <LinearLayout
-                    android:id="@+id/overview_examResultStatsContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/space_between_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                <TextView
+                    android:id="@+id/stats_average"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/colorAccent"
+                    card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@+id/overview_examResultStats_image"/>
 
-                    <TextView
-                        android:id="@+id/stats_average"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/colorAccent" />
+                <TextView
+                    android:id="@+id/stats_countGrade"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="@+id/guideline"
+                    card_view:layout_constraintTop_toBottomOf="@+id/overview_examResultStats_image"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingEnd="@dimen/space_between_content"
-                        android:paddingStart="@dimen/space_between_content">
+                <TextView
+                    android:id="@+id/stats_countCredits"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginEnd="8dp"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="@+id/guideline"
+                    card_view:layout_constraintTop_toBottomOf="@+id/stats_countGrade"/>
 
-                        <TextView
-                            android:id="@+id/stats_countGrade"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/stats_gradeBest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="@+id/guideline"
+                    card_view:layout_constraintTop_toBottomOf="@+id/stats_countCredits"/>
 
-                        <TextView
-                            android:id="@+id/stats_countCredits"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/stats_gradeBest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_between_content" />
-
-                        <TextView
-                            android:id="@+id/stats_gradeWorst"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/stats_gradeWorst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintStart_toStartOf="@+id/guideline"
+                    card_view:layout_constraintTop_toBottomOf="@+id/stats_gradeBest"/>
+            </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>
