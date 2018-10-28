@@ -79,8 +79,8 @@ public class OverviewFragment extends Fragment {
 
         if (navigation != null) {
             // Stundenplan
-            mLayout.findViewById(R.id.overview_timetable_lessons_day).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
-            mLayout.findViewById(R.id.overview_timetable_lessons_list).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
+            mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
+            mLayout.findViewById(R.id.overview_timetable_daily_surveying).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
 
             // Navigation zur Mensa
             mLayout.findViewById(R.id.overview_mensa).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_mensa));
@@ -321,7 +321,7 @@ public class OverviewFragment extends Fragment {
         showLessonOverview(calendar, nextLessonResult);
 
         // Karte anzeigen oder ausblenden
-        mLayout.findViewById(R.id.overview_timetableNew).setVisibility(showCard ? View.VISIBLE : View.GONE);
+        mLayout.findViewById(R.id.overview_timetable).setVisibility(showCard ? View.VISIBLE : View.GONE);
     }
 
     private void showNews() {

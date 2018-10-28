@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.R;
@@ -34,7 +36,6 @@ import static de.htwdd.htwdresden.classes.Const.Timetable.endDS;
  * @author Kay Förster
  */
 abstract class AbstractTimetableHelper {
-    final static DateFormat DATE_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
 
     /**
      * Liefert die Minuten seit Mitternacht aus dem übergeben {@see Calendar}
@@ -118,6 +119,20 @@ abstract class AbstractTimetableHelper {
     }
 
     /**
+     * Liefert ein korrigiertes {@link DateFormat} zurück.
+     *
+     * @param context aktueller App-Context
+     * @return {@link DateFormat} mit richter Formatierung
+     * @see <a href="https://stackoverflow.com/questions/48636884/java-dateformat-short-in-android-not-working-as-expected">stackoverflow.com</a>
+     */
+    static DateFormat getDateFormat(@NonNull final Context context) {
+        final boolean use24Hour = android.text.format.DateFormat.is24HourFormat(context);
+        final String skeleton = use24Hour ? "Hm" : "hm";
+        final String pattern = android.text.format.DateFormat.getBestDateTimePattern(Locale.GERMANY, skeleton);
+        return new SimpleDateFormat(pattern, Locale.GERMANY);
+    }
+
+    /**
      * Bestimmt ob übergebene Kalenderwoche gerade oder ungerade ist
      *
      * @param calendarWeek aktuelle Kalenderwoche
@@ -152,6 +167,7 @@ abstract class AbstractTimetableHelper {
      */
     static <T extends RealmModel & ILesson> void createSimpleLessonOverview(@NonNull final Context context, @NonNull final List<RealmResults<T>> iLessons,
                                                                             @NonNull final LinearLayout linearLayout, final int current_ds) {
+        final DateFormat dateFormat = getDateFormat(context);
         final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final Resources resources = context.getResources();
         int iteration = 0;
@@ -172,8 +188,8 @@ abstract class AbstractTimetableHelper {
             final TextView textDS = sub_view.findViewById(R.id.timetable_busy_plan_ds);
             textDS.setText(resources.getString(
                     R.string.timetable_ds_list_simple,
-                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.beginDS[iteration])),
-                    DATE_FORMAT.format(Const.Timetable.getDate(Const.Timetable.endDS[iteration]))
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.beginDS[iteration])),
+                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.endDS[iteration]))
             ));
 
             // Stunde anzeigen
