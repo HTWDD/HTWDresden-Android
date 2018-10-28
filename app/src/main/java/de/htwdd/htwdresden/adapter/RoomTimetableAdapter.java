@@ -47,9 +47,9 @@ public class RoomTimetableAdapter extends RealmBaseAdapter<LessonRoom> {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.fragment_room_timetable_item, viewGroup, false);
             view.setTag(viewHolder);
-            viewHolder.overview = (LinearLayout) view.findViewById(R.id.overview_lessons_list);
-            viewHolder.title = (TextView) view.findViewById(R.id.fragment_room_timetable_titel);
-            viewHolder.day = (TextView) view.findViewById(R.id.overview_lesson_day);
+            viewHolder.overview = view.findViewById(R.id.overview_lessons_list);
+            viewHolder.title = view.findViewById(R.id.fragment_room_timetable_titel);
+            viewHolder.day = view.findViewById(R.id.overview_lesson_day);
         } else viewHolder = (ViewHolder) view.getTag();
 
         final LessonRoom lessonRoom = getItem(i);

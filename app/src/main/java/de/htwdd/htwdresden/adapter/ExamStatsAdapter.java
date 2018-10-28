@@ -35,12 +35,12 @@ public class ExamStatsAdapter extends AbstractBaseAdapter<ExamStats> {
             viewHolder = new ViewHolder();
             convertView = mLayoutInflater.inflate(R.layout.exam_stats_item, parent, false);
             convertView.setTag(viewHolder);
-            viewHolder.semester = (TextView) convertView.findViewById(R.id.stats_semester);
-            viewHolder.average = (TextView) convertView.findViewById(R.id.stats_average);
-            viewHolder.countGrades = (TextView) convertView.findViewById(R.id.stats_countGrade);
-            viewHolder.countCredits = (TextView) convertView.findViewById(R.id.stats_countCredits);
-            viewHolder.gradeBest = (TextView) convertView.findViewById(R.id.stats_gradeBest);
-            viewHolder.gradeWorst = (TextView) convertView.findViewById(R.id.stats_gradeWorst);
+            viewHolder.semester = convertView.findViewById(R.id.stats_semester);
+            viewHolder.average = convertView.findViewById(R.id.stats_average);
+            viewHolder.countGrades = convertView.findViewById(R.id.stats_countGrade);
+            viewHolder.countCredits = convertView.findViewById(R.id.stats_countCredits);
+            viewHolder.gradeBest = convertView.findViewById(R.id.stats_gradeBest);
+            viewHolder.gradeWorst = convertView.findViewById(R.id.stats_gradeWorst);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
         final ExamStats examStats = getItem(position);

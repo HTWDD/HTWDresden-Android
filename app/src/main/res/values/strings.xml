@@ -212,11 +212,7 @@
     <string name="about_project">Projekt</string>
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
 
-    <string name="overview_update_available">Update verfügbar!</string>
-    <string name="overview_update_available_message">Bitte Update auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
-    <string name="overview_lessons_current">Aktuell</string>
-    <string name="overview_lessons_noLesson">keine Veranstaltung</string>
-    <string name="overview_lessons_next">Nächste</string>
+    <string name="overview_lessons_noLesson">keine Veranstaltungen</string>
     <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
     <string name="overview_lessons_remaining_start_detail">in %1$dh %2$dmin</string>
     <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
@@ -225,8 +221,6 @@
     <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future" translatable="false">%1$s\n%2$s</string>
     <string name="overview_lessons_no_room">kein Raum angeg.</string>
-    <string name="overview_mensa_load">Lade Daten</string>
-    <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
     <string name="crash_dialog_ok_toast">Vielen Dank!</string>
     <string name="crash_dialog_comment_prompt">Sie können eine Beschreibung des Problems hier hinzufügen:</string>

@@ -22,7 +22,7 @@ abstract class AbstractBaseAdapter<T> extends BaseAdapter {
     AbstractBaseAdapter(@NonNull final Context context, @NonNull final ArrayList<T> data) {
         this.data = data;
         this.context = context;
-        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override

@@ -71,12 +71,12 @@ abstract class AbstractTimetableGridAdapter<T extends RealmModel & ILesson> exte
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.fragment_timetable_grid_item, viewGroup, false);
             view.setTag(viewHolder);
-            viewHolder.type = (TextView) view.findViewById(R.id.timetableType);
-            viewHolder.tag = (TextView) view.findViewById(R.id.timetableTag);
-            viewHolder.room = (TextView) view.findViewById(R.id.timetableRoom);
-            viewHolder.more = (TextView) view.findViewById(R.id.timetableMoreLessons);
-            viewHolder.kw = (TextView) view.findViewById(R.id.timetableOnlyKW);
-            viewHolder.layout = (LinearLayout) view.findViewById(R.id.timetableLayout);
+            viewHolder.type = view.findViewById(R.id.timetableType);
+            viewHolder.tag = view.findViewById(R.id.timetableTag);
+            viewHolder.room = view.findViewById(R.id.timetableRoom);
+            viewHolder.more = view.findViewById(R.id.timetableMoreLessons);
+            viewHolder.kw = view.findViewById(R.id.timetableOnlyKW);
+            viewHolder.layout = view.findViewById(R.id.timetableLayout);
         } else viewHolder = (ViewHolder) view.getTag();
 
         // Standardmäßig alles ausblenden
@@ -140,7 +140,7 @@ abstract class AbstractTimetableGridAdapter<T extends RealmModel & ILesson> exte
                     lesson = lessons.first();
                 }
                 // mehrere Lehrveranstaltungen für dieser DS vorhanden
-                else if (lessons.size() > 1) {
+                else {
                     int singleLesson = 0;
                     if (!filterCurrentWeek) {
                         // Wenn nicht nach einer entsprechenden Woche gesucht wird jetzt nach einer Lehrveranstaltung suchen, welche bevorzugt angezeigt werden kann

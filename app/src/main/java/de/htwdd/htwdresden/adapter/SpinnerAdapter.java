@@ -21,12 +21,6 @@ public class SpinnerAdapter<T extends RealmObject & ISpinnerEntity> extends Real
     private final boolean addInitialText;
     private final String initialText;
 
-    public SpinnerAdapter(@Nullable final OrderedRealmCollection<T> data) {
-        super(data);
-        addInitialText = false;
-        initialText = null;
-    }
-
     public SpinnerAdapter(@Nullable OrderedRealmCollection<T> data, @Nullable final String initialText) {
         super(data);
         this.addInitialText = true;

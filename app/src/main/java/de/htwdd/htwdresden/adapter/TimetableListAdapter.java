@@ -28,8 +28,8 @@ import io.realm.RealmBaseAdapter;
 public class TimetableListAdapter extends RealmBaseAdapter<LessonUser> {
     private static final String[] nameOfDays = Arrays.copyOfRange(DateFormatSymbols.getInstance().getWeekdays(), 2, 8);
     private final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-    private static String[] lessonWeek;
-    private static String[] lessonType;
+    private final String[] lessonWeek;
+    private final String[] lessonType;
 
     public TimetableListAdapter(@NonNull final Context context, @Nullable final OrderedRealmCollection<LessonUser> data) {
         super(data);
@@ -49,13 +49,13 @@ public class TimetableListAdapter extends RealmBaseAdapter<LessonUser> {
             view = LayoutInflater.from(context).inflate(R.layout.timetable_list_item, viewGroup, false);
             view.setTag(viewHolder);
 
-            viewHolder.lesson_name = (TextView) view.findViewById(R.id.timetable_edit_lessonName);
-            viewHolder.lesson_typ = (TextView) view.findViewById(R.id.timetable_edit_lessonType);
-            viewHolder.lesson_room = (TextView) view.findViewById(R.id.timetable_edit_lessonRooms);
-            viewHolder.lesson_kw = (TextView) view.findViewById(R.id.timetable_edit_lessonWeek);
-            viewHolder.lesson_day = (TextView) view.findViewById(R.id.timetable_edit_lessonDay);
-            viewHolder.lesson_ds = (TextView) view.findViewById(R.id.timetable_edit_lessonDS);
-            viewHolder.lesson_weeksOnly = (TextView) view.findViewById(R.id.timetable_edit_lessonWeeksOnly);
+            viewHolder.lesson_name = view.findViewById(R.id.timetable_edit_lessonName);
+            viewHolder.lesson_typ = view.findViewById(R.id.timetable_edit_lessonType);
+            viewHolder.lesson_room = view.findViewById(R.id.timetable_edit_lessonRooms);
+            viewHolder.lesson_kw = view.findViewById(R.id.timetable_edit_lessonWeek);
+            viewHolder.lesson_day = view.findViewById(R.id.timetable_edit_lessonDay);
+            viewHolder.lesson_ds = view.findViewById(R.id.timetable_edit_lessonDS);
+            viewHolder.lesson_weeksOnly = view.findViewById(R.id.timetable_edit_lessonWeeksOnly);
         } else viewHolder = (ViewHolder) view.getTag();
 
         final LessonUser lesson = getItem(i);

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
                 // Schließe Tastatur
                 final View currentFocus = getCurrentFocus();
-                if (currentFocus != null && currentFocus instanceof EditText) {
+                if (currentFocus instanceof EditText) {
                     final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

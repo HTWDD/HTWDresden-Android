@@ -125,8 +125,8 @@ public final class Const {
         public static class SemesterPlan {
             public static final String SEMESTER_START = "period.beginDay";
             public static final String SEMESTER_END = "period.endDay";
-            public static final String FREE_DAYS_START = "freeDays.beginDay";
-            public static final String FREE_DAYS_END = "freeDays.endDay";
+            static final String FREE_DAYS_START = "freeDays.beginDay";
+            static final String FREE_DAYS_END = "freeDays.endDay";
         }
 
         public static class StudyGroups {

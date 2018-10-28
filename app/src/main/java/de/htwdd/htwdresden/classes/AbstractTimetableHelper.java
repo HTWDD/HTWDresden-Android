@@ -168,7 +168,7 @@ abstract class AbstractTimetableHelper {
     static <T extends RealmModel & ILesson> void createSimpleLessonOverview(@NonNull final Context context, @NonNull final List<RealmResults<T>> iLessons,
                                                                             @NonNull final LinearLayout linearLayout, final int current_ds) {
         final DateFormat dateFormat = getDateFormat(context);
-        final LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         final Resources resources = context.getResources();
         int iteration = 0;
         int foundedLessons;
@@ -201,10 +201,12 @@ abstract class AbstractTimetableHelper {
                     break;
                 case 1:
                     final ILesson lesson = lessons.first();
-                    if (lesson.getLessonTag() != null) {
-                        textLesson.setText(context.getResources().getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
-                    } else {
-                        textLesson.setText(lesson.getType());
+                    if (lesson != null){
+                        if (lesson.getLessonTag() != null) {
+                            textLesson.setText(resources.getString(R.string.timetable_overview_lessons, lesson.getLessonTag(), lesson.getType()));
+                        } else {
+                            textLesson.setText(lesson.getType());
+                        }
                     }
                     break;
                 default:
