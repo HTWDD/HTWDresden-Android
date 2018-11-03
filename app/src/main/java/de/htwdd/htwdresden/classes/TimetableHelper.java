@@ -48,9 +48,9 @@ public class TimetableHelper extends AbstractTimetableHelper {
         if (freeDays != null){
             return freeDays.getFreeDays()
                     .where()
-                    .greaterThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_START, calendar.getTime())
+                    .greaterThanOrEqualTo(Const.database.SemesterPlan.TIME_PERIOD_DAYS_START, calendar.getTime())
                     .and()
-                    .lessThanOrEqualTo(Const.database.SemesterPlan.FREE_DAYS_END, calendar.getTime())
+                    .lessThanOrEqualTo(Const.database.SemesterPlan.TIME_PERIOD_DAYS_END, calendar.getTime())
                     .findFirst();
         }
 

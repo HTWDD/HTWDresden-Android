@@ -123,10 +123,13 @@ public final class Const {
         }
 
         public static class SemesterPlan {
-            public static final String SEMESTER_START = "period.beginDay";
-            public static final String SEMESTER_END = "period.endDay";
-            static final String FREE_DAYS_START = "freeDays.beginDay";
-            static final String FREE_DAYS_END = "freeDays.endDay";
+            static final String TIME_PERIOD_DAYS_START = "beginDay";
+            static final String TIME_PERIOD_DAYS_END = "endDay";
+            public static final String SEMESTER_START = "period." + TIME_PERIOD_DAYS_START;
+            public static final String SEMESTER_END = "period." + TIME_PERIOD_DAYS_END;
+            static final String FREE_DAYS_START = "freeDays." + TIME_PERIOD_DAYS_START;
+            static final String FREE_DAYS_END = "freeDays." + TIME_PERIOD_DAYS_END;
+
         }
 
         public static class StudyGroups {
