@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
 import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
@@ -141,11 +142,14 @@ public class PreferencesStudyGroupPreference extends DialogPreference {
         super.onDialogClosed(positiveResult);
 
         if (positiveResult) {
+            // Speichere Einstellungen
             final SharedPreferences.Editor editor = getEditor();
             editor.putInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
             editor.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
             editor.commit();
+            // Starte Stundenplan Synchronisation
+            TimetableHelper.startSyncService(getContext());
         }
         realm.close();
     }
