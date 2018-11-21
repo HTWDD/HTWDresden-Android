@@ -3,19 +3,10 @@
     <PreferenceCategory
         android:key="pref_key_storage_settings"
         android:title="@string/settings_category_access_data">
-        <EditTextPreference
-            android:dialogMessage="@string/settings_bibNummer_dialogMessage"
-            android:key="sNummer"
-            android:numeric="integer"
-            android:summary="@string/settings_bibNummer_summary"
-            android:title="@string/settings_bibNummer" />
-        <EditTextPreference
-            android:dialogMessage="@string/settings_rzLogin_dialogMessage"
-            android:key="RZLogin"
-            android:summary="@string/settings_rzLogin_summary"
-            android:inputType="textPassword"
-            android:password="true"
-            android:title="@string/settings_rzLogin" />
+        <de.htwdd.htwdresden.PreferencesLoginPreference
+            android:key="login"
+            android:summary="@string/settings_login_summary"
+            android:title="@string/settings_login"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_study">
         <de.htwdd.htwdresden.PreferencesStudyGroupPreference
@@ -51,6 +42,7 @@
             android:key="autoExamUpdate"
             android:entries="@array/autoExamsUpdateInterval"
             android:entryValues="@array/autoExamsUpdateInterval_values"
+            android:defaultValue="0"
             android:summary="@string/settings_exam_results_summary"
             android:title="@string/settings_exam_results"/>
     </PreferenceCategory>

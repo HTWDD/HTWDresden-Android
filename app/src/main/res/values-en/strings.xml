@@ -151,9 +151,9 @@
     <string name="settings_audio">Automatic muting</string>
     <string name="settings_audio_request_permission">Permission needed to change notification settings</string>
     <string name="settings_audio_summary">Your phone will be muted during a lesson automatically.</string>
-    <string name="settings_bibNummer">Library user number</string>
-    <string name="settings_bibNummer_dialogMessage">You can find your library user number on your student card. It is written as sXXXXX. Input without s at the beginning!</string>
-    <string name="settings_bibNummer_summary">Needed for grade update</string>
+    <string name="settings_login_summary">Use: grade update</string>
+    <string name="settings_login_password">Password</string>
+    <string name="settings_login_username">Library user number</string>
     <string name="settings_category_access_data">Access data</string>
     <string name="settings_category_app_intern">HTWDresden internal</string>
     <string name="settings_category_other">other settings</string>
@@ -166,8 +166,6 @@
     <string name="settings_prof_id_summary">Use: Timetable</string>
     <string name="settings_prof_name">Examiner name</string>
     <string name="settings_prof_only">This option is only available for professors!</string>
-    <string name="settings_rzLogin_dialogMessage">Your UNIX-Password (e.g. used for login at OPAL)</string>
-    <string name="settings_rzLogin_summary">Needed for grade update</string>
     <string name="settings_studiengang">Study course</string>
     <string name="settings_studiengang_summary">Use: timetable, exams</string>
     <string name="settings_studiengruppe">Study group</string>

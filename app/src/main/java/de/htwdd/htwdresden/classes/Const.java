@@ -40,6 +40,8 @@ public final class Const {
         public static final String PREFERENCES_TIMETABLE_STUDIENGANG = "Stg";
         public static final String PREFERENCES_TIMETABLE_STUDIENGRUPPE = "StgGrp";
         public static final String PREFERENCES_TIMETABLE_PROFESSOR = "professorKey";
+        public static final String PREFERENCES_LOGIN_USERNAME = "sNummer";
+        public static final String PREFERENCES_LOGIN_PASSWORD = "RZLogin";
     }
 
     public static final class Timetable {

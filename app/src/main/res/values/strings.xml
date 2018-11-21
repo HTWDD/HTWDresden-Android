@@ -45,12 +45,10 @@
     <string name="settings_category_profs_summary">Einstellungen ausschließlich für Professoren</string>
     <string name="settings_category_other">sonstige Einstellungen</string>
     <string name="settings_category_app_intern">HTWDresden intern</string>
-    <string name="settings_bibNummer">Bibliotheksnummer</string>
-    <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
-    <string name="settings_rzLogin" translatable="false">RZLogin</string>
-    <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
+    <string name="settings_login" translatable="false">HTW-Login</string>
+    <string name="settings_login_summary">Verwendung: Notenabfrage</string>
+    <string name="settings_login_password">Passwort</string>
+    <string name="settings_login_username">Bibliotheksnummer</string>
     <string name="settings_jahrgang">Jahrgang</string>
     <string name="settings_studiengang">Studiengang</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
