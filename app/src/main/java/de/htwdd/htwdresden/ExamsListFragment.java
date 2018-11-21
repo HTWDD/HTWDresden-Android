@@ -45,7 +45,6 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
     private final static String LOG_TAG = "ExamsListFragment";
     private Realm realm;
     private View mLayout;
-    private View footer;
     private int stgJhr;
     private final ArrayList<ExamDate> examDates = new ArrayList<>();
     private ExamListAdapter adapter;
@@ -80,9 +79,9 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
 
         // ListView zusammenbauen
         final ListView listView = mLayout.findViewById(R.id.listView);
-        footer = inflater.inflate(R.layout.fragment_exams_footer, listView, false);
         listView.setAdapter(adapter);
-        listView.addFooterView(footer);
+        listView.setEmptyView(mLayout.findViewById(R.id.message_info));
+        listView.addFooterView(inflater.inflate(R.layout.fragment_exams_footer, listView, false));
 
         // Buttons zum wechseln des Imma-Jahres
         final Button buttonAdd = mLayout.findViewById(R.id.Button2);
@@ -199,7 +198,6 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         final Button localButton1 = mLayout.findViewById(R.id.Button1);
         final Button localButton2 = mLayout.findViewById(R.id.Button2);
 
-        footer.setVisibility(View.GONE);
         examDates.clear();
         adapter.notifyDataSetChanged();
         localButton1.setVisibility(View.GONE);
@@ -224,10 +222,8 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
                         changeButtonName(localButton2, localButton1);
                         // Meldung anzeigen
                         info.setText(R.string.exams_no_exams);
-                        return;
                     } else {
                         info.setText(null);
-                        footer.setVisibility(View.VISIBLE);
                     }
 
                     examDates.addAll(list);
