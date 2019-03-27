@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.LinearLayout;
 
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -210,7 +210,6 @@ public class TimetableHelper extends AbstractTimetableHelper {
      * @return String wenn die nächste Lehrveranstaltung startet
      */
     public static String getStringStartNextLesson(@NonNull final Context context, @NonNull final NextLessonResult nextLessonResult) {
-        final DateFormat dateFormat = getDateFormat(context);
         final Calendar calendar = GregorianCalendar.getInstance(Locale.GERMANY);
         final int differenceDay = Math.abs(nextLessonResult.getStartTimeOfLesson().get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR));
         final LessonUser firstLesson = (nextLessonResult.getResults() != null && !nextLessonResult.getResults().isEmpty()) ? nextLessonResult.getResults().first() : null;
@@ -234,8 +233,8 @@ public class TimetableHelper extends AbstractTimetableHelper {
                         R.string.overview_lessons_tomorrow_param,
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                dateFormat.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
-                                dateFormat.format(Const.Timetable.getDate(firstLesson.getEndTime()))
+                                TIME_INSTANCE.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
+                                TIME_INSTANCE.format(Const.Timetable.getDate(firstLesson.getEndTime()))
                         )
                 );
             default:
@@ -245,8 +244,8 @@ public class TimetableHelper extends AbstractTimetableHelper {
                         nameOfDays[nextLessonResult.getStartTimeOfLesson().get(Calendar.DAY_OF_WEEK)],
                         context.getString(
                                 R.string.timetable_ds_list_simple,
-                                dateFormat.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
-                                dateFormat.format(Const.Timetable.getDate(firstLesson.getEndTime()))
+                                TIME_INSTANCE.format(Const.Timetable.getDate(firstLesson.getBeginTime())),
+                                TIME_INSTANCE.format(Const.Timetable.getDate(firstLesson.getEndTime()))
                         )
                 );
         }

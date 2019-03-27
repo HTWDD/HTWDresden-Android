@@ -36,6 +36,7 @@ import static de.htwdd.htwdresden.classes.Const.Timetable.endDS;
  * @author Kay Förster
  */
 abstract class AbstractTimetableHelper {
+    static final DateFormat TIME_INSTANCE = DateFormat.getTimeInstance(DateFormat.SHORT);
 
     /**
      * Liefert die Minuten seit Mitternacht aus dem übergeben {@see Calendar}
@@ -167,7 +168,6 @@ abstract class AbstractTimetableHelper {
      */
     static <T extends RealmModel & ILesson> void createSimpleLessonOverview(@NonNull final Context context, @NonNull final List<RealmResults<T>> iLessons,
                                                                             @NonNull final LinearLayout linearLayout, final int current_ds) {
-        final DateFormat dateFormat = getDateFormat(context);
         final LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         final Resources resources = context.getResources();
         int iteration = 0;
@@ -188,8 +188,8 @@ abstract class AbstractTimetableHelper {
             final TextView textDS = sub_view.findViewById(R.id.timetable_busy_plan_ds);
             textDS.setText(resources.getString(
                     R.string.timetable_ds_list_simple,
-                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.beginDS[iteration])),
-                    dateFormat.format(Const.Timetable.getDate(Const.Timetable.endDS[iteration]))
+                    TIME_INSTANCE.format(Const.Timetable.getDate(Const.Timetable.beginDS[iteration])),
+                    TIME_INSTANCE.format(Const.Timetable.getDate(Const.Timetable.endDS[iteration]))
             ));
 
             // Stunde anzeigen
