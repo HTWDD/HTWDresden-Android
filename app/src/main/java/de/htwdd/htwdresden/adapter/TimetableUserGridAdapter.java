@@ -1,6 +1,6 @@
 package de.htwdd.htwdresden.adapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Calendar;
 

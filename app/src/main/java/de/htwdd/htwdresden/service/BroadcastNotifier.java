@@ -2,8 +2,8 @@ package de.htwdd.htwdresden.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.htwdd.htwdresden.classes.Const;
 

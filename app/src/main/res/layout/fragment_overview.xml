@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/overview_timetable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,9 +163,9 @@
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/overview_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -194,9 +194,9 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/overview_news_content" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/overview_mensa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -235,9 +235,9 @@
                     android:padding="@dimen/space_between_content" />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/overview_examResultStats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -316,6 +316,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>

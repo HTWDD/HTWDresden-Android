@@ -1,6 +1,6 @@
 package de.htwdd.htwdresden.classes;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 

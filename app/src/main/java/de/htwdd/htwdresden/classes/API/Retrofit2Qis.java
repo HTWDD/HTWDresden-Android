@@ -1,7 +1,7 @@
 package de.htwdd.htwdresden.classes.API;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
