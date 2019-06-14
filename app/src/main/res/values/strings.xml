@@ -1,4 +1,7 @@
 <resources>
+    <string name="auth_type">de.htwdd.htwdresden</string>
+    <string name="account_title">Account</string>
+
     <string name="app_name" translatable="false">HTWDresden</string>
     <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
     <string name="app_developer_name" translatable="false">Kay Förster</string>

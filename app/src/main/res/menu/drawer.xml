@@ -43,6 +43,10 @@
                     android:id="@+id/navigation_about"
                     android:icon="@drawable/ic_info_outline_24dp"
                     android:title="@string/navi_about" />
+                <item
+                    android:id="@+id/account_tab_activity"
+                    android:icon="@drawable/ic_info_outline_24dp"
+                    android:title="@string/account_title" />
             </menu>
         </item>
     </group>

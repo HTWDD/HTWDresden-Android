@@ -171,6 +171,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 supportedFragment = new ManagementFragment();
                 setTitle(getString(R.string.navi_uni_administration));
                 break;
+            case R.id.account_tab_activity:
+                supportedFragment = new AccountFragment();
+                setTitle(getString(R.string.account_title));
+                break;
             default:
                 supportedFragment = new Fragment();
                 break;
