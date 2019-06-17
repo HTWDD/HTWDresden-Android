@@ -10,8 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.account.ListAdapter.Item;
 
 public class AuthenticatorActivity extends AccountAuthenticatorActivity implements OnClickListener{
 
@@ -96,6 +100,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 			//Add the account to the Android System
 			if (mAccountManager.addAccountExplicitly(account, password, userData)) {
+				try {
+					Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.auth_type));
+
+					if(accounts.length > 1) {
+						mAccountManager.removeAccount(accounts[0], arg0 -> {
+						}, null);
+					}
+				} catch (Exception e) {
+					Log.i(TAG, "Exception:" + e);
+				}
 				// worked
 				Log.d(TAG, "Account added");
 				mAccountManager.setAuthToken(account, mAuthTokenType, authtoken);
@@ -114,5 +128,4 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 	public void onClick(View v) {
 		userSignIn();		
 	}
-
 }

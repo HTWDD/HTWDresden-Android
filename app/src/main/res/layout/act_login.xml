@@ -12,7 +12,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="20dp"
-              android:hint="Email address"
+              android:hint="@string/RZLogin"
               android:inputType="textEmailAddress"
               android:padding="10dp"
             />
@@ -22,7 +22,7 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
               android:inputType="textPassword"
-              android:hint="Password"
+              android:hint="@string/password"
               android:padding="10dp"
             />
 
@@ -30,7 +30,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
-              android:text="Sign in"
+              android:text="@string/sign_in"
               android:padding="10dp"/>
 
 </LinearLayout>

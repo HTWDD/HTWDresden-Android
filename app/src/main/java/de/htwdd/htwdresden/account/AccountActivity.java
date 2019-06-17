@@ -39,20 +39,7 @@ public class AccountActivity extends Activity implements OnClickListener {
         mAccountManager = AccountManager.get(this);
 
         findViewById(R.id.button1).setOnClickListener(this);
-        findViewById(R.id.button2).setOnClickListener(this);
     }
-
-//    private void showMessage(final String msg) {
-//        if (TextUtils.isEmpty(msg))
-//            return;
-//
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
     private ArrayList<Item> getData() {
         ArrayList<Item> accountsList = new ArrayList<Item>();
@@ -93,12 +80,6 @@ public class AccountActivity extends Activity implements OnClickListener {
         if (v.getId() == R.id.button1) {
             Intent createIntent = new Intent(AccountActivity.this, AuthenticatorActivity.class);
             startActivity(createIntent);
-        }
-        if (v.getId() == R.id.button2) {
-            list = getData();
-            listView = findViewById(R.id.listView1);
-            listadaptor = new ListAdapter(AccountActivity.this, R.layout.row_layout, list);
-            listView.setAdapter(listadaptor);
         }
     }
 }
