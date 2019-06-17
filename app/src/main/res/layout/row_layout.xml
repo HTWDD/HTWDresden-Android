@@ -25,6 +25,6 @@
         android:layout_height="30dp"
         android:padding="10dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/close_btn" />
+        android:background="@drawable/close_btn"/>
 
 </RelativeLayout>

@@ -90,7 +90,7 @@
 
         <!-- Services -->
         <service
-        android:name="account.AuthenticatorService"
+        android:name=".account.AuthenticatorService"
         android:exported="true"
         android:process=":auth" >
         <intent-filter>
