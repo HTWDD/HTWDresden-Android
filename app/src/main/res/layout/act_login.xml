@@ -12,8 +12,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="20dp"
-              android:hint="@string/RZLogin"
-              android:inputType="textEmailAddress"
+              android:hint="@string/sNummer"
+              android:inputType="text"
               android:padding="10dp"
             />
 
@@ -25,6 +25,41 @@
               android:hint="@string/password"
               android:padding="10dp"
             />
+    <EditText android:id="@+id/stdRichtung"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:inputType="text"
+        android:hint="@string/settings_studienrichtung"
+        android:padding="10dp"
+        />
+
+    <Spinner
+        android:id="@+id/ctvJahrgang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <Spinner
+        android:id="@+id/ctvStudiengang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <Spinner
+        android:id="@+id/ctvStudiengruppe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
 
     <Button android:id="@+id/submit"
               android:layout_width="match_parent"

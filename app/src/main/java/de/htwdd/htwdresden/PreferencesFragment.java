@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,6 +27,10 @@ import de.htwdd.htwdresden.service.ExamAutoUpdateService;
 import de.htwdd.htwdresden.service.TimetableProfessorSyncService;
 import de.htwdd.htwdresden.service.VolumeControllerService;
 
+import static android.app.Activity.RESULT_OK;
+import static androidx.constraintlayout.widget.Constraints.TAG;
+import static de.htwdd.htwdresden.account.AuthenticatorActivity.PARAM_USER_PASS;
+
 /**
  * Fragment für die Einstellungen
  *
@@ -33,6 +39,7 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final static String LOG_TAG = "PreferencesFragment";
     private final static int PERMISSIONS_REQUEST_NOTIFICATION_SERVICE = 1;
+    private AccountManager mAccountManager;
 
     public PreferencesFragment() {
         // Required empty public constructor
@@ -42,6 +49,9 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mAccountManager = AccountManager.get(getContext());
+        }
     }
 
     @Override
@@ -101,6 +111,14 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
             case Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR:
                 // Stundenplan aktualisieren
                 context.startService(new Intent(context, TimetableProfessorSyncService.class));
+                break;
+            case "RZLogin":
+                String password = (String) sharedPreferences.getAll().get(key);
+                break;
+                default:
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        Account[] existingAccount = AccountManager.get(context).getAccountsByType(getString(R.string.auth_type));
+                    }
                 break;
         }
     }

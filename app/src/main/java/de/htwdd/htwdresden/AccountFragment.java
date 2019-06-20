@@ -2,10 +2,13 @@ package de.htwdd.htwdresden;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +24,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import de.htwdd.htwdresden.account.AccountActivity;
 import de.htwdd.htwdresden.account.AuthenticatorActivity;
 import de.htwdd.htwdresden.account.ListAdapter.Item;
-import de.htwdd.htwdresden.account.ListAdapter.ListAdapter;
 
 public class AccountFragment extends Fragment {
 
@@ -58,7 +58,6 @@ public class AccountFragment extends Fragment {
     private ArrayList<Item> getData() {
         ArrayList<Item> accountsList = new ArrayList<Item>();
 
-        // Getting all registered Our Application Accounts;
         try {
             Account[] accounts = AccountManager.get(getContext()).getAccountsByType(getString(R.string.auth_type));
             for (Account account : accounts) {
@@ -69,72 +68,30 @@ public class AccountFragment extends Fragment {
             Log.i(TAG, "Exception:" + e);
         }
 
-        // For all registered accounts;
-        /*
-         * try { Account[] accounts = AccountManager.get(this).getAccounts();
-         * for (Account account : accounts) { Item item = new Item(
-         * account.type, account.name); accountsList.add(item); } } catch
-         * (Exception e) { Log.i("Exception", "Exception:" + e); }
-         */
         return accountsList;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        list = getData();
-        textView = view.findViewById(R.id.account_tv);
-
-        if(list.isEmpty())
-        {
-            button.setText("Login");
-            textView.setText("Sie sind mit keinem Account eingeloggt. Um die volle Funktionalität nutzen zu können, loggen Sie sich bitte ein.");
-        }
-        else {
-            button.setText("Nutzer wechseln");
-            textView.setText("Sie sind eingeloggt als: " + list.get(0).getValue() + "\nSollte dies nicht Ihr Account sein, nutzen Sie bitte die \"Nutzer wechseln\"-Schaltfläche unten, um sich mit Ihrem Account einzuloggen.");
-        }
-    }
-
+    @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
         super.onResume();
 
-        try {
-            Thread.sleep(1200);
+//        try {
+            //Thread.sleep(1200);
             list = getData();
             textView = view.findViewById(R.id.account_tv);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         if(list.isEmpty())
         {
-            button.setText("Login");
-            textView.setText("Sie sind mit keinem Account eingeloggt. Um die volle Funktionalität nutzen zu können, loggen Sie sich bitte ein.");
+            button.setText(getString(R.string.sign_in));
+            textView.setText(getString(R.string.not_logged_in_text));
         }
         else {
-            button.setText("Nutzer wechseln");
-            textView.setText("Sie sind eingeloggt als: " + list.get(0).getValue() + "\nSollte dies nicht Ihr Account sein, nutzen Sie bitte die \"Nutzer wechseln\"-Schaltfläche unten, um sich mit Ihrem Account einzuloggen.");
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        list = getData();
-        textView = view.findViewById(R.id.account_tv);
-
-        if(list.isEmpty())
-        {
-            button.setText("Login");
-            textView.setText("Sie sind mit keinem Account eingeloggt. Um die volle Funktionalität nutzen zu können, loggen Sie sich bitte ein.");
-        }
-        else {
-            button.setText("Nutzer wechseln");
-            textView.setText("Sie sind eingeloggt als: " + list.get(0).getValue() + "\nSollte dies nicht Ihr Account sein, nutzen Sie bitte die \"Nutzer wechseln\"-Schaltfläche unten, um sich mit Ihrem Account einzuloggen.");
+            button.setText(getString(R.string.change_user));
+            textView.setText(getString(R.string.logged_in_as) + list.get(0).getValue() + " " + getString(R.string.logged_in_as_test2));
         }
     }
 }

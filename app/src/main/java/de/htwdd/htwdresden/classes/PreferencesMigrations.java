@@ -65,6 +65,7 @@ public class PreferencesMigrations {
                 context.getString(R.string.settings_exam_results),
                 NotificationManager.IMPORTANCE_DEFAULT
         );
+        assert notificationManager != null;
         notificationManager.createNotificationChannel(notificationChannel);
     }
 }
