@@ -1,8 +1,8 @@
 package de.htwdd.htwdresden.service;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.Log;
@@ -37,8 +37,11 @@ public class ExamSyncService extends AbstractSyncHelper {
 
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        credentials = Credentials.basic("s" + sharedPreferences.getString("sNummer", ""), sharedPreferences.getString("RZLogin", ""));
+
+        Account[] accounts = AccountManager.get(context).getAccountsByType(getString(R.string.auth_type));
+
+        credentials = Credentials.basic("s" + accounts[0].name, AccountManager.get(context).getUserData(accounts[0], "RZLogin"));
+
         examResultsService = Retrofit2Qis.getInstance(context).getRetrofit().create(IExamResultsService.class);
 
         // Alle Noten laden

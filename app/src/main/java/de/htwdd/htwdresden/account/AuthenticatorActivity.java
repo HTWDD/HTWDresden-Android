@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
@@ -47,6 +48,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 	private int studyYear;
 	private String studyCourse;
 	private String studyGroup;
+	private String stgRi;
 
 	private final String TAG = this.getClass().getSimpleName();
 
@@ -72,6 +74,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 		setContentView(R.layout.act_login);
 
 		Log.d(TAG, "onCreate");
+
+		studyCourse = null;
+		studyGroup = null;
 
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		Realm realm = Realm.getDefaultInstance();
@@ -123,17 +128,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 				studyCourse = studyCourseObject.getStudyCourse();
 
 				// Auswahl selektieren
-				int position = 0;
-				final RealmList<StudyGroup> studyGroups = studyCourseObject.getStudyGroups();
-				if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE)) {
-					position = 1 + studyGroups.indexOf(studyGroups
-							.where()
-							.equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
-							.findFirst()
-					);
-				}
 				groupSpinner.setAdapter(new SpinnerAdapter<>(((StudyCourse) adapterView.getAdapter().getItem(i)).getStudyGroups(), pleaseSelectString));
-				groupSpinner.setSelection(position);
 			}
 
 			@Override
@@ -155,18 +150,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 				studyYear = studyYearObject.getStudyYear();
 
 				// Nachfolgenden Spinner füllen und Auswahl selektieren
-				int position = 0;
 				final RealmList<StudyCourse> studyCourses = studyYearObject.getStudyCourses();
-				// Finde ausgewählte Position
-				if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG)) {
-					position = 1 + studyCourses.indexOf(studyCourses
-							.where()
-							.equalTo(Const.database.StudyGroups.STUDY_COURSE, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""))
-							.findFirst()
-					);
-				}
+
 				courseSpinner.setAdapter(new SpinnerAdapter<>(studyCourses, pleaseSelectString));
-				courseSpinner.setSelection(position);
+				courseSpinner.setSelection(0);
 			}
 
 			@Override
@@ -174,22 +161,27 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 			}
 		});
 		yearSpinner.setSelection(yearPosition);
+		groupSpinner.setSelection(0);
+		courseSpinner.setSelection(0);
 
-		// If this is a first time adding, then this will be null
-		accountName = getIntent().getStringExtra(ARG_ACCOUNT_NAME);
-		mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
-
-		if (mAuthTokenType == null)
-			mAuthTokenType = getString(R.string.auth_type);
-
-		findAccount(accountName);
-
-		System.out.println(mAuthTokenType + ", accountName : " + accountName);
+		mAuthTokenType = getString(R.string.auth_type);
 
 		findViewById(R.id.submit).setOnClickListener(this);
 	}
 
 	void userSignIn() {
+
+		//Alten Nutzer entfernen
+		try {
+			Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.auth_type));
+
+			if(accounts.length > 0) {
+				mAccountManager.removeAccount(accounts[0], arg0 -> {
+				}, null);
+			}
+		} catch (Exception e) {
+			Log.i(TAG, "Exception:" + e);
+		}
 
 		// You should probably call your server with user credentials and get
 		// the authentication token here.
@@ -198,8 +190,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 		accountName = ((EditText) findViewById(R.id.accountName)).getText().toString().trim();
 		password = ((EditText) findViewById(R.id.accountPassword)).getText().toString().trim();
+		stgRi = ((EditText) findViewById(R.id.stdRichtung)).getText().toString().trim();
 
-		if (accountName.length() > 0) {
+		if (accountName.length() > 0 && studyCourse != null && studyGroup != null && studyYear != 0) {
 			Bundle data = new Bundle();
 			data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
 			data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAuthTokenType);
@@ -208,9 +201,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 			// Some extra data about the user
 			Bundle userData = new Bundle();
-			userData.putString("StgGrp", studyGroup);
-			userData.putString("Stg", studyCourse);
-			userData.putString("studyGroupYear", studyYear + "");
+			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
+			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
+			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear + "");
+            userData.putString("RZLogin", password);
+            userData.putString("stdRi", stgRi);
 			data.putBundle(AccountManager.KEY_USERDATA, userData);
 
 			//Make it an intent to be passed back to the Android Authenticator
@@ -222,16 +217,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 			//Add the account to the Android System
 			if (mAccountManager.addAccountExplicitly(account, password, userData)) {
-				try {
-					Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.auth_type));
-
-					if(accounts.length > 1) {
-						mAccountManager.removeAccount(accounts[0], arg0 -> {
-						}, null);
-					}
-				} catch (Exception e) {
-					Log.i(TAG, "Exception:" + e);
-				}
 				// worked
 				Log.d(TAG, "Account added");
 				mAccountManager.setAuthToken(account, mAuthTokenType, authtoken);
@@ -242,6 +227,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 				// guess not
 				Log.d(TAG, "Account NOT added");
 			}
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "Bitte überprüfe, ob alle erforderlichen Daten angegeben wurden", Toast.LENGTH_SHORT).show();
 		}
 	}
 

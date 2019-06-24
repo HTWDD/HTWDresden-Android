@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
@@ -260,13 +262,13 @@ public class TimetableHelper extends AbstractTimetableHelper {
     /**
      * Überprüft ob die Einstellungen zur Studiengruppe korrekt gesetzt sind
      *
-     * @param sharedPreferences SharedPreferences der App
      * @return true wenn Einstellungen korrekt, sonst false
      */
-    public static boolean checkPreferencesSettings(@NonNull final SharedPreferences sharedPreferences) {
-        return sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)
-                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, "").length() == 3
-                && sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, "").length() != 0;
+    public static boolean checkPreferencesSettings(@NonNull final Account account, Context context) {
+
+        return AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR).length() == 2
+                && AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG).length() == 3
+                && AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE).length() != 0;
     }
 
     /**

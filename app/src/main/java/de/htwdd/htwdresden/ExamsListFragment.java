@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -71,8 +73,9 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
             stgJhr = savedInstanceState.getInt("stgJhr", GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
         }
         else {
-            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mLayout.getContext());
-            stgJhr = sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
+
+            Account account = AccountManager.get(getContext()).getAccounts()[0];
+            stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(account, "studyGroupYear"));
         }
 
         // Handler für SwipeRefresh
@@ -150,6 +153,9 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         final Context context = mLayout.getContext();
         final TextView info = mLayout.findViewById(R.id.message_info);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Account account = AccountManager.get(context).getAccounts()[0];
+
         final IExamService iExamService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IExamService.class);
         Call<List<ExamDate>> exams = null;
 
@@ -167,20 +173,20 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         // Überprüfe Einstellungen
         if (sharedPreferences.getString("ProfName", "").length() > 0) {
             exams = iExamService.getExamSchedule(sharedPreferences.getString("ProfName", ""));
-        } else if (TimetableHelper.checkPreferencesSettings(sharedPreferences)) {
+        } else if (TimetableHelper.checkPreferencesSettings(account, context)) {
             final StudyGroup studyGroup = realm
                     .where(StudyGroup.class)
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, ""))
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""))
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG))
+                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, Integer.parseInt(AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)))
                     .findFirst();
 
             if (studyGroup != null && studyGroup.getStudyCourses().first() != null) {
                 exams = iExamService.getExamSchedule(
                         stgJhr,
-                        sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, ""),
-                        StudyGroupHelper.getGraduationChar(studyGroup),
-                        sharedPreferences.getString("StgRi", "")
+                        AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG),
+                            StudyGroupHelper.getGraduationChar(studyGroup),
+                        AccountManager.get(context).getUserData(account, "stdRi")
                 );
             }
         }

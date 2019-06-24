@@ -30,7 +30,7 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
-    <string name="info_no_settings">Fehlende Einstellungen!</string>
+    <string name="info_no_settings">Fehlende Einstellungen oder fehlendes Nutzerkonto!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
@@ -59,7 +59,7 @@
     <string name="settings_studiengang">Studiengang</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
-    <string name="settings_studienrichtung">Studienrichtung</string>
+    <string name="settings_studienrichtung">Studienrichtung (Optional: Filter für Prüfungen)</string>
     <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
     <string name="settings_prof_only">Die Funktion steht ausschließlich für Professoren zur Verfügung!</string>
     <string name="settings_prof_name">Prüfer-Name</string>
