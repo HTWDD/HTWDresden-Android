@@ -69,13 +69,8 @@ public class AccountFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        try {
-            //Thread.sleep(1200);
-            list = getData();
-            textView = view.findViewById(R.id.account_tv);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        list = getData();
+        textView = view.findViewById(R.id.account_tv);
 
         if(list.isEmpty())
         {

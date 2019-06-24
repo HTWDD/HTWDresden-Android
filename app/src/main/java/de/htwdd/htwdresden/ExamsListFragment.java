@@ -4,6 +4,7 @@ package de.htwdd.htwdresden;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,12 +19,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import de.htwdd.htwdresden.account.AuthenticatorActivity;
 import de.htwdd.htwdresden.adapter.ExamListAdapter;
 import de.htwdd.htwdresden.classes.API.IExamService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
@@ -74,8 +77,18 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         }
         else {
 
-            Account account = AccountManager.get(getContext()).getAccounts()[0];
-            stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(account, "studyGroupYear"));
+            try {
+                Account account = AccountManager.get(getContext()).getAccounts()[0];
+                stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(account, "studyGroupYear"));
+            }
+            catch (Exception e){
+                Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.sign_in, view -> {
+                            final Context context = requireContext();
+                            context.startActivity(new Intent(context, AuthenticatorActivity.class));
+                        })
+                        .show();
+            }
         }
 
         // Handler für SwipeRefresh
@@ -154,110 +167,120 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         final TextView info = mLayout.findViewById(R.id.message_info);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Account account = AccountManager.get(context).getAccounts()[0];
+        View.OnClickListener onClickListener = view -> {
+            context.startActivity(new Intent(context, AuthenticatorActivity.class));
+        };
+        try {
+            Account account = AccountManager.get(context).getAccounts()[0];
 
-        final IExamService iExamService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IExamService.class);
-        Call<List<ExamDate>> exams = null;
+            final IExamService iExamService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IExamService.class);
+            Call<List<ExamDate>> exams = null;
 
-        // Überprüfe Internetverbindung
-        if (ConnectionHelper.checkNoInternetConnection(context)) {
-            // Refresh ausschalten
-            onCompletion();
+            // Überprüfe Internetverbindung
+            if (ConnectionHelper.checkNoInternetConnection(context)) {
+                // Refresh ausschalten
+                onCompletion();
 
-            // Meldung anzeigen
-            info.setText(R.string.info_no_internet);
-            Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Überprüfe Einstellungen
-        if (sharedPreferences.getString("ProfName", "").length() > 0) {
-            exams = iExamService.getExamSchedule(sharedPreferences.getString("ProfName", ""));
-        } else if (TimetableHelper.checkPreferencesSettings(account, context)) {
-            final StudyGroup studyGroup = realm
-                    .where(StudyGroup.class)
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE))
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG))
-                    .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, Integer.parseInt(AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)))
-                    .findFirst();
-
-            if (studyGroup != null && studyGroup.getStudyCourses().first() != null) {
-                exams = iExamService.getExamSchedule(
-                        stgJhr,
-                        AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG),
-                            StudyGroupHelper.getGraduationChar(studyGroup),
-                        AccountManager.get(context).getUserData(account, "stdRi")
-                );
+                // Meldung anzeigen
+                info.setText(R.string.info_no_internet);
+                Snackbar.make(mLayout, R.string.info_no_internet, Snackbar.LENGTH_SHORT).show();
+                return;
             }
-        }
 
-        if (exams == null) {
-            info.setText(R.string.exams_no_settings);
-            onCompletion();
+            // Überprüfe Einstellungen
+            if (sharedPreferences.getString("ProfName", "").length() > 0) {
+                exams = iExamService.getExamSchedule(sharedPreferences.getString("ProfName", ""));
+            } else if (TimetableHelper.checkPreferencesSettings(account, context)) {
+                final StudyGroup studyGroup = realm
+                        .where(StudyGroup.class)
+                        .equalTo(Const.database.StudyGroups.STUDY_GROUP, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE))
+                        .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE, AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG))
+                        .equalTo(Const.database.StudyGroups.STUDY_GROUP_COURSE_YEAR, Integer.parseInt(AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)))
+                        .findFirst();
 
-            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.navi_settings, view -> ((INavigation) requireActivity()).goToNavigationItem(R.id.navigation_settings))
-                    .show();
-            return;
-        }
-
-        // View anpassen
-        final Button localButton1 = mLayout.findViewById(R.id.Button1);
-        final Button localButton2 = mLayout.findViewById(R.id.Button2);
-
-        footer.setVisibility(View.GONE);
-        examDates.clear();
-        adapter.notifyDataSetChanged();
-        localButton1.setVisibility(View.GONE);
-        localButton2.setVisibility(View.GONE);
-        ((SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout)).setRefreshing(true);
-
-        // API Anfrage ausführen
-        exams.enqueue(new Callback<List<ExamDate>>() {
-            @Override
-            public void onResponse(@NonNull final Call<List<ExamDate>> call, @NonNull final Response<List<ExamDate>> response) {
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
-                if (!isAdded()) {
-                    return;
+                if (studyGroup != null && studyGroup.getStudyCourses().first() != null) {
+                    exams = iExamService.getExamSchedule(
+                            stgJhr,
+                            AccountManager.get(context).getUserData(account, Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG),
+                            StudyGroupHelper.getGraduationChar(studyGroup),
+                            AccountManager.get(context).getUserData(account, "stdRi")
+                    );
                 }
+            }
 
-                if (response.isSuccessful()) {
-                    final List<ExamDate> list = response.body();
+            if (exams == null) {
+                info.setText(R.string.exams_no_settings);
+                onCompletion();
 
-                    // Meldung falls keine Prüfungen gefunden wurden
-                    if (list == null || list.isEmpty()) {
-                        // Zusätzliche Buttons zum Wechseln des Jahrganges anzeigen
-                        changeButtonName(localButton2, localButton1);
-                        // Meldung anzeigen
-                        info.setText(R.string.exams_no_exams);
+                Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.sign_in, onClickListener)
+                        .show();
+                return;
+            }
+
+            // View anpassen
+            final Button localButton1 = mLayout.findViewById(R.id.Button1);
+            final Button localButton2 = mLayout.findViewById(R.id.Button2);
+
+            footer.setVisibility(View.GONE);
+            examDates.clear();
+            adapter.notifyDataSetChanged();
+            localButton1.setVisibility(View.GONE);
+            localButton2.setVisibility(View.GONE);
+            ((SwipeRefreshLayout) mLayout.findViewById(R.id.swipeRefreshLayout)).setRefreshing(true);
+
+            // API Anfrage ausführen
+            exams.enqueue(new Callback<List<ExamDate>>() {
+                @Override
+                public void onResponse(@NonNull final Call<List<ExamDate>> call, @NonNull final Response<List<ExamDate>> response) {
+                    // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
+                    if (!isAdded()) {
                         return;
-                    } else {
-                        info.setText(null);
-                        footer.setVisibility(View.VISIBLE);
                     }
 
-                    examDates.addAll(list);
-                    // Adapter über neue Liste informieren
-                    adapter.notifyDataSetChanged();
-                } else {
-                    info.setText(R.string.info_internet_no_connection);
-                    Snackbar.make(mLayout, R.string.info_internet_no_connection, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
-                }
+                    if (response.isSuccessful()) {
+                        final List<ExamDate> list = response.body();
 
-                onCompletion();
-            }
+                        // Meldung falls keine Prüfungen gefunden wurden
+                        if (list == null || list.isEmpty()) {
+                            // Zusätzliche Buttons zum Wechseln des Jahrganges anzeigen
+                            changeButtonName(localButton2, localButton1);
+                            // Meldung anzeigen
+                            info.setText(R.string.exams_no_exams);
+                            return;
+                        } else {
+                            info.setText(null);
+                            footer.setVisibility(View.VISIBLE);
+                        }
 
-            @Override
-            public void onFailure(@NonNull final Call<List<ExamDate>> call, @NonNull final Throwable t) {
-                Log.e(LOG_TAG, "Fehler beim Ausführen des Requests ", t);
-                // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
-                if (isAdded()) {
-                    info.setText(R.string.info_internet_error);
+                        examDates.addAll(list);
+                        // Adapter über neue Liste informieren
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        info.setText(R.string.info_internet_no_connection);
+                        Snackbar.make(mLayout, R.string.info_internet_no_connection, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
+                    }
+
                     onCompletion();
-                    Snackbar.make(mLayout, R.string.info_internet_error, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(@NonNull final Call<List<ExamDate>> call, @NonNull final Throwable t) {
+                    Log.e(LOG_TAG, "Fehler beim Ausführen des Requests ", t);
+                    // Wenn Response zu langsam und Fragment nicht mehr angezeigt wird, gleich beenden
+                    if (isAdded()) {
+                        info.setText(R.string.info_internet_error);
+                        onCompletion();
+                        Snackbar.make(mLayout, R.string.info_internet_error, Snackbar.LENGTH_LONG).setAction(R.string.general_repeat, view -> loadData()).show();
+                    }
+                }
+            });
+        }
+        catch (Exception e){
+            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.sign_in, onClickListener)
+                    .show();
+        }
     }
 
     @Override

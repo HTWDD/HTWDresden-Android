@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Stack;
@@ -38,23 +39,29 @@ public class ExamSyncService extends AbstractSyncHelper {
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
 
-        Account[] accounts = AccountManager.get(context).getAccountsByType(getString(R.string.auth_type));
+        try{
+            Account[] accounts = AccountManager.get(context).getAccountsByType(getString(R.string.auth_type));
 
-        credentials = Credentials.basic("s" + accounts[0].name, AccountManager.get(context).getUserData(accounts[0], "RZLogin"));
+            credentials = Credentials.basic("s" + accounts[0].name, AccountManager.get(context).getUserData(accounts[0], "RZLogin"));
 
-        examResultsService = Retrofit2Qis.getInstance(context).getRetrofit().create(IExamResultsService.class);
+            examResultsService = Retrofit2Qis.getInstance(context).getRetrofit().create(IExamResultsService.class);
 
-        // Alle Noten laden
-        getGradeResults();
-        // Auf fertigstellung warten
-        waitForFinish();
-        // Ergebnisse speichern
-        if (!isCancel()) {
-            final boolean result = saveGrades();
-            if (result && broadcastNotifier != null) {
-                broadcastNotifier.notifyStatus(0);
+            // Alle Noten laden
+            getGradeResults();
+            // Auf fertigstellung warten
+            waitForFinish();
+            // Ergebnisse speichern
+            if (!isCancel()) {
+                final boolean result = saveGrades();
+                if (result && broadcastNotifier != null) {
+                    broadcastNotifier.notifyStatus(0);
+                }
             }
         }
+        catch (Exception e){
+            Toast.makeText(context, context.getString(R.string.error_loading_grades) + context.getString(R.string.no_account), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**

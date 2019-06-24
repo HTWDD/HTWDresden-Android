@@ -30,7 +30,7 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
-    <string name="info_no_settings">Fehlende Einstellungen oder fehlendes Nutzerkonto!</string>
+    <string name="info_no_settings">Fehlendes Nutzerkonto!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
@@ -153,7 +153,7 @@
     <string name="exams_grade">Noten</string>
     <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
-    <string name="exams_no_settings">Bitte Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_settings">Bitte Studiengruppe im Nutzerkonto richtig setzen!</string>
     <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
     <string name="exams_type">Art</string>
     <string name="exams_studyBranch">Richtung</string>
@@ -244,6 +244,8 @@
     <string name="sNummer">Bibliotheksnummer ohne \'s\'</string>
 
     <string name="Jahrgang">Jahrgang</string>
+    <string name="no_account">Sie sind mit keinem Nutzeraccount angemeldet.</string>
+    <string name="error_loading_grades">Noten konnten nicht geladen werden.</string>
     <string-array name="jahrgang_werte">
         <item>Bitte auswählen</item>
         <item>2016</item>

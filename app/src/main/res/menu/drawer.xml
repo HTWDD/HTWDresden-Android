@@ -45,7 +45,7 @@
                     android:title="@string/navi_about" />
                 <item
                     android:id="@+id/account_tab_activity"
-                    android:icon="@drawable/ic_supervisor_account_24dp"
+                    android:icon="@drawable/ic_vpn_key_black_24dp"
                     android:title="@string/account_title" />
             </menu>
         </item>

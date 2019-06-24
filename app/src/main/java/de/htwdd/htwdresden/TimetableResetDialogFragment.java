@@ -12,7 +12,7 @@ import de.htwdd.htwdresden.types.LessonUser;
 import io.realm.Realm;
 
 /**
- * Dialog zu zurücksetzen des Stundenplans. Zurücksetzen bedeutet dabei Stundenplan komplett löschen und neu laden
+ * Dialog zum Zurücksetzen des Stundenplans. Zurücksetzen bedeutet dabei Stundenplan komplett löschen und neu laden
  *
  * @author Kay Förster
  */
@@ -33,6 +33,7 @@ public class TimetableResetDialogFragment extends DialogFragment {
                     realm.executeTransaction(realm1 -> realm1.where(LessonUser.class).findAll().deleteAllFromRealm());
                     realm.close();
                     TimetableHelper.startSyncService(context);
+
                 })
                 .setNegativeButton(R.string.general_cancel, (dialogInterface, i) -> {
                 })

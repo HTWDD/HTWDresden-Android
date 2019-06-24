@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import de.htwdd.htwdresden.account.AuthenticatorActivity;
 import de.htwdd.htwdresden.adapter.TimetableUserGridAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.TimetableHelper;
@@ -54,9 +55,9 @@ public class TimetableOverviewFragment extends Fragment {
             if (!result) {
                 // Zeige Toast mit Link zu Einstellungen an
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.navi_settings, view -> {
+                        .setAction(R.string.sign_in, view -> {
                             final Context context = requireContext();
-                            context.startActivity(new Intent(context, PreferencesActivity.class));
+                            context.startActivity(new Intent(context, AuthenticatorActivity.class));
                         })
                         .show();
                 // Refresh ausschalten

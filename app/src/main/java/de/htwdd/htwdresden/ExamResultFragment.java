@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import de.htwdd.htwdresden.account.AuthenticatorActivity;
 import de.htwdd.htwdresden.adapter.ExamResultAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
@@ -69,9 +70,9 @@ public class ExamResultFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
                 // Snackbar mit Information anzeigen
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.navi_settings, view -> {
+                        .setAction(R.string.sign_in, view -> {
                             final Context context = requireContext();
-                            context.startActivity(new Intent(context, PreferencesActivity.class));
+                            context.startActivity(new Intent(context, AuthenticatorActivity.class));
                         })
                         .show();
                 return;

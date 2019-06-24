@@ -123,9 +123,9 @@ abstract class AbstractTimetableHelper {
             }
         }
         catch (Exception e){
-            Toast.makeText(context, "Sie sind mit keinem Nutzeraccount angemeldet.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.no_account), Toast.LENGTH_SHORT).show();
         }
-        
+
         return false;
     }
 
