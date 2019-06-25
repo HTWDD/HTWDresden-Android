@@ -30,7 +30,7 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
-    <string name="info_no_settings">Fehlendes Nutzerkonto!</string>
+    <string name="info_no_settings">Kein korrektes Nutzerkonto!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>

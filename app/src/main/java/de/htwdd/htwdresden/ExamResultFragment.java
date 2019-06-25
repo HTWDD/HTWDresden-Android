@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.htwdd.htwdresden.account.AuthenticatorActivity;
@@ -52,7 +53,13 @@ public class ExamResultFragment extends Fragment {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
         realm = Realm.getDefaultInstance();
-        adapter = new ExamResultAdapter(mLayout.getContext(), realm);
+
+
+        TextView info = mLayout.findViewById(R.id.info_message);
+        final ExpandableListView expandableListView = mLayout.findViewById(R.id.expandableListView);
+        expandableListView.setVisibility(View.GONE);
+        info.setVisibility(View.VISIBLE);
+        boolean noAccount = !ExamsHelper.checkPreferences(mLayout.getContext());
 
         final SwipeRefreshLayout swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -75,12 +82,18 @@ public class ExamResultFragment extends Fragment {
                             context.startActivity(new Intent(context, AuthenticatorActivity.class));
                         })
                         .show();
+
+                expandableListView.setVisibility(View.GONE);
+                info.setVisibility(View.VISIBLE);
+
                 return;
             }
 
             // Service zum Updaten starten
             context1.startService(new Intent(context1, ExamSyncService.class));
         });
+
+        adapter = new ExamResultAdapter(mLayout.getContext(), realm);
 
         // Daten aus Datenbank laden
         countExamResults = realm.where(ExamResult.class).count();
@@ -90,10 +103,11 @@ public class ExamResultFragment extends Fragment {
         examResults = realm.where(ExamResult.class).findAll();
         examResults.addChangeListener(realmListenerExams);
 
-        final ExpandableListView expandableListView = mLayout.findViewById(R.id.expandableListView);
-        expandableListView.setAdapter(adapter);
-        expandableListView.setEmptyView(mLayout.findViewById(R.id.info_message));
-        expandableListView.addHeaderView(inflater.inflate(R.layout.exams_header, expandableListView, false));
+        if(!noAccount){
+            expandableListView.setAdapter(adapter);
+            expandableListView.setEmptyView(mLayout.findViewById(R.id.info_message));
+            expandableListView.addHeaderView(inflater.inflate(R.layout.exams_header, expandableListView, false));
+        }
 
         // IntentReceiver erstellen
         final IntentFilter intentFilter = new IntentFilter(Const.IntentParams.BROADCAST_ACTION);

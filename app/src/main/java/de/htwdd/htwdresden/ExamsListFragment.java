@@ -82,6 +82,9 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
                 stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(account, "studyGroupYear"));
             }
             catch (Exception e){
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                sharedPreferences.edit().putBoolean("FIRST_RUN", true).apply();
+                stgJhr = GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000;
                 Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
                         .setAction(R.string.sign_in, view -> {
                             final Context context = requireContext();

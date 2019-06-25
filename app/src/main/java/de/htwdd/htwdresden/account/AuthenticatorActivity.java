@@ -179,6 +179,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 				mAccountManager.removeAccount(accounts[0], arg0 -> {
 				}, null);
 			}
+			Realm.getDefaultInstance().deleteAll();
 		} catch (Exception e) {
 			Log.i(TAG, "Exception:" + e);
 		}

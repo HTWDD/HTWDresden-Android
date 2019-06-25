@@ -16,8 +16,6 @@ import de.htwdd.htwdresden.account.ListAdapter.Item;
 
 public class AccountActivity extends Activity implements OnClickListener {
 
-    private String TAG = this.getClass().getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,22 +24,6 @@ public class AccountActivity extends Activity implements OnClickListener {
 
 
         findViewById(R.id.button1).setOnClickListener(this);
-    }
-
-    private ArrayList<Item> getData() {
-        ArrayList<Item> accountsList = new ArrayList<Item>();
-
-        // Getting all registered Our Application Accounts;
-        try {
-            Account[] accounts = AccountManager.get(this).getAccountsByType(getString(R.string.auth_type));
-            for (Account account : accounts) {
-                Item item = new Item(account.type, account.name);
-                accountsList.add(item);
-            }
-        } catch (Exception e) {
-            Log.i(TAG, "Exception:" + e);
-        }
-        return accountsList;
     }
 
     @SuppressWarnings("unchecked")

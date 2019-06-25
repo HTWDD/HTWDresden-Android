@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +33,21 @@ public class ExamResultStatsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
+
+        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, null, false);
         realm = Realm.getDefaultInstance();
+
+        try{
+            Account account = AccountManager.get(getContext()).getAccounts()[0];
+        }
+        catch (Exception e) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            // delete all realm objects
+            realm.delete(ExamResult.class);
+            //commit realm changes
+            realm.commitTransaction();
+        }
 
         // Refresh ausschalten
         mLayout.findViewById(R.id.swipeRefreshLayout).setEnabled(false);
