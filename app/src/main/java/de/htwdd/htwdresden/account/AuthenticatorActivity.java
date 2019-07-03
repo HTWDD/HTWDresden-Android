@@ -3,8 +3,8 @@ package de.htwdd.htwdresden.account;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,15 +13,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
@@ -32,7 +29,6 @@ import de.htwdd.htwdresden.types.studyGroups.StudyYear;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import okhttp3.Credentials;
 
 public class AuthenticatorActivity extends AccountAuthenticatorActivity implements OnClickListener {
 
@@ -58,15 +54,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 	String password = "12345";
 
 	String accountName;
-
-	public Account findAccount(String accountName) {
-		for (Account account : mAccountManager.getAccounts())
-			if (TextUtils.equals(account.name, accountName) && TextUtils.equals(account.type, getString(R.string.auth_type))) {
-				System.out.println("FOUND");
-				return account;
-			}
-		return null;
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +85,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 		Spinner courseSpinner = findViewById(R.id.ctvStudiengang);
 		Spinner groupSpinner = findViewById(R.id.ctvStudiengruppe);
 
+		courseSpinner.setEnabled(false);
+		groupSpinner.setEnabled(false);
+
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.jahrgang_werte, android.R.layout.simple_spinner_dropdown_item);
 		yearSpinner.setAdapter(adapter);
 
@@ -108,6 +98,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 					// Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
 					studyGroup = ((StudyGroup) adapterView.getAdapter().getItem(i)).getStudyGroup();
 				}
+				hideKeyboardFrom(view);
 			}
 
 			@Override
@@ -123,12 +114,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 					studyGroup = null;
 					return;
 				}
+				hideKeyboardFrom(view);
 				// Auswahl merken
 				final StudyCourse studyCourseObject = (StudyCourse) adapterView.getAdapter().getItem(i);
 				studyCourse = studyCourseObject.getStudyCourse();
 
 				// Auswahl selektieren
 				groupSpinner.setAdapter(new SpinnerAdapter<>(((StudyCourse) adapterView.getAdapter().getItem(i)).getStudyGroups(), pleaseSelectString));
+				groupSpinner.setEnabled(true);
 			}
 
 			@Override
@@ -143,8 +136,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 					// Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
 					courseSpinner.setAdapter(new SpinnerAdapter<>(null, pleaseSelectString));
 					studyYear = 0;
+
 					return;
 				}
+				hideKeyboardFrom(view);
 				// Auswahl merken
 				final StudyYear studyYearObject = (StudyYear) adapterView.getAdapter().getItem(i);
 				studyYear = studyYearObject.getStudyYear();
@@ -154,6 +149,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 				courseSpinner.setAdapter(new SpinnerAdapter<>(studyCourses, pleaseSelectString));
 				courseSpinner.setSelection(0);
+				courseSpinner.setEnabled(true);
+				groupSpinner.setEnabled(false);
 			}
 
 			@Override
@@ -232,6 +229,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 		else{
 			Toast.makeText(getApplicationContext(), "Bitte überprüfe, ob alle erforderlichen Daten angegeben wurden", Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public void hideKeyboardFrom(View view) {
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		assert imm != null;
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	@Override

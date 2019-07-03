@@ -109,7 +109,10 @@ class CheckUpdates implements Runnable {
 
                     PreferenceManager.getDefaultSharedPreferences(context)
                             .edit()
-                            .putLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, Calendar.getInstance().getTimeInMillis())
+                            .putLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME,
+                                    Calendar
+                                    .getInstance()
+                                    .getTimeInMillis())
                             .apply();
                     Log.i(LOG_TAG, "Semesterplan aktualisiert");
                 }
