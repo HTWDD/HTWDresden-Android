@@ -221,4 +221,5 @@
     <string name="mensa_credit_last_transaction">last billing:</string>
     <string name="mensa_price">student %.2f€ employee %.2f€</string>
     <string name="mensa_sold_out">sold out</string>
+    <string name="account_title">Account</string>
 </resources>

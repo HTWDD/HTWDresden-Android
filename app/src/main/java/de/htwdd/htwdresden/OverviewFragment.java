@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden;
 
 
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -313,5 +314,19 @@ public class OverviewFragment extends Fragment {
                 Log.i("OverviewFragment", "Fehler beim Ausführen des Requests ", t);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if(AccountManager.get(getContext()).getAccounts().length == 0){
+            realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            // delete all realm objects
+            realm.delete(ExamResult.class);
+            //commit realm changes
+            realm.commitTransaction();
+        }
     }
 }

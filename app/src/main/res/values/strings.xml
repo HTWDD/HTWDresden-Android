@@ -1,6 +1,7 @@
 <resources>
-    <string name="auth_type">de.htwdd.htwdresden</string>
-    <string name="account_title">Account</string>
+    <string name="auth_type" translatable="false">de.htwdd.htwdresden</string>
+    <string name="account_title">Nutzerkonto</string>
+    <string name="not_logged_in_text">Sie sind mit keinem Account eingeloggt. Um die volle Funktionalität nutzen zu können, loggen Sie sich bitte ein.</string>
 
     <string name="app_name" translatable="false">HTWDresden</string>
     <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
@@ -29,7 +30,7 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
-    <string name="info_no_settings">Fehlende Einstellungen!</string>
+    <string name="info_no_settings">Kein korrektes Nutzerkonto!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
     <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
@@ -58,7 +59,7 @@
     <string name="settings_studiengang">Studiengang</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
-    <string name="settings_studienrichtung">Studienrichtung</string>
+    <string name="settings_studienrichtung">Studienrichtung (Optional: Filter für Prüfungen)</string>
     <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
     <string name="settings_prof_only">Die Funktion steht ausschließlich für Professoren zur Verfügung!</string>
     <string name="settings_prof_name">Prüfer-Name</string>
@@ -152,7 +153,7 @@
     <string name="exams_grade">Noten</string>
     <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
-    <string name="exams_no_settings">Bitte Studiengruppe in den Einstellungen richtig setzen!</string>
+    <string name="exams_no_settings">Bitte Studiengruppe im Nutzerkonto richtig setzen!</string>
     <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
     <string name="exams_type">Art</string>
     <string name="exams_studyBranch">Richtung</string>
@@ -163,7 +164,7 @@
     <string name="exams_note">Hinweis</string>
     <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
     <string name="exams_from_Jhr">Jahrgang %s</string>
-    <string name="exams_result_no_results">Noch keine Noten vorhanden.</string>
+    <string name="exams_result_no_results">Noch keine Noten vorhanden. \nSwipe nach unten zum Aktualisieren.</string>
     <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
     <string name="exams_result_update_newGrades">Neue Noten hinzugefügt.</string>
     <string name="exams_result_update_noNewGrades">Keine neuen Noten vorhanden.</string>
@@ -234,4 +235,23 @@
     <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
         Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
         Klicken Sie bitte dazu auf OK.</string>
+    <string name="password">UNIX-Passwort</string>
+    <string name="sign_in">Einloggen</string>
+    <string name="change_user">Nutzer wechseln</string>
+    <string name="logged_in_as">Sie sind eingeloggt als: s</string>
+    <string name="logged_in_as_test2">
+ Sollte dies nicht Ihr Account sein, nutzen Sie bitte die "Nutzer wechseln"-Schaltfläche unten, um sich mit Ihrem Account einzuloggen.</string>
+    <string name="sNummer">Bibliotheksnummer ohne \'s\'</string>
+
+    <string name="Jahrgang">Jahrgang</string>
+    <string name="no_account">Sie sind mit keinem Nutzeraccount angemeldet.</string>
+    <string name="error_loading_grades">Noten konnten nicht geladen werden.</string>
+    <string name="swipe_to_reload">Nach unten swipen zum aktualisieren</string>
+    <string-array name="jahrgang_werte">
+        <item>Bitte auswählen</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+    </string-array>
+
 </resources>

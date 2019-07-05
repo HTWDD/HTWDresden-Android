@@ -1,9 +1,11 @@
 package de.htwdd.htwdresden.classes;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -24,8 +26,23 @@ import io.realm.Sort;
 public final class ExamsHelper {
 
     public static boolean checkPreferences(@NonNull final Context context) {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return !(sharedPreferences.getString("sNummer", "").length() < 5 || sharedPreferences.getString("RZLogin", "").length() < 3);
+
+
+        int lengthName = 0;
+        int lengthPasswd = 0;
+
+        try {
+            Account account = AccountManager.get(context).getAccounts()[0];
+
+            lengthName = account.name.length();
+            lengthPasswd = AccountManager.get(context).getUserData(account, "RZLogin").length();
+        }
+        catch (Exception e){
+            Toast.makeText(context, context.getString(R.string.error_loading_grades) + context.getString(R.string.no_account), Toast.LENGTH_SHORT).show();
+        }
+
+
+        return !(lengthName < 5 || lengthPasswd < 3);
     }
 
     /**

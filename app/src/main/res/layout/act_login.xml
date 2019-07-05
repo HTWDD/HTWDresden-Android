@@ -12,8 +12,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="20dp"
-              android:hint="Email address"
-              android:inputType="textEmailAddress"
+              android:hint="@string/sNummer"
+              android:inputType="text"
               android:padding="10dp"
             />
 
@@ -22,15 +22,68 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
               android:inputType="textPassword"
-              android:hint="Password"
+              android:hint="@string/password"
               android:padding="10dp"
             />
+    <EditText android:id="@+id/stdRichtung"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:inputType="text"
+        android:hint="@string/settings_studienrichtung"
+        android:padding="10dp"
+        />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_jahrgang" />
+
+    <Spinner
+        android:id="@+id/ctvJahrgang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_studiengang" />
+
+    <Spinner
+        android:id="@+id/ctvStudiengang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_studiengruppe" />
+
+    <Spinner
+        android:id="@+id/ctvStudiengruppe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:spinnerMode="dropdown"
+        />
 
     <Button android:id="@+id/submit"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
-              android:text="Sign in"
+              android:text="@string/sign_in"
               android:padding="10dp"/>
 
 </LinearLayout>

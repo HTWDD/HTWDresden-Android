@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.classes;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -102,18 +105,27 @@ abstract class AbstractTimetableHelper {
     public static boolean startSyncService(@NonNull final Context context) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Überprüfe Einstellungen für Professoren (zuerst, da Studenten ihre Entscheidung nicht mehr löschen können)
-        if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR, "").length() != 0) {
-            Log.d("AbstractTimetableHelper", "Starte TimetableProfessorSyncService");
-            context.startService(new Intent(context, TimetableProfessorSyncService.class));
-            return true;
+        try{
+            Account account = AccountManager.get(context).getAccounts()[0];
+
+            // Überprüfe Einstellungen für Professoren (zuerst, da Studenten ihre Entscheidung nicht mehr löschen können)
+            if (sharedPreferences.getString(Const.preferencesKey.PREFERENCES_TIMETABLE_PROFESSOR, "").length() != 0) {
+                Log.d("AbstractTimetableHelper", "Starte TimetableProfessorSyncService");
+                context.startService(new Intent(context, TimetableProfessorSyncService.class));
+                return true;
+            }
+
+            // Überprüfe Einstellungen für Studenten
+            else if (TimetableHelper.checkPreferencesSettings(account, context)) {
+                Log.d("AbstractTimetableHelper", "Starte TimetableStudentSyncService");
+                context.startService(new Intent(context, TimetableStudentSyncService.class));
+                return true;
+            }
         }
-        // Überprüfe Einstellungen für Studenten
-        else if (TimetableHelper.checkPreferencesSettings(sharedPreferences)) {
-            Log.d("AbstractTimetableHelper", "Starte TimetableStudentSyncService");
-            context.startService(new Intent(context, TimetableStudentSyncService.class));
-            return true;
+        catch (Exception e){
+            Toast.makeText(context, context.getString(R.string.no_account), Toast.LENGTH_SHORT).show();
         }
+
         return false;
     }
 

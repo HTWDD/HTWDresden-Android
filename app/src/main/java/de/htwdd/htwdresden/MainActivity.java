@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,6 +24,8 @@ import android.widget.EditText;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.types.exams.ExamResult;
+import io.realm.Realm;
 
 /**
  * Hinweis zum Navigation Drawer:
