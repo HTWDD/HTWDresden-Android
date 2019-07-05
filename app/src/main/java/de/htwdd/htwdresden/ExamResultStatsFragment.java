@@ -37,18 +37,6 @@ public class ExamResultStatsFragment extends Fragment {
         final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, null, false);
         realm = Realm.getDefaultInstance();
 
-        try{
-            Account account = AccountManager.get(getContext()).getAccounts()[0];
-        }
-        catch (Exception e) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            // delete all realm objects
-            realm.delete(ExamResult.class);
-            //commit realm changes
-            realm.commitTransaction();
-        }
-
         // Refresh ausschalten
         mLayout.findViewById(R.id.swipeRefreshLayout).setEnabled(false);
 
@@ -76,5 +64,19 @@ public class ExamResultStatsFragment extends Fragment {
         super.onDestroyView();
         allExamResults.removeChangeListener(realmChangeListener);
         realm.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(AccountManager.get(getContext()).getAccounts().length == 0){
+            realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            // delete all realm objects
+            realm.delete(ExamResult.class);
+            //commit realm changes
+            realm.commitTransaction();
+        }
     }
 }

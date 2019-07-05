@@ -164,7 +164,7 @@
     <string name="exams_note">Hinweis</string>
     <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
     <string name="exams_from_Jhr">Jahrgang %s</string>
-    <string name="exams_result_no_results">Noch keine Noten vorhanden.</string>
+    <string name="exams_result_no_results">Noch keine Noten vorhanden. \nSwipe nach unten zum Aktualisieren.</string>
     <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
     <string name="exams_result_update_newGrades">Neue Noten hinzugefügt.</string>
     <string name="exams_result_update_noNewGrades">Keine neuen Noten vorhanden.</string>
@@ -246,6 +246,7 @@
     <string name="Jahrgang">Jahrgang</string>
     <string name="no_account">Sie sind mit keinem Nutzeraccount angemeldet.</string>
     <string name="error_loading_grades">Noten konnten nicht geladen werden.</string>
+    <string name="swipe_to_reload">Nach unten swipen zum aktualisieren</string>
     <string-array name="jahrgang_werte">
         <item>Bitte auswählen</item>
         <item>2016</item>

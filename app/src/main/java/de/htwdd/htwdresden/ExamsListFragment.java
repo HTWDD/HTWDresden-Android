@@ -75,23 +75,19 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
         if (savedInstanceState != null) {
             stgJhr = savedInstanceState.getInt("stgJhr", GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000);
         }
+        else if (AccountManager.get(getContext()).getAccounts().length == 0) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            sharedPreferences.edit().putBoolean("FIRST_RUN", true).apply();
+            stgJhr = GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000;
+            Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.sign_in, view -> {
+                        final Context context = requireContext();
+                        context.startActivity(new Intent(context, AuthenticatorActivity.class));
+                    })
+                    .show();
+        }
         else {
-
-            try {
-                Account account = AccountManager.get(getContext()).getAccounts()[0];
-                stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(account, "studyGroupYear"));
-            }
-            catch (Exception e){
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                sharedPreferences.edit().putBoolean("FIRST_RUN", true).apply();
-                stgJhr = GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000;
-                Snackbar.make(mLayout, R.string.info_no_settings, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.sign_in, view -> {
-                            final Context context = requireContext();
-                            context.startActivity(new Intent(context, AuthenticatorActivity.class));
-                        })
-                        .show();
-            }
+            stgJhr = Integer.parseInt(AccountManager.get(getContext()).getUserData(AccountManager.get(getContext()).getAccounts()[0], "studyGroupYear"));
         }
 
         // Handler für SwipeRefresh
@@ -144,10 +140,10 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
     }
 
     /**
-     * Buttons zum wechseln der Jahrgänge beschriften und ggf. ausblenden
+     * Buttons zum Wechseln der Jahrgänge beschriften und ggf. ausblenden
      *
-     * @param buttonInc View für den Button zum inkrementieren des Jahrgangs
-     * @param buttonDec View für den Button zum dekrementieren des Jahrgangs
+     * @param buttonInc View für den Button zum Inkrementieren des Jahrgangs
+     * @param buttonDec View für den Button zum Dekrementieren des Jahrgangs
      */
     private void changeButtonName(Button buttonInc, Button buttonDec) {
         int currentYear = GregorianCalendar.getInstance().get(Calendar.YEAR) - 2000;
