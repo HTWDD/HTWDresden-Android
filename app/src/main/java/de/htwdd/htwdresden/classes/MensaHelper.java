@@ -10,9 +10,12 @@ import java.util.List;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.API.ICanteenService;
+import de.htwdd.htwdresden.classes.API.ICanteenService2;
+import de.htwdd.htwdresden.classes.API.Retrofit2OpenMensa;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -87,7 +90,34 @@ public class MensaHelper {
      */
     public void updateMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
         final ICanteenService canteenService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final ICanteenService2 canteenService2 = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService2.class);
         final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId));
+        final Call<List<Meal2>> meal2Call = canteenService2.listMeals("80", "2019-07-08");
+
+
+        meal2Call.enqueue(new Callback<List<Meal2>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal2>> call, @NonNull final retrofit2.Response<List<Meal2>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal2> meals = response.body();
+                if (meals != null) {
+                    saveMeals2(meals);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal2>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
         mealCall.enqueue(new Callback<List<Meal>>() {
             @Override
             public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
@@ -125,6 +155,16 @@ public class MensaHelper {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
+        realm.copyToRealmOrUpdate(meals);
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    private void saveMeals2(@NonNull final List<Meal2> meals) {
+//         ID der Mensa setzen
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.where(Meal2.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
         realm.close();
