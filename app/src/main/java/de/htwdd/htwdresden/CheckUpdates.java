@@ -17,6 +17,7 @@ import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
 import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
@@ -55,9 +56,9 @@ class CheckUpdates implements Runnable {
         final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IGeneralService.class);
 
         // Aktualisiere Mensa
-        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal.class).count() == 0) {
+        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal2.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
-            final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
+            final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
             mensaHelper.updateMeals(() -> {
                     },
                     () -> {

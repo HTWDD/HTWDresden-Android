@@ -4,8 +4,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import de.htwdd.htwdresden.R;
@@ -52,10 +55,10 @@ public class MensaHelper {
      * @param meals Liste von Speisen
      * @return Aufzählung von Speisen
      */
-    public static String concatTitels(@NonNull final Context context, @NonNull final RealmResults<Meal> meals) {
+    public static String concatTitels(@NonNull final Context context, @NonNull final RealmResults<Meal2> meals) {
         final StringBuilder stringBuilder = new StringBuilder();
-        for (final Meal meal : meals) {
-            stringBuilder.append(meal.getTitle());
+        for (final Meal2 meal : meals) {
+            stringBuilder.append(meal.getName());
             stringBuilder.append("\n\n");
         }
 
@@ -82,6 +85,12 @@ public class MensaHelper {
         return calendar.getTime();
     }
 
+    private static String getCurrentDateAsString() {
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
     /**
      * Aktualisiert Speisen der ausgewählten Mensa
      *
@@ -89,11 +98,12 @@ public class MensaHelper {
      * @param successFinish Callback welches nach erfolgreichen Abschluss aufgerufen wird
      */
     public void updateMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
-        final ICanteenService canteenService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ICanteenService.class);
-        final ICanteenService2 canteenService2 = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService2.class);
-        final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId));
-        final Call<List<Meal2>> meal2Call = canteenService2.listMeals("80", "2019-07-08");
 
+        final ICanteenService canteenService = Retrofit2Rubu.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final Call<List<Meal>> mealCall = canteenService.listMeals("1");
+
+        final ICanteenService2 canteenService2 = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService2.class);
+        final Call<List<Meal2>> meal2Call = canteenService2.listMeals(String.valueOf(mensaId), getCurrentDateAsString());
 
         meal2Call.enqueue(new Callback<List<Meal2>>() {
             @Override
@@ -150,18 +160,22 @@ public class MensaHelper {
     private void saveMeals(@NonNull final List<Meal> meals) {
         // ID der Mensa setzen
         for (final Meal meal : meals) {
-            meal.setMensaId(mensaId);
+            meal.setMensaId(Short.valueOf("1"));
         }
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
+        realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, 1).findAll().deleteAllFromRealm();
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
         realm.close();
     }
 
     private void saveMeals2(@NonNull final List<Meal2> meals) {
-//         ID der Mensa setzen
+        // ID der Mensa setzen
+        for (final Meal2 meal : meals) {
+            meal.setMensaId(mensaId);
+            meal.setDate(getDate(GregorianCalendar.getInstance()));
+        }
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.where(Meal2.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();

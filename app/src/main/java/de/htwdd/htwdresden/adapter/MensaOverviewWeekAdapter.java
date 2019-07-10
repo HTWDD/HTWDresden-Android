@@ -15,6 +15,7 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
@@ -24,11 +25,11 @@ import io.realm.RealmResults;
  *
  * @author Kay Förster
  */
-public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
+public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal2> {
     private static final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
     private final Calendar beginOfWeek;
 
-    public MensaOverviewWeekAdapter(@NonNull final Calendar beginOfWeek, @Nullable final OrderedRealmCollection<Meal> data) {
+    public MensaOverviewWeekAdapter(@NonNull final Calendar beginOfWeek, @Nullable final OrderedRealmCollection<Meal2> data) {
         super(data);
         this.beginOfWeek = beginOfWeek;
     }
@@ -61,7 +62,7 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
             return view;
         }
 
-        final RealmResults<Meal> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
+        final RealmResults<Meal2> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
         viewHolder.title.setText(nameOfDays[i + 2]);
         viewHolder.price.setText(MensaHelper.concatTitels(context, realmResults));
 

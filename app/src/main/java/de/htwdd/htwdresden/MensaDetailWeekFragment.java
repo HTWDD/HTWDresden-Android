@@ -23,6 +23,7 @@ import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.Realm;
 
 
@@ -77,7 +78,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
             beginOfWeek.roll(Calendar.WEEK_OF_YEAR, 1);
         }
 
-        ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realm.where(Meal.class).findAll()));
+        ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realm.where(Meal2.class).findAll()));
 
         return mLayout;
     }

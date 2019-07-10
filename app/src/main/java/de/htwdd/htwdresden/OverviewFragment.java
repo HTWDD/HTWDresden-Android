@@ -36,6 +36,7 @@ import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.News;
 import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.ExamStats;
 import io.realm.Realm;
@@ -54,10 +55,10 @@ public class OverviewFragment extends Fragment {
     // Datenbank
     private Realm realm;
     private RealmResults<ExamResult> examResults;
-    private RealmResults<Meal> meals;
+    private RealmResults<Meal2> meals;
     private RealmResults<LessonUser> lessons;
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
-    private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
+    private RealmChangeListener<RealmResults<Meal2>> realmListenerMensa;
     private RealmChangeListener<RealmResults<LessonUser>> realmListenerLessons;
 
     public OverviewFragment() {
@@ -85,7 +86,7 @@ public class OverviewFragment extends Fragment {
         final Calendar calendar = GregorianCalendar.getInstance();
         realm = Realm.getDefaultInstance();
         realmListenerMensa = element -> showMensaInfo(meals);
-        meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 1).findAll();
+        meals = realm.where(Meal2.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 80).findAll();
         meals.addChangeListener(realmListenerMensa);
         showMensaInfo(meals);
 
@@ -257,7 +258,7 @@ public class OverviewFragment extends Fragment {
      *
      * @param meals Liste der Mahlzeiten
      */
-    private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
+    private void showMensaInfo(@NonNull final RealmResults<Meal2> meals) {
         final TextView message = mLayout.findViewById(R.id.overview_mensaMessage);
         final TextView content = mLayout.findViewById(R.id.overview_mensaContent);
 
