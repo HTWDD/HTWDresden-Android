@@ -72,7 +72,8 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));
         // Default Divider
         final TypedArray typedArray = mLayout.getContext().obtainStyledAttributes(new int[]{ android.R.attr.listDivider });
-        listView.setDivider(typedArray.getDrawable(0));
+        //listView.setDivider(typedArray.getDrawable(0));
+        listView.setDividerHeight(8);
         typedArray.recycle();
 
         return mLayout;
