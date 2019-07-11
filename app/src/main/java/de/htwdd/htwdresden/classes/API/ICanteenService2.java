@@ -19,6 +19,6 @@ public interface ICanteenService2 {
     Call<List<Meal2>> listMeals(@Path("canteenID") String canteenID,
                                 @Path("date") String date);
 
-    @GET("canteens")
+    @GET("canteens?near[lat]=51.058583&near[lng]=13.738208&near[dist]=20")
     Call<List<Canteen>> listCanteens();
 }

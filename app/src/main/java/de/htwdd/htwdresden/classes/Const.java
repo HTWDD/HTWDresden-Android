@@ -9,6 +9,7 @@ public final class Const {
 
     public static final class BundleParams {
         public static final String MENSA_DETAIL_MODE = "MENSA_DETAIL_MODE";
+        public static final String CANTEEN_DETAIL_MODE = "CANTEEN_DETAIL_MODE";
         public static final String TIMETABLE_WEEK = "TIMETABLE_WEEK";
         public static final String TIMETABLE_DAY = "TIMETABLE_DAY";
         public static final String TIMETABLE_DS = "TIMETABLE_DS";

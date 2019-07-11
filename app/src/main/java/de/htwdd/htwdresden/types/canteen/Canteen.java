@@ -1,16 +1,19 @@
 package de.htwdd.htwdresden.types.canteen;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * Beschreibung einer Kantine
  *
  * @author Kay Förster
  */
-public class Canteen {
+public class Canteen extends RealmObject {
     private int id;
     private String city;
     private String name;
     private String address;
-    private Coordinates coordinates;
+    private RealmList<Float> coordinates;
 
     public int getId() {
         return id;
@@ -28,7 +31,7 @@ public class Canteen {
         return address;
     }
 
-    public Coordinates getCoordinates() {
+    public RealmList<Float> getCoordinates() {
         return coordinates;
     }
 }

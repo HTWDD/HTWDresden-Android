@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="@dimen/space_between_content"
-        android:text="@string/exams_result_no_results"
+        android:text="@string/exams_result_no_results_2"
         android:background="@color/app_background"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

@@ -1,11 +1,14 @@
 package de.htwdd.htwdresden.types.canteen;
 
+import io.realm.RealmObject;
+
 /**
  * Beschreibung von Koordinaten
  *
  * @author Kay Förster
  */
-public class Coordinates {
+public class Coordinates{
+
     private float longitude;
     private float latitude;
 

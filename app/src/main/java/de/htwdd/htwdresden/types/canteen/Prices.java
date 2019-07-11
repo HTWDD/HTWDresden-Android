@@ -1,6 +1,5 @@
 package de.htwdd.htwdresden.types.canteen;
 
-import io.realm.RealmModel;
 import io.realm.RealmObject;
 
 public class Prices extends RealmObject {

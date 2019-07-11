@@ -16,6 +16,7 @@ import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
+import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.canteen.Meal2;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
@@ -55,14 +56,19 @@ class CheckUpdates implements Runnable {
         final long semesterplanLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, 0);
         final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IGeneralService.class);
 
-        // Aktualisiere Mensa
-        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal2.class).count() == 0) {
+        // Aktualisiere Meal und Mensa
+        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal2.class).count() == 0 || realm.where(Canteen.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
+
+
+            mensaHelper.updateCanteens(() -> { },
+                    () -> Log.i(LOG_TAG, "Kantinen aktualisiert"));
+
             mensaHelper.updateMeals(() -> {
                     },
                     () -> {
-                        Log.i(LOG_TAG, "Mensa aktualisiert");
+                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert");
                         final SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
                         editor.apply();

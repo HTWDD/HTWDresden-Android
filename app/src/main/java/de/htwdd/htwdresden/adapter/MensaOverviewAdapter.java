@@ -1,0 +1,59 @@
+package de.htwdd.htwdresden.adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+
+import de.htwdd.htwdresden.R;
+import de.htwdd.htwdresden.types.canteen.Canteen;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmBaseAdapter;
+
+/**
+ * Adapter für die Mensa Tagesübersicht
+ *
+ * @author Kay Förster
+ */
+public class MensaOverviewAdapter extends RealmBaseAdapter<Canteen> {
+
+    public MensaOverviewAdapter(@Nullable final OrderedRealmCollection<Canteen> data) {
+        super(data);
+    }
+
+    @Override
+    public View getView(final int i, @Nullable View view, final ViewGroup viewGroup) {
+        final Context context = viewGroup.getContext();
+        final ViewHolder viewHolder;
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_item, viewGroup, false);
+            viewHolder = new ViewHolder();
+            viewHolder.name = view.findViewById(R.id.mensa_name);
+            viewHolder.adresse = view.findViewById(R.id.mensa_adresse);
+            viewHolder.city = view.findViewById(R.id.mensa_city);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        final Canteen canteen = getItem(i);
+        if (canteen == null) {
+            return view;
+        }
+
+        viewHolder.name.setText(canteen.getName());
+        viewHolder.adresse.setText(canteen.getAddress());
+        viewHolder.city.setText(canteen.getCity());
+
+        return view;
+    }
+
+    private static class ViewHolder {
+        TextView name;
+        TextView adresse;
+        TextView city;
+    }
+}

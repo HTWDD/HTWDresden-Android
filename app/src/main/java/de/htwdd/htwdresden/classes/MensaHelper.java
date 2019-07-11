@@ -17,6 +17,7 @@ import de.htwdd.htwdresden.classes.API.ICanteenService2;
 import de.htwdd.htwdresden.classes.API.Retrofit2OpenMensa;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
+import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.Realm;
@@ -45,6 +46,11 @@ public class MensaHelper {
      * @param iRefreshing Callback welches nach Abschluss aufgerufen wird
      */
     public void updateMeals(@NonNull final IRefreshing iRefreshing) {
+        updateMeals(iRefreshing, () -> {
+        });
+    }
+
+    public void updateCanteens(@NonNull final IRefreshing iRefreshing) {
         updateMeals(iRefreshing, () -> {
         });
     }
@@ -180,6 +186,44 @@ public class MensaHelper {
         realm.beginTransaction();
         realm.where(Meal2.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
         realm.copyToRealmOrUpdate(meals);
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    public void updateCanteens(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
+
+        final ICanteenService2 canteenService2 = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService2.class);
+        final Call<List<Canteen>> canteenCall = canteenService2.listCanteens();
+
+        canteenCall.enqueue(new Callback<List<Canteen>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Canteen>> call, @NonNull final retrofit2.Response<List<Canteen>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Canteen> canteens = response.body();
+                if (canteens != null) {
+                    saveCanteens(canteens);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Canteen>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+    }
+
+    private void saveCanteens(final List<Canteen> canteens) {
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(canteens);
         realm.commitTransaction();
         realm.close();
     }
