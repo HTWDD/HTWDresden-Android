@@ -35,7 +35,6 @@ import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.News;
-import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.canteen.Meal2;
 import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.ExamStats;

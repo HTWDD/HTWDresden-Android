@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -57,7 +57,7 @@ public class MensaWidget extends AppWidgetProvider {
 
         // Lade Daten aus der Datenbank
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<Meal> meals = realm.where(Meal.class)
+        final RealmResults<Meal2> meals = realm.where(Meal2.class)
                 .equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar))
                 .equalTo(Const.database.Canteen.MENSA_IS_SOLDOUT, false)
                 .findAll();
@@ -66,7 +66,7 @@ public class MensaWidget extends AppWidgetProvider {
         final Resources ressource = context.getResources();
         final String packageName = context.getPackageName();
         final int cells = minHeight <= 65 ? 4 : 8;
-        Meal meal;
+        Meal2 meal;
 
         for (int i = 1; i < cells + 1; i++) {
             final int mealName = ressource.getIdentifier("widget_mensa_item_meal_" + i, "id", packageName);
@@ -84,8 +84,8 @@ public class MensaWidget extends AppWidgetProvider {
                 continue;
             }
 
-            views.setTextViewText(mealName, meal.getTitle());
-            views.setTextViewText(mealPrice, context.getString(R.string.mensa_euro, meal.getStudentPrice()));
+            views.setTextViewText(mealName, meal.getName());
+            views.setTextViewText(mealPrice, context.getString(R.string.mensa_euro, meal.getPrices().getStudents()));
         }
 
         // Info setzen

@@ -14,7 +14,6 @@ import java.util.Calendar;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
-import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.canteen.Meal2;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;

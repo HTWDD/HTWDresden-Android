@@ -17,7 +17,6 @@ import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.types.canteen.Canteen;
-import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.canteen.Meal2;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
 import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
