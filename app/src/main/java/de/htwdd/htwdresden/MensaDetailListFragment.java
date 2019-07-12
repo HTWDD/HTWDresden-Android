@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,6 +76,18 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         //listView.setDivider(typedArray.getDrawable(0));
         listView.setDividerHeight(8);
         typedArray.recycle();
+
+        listView.setOnItemClickListener(((adapterView, view, i, l) -> {
+            final Canteen canteen = mensaArrayAdapter.getItem(i);
+            if (canteen != null) {
+
+                Context context = view.getContext();
+                Intent intent = new Intent(context, CanteenDetailActivity.class);
+                intent.putExtra(CanteenDetailFragment.ARG_CANTEEN_ID, String.valueOf(canteen.getId()));
+
+                context.startActivity(intent);
+            }
+        }));
 
         return mLayout;
     }

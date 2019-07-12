@@ -255,5 +255,7 @@
         <item>2017</item>
         <item>2018</item>
     </string-array>
+    <string name="title_canteen_list">Canteens</string>
+    <string name="title_canteen_detail">Canteen Detail</string>
 
 </resources>
