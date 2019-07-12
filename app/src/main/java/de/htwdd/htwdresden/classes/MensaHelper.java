@@ -16,7 +16,7 @@ import de.htwdd.htwdresden.classes.API.ICanteenService;
 import de.htwdd.htwdresden.classes.API.Retrofit2OpenMensa;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Canteen;
-import de.htwdd.htwdresden.types.canteen.Meal2;
+import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -58,9 +58,9 @@ public class MensaHelper {
      * @param meals Liste von Speisen
      * @return Aufzählung von Speisen
      */
-    public static String concatTitels(@NonNull final Context context, @NonNull final RealmResults<Meal2> meals) {
+    public static String concatTitels(@NonNull final Context context, @NonNull final RealmResults<Meal> meals) {
         final StringBuilder stringBuilder = new StringBuilder();
-        for (final Meal2 meal : meals) {
+        for (final Meal meal : meals) {
             stringBuilder.append(meal.getName());
             stringBuilder.append("\n\n");
         }
@@ -103,13 +103,13 @@ public class MensaHelper {
     public void updateMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
 
         final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
-        final Call<List<Meal2>> mealCall = canteenService.listMeals(String.valueOf(mensaId), getCurrentDateAsString());
+        final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId), getCurrentDateAsString());
 
-        mealCall.enqueue(new Callback<List<Meal2>>() {
+        mealCall.enqueue(new Callback<List<Meal>>() {
             @Override
-            public void onResponse(@NonNull final Call<List<Meal2>> call, @NonNull final retrofit2.Response<List<Meal2>> response) {
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
                 Log.d(LOG_TAG, "Mensa Request erfolgreich");
-                final List<Meal2> meals = response.body();
+                final List<Meal> meals = response.body();
                 if (meals != null) {
                     saveMeals(meals);
                 }
@@ -121,7 +121,7 @@ public class MensaHelper {
             }
 
             @Override
-            public void onFailure(@NonNull final Call<List<Meal2>> call, @NonNull final Throwable t) {
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
                 Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
                 // Refreshing ausschalten
                 iRefreshing.onCompletion();
@@ -134,15 +134,15 @@ public class MensaHelper {
      *
      * @param meals Liste von Speisen
      */
-    private void saveMeals(@NonNull final List<Meal2> meals) {
+    private void saveMeals(@NonNull final List<Meal> meals) {
         // ID der Mensa setzen
-        for (final Meal2 meal : meals) {
+        for (final Meal meal : meals) {
             meal.setMensaId(mensaId);
             meal.setDate(getDate(GregorianCalendar.getInstance()));
         }
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(Meal2.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
+        realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
         realm.close();
@@ -150,8 +150,8 @@ public class MensaHelper {
 
     public void updateCanteens(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
 
-        final ICanteenService canteenService2 = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
-        final Call<List<Canteen>> canteenCall = canteenService2.listCanteensOfDD();
+        final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final Call<List<Canteen>> canteenCall = canteenService.listCanteensOfDD();
 
         canteenCall.enqueue(new Callback<List<Canteen>>() {
             @Override

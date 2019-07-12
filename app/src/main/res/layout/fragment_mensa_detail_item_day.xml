@@ -65,6 +65,17 @@
         card_view:srcCompat="@drawable/ic_meal_vegan"
         android:contentDescription="@string/mensa_meal_info_vegan"/>
 
+    <ImageView
+        android:id="@+id/meal_garlic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        card_view:layout_constraintBottom_toBottomOf="@+id/meal_vegan"
+        card_view:layout_constraintStart_toEndOf="@+id/meal_vegan"
+        card_view:layout_constraintTop_toTopOf="@+id/meal_vegan"
+        card_view:srcCompat="@drawable/ic_meal_garlic"
+        android:contentDescription="@string/mensa_meal_info_garlic"/>
+
     <TextView
         android:id="@+id/mensa_title"
         android:layout_width="0dp"

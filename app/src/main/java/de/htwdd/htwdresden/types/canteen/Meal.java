@@ -12,7 +12,7 @@ import io.realm.RealmObject;
  *
  * @author Kay Förster
  */
-public class Meal2 extends RealmObject {
+public class Meal extends RealmObject {
     private long id;
     private String name;
     private String category;

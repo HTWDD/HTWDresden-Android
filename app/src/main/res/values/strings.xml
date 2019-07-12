@@ -92,6 +92,7 @@
     <string name="mensa_meal_info_beef">Rindfleisch</string>
     <string name="mensa_meal_info_vegetarian">Vegetarisch</string>
     <string name="mensa_meal_info_vegan">Vegan</string>
+    <string name="mensa_meal_info_garlic">Knoblauch</string>
 
     <string name="timetable_overview_today">Heute</string>
     <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
