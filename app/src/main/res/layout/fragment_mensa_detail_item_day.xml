@@ -43,9 +43,6 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:contentDescription="@string/mensa_meal_info_pork"
-            card_view:layout_constraintBottom_toTopOf="@+id/mensa_price"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/mensa_title"
             card_view:srcCompat="@drawable/ic_meal_pig" />
 
         <ImageView
@@ -54,9 +51,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            card_view:layout_constraintBottom_toBottomOf="@+id/mensa_pork"
-            card_view:layout_constraintStart_toEndOf="@+id/mensa_pork"
-            card_view:layout_constraintTop_toTopOf="@+id/mensa_pork"
             card_view:srcCompat="@drawable/ic_meal_beef"
             android:contentDescription="@string/mensa_meal_info_beef"/>
 
@@ -66,9 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            card_view:layout_constraintBottom_toBottomOf="@+id/mensa_beef"
-            card_view:layout_constraintStart_toEndOf="@+id/mensa_beef"
-            card_view:layout_constraintTop_toTopOf="@+id/mensa_beef"
             card_view:srcCompat="@drawable/ic_meal_vegetarian"
             android:contentDescription="@string/mensa_meal_info_vegetarian"/>
 
@@ -78,9 +69,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            card_view:layout_constraintBottom_toBottomOf="@+id/meal_vegetarian"
-            card_view:layout_constraintStart_toEndOf="@+id/meal_vegetarian"
-            card_view:layout_constraintTop_toTopOf="@+id/meal_vegetarian"
             card_view:srcCompat="@drawable/ic_meal_vegan"
             android:contentDescription="@string/mensa_meal_info_vegan"/>
 
@@ -90,9 +78,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            card_view:layout_constraintBottom_toBottomOf="@+id/meal_vegan"
-            card_view:layout_constraintStart_toEndOf="@+id/meal_vegan"
-            card_view:layout_constraintTop_toTopOf="@+id/meal_vegan"
             card_view:srcCompat="@drawable/ic_meal_garlic"
             android:contentDescription="@string/mensa_meal_info_garlic"/>
 
@@ -103,9 +88,6 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:contentDescription="@string/mensa_meal_info_garlic"
-            card_view:layout_constraintBottom_toBottomOf="@+id/meal_garlic"
-            card_view:layout_constraintStart_toEndOf="@+id/meal_garlic"
-            card_view:layout_constraintTop_toTopOf="@+id/meal_garlic"
             card_view:srcCompat="@drawable/ic_meal_alcohol" />
 
     </LinearLayout>

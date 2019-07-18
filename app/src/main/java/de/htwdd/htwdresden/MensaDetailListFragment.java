@@ -44,6 +44,13 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MensaHelper mensaHelper = new MensaHelper(Objects.requireNonNull(getContext()), (short) 80);
+        mensaHelper.updateCanteens(this);
+    }
+
+    @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
@@ -68,16 +75,24 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
             }
         });
 
+        RealmResults<Canteen> canteenList = realm.where(Canteen.class).findAll();
+
+        for (Canteen canteen : canteenList) {
+
+            short mensaId =  (short) canteen.getId();
+
+            MensaHelper mensaHelperMeals = new MensaHelper(getContext(), mensaId);
+            mensaHelperMeals.updateWeekMeals(this);
+        }
+
         // Setze Adapter
         final RealmResults<Canteen> realmResults = realm.where(Canteen.class)
                 .findAll();
         final MensaOverviewAdapter mensaArrayAdapter = new MensaOverviewAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));
-        // Default Divider
         final TypedArray typedArray = mLayout.getContext().obtainStyledAttributes(new int[]{ android.R.attr.listDivider });
-        //listView.setDivider(typedArray.getDrawable(0));
-        listView.setDividerHeight(8);
+        listView.setDividerHeight(50);
         typedArray.recycle();
 
         listView.setOnItemClickListener(((adapterView, view, i, l) -> {

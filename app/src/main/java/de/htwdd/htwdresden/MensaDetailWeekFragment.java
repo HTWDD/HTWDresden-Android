@@ -71,10 +71,6 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
-            final MensaHelper mensaHelper = new MensaHelper(context, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID)));
-
-            mensaHelper.updateMeals(this);
-            //mensaHelper.updateMeals(this);
         });
 
         // Setze Kalender auf Montag der ausgewählten Woche
@@ -83,6 +79,9 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         if (modus == 2) {
             beginOfWeek.roll(Calendar.WEEK_OF_YEAR, 1);
         }
+
+        RealmResults<Meal> test = realm.where(Meal.class).equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID))).findAll();
+        RealmResults<Meal> test2 = realm.where(Meal.class).findAll();
 
         ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realm.where(Meal.class).equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID))).findAll()));
 

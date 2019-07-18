@@ -51,19 +51,15 @@ class CheckUpdates implements Runnable {
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final long mensaDayLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, 0);
-        final long mensaWeekLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
         final long studyGroupsLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_STUDY_GROUP_LAST_UPDATE, 0);
         final long semesterplanLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, 0);
         final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IGeneralService.class);
 
-        // Aktualisiere Meal und Mensa
+        // Aktualisiere Meal für Overview
         if ((calendar.getTimeInMillis() - mensaDayLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS) || realm.where(Meal.class).count() == 0 || realm.where(Canteen.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
 
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
-
-            mensaHelper.updateCanteens(() -> { },
-                    () -> Log.i(LOG_TAG, "Kantinen aktualisiert"));
 
             mensaHelper.updateDayMeals(() -> {
                     },
@@ -73,28 +69,6 @@ class CheckUpdates implements Runnable {
                         editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, calendar.getTimeInMillis());
                         editor.apply();
                     });
-
-            if ((calendar.getTimeInMillis() - mensaWeekLastUpdate) > TimeUnit.MILLISECONDS.convert(2, TimeUnit.DAYS)){
-                mensaHelper.updateWeekMealsOfDD(() -> {
-                        },
-                        () -> {
-                            Log.i(LOG_TAG, "Mahlzeiten der Woche aktualisiert");
-                            final SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
-                            editor.apply();
-                        });
-            }
-//
-//            if ((calendar.getTimeInMillis() - mensaWeekLastUpdate) > TimeUnit.MILLISECONDS.convert(2, TimeUnit.DAYS)){
-//                mensaHelper.updateNextWeekMeals(() -> {
-//                        },
-//                        () -> {
-//                            Log.i(LOG_TAG, "Mahlzeiten der Woche aktualisiert");
-//                            final SharedPreferences.Editor editor = sharedPreferences.edit();
-//                            editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
-//                            editor.apply();
-//                        });
-//            }
         }
 
         // Aktualisiere Studiengruppen

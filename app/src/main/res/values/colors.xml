@@ -16,4 +16,6 @@
     <color name="exam_results_green">#090</color>
 
     <color name="overview_header">#8BC34A</color>
+
+    <color name="black">#000</color>
 </resources>

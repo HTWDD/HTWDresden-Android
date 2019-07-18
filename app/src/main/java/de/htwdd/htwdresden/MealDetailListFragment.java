@@ -13,19 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import de.htwdd.htwdresden.adapter.MensaOverviewAdapter;
+import java.util.Calendar;
+
 import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
-import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_DATE;
 import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_ID;
 
 /**
@@ -47,6 +47,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
+
         realm = Realm.getDefaultInstance();
         // Suche Views
         final ListView listView = mLayout.findViewById(R.id.listView);
@@ -65,15 +66,14 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            assert getArguments() != null;
-            final MensaHelper mensaHelper = new MensaHelper(context, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID)));
-            mensaHelper.updateMeals(this);
         });
 
+
+
         // Setze Adapter
+        assert getArguments() != null;
         final RealmResults<Meal> realmResults = realm.where(Meal.class)
-                .equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID)))
+                .equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID))).equalTo(MENSA_DATE, MensaHelper.getDate(Calendar.getInstance()))
                 .findAll();
         final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
