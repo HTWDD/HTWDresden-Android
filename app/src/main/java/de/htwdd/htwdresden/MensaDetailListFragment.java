@@ -14,7 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.Objects;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewAdapter;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
@@ -23,6 +26,8 @@ import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Canteen;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
 
 
 /**
@@ -61,8 +66,6 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
                 Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
-            final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
-            mensaHelper.updateCanteens(this);
         });
 
         // Setze Adapter
@@ -80,12 +83,14 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         listView.setOnItemClickListener(((adapterView, view, i, l) -> {
             final Canteen canteen = mensaArrayAdapter.getItem(i);
             if (canteen != null) {
+                final FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                Fragment fragment = new MealFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ARG_CANTEEN_ID, String.valueOf(canteen.getId()));
 
-                Context context = view.getContext();
-                Intent intent = new Intent(context, CanteenDetailActivity.class);
-                intent.putExtra(CanteenDetailFragment.ARG_CANTEEN_ID, String.valueOf(canteen.getId()));
-
-                context.startActivity(intent);
+                fragment.setArguments(bundle);
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction().replace(R.id.activity_main_FrameLayout, fragment, null).commitAllowingStateLoss();
             }
         }));
 

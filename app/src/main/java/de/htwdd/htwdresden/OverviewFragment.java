@@ -270,7 +270,7 @@ public class OverviewFragment extends Fragment {
         }
 
         // Inhalt anzeigen
-        content.setText(MensaHelper.concatTitels(mLayout.getContext(), meals));
+        content.setText(MensaHelper.concatTitles(mLayout.getContext(), meals));
         message.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
     }

@@ -22,6 +22,8 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_DATE;
+
 /**
  * Stellt Funktionen zum Parsen der Mensa-Webseite bereit.
  *
@@ -42,13 +44,20 @@ public class MensaHelper {
      *
      * @param iRefreshing Callback welches nach Abschluss aufgerufen wird
      */
+    public void updateDayMeals(@NonNull final IRefreshing iRefreshing) {
+        updateDayMeals(iRefreshing, () -> {
+        });
+    }
+
     public void updateMeals(@NonNull final IRefreshing iRefreshing) {
-        updateMeals(iRefreshing, () -> {
+        updateWeekMeals(iRefreshing, () -> {
+        });
+        updateNextWeekMeals(iRefreshing, () -> {
         });
     }
 
     public void updateCanteens(@NonNull final IRefreshing iRefreshing) {
-        updateMeals(iRefreshing, () -> {
+        updateDayMeals(iRefreshing, () -> {
         });
     }
 
@@ -58,7 +67,7 @@ public class MensaHelper {
      * @param meals Liste von Speisen
      * @return Aufzählung von Speisen
      */
-    public static String concatTitels(@NonNull final Context context, @NonNull final RealmResults<Meal> meals) {
+    public static String concatTitles(@NonNull final Context context, @NonNull final RealmResults<Meal> meals) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (final Meal meal : meals) {
             stringBuilder.append(meal.getName());
@@ -75,7 +84,7 @@ public class MensaHelper {
     }
 
     /**
-     * Entfernt aus dem übergebene Kalender die Zeit und gibt ein Date-Objekt zurück
+     * Entfernt aus dem übergebenen Kalender die Zeit und gibt ein Date-Objekt zurück
      *
      * @param calendar Kalender aus dem die Zeit entfernt wird
      * @return Date-Objekt aus dem Kalender ohne Zeit
@@ -94,13 +103,63 @@ public class MensaHelper {
         return dateFormat.format(date);
     }
 
+    private static String getDateOfWeekAsString(int dayOfWeek) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + dayOfWeek);
+
+        Date date = calendar.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
+    private static String getDateOfNextWeekAsString(int dayOfWeek) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + dayOfWeek);
+        calendar.roll(Calendar.WEEK_OF_YEAR, 1);
+
+        Date date = calendar.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
+    private static Date getDateOfWeek(int dayOfWeek) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + dayOfWeek);
+
+        return calendar.getTime();
+    }
+
+    private static Date getDateOfNextWeek(int dayOfWeek) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + dayOfWeek);
+        calendar.roll(Calendar.WEEK_OF_YEAR, 1);
+
+        return calendar.getTime();
+    }
+
     /**
      * Aktualisiert Speisen der ausgewählten Mensa
      *
      * @param iRefreshing Callback welches nach Abschluss aufgerufen wird
      * @param successFinish Callback welches nach erfolgreichen Abschluss aufgerufen wird
      */
-    public void updateMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
+    public void updateDayMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
 
         final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
         final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId), getCurrentDateAsString());
@@ -112,6 +171,383 @@ public class MensaHelper {
                 final List<Meal> meals = response.body();
                 if (meals != null) {
                     saveMeals(meals);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+    }
+
+    public void updateWeekMealsOfDD(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
+
+        final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final Call<List<Meal>> mealCallMonday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(0));
+        final Call<List<Meal>> mealCallTuesday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(1));
+        final Call<List<Meal>> mealCallWednesday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(2));
+        final Call<List<Meal>> mealCallThursday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(3));
+        final Call<List<Meal>> mealCallFriday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(4));
+
+
+        mealCallMonday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 0);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallTuesday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 1);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallWednesday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 2);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallThursday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 3);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallFriday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 4);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+    }
+
+    public void updateWeekMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
+
+        final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final Call<List<Meal>> mealCallMonday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(0));
+        final Call<List<Meal>> mealCallTuesday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(1));
+        final Call<List<Meal>> mealCallWednsday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(2));
+        final Call<List<Meal>> mealCallThursday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(3));
+        final Call<List<Meal>> mealCallFriday = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(4));
+
+
+        mealCallMonday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 0);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallTuesday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 1);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallWednsday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 2);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallThursday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 3);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallFriday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfWeek(meals, 4);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+    }
+
+    public void updateNextWeekMeals(@NonNull final IRefreshing iRefreshing, @NonNull final IRefreshing successFinish) {
+
+        final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
+        final Call<List<Meal>> mealCallMonday = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(0));
+        final Call<List<Meal>> mealCallTuesday = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(1));
+        final Call<List<Meal>> mealCallWednsday = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(2));
+        final Call<List<Meal>> mealCallThursday = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(3));
+        final Call<List<Meal>> mealCallFriday = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(4));
+
+        mealCallMonday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfNextWeek(meals, 0);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallTuesday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfNextWeek(meals, 1);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallWednsday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfNextWeek(meals, 2);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallThursday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfNextWeek(meals, 3);
+                }
+
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+
+                successFinish.onCompletion();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<List<Meal>> call, @NonNull final Throwable t) {
+                Log.e(LOG_TAG, "Fehler beim Abrufen der API", t);
+                // Refreshing ausschalten
+                iRefreshing.onCompletion();
+            }
+        });
+
+        mealCallFriday.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(@NonNull final Call<List<Meal>> call, @NonNull final retrofit2.Response<List<Meal>> response) {
+                Log.d(LOG_TAG, "Mensa Request erfolgreich");
+                final List<Meal> meals = response.body();
+                if (meals != null) {
+                    saveMealsOfNextWeek(meals, 4);
                 }
 
                 // Refreshing ausschalten
@@ -143,6 +579,34 @@ public class MensaHelper {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).findAll().deleteAllFromRealm();
+        realm.copyToRealmOrUpdate(meals);
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    private void saveMealsOfWeek(@NonNull final List<Meal> meals, int dayOfWeek) {
+        // ID der Mensa setzen
+        for (final Meal meal : meals) {
+            meal.setMensaId(mensaId);
+            meal.setDate(getDateOfWeek(dayOfWeek));
+        }
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).equalTo(MENSA_DATE, meals.get(0).getDate()).findAll().deleteAllFromRealm();
+        realm.copyToRealmOrUpdate(meals);
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    private void saveMealsOfNextWeek(@NonNull final List<Meal> meals, int dayOfWeek) {
+        // ID der Mensa setzen
+        for (final Meal meal : meals) {
+            meal.setMensaId(mensaId);
+            meal.setDate(getDateOfNextWeek(dayOfWeek + 7));
+        }
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_ID, mensaId).equalTo(MENSA_DATE, meals.get(0).getDate()).findAll().deleteAllFromRealm();
         realm.copyToRealmOrUpdate(meals);
         realm.commitTransaction();
         realm.close();

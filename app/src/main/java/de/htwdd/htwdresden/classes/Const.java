@@ -35,6 +35,7 @@ public final class Const {
         static final String PREFERENCES_AUTO_MUTE_MODE = "autoMuteMode";
         public static final String PREFERENCES_SEMESTERPLAN_UPDATETIME = "semesterPlanUpdateTime";
         public static final String PREFERENCES_MENSA_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
+        public static final String PREFERENCES_MENSA_NEXT_WEEK_LASTUPDATE = "mensaWeekLastUpdate";
         public static final String PREFERENCES_MENSA_DAY_LASTUPDATE = "mensaDayLastUpdate";
         public static final String PREFERENCES_STUDY_GROUP_LAST_UPDATE = "studyGroupsLastUpdate";
         public static final String PREFERENCES_AUTO_EXAM_UPDATE = "autoExamUpdate";

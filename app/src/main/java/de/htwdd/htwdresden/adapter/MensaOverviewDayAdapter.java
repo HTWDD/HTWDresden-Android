@@ -32,13 +32,14 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item_day, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.title = view.findViewById(R.id.mensa_title);
-            viewHolder.price = view.findViewById(R.id.mensa_price);
-            viewHolder.imageView = view.findViewById(R.id.mensa_image);
+            viewHolder.price_student = view.findViewById(R.id.mensa_price_student);
+            viewHolder.price_employee = view.findViewById(R.id.mensa_price_employee);
             viewHolder.imagePork = view.findViewById(R.id.mensa_pork);
             viewHolder.imageBeef = view.findViewById(R.id.mensa_beef);
             viewHolder.imageVegetarian = view.findViewById(R.id.meal_vegetarian);
             viewHolder.imageVegan = view.findViewById(R.id.meal_vegan);
             viewHolder.imageGarlic = view.findViewById(R.id.meal_garlic);
+            viewHolder.imageAlcohol = view.findViewById(R.id.meal_alcohol);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -54,7 +55,8 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         // Preis anzeigen
         final float priceStudent = (float) meal.getPrices().getStudents();
         final float priceEmployee = (float) meal.getPrices().getEmployees();
-        viewHolder.price.setText(context.getString(R.string.mensa_price, priceStudent, priceEmployee));
+        viewHolder.price_student.setText(context.getString(R.string.mensa_price_student, priceStudent));
+        viewHolder.price_employee.setText(context.getString(R.string.mensa_price_employee, priceEmployee));
 
         // Eigenschaften als Icon anzeigen
         viewHolder.imagePork.setVisibility(meal.getNotes().contains("Schweinefleisch") ? View.VISIBLE : View.GONE);
@@ -62,18 +64,20 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         viewHolder.imageVegetarian.setVisibility(meal.getNotes().contains("vegetarisch") ? View.VISIBLE : View.GONE);
         viewHolder.imageVegan.setVisibility(meal.getNotes().contains("vegan") ? View.VISIBLE : View.GONE);
         viewHolder.imageGarlic.setVisibility(meal.getNotes().contains("Knoblauch") ? View.VISIBLE : View.GONE);
+        viewHolder.imageAlcohol.setVisibility(meal.getNotes().contains("Alkohol") ? View.VISIBLE : View.GONE);
 
         return view;
     }
 
     private static class ViewHolder {
         TextView title;
-        TextView price;
+        TextView price_student;
+        TextView price_employee;
         ImageView imagePork;
         ImageView imageBeef;
         ImageView imageVegetarian;
         ImageView imageVegan;
         ImageView imageGarlic;
-        ImageView imageView;
+        ImageView imageAlcohol;
     }
 }

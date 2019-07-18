@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 tag = "overview";
                 break;
             case R.id.navigation_mensa:
-                supportedFragment = new MensaFragment();
+                supportedFragment = new MensaDetailListFragment();
                 setTitle(getString(R.string.navi_mensa));
                 break;
             case R.id.navigation_timetable:

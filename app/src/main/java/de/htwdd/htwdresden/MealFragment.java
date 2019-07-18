@@ -20,6 +20,8 @@ import de.htwdd.htwdresden.adapter.ViewPagerAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.types.TabItem;
 
+import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
+
 
 /**
  * Übersicht über die verschiedenen Mensa-Funktionalitäten
@@ -39,13 +41,16 @@ public class MealFragment extends Fragment {
 
         final Bundle bundle_1 = new Bundle();
         bundle_1.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 0);
+        bundle_1.putString(ARG_CANTEEN_ID, getArguments().getString(ARG_CANTEEN_ID));
         final Bundle bundle_2 = new Bundle();
         bundle_2.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 1);
+        bundle_2.putString(ARG_CANTEEN_ID, getArguments().getString(ARG_CANTEEN_ID));
         final Bundle bundle_3 = new Bundle();
         bundle_3.putInt(Const.BundleParams.MENSA_DETAIL_MODE, 2);
+        bundle_3.putString(ARG_CANTEEN_ID, getArguments().getString(ARG_CANTEEN_ID));
         mTabs.add(new TabItem(
                 getResources().getString(R.string.mensa_tab_today),
-                MensaDetailListFragment.class,
+                MealDetailListFragment.class,
                 bundle_1
         ));
         mTabs.add(new TabItem(

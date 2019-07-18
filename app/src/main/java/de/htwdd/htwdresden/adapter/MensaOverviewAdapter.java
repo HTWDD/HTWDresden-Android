@@ -44,8 +44,11 @@ public class MensaOverviewAdapter extends RealmBaseAdapter<Canteen> {
             return view;
         }
 
+        String adressShortened = canteen.getAddress().replaceAll(", Deutschland", "");
+        adressShortened = adressShortened.substring(0, adressShortened.indexOf(','));
+
         viewHolder.name.setText(trimName(canteen.getName()));
-        viewHolder.adresse.setText(canteen.getAddress().replaceAll(", Deutschland", ""));
+        viewHolder.adresse.setText(adressShortened);
         viewHolder.city.setText(canteen.getCity());
 
         return view;

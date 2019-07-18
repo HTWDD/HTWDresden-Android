@@ -63,7 +63,7 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
 
         final RealmResults<Meal> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
         viewHolder.title.setText(nameOfDays[i + 2]);
-        viewHolder.price.setText(MensaHelper.concatTitels(context, realmResults));
+        viewHolder.price.setText(MensaHelper.concatTitles(context, realmResults));
 
         return view;
     }
