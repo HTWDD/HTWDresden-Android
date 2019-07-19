@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.API.IGeneralService;
@@ -24,6 +25,7 @@ import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,14 +63,29 @@ class CheckUpdates implements Runnable {
 
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
 
-            mensaHelper.updateDayMeals(() -> {
+            mensaHelper.updateCanteens(() -> {
                     },
                     () -> {
-                        Log.i(LOG_TAG, "Mahlzeiten des Tages aktualisiert");
+                        Log.i(LOG_TAG, "Kantinen aktualisiert");
+
+                        Realm realm2 = Realm.getDefaultInstance();
+
+                        RealmResults<Canteen> canteenList = realm2.where(Canteen.class).findAll();
+
+                        for (Canteen canteen : canteenList) {
+                            MensaHelper helper = new MensaHelper(context, (short) canteen.getId());
+
+                            helper.updateDayMeals(() -> {
+                                    },
+                                    () -> {
+                                        Log.i(LOG_TAG, "Mahlzeiten des Tages aktualisiert für " + canteen.getName());
+                                    });
+                        }
                         final SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, calendar.getTimeInMillis());
                         editor.apply();
                     });
+
         }
 
         // Aktualisiere Studiengruppen

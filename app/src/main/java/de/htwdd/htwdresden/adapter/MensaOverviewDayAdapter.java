@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import de.htwdd.htwdresden.R;
@@ -34,12 +35,12 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
             viewHolder.title = view.findViewById(R.id.mensa_title);
             viewHolder.price_student = view.findViewById(R.id.mensa_price_student);
             viewHolder.price_employee = view.findViewById(R.id.mensa_price_employee);
-            viewHolder.imagePork = view.findViewById(R.id.mensa_pork);
-            viewHolder.imageBeef = view.findViewById(R.id.mensa_beef);
-            viewHolder.imageVegetarian = view.findViewById(R.id.meal_vegetarian);
-            viewHolder.imageVegan = view.findViewById(R.id.meal_vegan);
-            viewHolder.imageGarlic = view.findViewById(R.id.meal_garlic);
-            viewHolder.imageAlcohol = view.findViewById(R.id.meal_alcohol);
+            viewHolder.imagePork = view.findViewById(R.id.mensa_layout_pork);
+            viewHolder.imageBeef = view.findViewById(R.id.mensa_layout_beef);
+            viewHolder.imageVegetarian = view.findViewById(R.id.mensa_layout_vegetarian);
+            viewHolder.imageVegan = view.findViewById(R.id.mensa_layout_vegan);
+            viewHolder.imageGarlic = view.findViewById(R.id.mensa_layout_garlic);
+            viewHolder.imageAlcohol = view.findViewById(R.id.mensa_layout_alcohol);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -59,12 +60,12 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         viewHolder.price_employee.setText(context.getString(R.string.mensa_price_employee, priceEmployee));
 
         // Eigenschaften als Icon anzeigen
-        viewHolder.imagePork.setVisibility(meal.getNotes().contains("Schweinefleisch") ? View.VISIBLE : View.GONE);
-        viewHolder.imageBeef.setVisibility(meal.getNotes().contains("Rindfleisch") ? View.VISIBLE : View.GONE);
+        viewHolder.imagePork.setVisibility(meal.getNotes().contains("enthält Schweinefleisch") ? View.VISIBLE : View.GONE);
+        viewHolder.imageBeef.setVisibility(meal.getNotes().contains("enthält Rindfleisch") ? View.VISIBLE : View.GONE);
         viewHolder.imageVegetarian.setVisibility(meal.getNotes().contains("vegetarisch") ? View.VISIBLE : View.GONE);
         viewHolder.imageVegan.setVisibility(meal.getNotes().contains("vegan") ? View.VISIBLE : View.GONE);
-        viewHolder.imageGarlic.setVisibility(meal.getNotes().contains("Knoblauch") ? View.VISIBLE : View.GONE);
-        viewHolder.imageAlcohol.setVisibility(meal.getNotes().contains("Alkohol") ? View.VISIBLE : View.GONE);
+        viewHolder.imageGarlic.setVisibility(meal.getNotes().contains("enthält Knoblauch") ? View.VISIBLE : View.GONE);
+        viewHolder.imageAlcohol.setVisibility(meal.getNotes().contains("enthält Alkohol") ? View.VISIBLE : View.GONE);
 
         return view;
     }
@@ -73,11 +74,11 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         TextView title;
         TextView price_student;
         TextView price_employee;
-        ImageView imagePork;
-        ImageView imageBeef;
-        ImageView imageVegetarian;
-        ImageView imageVegan;
-        ImageView imageGarlic;
-        ImageView imageAlcohol;
+        LinearLayout imagePork;
+        LinearLayout imageBeef;
+        LinearLayout imageVegetarian;
+        LinearLayout imageVegan;
+        LinearLayout imageGarlic;
+        LinearLayout imageAlcohol;
     }
 }

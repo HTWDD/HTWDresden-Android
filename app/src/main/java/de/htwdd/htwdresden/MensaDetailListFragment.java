@@ -24,6 +24,8 @@ import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Canteen;
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -48,6 +50,17 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         super.onCreate(savedInstanceState);
         MensaHelper mensaHelper = new MensaHelper(Objects.requireNonNull(getContext()), (short) 80);
         mensaHelper.updateCanteens(this);
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Canteen> canteenList = realm.where(Canteen.class).findAll();
+
+        for (Canteen canteen : canteenList) {
+
+            short mensaId =  (short) canteen.getId();
+
+            MensaHelper mensaHelperMeals = new MensaHelper(getContext(), mensaId);
+            mensaHelperMeals.updateWeekMeals(this);
+        }
     }
 
     @Override
@@ -61,33 +74,12 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
         ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
 
-        // Setze Swipe Refresh Layout
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            final Context context = getContext();
-            if (context == null) {
-                return;
-            }
-            // Überprüfe Internetverbindung
-            if (ConnectionHelper.checkNoInternetConnection(context)) {
-                onCompletion();
-                Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
-                return;
-            }
-        });
-
-        RealmResults<Canteen> canteenList = realm.where(Canteen.class).findAll();
-
-        for (Canteen canteen : canteenList) {
-
-            short mensaId =  (short) canteen.getId();
-
-            MensaHelper mensaHelperMeals = new MensaHelper(getContext(), mensaId);
-            mensaHelperMeals.updateWeekMeals(this);
-        }
+        swipeRefreshLayout.setEnabled(false);
 
         // Setze Adapter
         final RealmResults<Canteen> realmResults = realm.where(Canteen.class)
                 .findAll();
+
         final MensaOverviewAdapter mensaArrayAdapter = new MensaOverviewAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));
