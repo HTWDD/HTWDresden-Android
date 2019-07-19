@@ -338,6 +338,15 @@ public class MensaHelper {
 
     private void saveCanteens(final List<Canteen> canteens) {
 
+        for (Canteen canteen : canteens) {
+            if(canteen.getId() != 80){
+                canteen.setIsFav(false);
+            }
+            else {
+                canteen.setIsFav(true);
+            }
+        }
+
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.where(Canteen.class).findAll().deleteAllFromRealm();

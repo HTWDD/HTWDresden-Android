@@ -14,6 +14,7 @@ public class Canteen extends RealmObject {
     private String name;
     private String address;
     private RealmList<Float> coordinates;
+    private Boolean isFav;
 
     public int getId() {
         return id;
@@ -33,5 +34,12 @@ public class Canteen extends RealmObject {
 
     public RealmList<Float> getCoordinates() {
         return coordinates;
+    }
+
+    public Boolean getFav() {
+        return isFav;
+    }
+    public void setIsFav(Boolean isFav) {
+        this.isFav = isFav;
     }
 }

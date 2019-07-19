@@ -68,12 +68,9 @@ public class MensaOverviewAdapter extends RealmBaseAdapter<Canteen> {
 
         RealmResults<Meal> realmResults = realm.where(Meal.class).equalTo(MENSA_ID, canteen.getId()).equalTo(MENSA_DATE, MensaHelper.getDate(Calendar.getInstance())).findAll();
 
-        realmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Meal>>() {
-            @Override
-            public void onChange(RealmResults<Meal> results, OrderedCollectionChangeSet changeSet) {
-                // Query results are updated in real time with fine grained notifications.
-                changeSet.getInsertions(); // => [0] is added.
-            }
+        realmResults.addChangeListener((results, changeSet) -> {
+            // Query results are updated in real time with fine grained notifications.
+            changeSet.getInsertions(); // => [0] is added.
         });
 
         int mealNum = realm.where(Meal.class).equalTo(MENSA_ID, canteen.getId()).equalTo(MENSA_DATE, MensaHelper.getDate(Calendar.getInstance())).findAll().size();

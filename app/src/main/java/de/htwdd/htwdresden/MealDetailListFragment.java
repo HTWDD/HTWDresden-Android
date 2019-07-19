@@ -55,20 +55,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
         ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
 
         // Setze Swipe Refresh Layout
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            final Context context = getContext();
-            if (context == null) {
-                return;
-            }
-            // Überprüfe Internetverbindung
-            if (ConnectionHelper.checkNoInternetConnection(context)) {
-                onCompletion();
-                Toast.makeText(context, R.string.info_no_internet, Toast.LENGTH_SHORT).show();
-                return;
-            }
-        });
-
-
+        swipeRefreshLayout.setEnabled(false);
 
         // Setze Adapter
         assert getArguments() != null;

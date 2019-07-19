@@ -99,6 +99,8 @@ public class OverviewFragment extends Fragment {
             changeSet.getInsertions(); // => [0] is added.
         });
 
+        realm.setAutoRefresh(true);
+
         showMensaInfo(meals);
 
         RealmResults<Canteen> canteenList = realm.where(Canteen.class).findAll();
@@ -293,15 +295,6 @@ public class OverviewFragment extends Fragment {
             message.setText(R.string.mensa_no_offer);
             message.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
-
-            meals.addChangeListener((results, changeSet) -> {
-                // Query results are updated in real time with fine grained notifications.
-                changeSet.getInsertions(); // => [0] is added.
-
-                content.setText(MensaHelper.concatTitles(mLayout.getContext(), meals));
-                message.setVisibility(View.GONE);
-                content.setVisibility(View.VISIBLE);
-            });
 
             return;
         }

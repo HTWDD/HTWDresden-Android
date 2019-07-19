@@ -17,6 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 import de.htwdd.htwdresden.adapter.MensaOverviewAdapter;
@@ -28,8 +32,10 @@ import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
+import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_ID;
 
 
 /**
@@ -78,7 +84,8 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
 
         // Setze Adapter
         final RealmResults<Canteen> realmResults = realm.where(Canteen.class)
-                .findAll();
+                .findAll().sort("isFav", Sort.DESCENDING);
+
 
         final MensaOverviewAdapter mensaArrayAdapter = new MensaOverviewAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
