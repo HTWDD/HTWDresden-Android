@@ -67,6 +67,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_pork"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -93,6 +94,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_beef"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -119,6 +121,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_vegetarian"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -145,6 +148,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_vegan"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -171,6 +175,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_garlic"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -197,6 +202,7 @@
                 android:background="@drawable/rounded_corners_background_dark"
                 android:textColor="@color/white"
                 android:text="@string/mensa_meal_info_alcohol"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>

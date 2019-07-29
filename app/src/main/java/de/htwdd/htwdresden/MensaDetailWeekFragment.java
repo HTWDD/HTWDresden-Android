@@ -69,7 +69,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
 
         // Setze Swipe Refresh Layout
         swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
+        ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer_week);
         swipeRefreshLayout.setEnabled(false);
 
         // Setze Kalender auf Montag der ausgewählten Woche
@@ -98,7 +98,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
             }
         }
 
-        if(j != 5) {
+        if(j != listDataHeader.size()) {
             MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
 
             // setting list adapter
@@ -109,6 +109,8 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
                 expListView.expandGroup(i);
 
             expListView.setDividerHeight(8);
+
+            ((TextView) mLayout.findViewById(R.id.message_info)).setVisibility(View.GONE);
         }
 
         return mLayout;

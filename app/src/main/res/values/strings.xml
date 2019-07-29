@@ -80,6 +80,10 @@
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
+    <string name="mensa_no_offer_image">&#127869;</string>
+    <string name="mensa_no_meals">Kein Essen</string>
+    <string name="mensa_no_offer_day">Hier gibt es heute nichts zu essen &#128556;</string>
+    <string name="mensa_no_offer_week">In der Woche gibt es hier leider nichts zu essen &#128542;</string>
     <string name="mensa_euro" translatable="false">%.2f€</string>
     <string name="mensa_euro_string" translatable="false">%s€</string>
     <string name="mensa_credit_title">Mensa Guthaben</string>

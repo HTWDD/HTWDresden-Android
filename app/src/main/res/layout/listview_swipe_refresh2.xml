@@ -5,6 +5,14 @@
     android:background="#ececec">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/space_between_content"
+        android:text="@string/mensa_no_offer_image"
+        android:textSize="135sp" />
+
+    <TextView
         android:id="@+id/message_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -65,7 +65,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
         realm = Realm.getDefaultInstance();
         // Suche Views
         swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
-        ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
+        ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer_day);
 
         // Setze Swipe Refresh Layout
         swipeRefreshLayout.setEnabled(false);
@@ -76,17 +76,27 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
         // preparing list data
         prepareListData();
 
-        MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
+        int j = 0;
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+        for (RealmResults<Meal> mealList : listDataChild.values()) {
+            if ( mealList.size() == 0) {
+                j++;
+            }
+        }
 
-        int count = listAdapter.getGroupCount();
-        for ( int i = 0; i < count; i++ )
-            expListView.expandGroup(i);
+        if(j != listDataHeader.size()) {
+            MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
 
-        expListView.setDividerHeight(8);
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
 
+            int count = listAdapter.getGroupCount();
+            for (int i = 0; i < count; i++)
+                expListView.expandGroup(i);
+
+            expListView.setDividerHeight(8);
+            ((TextView) mLayout.findViewById(R.id.message_info)).setVisibility(View.GONE);
+        }
         return mLayout;
     }
 

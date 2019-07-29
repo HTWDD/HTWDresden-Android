@@ -58,7 +58,7 @@ class CheckUpdates implements Runnable {
         final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IGeneralService.class);
 
         // Aktualisiere Meal für Overview
-        if ((calendar.getTimeInMillis() - mensaDayLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS) || realm.where(Meal.class).count() == 0 || realm.where(Canteen.class).count() == 0) {
+        if ((calendar.getTimeInMillis() - mensaDayLastUpdate) > TimeUnit.MILLISECONDS.convert(12, TimeUnit.HOURS) || realm.where(Meal.class).count() == 0 || realm.where(Canteen.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
 
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
