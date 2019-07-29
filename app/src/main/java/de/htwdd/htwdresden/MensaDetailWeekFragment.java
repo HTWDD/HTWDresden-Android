@@ -1,33 +1,39 @@
 package de.htwdd.htwdresden;
 
 
-import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
-
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
-import de.htwdd.htwdresden.classes.ConnectionHelper;
+import de.htwdd.htwdresden.adapter.ExpandableListAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
+import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_DATE;
 import static de.htwdd.htwdresden.classes.Const.database.Canteen.MENSA_ID;
 
 
@@ -41,6 +47,9 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
     private int modus = 1;
     private Realm realm;
 
+    private List<String> listDataHeader;
+    private HashMap<String, RealmResults<Meal>> listDataChild;
+
     public MensaDetailWeekFragment() {
         // Required empty public constructor
     }
@@ -50,7 +59,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         realm = Realm.getDefaultInstance();
 
         // Inflate the layout for this fragment
-        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh, container, false);
+        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh2, container, false);
 
         // Überprüfe Bundle & setze Modus
         final Bundle bundle = getArguments();
@@ -69,9 +78,96 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
             beginOfWeek.roll(Calendar.WEEK_OF_YEAR, 1);
         }
 
-        ((ListView) mLayout.findViewById(R.id.listView)).setAdapter(new MensaOverviewWeekAdapter(beginOfWeek, realm.where(Meal.class).equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID))).findAll()));
+        // get the listview
+        ExpandableListView expListView = (ExpandableListView) mLayout.findViewById(R.id.expListView);
+
+        assert bundle != null;
+        String mensaIdString = bundle.getString(ARG_CANTEEN_ID);
+
+        int mensaId = Integer.parseInt(mensaIdString);
+
+        // preparing list data
+        prepareListData(beginOfWeek, mensaId);
+
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+
+        int count = listAdapter.getGroupCount();
+        for ( int i = 0; i < count; i++ )
+            expListView.expandGroup(i);
+
+        expListView.setDividerHeight(8);
 
         return mLayout;
+    }
+
+    /*
+     * Preparing the list data
+     */
+    private void prepareListData(Calendar beginOfWeek, int mensaId) {
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, RealmResults<Meal>>();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
+
+        for ( int i = 0; i < 5; i++) {
+            // Bestimme Tag
+            final Calendar calendar = (Calendar) beginOfWeek.clone();
+            calendar.roll(Calendar.DAY_OF_WEEK, i);
+
+            // Adding child data
+            listDataHeader.add(nameOfDays[i + 2] + ", " + dateFormat.format(calendar.getTime()));
+        }
+
+        final Calendar calendar = (Calendar) beginOfWeek.clone();
+        calendar.roll(Calendar.DAY_OF_WEEK, 0);
+
+        // Adding child data
+        RealmResults<Meal> montag = realm.where(Meal.class)
+                .equalTo(MENSA_ID, mensaId)
+                .equalTo(MENSA_DATE, MensaHelper.getDate(calendar))
+                .findAll();
+
+        calendar.roll(Calendar.DAY_OF_WEEK, 1);
+
+        RealmResults<Meal> dienstag = realm.where(Meal.class)
+                .equalTo(MENSA_ID, mensaId)
+                .equalTo(MENSA_DATE, MensaHelper.getDate(calendar))
+                .findAll();
+
+        calendar.roll(Calendar.DAY_OF_WEEK, 1);
+
+        RealmResults<Meal> mittwoch = realm.where(Meal.class)
+                .equalTo(MENSA_ID, mensaId)
+                .equalTo(MENSA_DATE, MensaHelper.getDate(calendar))
+                .findAll();
+
+        calendar.roll(Calendar.DAY_OF_WEEK, 1);
+
+        Calendar cal = calendar;
+
+        RealmResults<Meal> donnerstag = realm.where(Meal.class)
+                .equalTo(MENSA_ID, mensaId)
+                .equalTo(MENSA_DATE, MensaHelper.getDate(calendar))
+                .findAll();
+
+        calendar.roll(Calendar.DAY_OF_WEEK, 1);
+
+        RealmResults<Meal> freitag = realm.where(Meal.class)
+                .equalTo(MENSA_ID, mensaId)
+                .equalTo(MENSA_DATE, MensaHelper.getDate(calendar))
+                .findAll();
+
+        // Header, Child data
+        listDataChild.put(listDataHeader.get(0), montag);
+        listDataChild.put(listDataHeader.get(1), dienstag);
+        listDataChild.put(listDataHeader.get(2), mittwoch);
+        listDataChild.put(listDataHeader.get(3), donnerstag);
+        listDataChild.put(listDataHeader.get(4), freitag);
     }
 
     @Override

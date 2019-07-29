@@ -86,7 +86,6 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
         final RealmResults<Canteen> realmResults = realm.where(Canteen.class)
                 .findAll().sort("isFav", Sort.DESCENDING);
 
-
         final MensaOverviewAdapter mensaArrayAdapter = new MensaOverviewAdapter(realmResults);
         listView.setAdapter(mensaArrayAdapter);
         listView.setEmptyView(mLayout.findViewById(R.id.message_info));

@@ -3,12 +3,17 @@ package de.htwdd.htwdresden.adapter;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import de.htwdd.htwdresden.R;
@@ -40,13 +45,14 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
 
     @Override
     public View getView(final int i, @Nullable View view, final ViewGroup viewGroup) {
+
         final Context context = viewGroup.getContext();
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item_week, viewGroup, false);
             viewHolder = new ViewHolder();
             viewHolder.title = view.findViewById(R.id.mensa_title);
-            viewHolder.price = view.findViewById(R.id.mensa_price);
+            viewHolder.listView = view.findViewById(R.id.mensa_price);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -62,8 +68,18 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
         }
 
         final RealmResults<Meal> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
-        viewHolder.title.setText(nameOfDays[i + 2]);
-        viewHolder.price.setText(MensaHelper.concatTitles(context, realmResults));
+
+        final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
+        viewHolder.listView.setAdapter(mensaArrayAdapter);
+        // Default Divider
+        final TypedArray typedArray = context.obtainStyledAttributes(new int[]{ android.R.attr.listDivider });
+        viewHolder.listView.setDividerHeight(8);
+        typedArray.recycle();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+
+        viewHolder.title.setText(nameOfDays[i + 2] + ", " + dateFormat.format(calendar.getTime()));
 
         return view;
     }
@@ -71,6 +87,6 @@ public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
 
     private static class ViewHolder {
         TextView title;
-        TextView price;
+        ListView listView;
     }
 }

@@ -57,19 +57,8 @@ public class MensaOverviewDayAdapter extends RealmBaseAdapter<Meal> {
         final float priceStudent = (float) meal.getPrices().getStudents();
         final float priceEmployee = (float) meal.getPrices().getEmployees();
 
-        if(priceStudent == 0){
-            viewHolder.price_student.setText(context.getString(R.string.mensa_price_student_no_price));
-        }
-        else {
-            viewHolder.price_student.setText(context.getString(R.string.mensa_price_student, priceStudent));
-        }
-        if(priceEmployee == 0){
-            viewHolder.price_employee.setText(context.getString(R.string.mensa_price_employee_no_price));
-        }
-        else
-        {
-            viewHolder.price_employee.setText(context.getString(R.string.mensa_price_employee, priceEmployee));
-        }
+        viewHolder.price_student.setText(priceStudent == 0 ? context.getString(R.string.mensa_price_student_no_price) : context.getString(R.string.mensa_price_student, priceStudent));
+        viewHolder.price_employee.setText(priceEmployee == 0 ? context.getString(R.string.mensa_price_employee_no_price) : context.getString(R.string.mensa_price_employee, priceEmployee));
 
         // Eigenschaften als Icon anzeigen
         viewHolder.imagePork.setVisibility(meal.getNotes().contains("enthält Schweinefleisch") ? View.VISIBLE : View.GONE);
