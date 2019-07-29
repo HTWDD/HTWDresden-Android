@@ -1,34 +1,30 @@
 package de.htwdd.htwdresden.adapter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.List;
+
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.types.canteen.Meal;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class MensaOverviewWeekAdapterExpandable extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, RealmResults<Meal>> _listDataChild;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, RealmResults<Meal>> listChildData) {
+    public MensaOverviewWeekAdapterExpandable(Context context, List<String> listDataHeader,
+                                              HashMap<String, RealmResults<Meal>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;

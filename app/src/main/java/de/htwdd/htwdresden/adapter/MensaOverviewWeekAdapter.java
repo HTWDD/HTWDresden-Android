@@ -1,92 +1,145 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.types.canteen.Meal;
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
 
-/**
- * Adapter für die Mensa Wochenübersicht
- *
- * @author Kay Förster
- */
-public class MensaOverviewWeekAdapter extends RealmBaseAdapter<Meal> {
-    private static final String[] nameOfDays = DateFormatSymbols.getInstance().getWeekdays();
-    private final Calendar beginOfWeek;
+public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
 
-    public MensaOverviewWeekAdapter(@NonNull final Calendar beginOfWeek, @Nullable final OrderedRealmCollection<Meal> data) {
-        super(data);
-        this.beginOfWeek = beginOfWeek;
+    private Context _context;
+    private List<String> _listDataHeader; // header titles
+    // child data in format of header title, child title
+    private HashMap<String, RealmResults<Meal>> _listDataChild;
+
+    public MensaOverviewWeekAdapter(Context context, List<String> listDataHeader,
+                                    HashMap<String, RealmResults<Meal>> listChildData) {
+        this._context = context;
+        this._listDataHeader = listDataHeader;
+        this._listDataChild = listChildData;
     }
 
     @Override
-    public int getCount() {
-        return 5;
+    public Meal getChild(int groupPosition, int childPosition) {
+
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                .get(childPosition);
     }
 
     @Override
-    public View getView(final int i, @Nullable View view, final ViewGroup viewGroup) {
-
-        final Context context = viewGroup.getContext();
-        final ViewHolder viewHolder;
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.fragment_mensa_detail_item_week, viewGroup, false);
-            viewHolder = new ViewHolder();
-            viewHolder.title = view.findViewById(R.id.mensa_title);
-            viewHolder.listView = view.findViewById(R.id.mensa_price);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
-
-        // Bestimme Tag
-        final Calendar calendar = (Calendar) beginOfWeek.clone();
-        calendar.roll(Calendar.DAY_OF_WEEK, i);
-
-        // Gerichte für den jeweiligen Tag laden
-        if (adapterData == null) {
-            return view;
-        }
-
-        final RealmResults<Meal> realmResults = adapterData.where().equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).findAll();
-
-        final MensaOverviewDayAdapter mensaArrayAdapter = new MensaOverviewDayAdapter(realmResults);
-        viewHolder.listView.setAdapter(mensaArrayAdapter);
-        // Default Divider
-        final TypedArray typedArray = context.obtainStyledAttributes(new int[]{ android.R.attr.listDivider });
-        viewHolder.listView.setDividerHeight(8);
-        typedArray.recycle();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-
-
-        viewHolder.title.setText(nameOfDays[i + 2] + ", " + dateFormat.format(calendar.getTime()));
-
-        return view;
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
     }
 
+    @Override
+    public View getChildView(int groupPosition, final int childPosition,
+                             boolean isLastChild, View convertView, ViewGroup parent) {
+        final Meal child = (Meal) getChild(groupPosition, childPosition);
 
-    private static class ViewHolder {
-        TextView title;
-        ListView listView;
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert infalInflater != null;
+            convertView = infalInflater.inflate(R.layout.fragment_mensa_detail_item_week_group_item, null);
+        }
+
+        TextView txtNameChild = (TextView) convertView
+                .findViewById(R.id.mensa_title);
+        TextView txtPriceStudentChild = (TextView) convertView
+                .findViewById(R.id.mensa_price_student);
+        TextView txtPriceEmployeeChild = (TextView) convertView
+                .findViewById(R.id.mensa_price_employee);
+
+        LinearLayout imgPork = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_pork);
+        LinearLayout imgBeef = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_beef);
+        LinearLayout imgVegetarian = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_vegetarian);
+        LinearLayout imgVegan = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_vegan);
+        LinearLayout imgGarlic = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_garlic);
+        LinearLayout imgAlcohol = (LinearLayout) convertView
+                .findViewById(R.id.mensa_layout_alcohol);
+
+        txtNameChild.setText(child.getName());
+
+        // Preis anzeigen
+        final float priceStudent = (float) child.getPrices().getStudents();
+        final float priceEmployee = (float) child.getPrices().getEmployees();
+
+        txtPriceStudentChild.setText(priceStudent == 0 ? _context.getString(R.string.mensa_price_student_no_price) : _context.getString(R.string.mensa_price_student, priceStudent));
+        txtPriceEmployeeChild.setText(priceEmployee == 0 ? _context.getString(R.string.mensa_price_employee_no_price) : _context.getString(R.string.mensa_price_employee, priceEmployee));
+
+        // Eigenschaften als Icon anzeigen
+        imgPork.setVisibility(child.getNotes().contains("enthält Schweinefleisch") ? View.VISIBLE : View.GONE);
+        imgBeef.setVisibility(child.getNotes().contains("enthält Rindfleisch") ? View.VISIBLE : View.GONE);
+        imgVegetarian.setVisibility(child.getNotes().contains("vegetarisch") ? View.VISIBLE : View.GONE);
+        imgVegan.setVisibility(child.getNotes().contains("vegan") ? View.VISIBLE : View.GONE);
+        imgGarlic.setVisibility(child.getNotes().contains("enthält Knoblauch") ? View.VISIBLE : View.GONE);
+        imgAlcohol.setVisibility(child.getNotes().contains("enthält Alkohol") ? View.VISIBLE : View.GONE);
+
+        return convertView;
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                .size();
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return this._listDataHeader.get(groupPosition);
+    }
+
+    @Override
+    public int getGroupCount() {
+        return this._listDataHeader.size();
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded,
+                             View convertView, ViewGroup parent) {
+        String headerTitle = (String) getGroup(groupPosition);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.fragment_mensa_detail_item_week_group_header, null);
+        }
+
+        TextView lblListHeader = (TextView) convertView
+                .findViewById(R.id.day_title);
+        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setText(headerTitle);
+
+        return convertView;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
     }
 }

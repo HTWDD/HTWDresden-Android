@@ -1,12 +1,13 @@
 package de.htwdd.htwdresden;
 
 
-import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,13 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.adapter.ExpandableListAdapter;
+import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
@@ -69,6 +69,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
 
         // Setze Swipe Refresh Layout
         swipeRefreshLayout = mLayout.findViewById(R.id.swipeRefreshLayout);
+        ((TextView) mLayout.findViewById(R.id.message_info)).setText(R.string.mensa_no_offer);
         swipeRefreshLayout.setEnabled(false);
 
         // Setze Kalender auf Montag der ausgewählten Woche
@@ -89,16 +90,26 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         // preparing list data
         prepareListData(beginOfWeek, mensaId);
 
-        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this.getContext(), listDataHeader, listDataChild);
+        int j = 0;
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+        for (RealmResults<Meal> mealList : listDataChild.values()) {
+            if ( mealList.size() == 0) {
+                j++;
+            }
+        }
 
-        int count = listAdapter.getGroupCount();
-        for ( int i = 0; i < count; i++ )
-            expListView.expandGroup(i);
+        if(j != 5) {
+            MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
 
-        expListView.setDividerHeight(8);
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+
+            int count = listAdapter.getGroupCount();
+            for ( int i = 0; i < count; i++ )
+                expListView.expandGroup(i);
+
+            expListView.setDividerHeight(8);
+        }
 
         return mLayout;
     }
