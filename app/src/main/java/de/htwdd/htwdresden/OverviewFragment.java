@@ -110,7 +110,7 @@ public class OverviewFragment extends Fragment {
             mensaHelperMeals.updateWeekMeals(() -> {
                     },
                     () -> {
-                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert für " + canteen.getName());
+                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert");
                     });
         }
 
