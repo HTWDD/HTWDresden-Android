@@ -1,12 +1,12 @@
 package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -110,12 +110,6 @@ public class MensaHelper {
         return dateFormat.format(date);
     }
 
-    private static String getDateOfNextWeekAsString(Date date) {
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date);
-    }
-
     private static Date getDateOfWeek(int dayOfWeek) {
 
         Calendar calendar = Calendar.getInstance();
@@ -132,12 +126,7 @@ public class MensaHelper {
     private static Date getDateOfNextWeek(int dayOfWeek) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + dayOfWeek);
+        calendar.setTime(getDateOfWeek(dayOfWeek));
         calendar.roll(Calendar.WEEK_OF_YEAR, 1);
 
         return calendar.getTime();
@@ -221,7 +210,7 @@ public class MensaHelper {
         final ICanteenService canteenService = Retrofit2OpenMensa.getInstance(context).getRetrofit().create(ICanteenService.class);
 
         for ( int i = 0; i < 5; i++){
-            final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId), getDateOfNextWeekAsString(getDateOfNextWeek(i)));
+            final Call<List<Meal>> mealCall = canteenService.listMeals(String.valueOf(mensaId), getDateOfWeekAsString(getDateOfNextWeek(i)));
 
             int finalI = i;
             mealCall.enqueue(new Callback<List<Meal>>() {

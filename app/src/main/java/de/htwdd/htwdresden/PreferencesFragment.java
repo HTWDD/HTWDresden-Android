@@ -1,8 +1,6 @@
 package de.htwdd.htwdresden;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;

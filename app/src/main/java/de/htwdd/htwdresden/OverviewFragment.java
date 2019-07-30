@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.cardview.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +14,11 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,8 +41,6 @@ import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.ExamStats;
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -93,13 +92,11 @@ public class OverviewFragment extends Fragment {
         realmListenerMensa = element -> showMensaInfo(meals);
         meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 80).findAll();
 
+        meals.addChangeListener(meals -> {
 
-        meals.addChangeListener((results, changeSet) -> {
-            // Query results are updated in real time with fine grained notifications.
-            changeSet.getInsertions(); // => [0] is added.
+            meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 80).findAll();
+            showMensaInfo(meals);
         });
-
-        realm.setAutoRefresh(true);
 
         showMensaInfo(meals);
 
@@ -113,7 +110,7 @@ public class OverviewFragment extends Fragment {
             mensaHelperMeals.updateWeekMeals(() -> {
                     },
                     () -> {
-                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert");
+                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert für " + canteen.getName());
                     });
         }
 
@@ -292,13 +289,16 @@ public class OverviewFragment extends Fragment {
 
         // Aktuell kein Angebot vorhanden
         if (meals.size() == 0) {
+
             message.setText(R.string.mensa_no_offer);
             message.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
 
             return;
         }
-
+        else {
+            this.meals.removeAllChangeListeners();
+        }
         // Inhalt anzeigen
         content.setText(MensaHelper.concatTitles(mLayout.getContext(), meals));
         message.setVisibility(View.GONE);

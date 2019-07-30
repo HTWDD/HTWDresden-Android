@@ -35,11 +35,8 @@ public class Retrofit2Rubu {
 
     private Retrofit2Rubu(@NonNull final Context context) {
         final Cache cache = new Cache(context.getApplicationContext().getCacheDir(), 10 * 1024 * 1024);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .cache(cache)
-                .build();
 
-        final OkHttpClient okHttpClient1 = getUnsafeOkHttpClient(cache);
+        final OkHttpClient okHttpClient = getUnsafeOkHttpClient(cache);
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LessonUser.class, new LessonUserTypeAdapter<LessonUser>())
@@ -48,7 +45,7 @@ public class Retrofit2Rubu {
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://rubu2.rz.htw-dresden.de/API/")
-                .client(okHttpClient1)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
@@ -96,12 +93,7 @@ public class Retrofit2Rubu {
             return new OkHttpClient.Builder()
                     .cache(cache)
                     .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
-                    .hostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String hostname, SSLSession session) {
-                            return true;
-                        }
-                    }).build();
+                    .hostnameVerifier((hostname, session) -> true).build();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

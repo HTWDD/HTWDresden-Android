@@ -1,33 +1,24 @@
 package de.htwdd.htwdresden;
 
-import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import de.htwdd.htwdresden.adapter.MensaOverviewDayAdapter;
 import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
-import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;

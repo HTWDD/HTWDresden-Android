@@ -3,13 +3,13 @@ package de.htwdd.htwdresden;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import de.htwdd.htwdresden.classes.API.IGeneralService;
@@ -81,6 +81,8 @@ class CheckUpdates implements Runnable {
                                         Log.i(LOG_TAG, "Mahlzeiten des Tages aktualisiert für " + canteen.getName());
                                     });
                         }
+
+
                         final SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, calendar.getTimeInMillis());
                         editor.apply();
