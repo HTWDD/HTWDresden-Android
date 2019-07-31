@@ -16,24 +16,24 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import io.realm.RealmResults;
 
-public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
+public class MensaOverviewMealAdapter extends BaseExpandableListAdapter {
 
-    private Context _context;
-    private List<String> _listDataHeader; // header titles
+    private Context context;
+    private List<String> listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, RealmResults<Meal>> _listDataChild;
+    private HashMap<String, RealmResults<Meal>> listDataChild;
 
-    public MensaOverviewWeekAdapter(Context context, List<String> listDataHeader,
+    public MensaOverviewMealAdapter(Context context, List<String> listDataHeader,
                                     HashMap<String, RealmResults<Meal>> listChildData) {
-        this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
+        this.context = context;
+        this.listDataHeader = listDataHeader;
+        this.listDataChild = listChildData;
     }
 
     @Override
     public Meal getChild(int groupPosition, int childPosition) {
 
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
                 .get(childPosition);
     }
 
@@ -48,7 +48,7 @@ public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
         final Meal child = (Meal) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert infalInflater != null;
             convertView = infalInflater.inflate(R.layout.fragment_mensa_detail_item_week_group_item, null);
@@ -80,8 +80,8 @@ public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
         final float priceStudent = (float) child.getPrices().getStudents();
         final float priceEmployee = (float) child.getPrices().getEmployees();
 
-        txtPriceStudentChild.setText(priceStudent == 0 ? _context.getString(R.string.mensa_price_student_no_price) : _context.getString(R.string.mensa_price_student, priceStudent));
-        txtPriceEmployeeChild.setText(priceEmployee == 0 ? _context.getString(R.string.mensa_price_employee_no_price) : _context.getString(R.string.mensa_price_employee, priceEmployee));
+        txtPriceStudentChild.setText(priceStudent == 0 ? context.getString(R.string.mensa_price_student_no_price) : context.getString(R.string.mensa_price_student, priceStudent));
+        txtPriceEmployeeChild.setText(priceEmployee == 0 ? context.getString(R.string.mensa_price_employee_no_price) : context.getString(R.string.mensa_price_employee, priceEmployee));
 
         // Eigenschaften als Icon anzeigen
         imgPork.setVisibility(child.getNotes().contains("enthält Schweinefleisch") ? View.VISIBLE : View.GONE);
@@ -96,18 +96,18 @@ public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
                 .size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.listDataHeader.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.listDataHeader.size();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class MensaOverviewWeekAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.fragment_mensa_detail_item_week_group_header, null);
         }

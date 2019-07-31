@@ -266,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/space_between_content"
-                    android:text="@string/exams_result_no_results"
+                    android:text="@string/exams_result_no_results_dashboard"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:visibility="gone" />
 

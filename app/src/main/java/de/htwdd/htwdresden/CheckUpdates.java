@@ -68,9 +68,9 @@ class CheckUpdates implements Runnable {
                     () -> {
                         Log.i(LOG_TAG, "Kantinen aktualisiert");
 
-                        Realm realm2 = Realm.getDefaultInstance();
+                        Realm realmMensaOverview = Realm.getDefaultInstance();
 
-                        RealmResults<Canteen> canteenList = realm2.where(Canteen.class).findAll();
+                        RealmResults<Canteen> canteenList = realmMensaOverview.where(Canteen.class).findAll();
 
                         for (Canteen canteen : canteenList) {
                             MensaHelper helper = new MensaHelper(context, (short) canteen.getId());

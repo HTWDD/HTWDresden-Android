@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
+import de.htwdd.htwdresden.adapter.MensaOverviewMealAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
@@ -58,7 +58,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         realm = Realm.getDefaultInstance();
 
         // Inflate the layout for this fragment
-        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh2, container, false);
+        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh_expandable, container, false);
 
         // Überprüfe Bundle & setze Modus
         final Bundle bundle = getArguments();
@@ -82,9 +82,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         ExpandableListView expListView = (ExpandableListView) mLayout.findViewById(R.id.expListView);
 
         assert bundle != null;
-        String mensaIdString = bundle.getString(ARG_CANTEEN_ID);
-
-        int mensaId = Integer.parseInt(mensaIdString);
+        int mensaId = bundle.getInt(ARG_CANTEEN_ID);
 
         // preparing list data
         prepareListData(beginOfWeek, mensaId);
@@ -98,7 +96,7 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
         }
 
         if(j != listDataHeader.size()) {
-            MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
+            MensaOverviewMealAdapter listAdapter = new MensaOverviewMealAdapter(this.getContext(), listDataHeader, listDataChild);
 
             // setting list adapter
             expListView.setAdapter(listAdapter);

@@ -41,7 +41,7 @@ public class ExamResultStatsFragment extends Fragment {
 
         // Hinweismeldung wenn keine Ergebnisse vorliegen
         final TextView message = mLayout.findViewById(R.id.message_info);
-        message.setText(R.string.exams_result_no_results_2);
+        message.setText(R.string.exams_result_no_results_message);
 
         // Adapter erstellen und an Liste anhängen
         final ExamStatsAdapter adapter = new ExamStatsAdapter(mLayout.getContext(), realm);

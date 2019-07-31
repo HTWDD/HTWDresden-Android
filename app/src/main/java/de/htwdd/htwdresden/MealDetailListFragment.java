@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import de.htwdd.htwdresden.adapter.MensaOverviewWeekAdapter;
+import de.htwdd.htwdresden.adapter.MensaOverviewMealAdapter;
 import de.htwdd.htwdresden.classes.MensaHelper;
 import de.htwdd.htwdresden.interfaces.IRefreshing;
 import de.htwdd.htwdresden.types.canteen.Meal;
@@ -51,7 +51,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh2, container, false);
+        final View mLayout = inflater.inflate(R.layout.listview_swipe_refresh_expandable, container, false);
 
         realm = Realm.getDefaultInstance();
         // Suche Views
@@ -76,7 +76,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
         }
 
         if(j != listDataHeader.size()) {
-            MensaOverviewWeekAdapter listAdapter = new MensaOverviewWeekAdapter(this.getContext(), listDataHeader, listDataChild);
+            MensaOverviewMealAdapter listAdapter = new MensaOverviewMealAdapter(this.getContext(), listDataHeader, listDataChild);
 
             // setting list adapter
             expListView.setAdapter(listAdapter);
@@ -96,7 +96,7 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
         listDataChild = new HashMap<String, RealmResults<Meal>>();
 
         final RealmResults<Meal> realmResults = realm.where(Meal.class)
-                .equalTo(MENSA_ID, Short.valueOf(getArguments().getString(ARG_CANTEEN_ID)))
+                .equalTo(MENSA_ID, (short) getArguments().getInt(ARG_CANTEEN_ID))
                 .equalTo(MENSA_DATE, MensaHelper.getDate(Calendar.getInstance()))
                 .sort(MENSA_CATEGORY, Sort.ASCENDING)
                 .findAll();
