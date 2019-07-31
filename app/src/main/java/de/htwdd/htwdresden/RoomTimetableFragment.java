@@ -44,10 +44,6 @@ public class RoomTimetableFragment extends Fragment {
     private RoomTimetableAdapter roomTimetableAdapter;
     private ResponseReceiver responseReceiver;
 
-    public RoomTimetableFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onResume() {
         super.onResume();

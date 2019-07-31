@@ -29,10 +29,6 @@ public class ManagementFragment extends Fragment {
     private Realm realm;
     private View mLayout;
 
-    public ManagementFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         mLayout = inflater.inflate(R.layout.fragment_management, container, false);

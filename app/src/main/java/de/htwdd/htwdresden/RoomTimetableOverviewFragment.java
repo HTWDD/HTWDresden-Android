@@ -22,10 +22,6 @@ import io.realm.Realm;
 public class RoomTimetableOverviewFragment extends Fragment {
     private Realm realm;
 
-    public RoomTimetableOverviewFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

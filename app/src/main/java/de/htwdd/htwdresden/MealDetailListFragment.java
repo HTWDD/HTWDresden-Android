@@ -44,10 +44,6 @@ public class MealDetailListFragment extends Fragment implements IRefreshing {
 
     public static final String ARG_CANTEEN_ID = "canteen_id";
 
-    public MealDetailListFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

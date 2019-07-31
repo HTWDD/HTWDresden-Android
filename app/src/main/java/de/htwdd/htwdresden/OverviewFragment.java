@@ -65,10 +65,6 @@ public class OverviewFragment extends Fragment {
     private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
     private RealmChangeListener<RealmResults<LessonUser>> realmListenerLessons;
 
-    public OverviewFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

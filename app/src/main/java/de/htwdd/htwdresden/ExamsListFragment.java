@@ -55,10 +55,6 @@ public class ExamsListFragment extends Fragment implements IRefreshing {
     private final ArrayList<ExamDate> examDates = new ArrayList<>();
     private ExamListAdapter adapter;
 
-    public ExamsListFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

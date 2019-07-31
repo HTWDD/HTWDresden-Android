@@ -61,10 +61,6 @@ public class TimetableEditFragment extends Fragment {
     private int endTime;
     private boolean[] selectedKws = new boolean[53];
 
-    public TimetableEditFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final Activity activity = requireActivity();

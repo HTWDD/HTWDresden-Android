@@ -26,10 +26,6 @@ public class ExamResultStatsFragment extends Fragment {
     private RealmResults<ExamResult> allExamResults;
     private RealmChangeListener<RealmResults<ExamResult>> realmChangeListener;
 
-    public ExamResultStatsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 

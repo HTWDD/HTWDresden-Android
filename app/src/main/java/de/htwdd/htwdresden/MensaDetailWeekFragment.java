@@ -49,10 +49,6 @@ public class MensaDetailWeekFragment extends Fragment implements IRefreshing {
     private List<String> listDataHeader;
     private HashMap<String, RealmResults<Meal>> listDataChild;
 
-    public MensaDetailWeekFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();

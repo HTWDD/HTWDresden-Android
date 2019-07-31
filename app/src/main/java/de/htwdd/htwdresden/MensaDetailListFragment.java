@@ -39,10 +39,6 @@ public class MensaDetailListFragment extends Fragment implements IRefreshing {
     private RealmResults<Meal> meals;
     int i = 0;
 
-    public MensaDetailListFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

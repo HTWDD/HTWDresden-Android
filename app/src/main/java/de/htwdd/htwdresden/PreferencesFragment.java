@@ -35,10 +35,6 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
     private final static String LOG_TAG = "PreferencesFragment";
     private final static int PERMISSIONS_REQUEST_NOTIFICATION_SERVICE = 1;
 
-    public PreferencesFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

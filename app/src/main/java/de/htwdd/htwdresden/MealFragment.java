@@ -31,10 +31,6 @@ import static de.htwdd.htwdresden.MealDetailListFragment.ARG_CANTEEN_ID;
 public class MealFragment extends Fragment {
     private List<TabItem> mTabs = new ArrayList<>();
 
-    public MealFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
