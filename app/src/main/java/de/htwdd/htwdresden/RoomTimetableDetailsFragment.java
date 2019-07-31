@@ -31,10 +31,6 @@ public class RoomTimetableDetailsFragment extends Fragment {
     private final List<TabItem> mTabs = new ArrayList<>();
     private String room;
 
-    public RoomTimetableDetailsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

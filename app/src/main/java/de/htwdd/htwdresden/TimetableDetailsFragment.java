@@ -28,10 +28,6 @@ import io.realm.RealmResults;
 public class TimetableDetailsFragment extends Fragment {
     private Realm realm;
 
-    public TimetableDetailsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

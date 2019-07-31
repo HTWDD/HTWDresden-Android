@@ -1,8 +1,6 @@
 package de.htwdd.htwdresden;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,10 +34,6 @@ import de.htwdd.htwdresden.service.VolumeControllerService;
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final static String LOG_TAG = "PreferencesFragment";
     private final static int PERMISSIONS_REQUEST_NOTIFICATION_SERVICE = 1;
-
-    public PreferencesFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {

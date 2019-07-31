@@ -23,10 +23,6 @@ import de.htwdd.htwdresden.account.ListAdapter.Item;
 
 public class AccountFragment extends Fragment {
 
-    public AccountFragment() {
-        // Required empty public constructor
-    }
-
     private String TAG = this.getClass().getSimpleName();
     @SuppressWarnings("rawtypes")
     private ArrayList<Item> list = null;

@@ -80,18 +80,27 @@
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
+    <string name="mensa_no_offer_image">&#127869;</string>
+    <string name="mensa_no_meals">Kein Essen</string>
+    <string name="mensa_no_offer_day">Hier gibt es heute nichts zu essen &#128556;</string>
+    <string name="mensa_no_offer_week">In der Woche gibt es hier leider nichts zu essen &#128542;</string>
     <string name="mensa_euro" translatable="false">%.2f€</string>
     <string name="mensa_euro_string" translatable="false">%s€</string>
     <string name="mensa_credit_title">Mensa Guthaben</string>
     <string name="mensa_credit_current">Aktuelles Guthaben:</string>
     <string name="mensa_credit_last_transaction">letzte Abbuchung:</string>
-    <string name="mensa_price">Student %.2f€ Mitarbeiter %.2f€</string>
+    <string name="mensa_price_student">Student %.2f€ </string>
+    <string name="mensa_price_employee">Mitarbeiter %.2f€</string>
+    <string name="mensa_price_student_no_price">Student: keine Angabe</string>
+    <string name="mensa_price_employee_no_price">Mitarbeiter: keine Angabe</string>
     <string name="mensa_sold_out">Ausverkauft</string>
     <string name="mensa_meal_info_image">Vorschau</string>
-    <string name="mensa_meal_info_pork">Schwein</string>
+    <string name="mensa_meal_info_pork">Schweinefleisch</string>
     <string name="mensa_meal_info_beef">Rindfleisch</string>
     <string name="mensa_meal_info_vegetarian">Vegetarisch</string>
     <string name="mensa_meal_info_vegan">Vegan</string>
+    <string name="mensa_meal_info_garlic">Knoblauch</string>
+    <string name="mensa_meal_info_alcohol">Alkohol</string>
 
     <string name="timetable_overview_today">Heute</string>
     <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
@@ -164,7 +173,8 @@
     <string name="exams_note">Hinweis</string>
     <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
     <string name="exams_from_Jhr">Jahrgang %s</string>
-    <string name="exams_result_no_results">Noch keine Noten vorhanden. \nSwipe nach unten zum Aktualisieren.</string>
+    <string name="exams_result_no_results_dashboard">Noch keine Noten vorhanden.</string>
+    <string name="exams_result_no_results_message">Noch keine Noten vorhanden. \nSwipe nach unten zum Aktualisieren.</string>
     <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
     <string name="exams_result_update_newGrades">Neue Noten hinzugefügt.</string>
     <string name="exams_result_update_noNewGrades">Keine neuen Noten vorhanden.</string>
@@ -253,5 +263,7 @@
         <item>2017</item>
         <item>2018</item>
     </string-array>
+    <string name="title_canteen_list">Canteens</string>
+    <string name="title_canteen_detail">Canteen Detail</string>
 
 </resources>

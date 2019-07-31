@@ -33,10 +33,6 @@ public class CampusPlanFragment extends Fragment {
     private int mShortAnimationDuration;
     private View mLayout;
 
-    public CampusPlanFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

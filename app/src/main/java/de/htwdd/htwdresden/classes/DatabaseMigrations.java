@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.Date;
 
+import de.htwdd.htwdresden.types.canteen.Prices;
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.RealmList;
@@ -60,6 +61,33 @@ public class DatabaseMigrations implements RealmMigration {
                 lessonRoomSchema.removeField("studyGroups");
                 lessonRoomSchema.addRealmListField("studyGroups", String.class);
             }
+            oldVersion++;
+        }
+
+        if (oldVersion == 5) {
+            schema.remove("Meal");
+            schema.create("Meal")
+                    .addField("prices", Prices.class)
+                    .addField("category", String.class)
+                    .addField("name", String.class)
+                    .addRealmListField("notes", String.class)
+                    .addField("date", Date.class)
+                    .addField("id", long.class)
+                    .addField("mensaId", short.class);
+
+            schema.remove("Canteen");
+            schema.create("Canteen")
+                    .addField("id", int.class)
+                    .addField("city", String.class)
+                    .addField("name", String.class)
+                    .addField("address", String.class)
+                    .addField("isFav", Boolean.class)
+                    .addRealmListField("coordinates", Float.class);
+
+            schema.create("Prices")
+                    .addField("students", Double.class)
+                    .addField("employees", Double.class);
+            oldVersion++;
         }
 
         // weeksOnly in primitiven Datentyp umwandeln

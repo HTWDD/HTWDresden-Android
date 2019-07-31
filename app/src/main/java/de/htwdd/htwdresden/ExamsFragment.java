@@ -24,10 +24,6 @@ import de.htwdd.htwdresden.types.TabItem;
 public class ExamsFragment extends Fragment {
     private final List<TabItem> mTabs = new ArrayList<>();
 
-    public ExamsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

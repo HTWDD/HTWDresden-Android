@@ -1,18 +1,12 @@
 package de.htwdd.htwdresden.account;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import java.util.ArrayList;
-
 import de.htwdd.htwdresden.R;
-import de.htwdd.htwdresden.account.ListAdapter.Item;
 
 public class AccountActivity extends Activity implements OnClickListener {
 

@@ -44,10 +44,6 @@ public class ExamResultFragment extends Fragment {
     private ExamResultAdapter adapter;
     private View mLayout;
 
-    public ExamResultFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

@@ -84,8 +84,8 @@ public class MensaWidget extends AppWidgetProvider {
                 continue;
             }
 
-            views.setTextViewText(mealName, meal.getTitle());
-            views.setTextViewText(mealPrice, context.getString(R.string.mensa_euro, meal.getStudentPrice()));
+            views.setTextViewText(mealName, meal.getName());
+            views.setTextViewText(mealPrice, context.getString(R.string.mensa_euro, meal.getPrices().getStudents()));
         }
 
         // Info setzen
@@ -104,7 +104,7 @@ public class MensaWidget extends AppWidgetProvider {
         // Während der Mensa Öffnungszeiten, Speisepläne vorher aktualisieren
         if (hour_of_Day >= 10 && hour_of_Day <= 15 && calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.MONDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
             final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
-            mensaHelper.updateMeals(() -> {
+            mensaHelper.updateDayMeals(() -> {
                 // Widgets updaten
                 for (final int appWidgetId : appWidgetIds) {
                     updateAppWidget(context, appWidgetManager, appWidgetId);

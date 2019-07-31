@@ -1,100 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="wrap_content"
-                                             android:background="@color/white">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="80dp"
+    android:background="@drawable/rounded_corners_background"
+    android:layout_margin="5dp">
 
-    <ImageView
-        android:id="@+id/mensa_image"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/mensa_meal_info_image"/>
-
-    <ImageView
-        android:id="@+id/mensa_pork"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_weight="1"
-        card_view:layout_constraintBottom_toTopOf="@+id/mensa_price"
-        card_view:layout_constraintStart_toEndOf="@+id/mensa_image"
-        card_view:layout_constraintTop_toBottomOf="@+id/mensa_title"
-        card_view:srcCompat="@drawable/ic_meal_pig"
-        android:contentDescription="@string/mensa_meal_info_pork"/>
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/mensa_beef"
-        android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/mensa_meal_info_pork"
+            card_view:srcCompat="@drawable/ic_fork_and_knife"/>
+
+        <TextView
+            android:id="@+id/mensa_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            card_view:layout_constraintBottom_toTopOf="@+id/mensa_pork"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        card_view:layout_constraintBottom_toBottomOf="@+id/mensa_pork"
-        card_view:layout_constraintStart_toEndOf="@+id/mensa_pork"
-        card_view:layout_constraintTop_toTopOf="@+id/mensa_pork"
-        card_view:srcCompat="@drawable/ic_meal_beef"
-        android:contentDescription="@string/mensa_meal_info_beef"/>
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/meal_vegetarian"
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/mensa_layout_pork"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/mensa_pork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/mensa_meal_info_pork"
+                android:layout_gravity="center_horizontal"
+                card_view:srcCompat="@drawable/ic_meal_symbol_pork"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_pork"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensa_layout_beef"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/mensa_beef"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                card_view:srcCompat="@drawable/ic_meal_symbol_beef"
+                android:contentDescription="@string/mensa_meal_info_beef"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_beef"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensa_layout_vegetarian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/meal_vegetarian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                card_view:srcCompat="@drawable/ic_meal_symbol_vegetarian"
+                android:contentDescription="@string/mensa_meal_info_vegetarian"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_vegetarian"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensa_layout_vegan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/meal_vegan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                card_view:srcCompat="@drawable/ic_meal_symbol_vegan"
+                android:contentDescription="@string/mensa_meal_info_vegan"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_vegan"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensa_layout_garlic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/meal_garlic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                card_view:srcCompat="@drawable/ic_meal_symbol_garlic"
+                android:contentDescription="@string/mensa_meal_info_garlic"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_garlic"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensa_layout_alcohol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/meal_alcohol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/mensa_meal_info_garlic"
+                card_view:srcCompat="@drawable/ic_meal_symbol_alcohol"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners_background_dark"
+                android:textColor="@color/white"
+                android:text="@string/mensa_meal_info_alcohol"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        card_view:layout_constraintBottom_toBottomOf="@+id/mensa_beef"
-        card_view:layout_constraintStart_toEndOf="@+id/mensa_beef"
-        card_view:layout_constraintTop_toTopOf="@+id/mensa_beef"
-        card_view:srcCompat="@drawable/ic_meal_vegetarian"
-        android:contentDescription="@string/mensa_meal_info_vegetarian"/>
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/meal_vegan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        card_view:layout_constraintBottom_toBottomOf="@+id/meal_vegetarian"
-        card_view:layout_constraintStart_toEndOf="@+id/meal_vegetarian"
-        card_view:layout_constraintTop_toTopOf="@+id/meal_vegetarian"
-        card_view:srcCompat="@drawable/ic_meal_vegan"
-        android:contentDescription="@string/mensa_meal_info_vegan"/>
+        <TextView
+            android:id="@+id/mensa_price_student"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/rounded_corners_background_orange"
+            android:textColor="@color/white"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/mensa_pork"/>
 
-    <TextView
-        android:id="@+id/mensa_title"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_below="@+id/mensa_image"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        card_view:layout_constraintBottom_toTopOf="@+id/mensa_pork"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toEndOf="@+id/mensa_image"
-        card_view:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/mensa_price_employee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/rounded_corners_background_blue"
+            android:textColor="@color/white"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/mensa_pork"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/mensa_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mensa_title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="bottom"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintStart_toEndOf="@+id/mensa_image"
-        card_view:layout_constraintTop_toBottomOf="@+id/mensa_pork"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

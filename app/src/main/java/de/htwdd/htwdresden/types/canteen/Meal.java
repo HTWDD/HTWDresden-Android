@@ -13,65 +13,34 @@ import io.realm.RealmObject;
  * @author Kay Förster
  */
 public class Meal extends RealmObject {
-    @Nullable
-    private Float studentPrice;
-    @Nullable
-    private Float employeePrice;
-    private String title;
-    private boolean isSoldOut;
-    private RealmList<String> additives;
-    private RealmList<String> information;
-    private RealmList<String> allergens;
+    private long id;
+    private String name;
+    private String category;
+    private RealmList<String> notes;
     private Date date;
-    private String detailURL;
+    private Prices prices;
     @Nullable
-    private String image;
     private short mensaId;
 
-    @Nullable
-    public Float getStudentPrice() {
-        return studentPrice;
+    public long getId() { return id; }
+    public void setId(long value) { this.id = value; }
+
+    public String getName() { return name; }
+    public void setName(String value) { this.name = value; }
+
+    public String getCategory() { return category; }
+
+    public Date getDate() { return date; }
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    @Nullable
-    public Float getEmployeePrice() {
-        return employeePrice;
-    }
+    public RealmList<String> getNotes() { return notes; }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isSoldOut() {
-        return isSoldOut;
-    }
-
-    public RealmList<String> getAdditives() {
-        return additives;
-    }
-
-    public RealmList<String> getInformation() {
-        return information;
-    }
-
-    public RealmList<String> getAllergens() {
-        return allergens;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getDetailURL() {
-        return detailURL;
-    }
-
-    @Nullable
-    public String getImage() {
-        return image;
-    }
+    public Prices getPrices() { return prices; }
 
     public void setMensaId(final short mensaId) {
         this.mensaId = mensaId;
     }
 }
+

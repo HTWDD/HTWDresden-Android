@@ -22,10 +22,6 @@ import android.widget.TextView;
  */
 public class AboutFragment extends Fragment {
 
-    public AboutFragment() {
-        // Required empty public constructor
-    }
-
     private static void sendEmail(final @NonNull Context context, final String[] recipientList, final String title) {
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");

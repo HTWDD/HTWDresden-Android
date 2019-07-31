@@ -1,7 +1,5 @@
 package de.htwdd.htwdresden;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -24,8 +22,6 @@ import android.widget.EditText;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.types.exams.ExamResult;
-import io.realm.Realm;
 
 /**
  * Hinweis zum Navigation Drawer:
@@ -63,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 tag = "overview";
                 break;
             case R.id.navigation_mensa:
-                supportedFragment = new MensaFragment();
+                supportedFragment = new MensaDetailListFragment();
                 setTitle(getString(R.string.navi_mensa));
                 break;
             case R.id.navigation_timetable:

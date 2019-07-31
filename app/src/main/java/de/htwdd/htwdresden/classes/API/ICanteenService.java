@@ -14,9 +14,10 @@ import retrofit2.http.Path;
  * @author Kay Förster
  */
 public interface ICanteenService {
-    @GET("emeal/meals/{canteenID}")
-    Call<List<Meal>> listMeals(@Path("canteenID") String canteenID);
+    @GET("canteens/{canteenID}/days/{date}/meals")
+    Call<List<Meal>> listMeals(@Path("canteenID") String canteenID,
+                               @Path("date") String date);
 
-    @GET("emeal/canteens")
-    Call<List<Canteen>> listCanteens();
+    @GET("canteens?near[lat]=51.058583&near[lng]=13.738208&near[dist]=20")
+    Call<List<Canteen>> listCanteensOfDD();
 }

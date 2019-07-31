@@ -35,10 +35,6 @@ public class TimetableFragment extends Fragment {
     private final Bundle bundleCurrentWeek = new Bundle();
     private final Bundle bundleNextWeek = new Bundle();
 
-    public TimetableFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

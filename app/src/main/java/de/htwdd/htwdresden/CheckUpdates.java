@@ -3,8 +3,9 @@ package de.htwdd.htwdresden;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,6 +17,7 @@ import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
 import de.htwdd.htwdresden.classes.ConnectionHelper;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.MensaHelper;
+import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.semsterPlan.Semester;
 import de.htwdd.htwdresden.types.semsterPlan.TimePeriod;
@@ -23,6 +25,7 @@ import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,23 +52,42 @@ class CheckUpdates implements Runnable {
         final Realm realm = Realm.getDefaultInstance();
         final Calendar calendar = GregorianCalendar.getInstance();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final long mensaLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, 0);
+        final long mensaDayLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, 0);
         final long studyGroupsLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_STUDY_GROUP_LAST_UPDATE, 0);
         final long semesterplanLastUpdate = sharedPreferences.getLong(Const.preferencesKey.PREFERENCES_SEMESTERPLAN_UPDATETIME, 0);
         final IGeneralService iGeneralService = Retrofit2Rubu.getInstance(context).getRetrofit().create(IGeneralService.class);
 
-        // Aktualisiere Mensa
-        if ((calendar.getTimeInMillis() - mensaLastUpdate) > TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) || realm.where(Meal.class).count() == 0) {
+        // Aktualisiere Meal für Overview
+        if ((calendar.getTimeInMillis() - mensaDayLastUpdate) > TimeUnit.MILLISECONDS.convert(12, TimeUnit.HOURS) || realm.where(Meal.class).count() == 0 || realm.where(Canteen.class).count() == 0) {
             Log.d(LOG_TAG, "Lade Mensa");
-            final MensaHelper mensaHelper = new MensaHelper(context, (short) 1);
-            mensaHelper.updateMeals(() -> {
+
+            final MensaHelper mensaHelper = new MensaHelper(context, (short) 80);
+
+            mensaHelper.updateCanteens(() -> {
                     },
                     () -> {
-                        Log.i(LOG_TAG, "Mensa aktualisiert");
+                        Log.i(LOG_TAG, "Kantinen aktualisiert");
+
+                        Realm realmMensaOverview = Realm.getDefaultInstance();
+
+                        RealmResults<Canteen> canteenList = realmMensaOverview.where(Canteen.class).findAll();
+
+                        for (Canteen canteen : canteenList) {
+                            MensaHelper helper = new MensaHelper(context, (short) canteen.getId());
+
+                            helper.updateDayMeals(() -> {
+                                    },
+                                    () -> {
+                                        Log.i(LOG_TAG, "Mahlzeiten des Tages aktualisiert für " + canteen.getName());
+                                    });
+                        }
+
+
                         final SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_WEEK_LASTUPDATE, calendar.getTimeInMillis());
+                        editor.putLong(Const.preferencesKey.PREFERENCES_MENSA_DAY_LASTUPDATE, calendar.getTimeInMillis());
                         editor.apply();
                     });
+
         }
 
         // Aktualisiere Studiengruppen

@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.cardview.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import de.htwdd.htwdresden.classes.API.IGeneralService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
@@ -35,6 +37,7 @@ import de.htwdd.htwdresden.classes.TimetableHelper;
 import de.htwdd.htwdresden.interfaces.INavigation;
 import de.htwdd.htwdresden.types.LessonUser;
 import de.htwdd.htwdresden.types.News;
+import de.htwdd.htwdresden.types.canteen.Canteen;
 import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.ExamStats;
@@ -44,6 +47,8 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static org.acra.ACRA.LOG_TAG;
 
 
 /**
@@ -59,10 +64,6 @@ public class OverviewFragment extends Fragment {
     private RealmChangeListener<RealmResults<ExamResult>> realmListenerExams;
     private RealmChangeListener<RealmResults<Meal>> realmListenerMensa;
     private RealmChangeListener<RealmResults<LessonUser>> realmListenerLessons;
-
-    public OverviewFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -85,9 +86,29 @@ public class OverviewFragment extends Fragment {
         final Calendar calendar = GregorianCalendar.getInstance();
         realm = Realm.getDefaultInstance();
         realmListenerMensa = element -> showMensaInfo(meals);
-        meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 1).findAll();
-        meals.addChangeListener(realmListenerMensa);
+        meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 80).findAll();
+
+        meals.addChangeListener(meals -> {
+
+            meals = realm.where(Meal.class).equalTo(Const.database.Canteen.MENSA_DATE, MensaHelper.getDate(calendar)).equalTo(Const.database.Canteen.MENSA_ID, 80).findAll();
+            showMensaInfo(meals);
+        });
+
         showMensaInfo(meals);
+
+        RealmResults<Canteen> canteenList = realm.where(Canteen.class).findAll();
+
+        for (Canteen canteen : canteenList) {
+
+            short mensaId =  (short) canteen.getId();
+
+            MensaHelper mensaHelperMeals = new MensaHelper(Objects.requireNonNull(getContext()), mensaId);
+            mensaHelperMeals.updateWeekMeals(() -> {
+                    },
+                    () -> {
+                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert");
+                    });
+        }
 
         // Übersicht über Noten
         realmListenerExams = element -> showExamStats(element.size() > 0);
@@ -258,19 +279,24 @@ public class OverviewFragment extends Fragment {
      * @param meals Liste der Mahlzeiten
      */
     private void showMensaInfo(@NonNull final RealmResults<Meal> meals) {
+
         final TextView message = mLayout.findViewById(R.id.overview_mensaMessage);
         final TextView content = mLayout.findViewById(R.id.overview_mensaContent);
 
         // Aktuell kein Angebot vorhanden
         if (meals.size() == 0) {
+
             message.setText(R.string.mensa_no_offer);
             message.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
+
             return;
         }
-
+        else {
+            this.meals.removeAllChangeListeners();
+        }
         // Inhalt anzeigen
-        content.setText(MensaHelper.concatTitels(mLayout.getContext(), meals));
+        content.setText(MensaHelper.concatTitles(mLayout.getContext(), meals));
         message.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
     }

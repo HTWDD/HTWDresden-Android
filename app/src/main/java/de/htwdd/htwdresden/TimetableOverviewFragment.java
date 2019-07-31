@@ -36,10 +36,6 @@ public class TimetableOverviewFragment extends Fragment {
     private View mLayout;
     private ResponseReceiver responseReceiver;
 
-    public TimetableOverviewFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment

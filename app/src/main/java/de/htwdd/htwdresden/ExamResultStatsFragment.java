@@ -1,7 +1,6 @@
 package de.htwdd.htwdresden;
 
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -27,10 +26,6 @@ public class ExamResultStatsFragment extends Fragment {
     private RealmResults<ExamResult> allExamResults;
     private RealmChangeListener<RealmResults<ExamResult>> realmChangeListener;
 
-    public ExamResultStatsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
@@ -42,7 +37,7 @@ public class ExamResultStatsFragment extends Fragment {
 
         // Hinweismeldung wenn keine Ergebnisse vorliegen
         final TextView message = mLayout.findViewById(R.id.message_info);
-        message.setText(R.string.exams_result_no_results);
+        message.setText(R.string.exams_result_no_results_message);
 
         // Adapter erstellen und an Liste anhängen
         final ExamStatsAdapter adapter = new ExamStatsAdapter(mLayout.getContext(), realm);
