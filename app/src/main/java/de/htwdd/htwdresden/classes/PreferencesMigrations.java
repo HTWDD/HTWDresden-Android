@@ -17,7 +17,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  * @author Kay Förster
  */
 public class PreferencesMigrations {
-    private final static int newVersion = 1;
+    private final static int newVersion = 2;
     private final Context context;
     private final SharedPreferences sharedPreferences;
 
@@ -35,8 +35,8 @@ public class PreferencesMigrations {
 
         // Setze Einstellungen beim ersten Starten der App
         if (sharedPreferences.getBoolean("FIRST_RUN", true)) {
-            editor.putBoolean("FIRST_RUN", false);
-            editor.putBoolean("acra.enable", true);
+            editor.putBoolean("firebase_analytics.enable", false);
+            editor.putBoolean("firebase_crashlytics.enable", false);
         }
 
         // Erste Migration

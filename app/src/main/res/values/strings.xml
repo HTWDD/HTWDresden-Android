@@ -72,9 +72,10 @@
     <string name="settings_audio_request_permission">Berechtigung wird benötigt zum ändern der Benachrichtigungseinstellungen</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
     <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
-    <string name="settings_acra" translatable="false">Bug-Reporting</string>
-    <string name="settings_acra_disabled">Eingeschaltet</string>
-    <string name="settings_acra_enabled">Ausgeschaltet</string>
+    <string name="settings_firebase_analytics" translatable="false">Analyse</string>
+    <string name="settings_firebase_crashlytics" translatable="false">Bug-Reporting</string>
+    <string name="settings_firebase_disabled">Eingeschaltet</string>
+    <string name="settings_firebase_enabled">Ausgeschaltet</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
@@ -135,7 +136,7 @@
     <string name="timetable_edit_lessonWeek">Woche</string>
     <string name="timetable_edit_lessonDay">Tag</string>
     <string name="timetable_edit_lessonDS">Zeit</string>
-    <string name="timetable_edit_lessonDS_value">Zeit individual festlegen</string>
+    <string name="timetable_edit_lessonDS_value">Zeit individuell festlegen</string>
     <string name="timetable_edit_time_individual_to">bis</string>
     <string name="timetable_edit_lessonWeeks">nur in KW</string>
     <string name="timetable_edit_lessonWeeks_title">Lehrveranstaltung findet ausschl. in folgenden KW statt</string>
@@ -263,7 +264,25 @@
         <item>2017</item>
         <item>2018</item>
     </string-array>
-    <string name="title_canteen_list">Canteens</string>
-    <string name="title_canteen_detail">Canteen Detail</string>
+    <string name="logo_htw">Logo HTW</string>
+    <string name="welcome_text_timetable">Hab immer den Überblick, wann du welche\nVorlesung, Übung etc. hast.</string>
+    <string name="welcome_text_mensa">Was gibt\'s heute zu Essen? &#127823;&#127829;&#129369;</string>
+    <string name="welcome_text_grades">Wer hat denn da eine 1 bekommen?\nBestimmt du!</string>
+    <string name="welcome_text_content">Schön, dass du die HTW Dresden App\nverwendest.</string>
+    <string name="welcome">Willkommen</string>
+    <string name="analytics_text_changing">Du kannst deine Entscheidung jederzeit in den Einstellungen ändern.</string>
+    <string name="analytics_text_helping">Möchtest du uns dabei helfen?</string>
+    <string name="analytics_text_summary">Dabei werden gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
+    <string name="analytics">Analytics &#128202;</string>
+    <string name="analytics_text_content">Wir würden gerne Google Analytics bei deinem Gerät nutzen, um die App stetig zu verbessern.</string>
+    <string name="crashlytics">Crashlytics &#128202;</string>
+    <string name="crashlytics_text_content">Wir würden gern Google Crashlytics bei deinem Gerät nutzen, um die App stetig zu verbessern.</string>
+    <string name="crashlytics_text_summary">Dabei werden bei einem App-Absturz gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
+    <string name="yes_button">JA!</string>
+    <string name="login_with_img">Einloggen? &#128272;</string>
+    <string name="login_text_content">Möchtest du dich direkt mit deinen Daten anmelden?</string>
+    <string name="login_text_summary">Dadurch erhältst du zum Beispiel Zugriff auf deine Noten.\nKlicke einfach auf den Knopf und du wirst zum Login weitergeleitet.</string>
+    <string name="login_text_summary2">Du kannst diesen Schritt auch überspringen und dich zu einem späteren Zeitpunkt in deinem Nutzerkonto anmelden.</string>
+    <string name="login">Anmelden</string>
 
 </resources>

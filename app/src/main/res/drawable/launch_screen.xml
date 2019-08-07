@@ -10,7 +10,7 @@
     <item>
 
         <bitmap
-            android:src="@drawable/ic_logo_htw_splash_screen"
+            android:src="@drawable/htw_logo_gross"
             android:gravity="center"/>
 
     </item>

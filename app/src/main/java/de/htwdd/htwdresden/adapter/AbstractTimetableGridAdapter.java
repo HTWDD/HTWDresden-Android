@@ -129,7 +129,7 @@ abstract class AbstractTimetableGridAdapter<T extends RealmModel & ILesson> exte
 
                 // Keine Lehrveranstaltung in diesem Zeitabschnitt
                 if (lessons.size() == 0) {
-                    viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.gray));
                     viewHolder.tag.setText(null);
                     viewHolder.type.setText(null);
                     viewHolder.room.setText(null);
@@ -162,7 +162,7 @@ abstract class AbstractTimetableGridAdapter<T extends RealmModel & ILesson> exte
 
                     // Es gibt keine passende Veranstaltung die angezeigt werden kann
                     if (singleLesson != 1) {
-                        viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        viewHolder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.gray));
                         viewHolder.tag.setText(null);
                         viewHolder.room.setVisibility(View.GONE);
                         viewHolder.type.setText(R.string.timetable_moreLessons);

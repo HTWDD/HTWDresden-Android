@@ -30,10 +30,16 @@
     <PreferenceCategory android:title="@string/settings_category_app_intern">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="acra.enable"
-            android:summaryOff="@string/settings_acra_enabled"
-            android:summaryOn="@string/settings_acra_disabled"
-            android:title="@string/settings_acra" />
+            android:key="firebase_analytics.enable"
+            android:summaryOff="@string/settings_firebase_enabled"
+            android:summaryOn="@string/settings_firebase_disabled"
+            android:title="@string/settings_firebase_analytics" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="firebase_crashlytics.enable"
+            android:summaryOff="@string/settings_firebase_enabled"
+            android:summaryOn="@string/settings_firebase_disabled"
+            android:title="@string/settings_firebase_crashlytics" />
     </PreferenceCategory>
 
 </PreferenceScreen>

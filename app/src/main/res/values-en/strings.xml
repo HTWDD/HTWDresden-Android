@@ -152,8 +152,8 @@
     <string name="room_timetable_details_title">Room timetable %s</string>
     <string name="room_timetable_no_rooms">No rooms added yet!</string>
     <string name="room_timetable_update_success">Room timetable updated!</string>
-    <string name="settings_acra_disabled">Turned on</string>
-    <string name="settings_acra_enabled">Turned off</string>
+    <string name="settings_firebase_disabled">Turned on</string>
+    <string name="settings_firebase_enabled">Turned off</string>
     <string name="settings_audio">Automatic muting</string>
     <string name="settings_audio_request_permission">Permission needed to change notification settings</string>
     <string name="settings_audio_summary">Your phone will be muted during a lesson automatically.</string>
