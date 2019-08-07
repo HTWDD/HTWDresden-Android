@@ -4,14 +4,13 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
-
+import com.airbnb.lottie.LottieAnimationView;
 import com.hololo.tutorial.library.Step;
 import com.hololo.tutorial.library.TutorialActivity;
 
@@ -21,21 +20,19 @@ public class OnBoardActivity extends TutorialActivity {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    LottieAnimationView ltAnimViewActiveAnalytics;
+    LottieAnimationView ltAnimViewInActiveAnalytics;
+    LottieAnimationView animationCheckBox;
+    LottieAnimationView animationGreenButton;
+    LottieAnimationView animationRedButton;
+    TextView noteCrashlytics;
     Button buttonPrev;
     Button buttonNext;
-    Button btnAnalytics;
-    Button btnCrashlytics;
     Button btnLogin;
-    Drawable active;
-    Drawable inActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-
-        active = ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_button_active, null);
-        inActive = ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_button_inactive, null);
 
         setIndicator(R.drawable.indicator_selected_inactive);
         setIndicatorSelected(R.drawable.indicator_selected);
@@ -109,37 +106,94 @@ public class OnBoardActivity extends TutorialActivity {
         }
 
         if(position == 1) {
-            btnAnalytics = findViewById(R.id.btnAnalytics);
+            ltAnimViewActiveAnalytics = findViewById(R.id.anim_active_analytics);
+            ltAnimViewInActiveAnalytics = findViewById(R.id.anim_not_active_analytics);
 
             if(!sharedPreferences.getBoolean("firebase_analytics.enable", false)){
-                btnAnalytics.setEnabled(true);
-                btnAnalytics.setBackground(active);
-                btnAnalytics.setOnClickListener(view -> {
+                ltAnimViewInActiveAnalytics.setEnabled(true);
+                ltAnimViewInActiveAnalytics.setOnClickListener(view -> {
+                    editor = sharedPreferences.edit();
                     editor.putBoolean("firebase_analytics.enable", true);
                     editor.apply();
-                    btnAnalytics.setBackground(inActive);
-                    btnAnalytics.setEnabled(false);
+                    ltAnimViewInActiveAnalytics.setVisibility(View.GONE);
+                    ltAnimViewActiveAnalytics.setVisibility(View.VISIBLE);
+                    ltAnimViewActiveAnalytics.playAnimation();
                 });
             }
-
-        }
-
-        if(sharedPreferences.getBoolean("firebase_analytics.enable", false)){
-            if(position == 2) {
-                btnCrashlytics = findViewById(R.id.btnCrashlytics);
-
-                if(!sharedPreferences.getBoolean("firebase_crashlytics.enable", true)){
-                    btnCrashlytics.setEnabled(true);
-                    btnCrashlytics.setBackground(active);
-                    btnCrashlytics.setOnClickListener(view -> {
-                        editor.putBoolean("firebase_crashlytics.enable", true);
-                        editor.apply();
-                        btnCrashlytics.setBackground(inActive);
-                        btnCrashlytics.setEnabled(false);
-                    });
-                }
+            else {
+                ltAnimViewInActiveAnalytics.setVisibility(View.GONE);
+                ltAnimViewActiveAnalytics.setVisibility(View.VISIBLE);
             }
         }
+
+        if(position == 2) {
+            animationCheckBox = findViewById(R.id.anim_active_crashlytics);
+            animationGreenButton = findViewById(R.id.anim_not_active_crashlytics);
+            animationRedButton = findViewById(R.id.anim_inactive_crashlytics);
+            noteCrashlytics = findViewById(R.id.notes_crashlytics);
+
+            if(sharedPreferences.getBoolean("firebase_analytics.enable", false)) {
+                animationCheckBox.setVisibility(View.VISIBLE);
+                animationCheckBox.setEnabled(true);
+                animationRedButton.setVisibility(View.GONE);
+                noteCrashlytics.setVisibility(View.GONE);
+                animationCheckBox.setOnClickListener(view -> {
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("firebase_crashlytics.enable", true);
+                    editor.apply();
+                }
+                );
+                if (!sharedPreferences.getBoolean("firebase_crashlytics.enable", true)) {
+                    animationCheckBox.setEnabled(true);
+                    animationCheckBox.setVisibility(View.VISIBLE);
+                    animationGreenButton.setVisibility(View.GONE);
+                }
+                else {
+                    animationCheckBox.setEnabled(false);
+                    animationCheckBox.setVisibility(View.GONE);
+                    animationGreenButton.setVisibility(View.VISIBLE);
+                    animationGreenButton.playAnimation();
+                }
+            }
+            else {
+                animationRedButton.setVisibility(View.VISIBLE);
+                noteCrashlytics.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+//        if(position == 2) {
+//            animationCheckBox = findViewById(R.id.anim_active_crashlytics);
+//            animationGreenButton = findViewById(R.id.anim_not_active_crashlytics);
+//            animationRedButton = findViewById(R.id.anim_inactive_crashlytics);
+//            noteCrashlytics = findViewById(R.id.notes_crashlytics);
+//
+//            if(sharedPreferences.getBoolean("firebase_analytics.enable", false)){
+//
+//                animationGreenButton.setVisibility(View.VISIBLE);
+//                noteCrashlytics.setVisibility(View.GONE);
+//                animationRedButton.setVisibility(View.GONE);
+//
+//                if(!sharedPreferences.getBoolean("firebase_crashlytics.enable", true)){
+//
+//                    animationCheckBox.setVisibility(View.GONE);
+//                    animationGreenButton.setVisibility(View.VISIBLE);
+//
+//                    animationGreenButton.setOnClickListener(view -> {
+//                        editor.putBoolean("firebase_crashlytics.enable", true);
+//                        editor.apply();
+//                        animationGreenButton.setVisibility(View.GONE);
+//                        animationGreenButton.setEnabled(false);
+//                        animationCheckBox.setVisibility(View.VISIBLE);
+//                        animationCheckBox.playAnimation();
+//                    });
+//                }
+//                else {
+//                    animationGreenButton.setVisibility(View.GONE);
+//                    animationCheckBox.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        }
 
         if(position == 3) {
             btnLogin = findViewById(R.id.btnLogin);

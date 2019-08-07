@@ -284,5 +284,6 @@
     <string name="login_text_summary">Dadurch erhältst du zum Beispiel Zugriff auf deine Noten.\nKlicke einfach auf den Knopf und du wirst zum Login weitergeleitet.</string>
     <string name="login_text_summary2">Du kannst diesen Schritt auch überspringen und dich zu einem späteren Zeitpunkt in deinem Nutzerkonto anmelden.</string>
     <string name="login">Anmelden</string>
+    <string name="crashlytics_not_acceptable">Du musst zuerst die Analytics akzeptieren, bevor du bei den Crashlytics zustimmen kannst.</string>
 
 </resources>

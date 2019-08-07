@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container"
     android:background="@color/light_gray">
@@ -75,15 +77,24 @@
         android:textStyle="italic"
         android:text="@string/analytics_text_changing"/>
 
-    <Button
-        android:id="@+id/btnAnalytics"
-        android:enabled="false"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:background="@drawable/rounded_button_inactive"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/anim_not_active_analytics"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:lottie_fileName="success_blue.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:layout_gravity="center">
+    </com.airbnb.lottie.LottieAnimationView>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/anim_active_analytics"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:lottie_fileName="check_mark_success_blue.json"
+        app:lottie_loop="false"
+        app:lottie_autoPlay="false"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/yes_button"
-        android:textColor="@color/white"/>
+        android:visibility="gone">
+    </com.airbnb.lottie.LottieAnimationView>
 
 </LinearLayout>
