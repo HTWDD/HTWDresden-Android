@@ -77,35 +77,14 @@
         android:text="@string/analytics_text_changing"/>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/anim_inactive_crashlytics"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:lottie_fileName="circle_red_button.json"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
-        android:layout_gravity="center"
-        android:visibility="gone">
-    </com.airbnb.lottie.LottieAnimationView>
-    <com.airbnb.lottie.LottieAnimationView
     android:id="@+id/anim_active_crashlytics"
     android:layout_width="100dp"
     android:layout_height="100dp"
-    app:lottie_fileName="check_mark_success_blue.json"
-    app:lottie_loop="false"
-    app:lottie_autoPlay="false"
+    app:lottie_fileName="circle_red_button.json"
+    app:lottie_loop="true"
+    app:lottie_autoPlay="true"
     android:layout_gravity="center">
     </com.airbnb.lottie.LottieAnimationView>
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/anim_not_active_crashlytics"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:lottie_fileName="success_blue.json"
-        app:lottie_loop="false"
-        app:lottie_autoPlay="false"
-        android:layout_gravity="center"
-        android:visibility="gone">
-    </com.airbnb.lottie.LottieAnimationView>
-
 
     <TextView
         android:id="@+id/notes_crashlytics"
@@ -114,6 +93,8 @@
         android:textColor="@color/red"
         android:text="@string/crashlytics_not_acceptable"
         android:textAlignment="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textStyle="italic"
         android:visibility="gone"/>
 
