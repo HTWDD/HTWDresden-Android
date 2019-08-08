@@ -93,8 +93,7 @@
     app:lottie_fileName="check_mark_success_blue.json"
     app:lottie_loop="false"
     app:lottie_autoPlay="false"
-    android:layout_gravity="center"
-    android:visibility="gone">
+    android:layout_gravity="center">
     </com.airbnb.lottie.LottieAnimationView>
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/anim_not_active_crashlytics"
