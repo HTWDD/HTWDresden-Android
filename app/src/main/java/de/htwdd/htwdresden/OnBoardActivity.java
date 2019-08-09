@@ -1,13 +1,16 @@
 package de.htwdd.htwdresden;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -15,10 +18,22 @@ import com.hololo.tutorial.library.Step;
 import com.hololo.tutorial.library.TutorialActivity;
 
 import de.htwdd.htwdresden.account.AuthenticatorActivity;
+import de.htwdd.htwdresden.adapter.SpinnerAdapter;
+import de.htwdd.htwdresden.classes.Const;
+import de.htwdd.htwdresden.types.canteen.Meal;
+import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
+import de.htwdd.htwdresden.types.studyGroups.StudyData;
+import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
+import de.htwdd.htwdresden.types.studyGroups.StudyYear;
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class OnBoardActivity extends TutorialActivity {
 
-    String animation = "{\"v\":\"4.9.0\",\"fr\":29.9700012207031,\"ip\":0,\"op\":150.000006109625,\"w\":100,\"h\":100,\"nm\":\"tap-button\",\"ddd\":0,\"assets\":[],\"layers\":[{\"ddd\":0,\"ind\":1,\"ty\":4,\"nm\":\"Layer 1/tap-button Outlines\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":72},\"r\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":0,\"s\":[0],\"e\":[1800]},{\"t\":149.000006068894}]},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[18.777,0],[0,18.777],[-18.778,0],[0,-18.778]],\"o\":[[-18.778,0],[0,-18.778],[18.777,0],[0,18.777]],\"v\":[[0,34],[-34,0],[0,-34],[34,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[19.882,0],[0,-19.882],[-19.882,0],[0,19.882]],\"o\":[[-19.882,0],[0,19.882],[19.882,0],[0,-19.882]],\"v\":[[0,-36],[-36,0],[0,36],[36,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":0,\"k\":[100,100],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":0,\"k\":100,\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":2,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"},{\"ty\":\"gf\",\"o\":{\"a\":0,\"k\":99},\"r\":1,\"g\":{\"p\":3,\"k\":{\"a\":0,\"k\":[0,1,1,1,0.5,1,1,1,1,1,1,1,0.193,0,0.308,0.5,0.423,1,0.507,1,0.592,1,0.716,0.5,0.84,0]}},\"s\":{\"a\":0,\"k\":[0,0]},\"e\":{\"a\":0,\"k\":[100,0]},\"t\":1,\"nm\":\"Gradient Fill 1\",\"mn\":\"ADBE Vector Graphic - G-Fill\"}],\"ip\":0,\"op\":150.000006109625,\"st\":0,\"bm\":0},{\"ddd\":0,\"ind\":2,\"ty\":4,\"nm\":\"Layer 4 Outlines\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":10},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[16.028,0],[0,-19.882],[-1.145,-3.512],[-27.666,19.848]],\"o\":[[-19.882,0],[0,3.896],[15.085,0.642],[-4.663,-14.477]],\"v\":[[0.867,-23.617],[-35.133,12.383],[-33.362,23.538],[35.134,1.339]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"mm\",\"mm\":4,\"nm\":\"Merge Paths 1\",\"mn\":\"ADBE Vector Filter - Merge\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[1,1,1,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[49.133,37.617],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":0,\"k\":[100,100],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":0,\"k\":100,\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":0,\"op\":153.000006231818,\"st\":0,\"bm\":0},{\"ddd\":0,\"ind\":3,\"ty\":4,\"nm\":\"Layer 2 Outlines\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[0,19.882],[19.882,0],[0,-19.882],[-19.882,0]],\"o\":[[0,-19.882],[-19.882,0],[0,19.882],[19.882,0]],\"v\":[[36,0],[0,-36],[-36,0],[0,36]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.9490196,0.3843137,0.2941177,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":0,\"k\":[100,100],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":0,\"k\":100,\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":2,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":0,\"op\":153.000006231818,\"st\":0,\"bm\":0},{\"ddd\":0,\"ind\":4,\"ty\":4,\"nm\":\"Layer 3 Outlines 11\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":135,\"s\":[85,85],\"e\":[120,120]},{\"t\":165.000006720588}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":135,\"s\":[100],\"e\":[0]},{\"t\":165.000006720588}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":135.000005498663,\"op\":166.000006761319,\"st\":135.000005498663,\"bm\":0},{\"ddd\":0,\"ind\":5,\"ty\":4,\"nm\":\"Layer 3 Outlines 10\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":120,\"s\":[85,85],\"e\":[120,120]},{\"t\":150.000006109625}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":120,\"s\":[100],\"e\":[0]},{\"t\":150.000006109625}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":120.0000048877,\"op\":151.000006150356,\"st\":120.0000048877,\"bm\":0},{\"ddd\":0,\"ind\":6,\"ty\":4,\"nm\":\"Layer 3 Outlines 9\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":105,\"s\":[85,85],\"e\":[120,120]},{\"t\":135.000005498663}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":105,\"s\":[100],\"e\":[0]},{\"t\":135.000005498663}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":105.000004276738,\"op\":136.000005539394,\"st\":105.000004276738,\"bm\":0},{\"ddd\":0,\"ind\":7,\"ty\":4,\"nm\":\"Layer 3 Outlines 8\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":90,\"s\":[85,85],\"e\":[120,120]},{\"t\":120.0000048877}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":90,\"s\":[100],\"e\":[0]},{\"t\":120.0000048877}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":90.0000036657751,\"op\":121.000004928431,\"st\":90.0000036657751,\"bm\":0},{\"ddd\":0,\"ind\":8,\"ty\":4,\"nm\":\"Layer 3 Outlines 7\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":75,\"s\":[85,85],\"e\":[120,120]},{\"t\":105.000004276738}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":75,\"s\":[100],\"e\":[0]},{\"t\":105.000004276738}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":75.0000030548126,\"op\":106.000004317469,\"st\":75.0000030548126,\"bm\":0},{\"ddd\":0,\"ind\":9,\"ty\":4,\"nm\":\"Layer 3 Outlines 6\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":60,\"s\":[85,85],\"e\":[120,120]},{\"t\":90.0000036657751}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":60,\"s\":[100],\"e\":[0]},{\"t\":90.0000036657751}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":60.0000024438501,\"op\":91.000003706506,\"st\":60.0000024438501,\"bm\":0},{\"ddd\":0,\"ind\":10,\"ty\":4,\"nm\":\"Layer 3 Outlines 5\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":45,\"s\":[85,85],\"e\":[120,120]},{\"t\":75.0000030548126}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":45,\"s\":[100],\"e\":[0]},{\"t\":75.0000030548126}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":45.0000018328876,\"op\":76.0000030955434,\"st\":45.0000018328876,\"bm\":0},{\"ddd\":0,\"ind\":11,\"ty\":4,\"nm\":\"Layer 3 Outlines 4\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":30,\"s\":[85,85],\"e\":[120,120]},{\"t\":60.0000024438501}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":30,\"s\":[100],\"e\":[0]},{\"t\":60.0000024438501}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":30.0000012219251,\"op\":61.0000024845809,\"st\":30.0000012219251,\"bm\":0},{\"ddd\":0,\"ind\":12,\"ty\":4,\"nm\":\"Layer 3 Outlines 3\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":15,\"s\":[85,85],\"e\":[120,120]},{\"t\":45.0000018328876}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":15,\"s\":[100],\"e\":[0]},{\"t\":45.0000018328876}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":15.0000006109625,\"op\":46.0000018736184,\"st\":15.0000006109625,\"bm\":0},{\"ddd\":0,\"ind\":13,\"ty\":4,\"nm\":\"Layer 3 Outlines 2\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":0,\"s\":[85,85],\"e\":[120,120]},{\"t\":30.0000012219251}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":0,\"s\":[100],\"e\":[0]},{\"t\":30.0000012219251}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":0,\"op\":31.0000012626559,\"st\":0,\"bm\":0},{\"ddd\":0,\"ind\":14,\"ty\":4,\"nm\":\"Layer 3 Outlines\",\"sr\":1,\"ks\":{\"o\":{\"a\":0,\"k\":100},\"r\":{\"a\":0,\"k\":0},\"p\":{\"a\":0,\"k\":[50,50,0]},\"a\":{\"a\":0,\"k\":[50,50,0]},\"s\":{\"a\":0,\"k\":[100,100,100]}},\"ao\":0,\"shapes\":[{\"ty\":\"gr\",\"it\":[{\"ind\":0,\"ty\":\"sh\",\"ix\":1,\"ks\":{\"a\":0,\"k\":{\"i\":[[22.092,0],[0,-22.091],[-22.091,0],[0,22.092]],\"o\":[[-22.091,0],[0,22.092],[22.092,0],[0,-22.091]],\"v\":[[0,-40],[-40,0],[0,40],[40,0]],\"c\":true}},\"nm\":\"Path 1\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ind\":1,\"ty\":\"sh\",\"ix\":2,\"ks\":{\"a\":0,\"k\":{\"i\":[[-21.505,0],[0,-21.505],[21.505,0],[0,21.505]],\"o\":[[21.505,0],[0,21.505],[-21.505,0],[0,-21.505]],\"v\":[[0,-39],[39,0],[0,39],[-39,0]],\"c\":true}},\"nm\":\"Path 2\",\"mn\":\"ADBE Vector Shape - Group\"},{\"ty\":\"fl\",\"c\":{\"a\":0,\"k\":[0.945098,0.3843137,0.2901961,1]},\"o\":{\"a\":0,\"k\":100},\"r\":1,\"nm\":\"Fill 1\",\"mn\":\"ADBE Vector Graphic - Fill\"},{\"ty\":\"tr\",\"p\":{\"a\":0,\"k\":[50,50],\"ix\":2},\"a\":{\"a\":0,\"k\":[0,0],\"ix\":1},\"s\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833,0.833],\"y\":[0.833,0.833]},\"o\":{\"x\":[0.167,0.167],\"y\":[0.167,0.167]},\"n\":[\"0p833_0p833_0p167_0p167\",\"0p833_0p833_0p167_0p167\"],\"t\":-15,\"s\":[85,85],\"e\":[120,120]},{\"t\":15.0000006109625}],\"ix\":3},\"r\":{\"a\":0,\"k\":0,\"ix\":6},\"o\":{\"a\":1,\"k\":[{\"i\":{\"x\":[0.833],\"y\":[0.833]},\"o\":{\"x\":[0.167],\"y\":[0.167]},\"n\":[\"0p833_0p833_0p167_0p167\"],\"t\":-15,\"s\":[100],\"e\":[0]},{\"t\":15.0000006109625}],\"ix\":7},\"sk\":{\"a\":0,\"k\":0,\"ix\":4},\"sa\":{\"a\":0,\"k\":0,\"ix\":5},\"nm\":\"Transform\"}],\"nm\":\"Group 1\",\"np\":3,\"cix\":2,\"ix\":1,\"mn\":\"ADBE Vector Group\"}],\"ip\":-15.0000006109625,\"op\":16.0000006516934,\"st\":-15.0000006109625,\"bm\":0}]}";
+    private int studyYear;
+    private String studyCourse;
+    private String studyGroup;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -28,7 +43,6 @@ public class OnBoardActivity extends TutorialActivity {
     TextView noteCrashlytics;
     Button buttonPrev;
     Button buttonNext;
-    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +81,11 @@ public class OnBoardActivity extends TutorialActivity {
                     .build());
 
             addFragment(new Step.Builder()
-                    .setTitle(getString(R.string.login_with_img))
-                    .setView(R.layout.onboarding_fragment_login)
-                    .setContent(getString(R.string.login_text_content))
+                    .setTitle(getString(R.string.settings_studiengruppe))
+                    .setView(R.layout.onboarding_fragment_studyyear)
+                    .setContent(getString(R.string.studygroup_text_content))
                     .setDrawable(R.drawable.htw_logo_gross)
-                    .setSummary(getString(R.string.login_text_summary))
+                    .setSummary(getString(R.string.studygroup_text_summary))
                     .build());
 
             addFragment(new Step.Builder()
@@ -84,9 +98,9 @@ public class OnBoardActivity extends TutorialActivity {
 
             addFragment(new Step.Builder()
                     .setView(R.layout.onboarding_fragment_finish_tutorial)
-                    .setTitle("Activate Crashlogger?")
-                    .setContent("This is content")
-                    .setSummary("This is summary")
+                    .setTitle(getString(R.string.finish_text_header))
+                    .setContent(getString(R.string.finish_text_content))
+                    .setSummary(getString(R.string.finish_text_summary))
                     .setDrawable(R.drawable.htw_logo_gross)
                     .build());
 
@@ -97,7 +111,7 @@ public class OnBoardActivity extends TutorialActivity {
             buttonNext.setTextColor(getResources().getColor(R.color.middle_gray));
             setPrevText("Zurück");
             setNextText("Weiter");
-            setFinishText("Fertig");
+            setFinishText("Los geht's!");
         }
         else {
             finishTutorial();
@@ -163,29 +177,115 @@ public class OnBoardActivity extends TutorialActivity {
             }
         }
 
-
         if(position == 3) {
-            btnLogin = findViewById(R.id.btnLogin);
-
-            Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.auth_type));
-
-            if(accounts.length > 0) {
-                btnLogin.setEnabled(false);
-            }
-            else {
-                btnLogin.setEnabled(true);
-                btnLogin.setOnClickListener(view ->
-                        openLogin());
-            }
-            if(accounts.length > 0) {
-                btnLogin.setEnabled(false);
-            }
+            prepareSpinners();
         }
     }
 
-    void openLogin(){
-        Intent intent = new Intent(this, AuthenticatorActivity.class);
-        startActivity(intent);
+    void prepareSpinners() {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Realm realm = Realm.getDefaultInstance();
+        final RealmResults<StudyYear> realmResultsYear = realm.where(StudyYear.class).findAll();
+
+        // Finde aktuell ausgewählte Position
+        int yearPosition = 0;
+        if (sharedPreferences.contains(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR)) {
+            yearPosition = 1 + realmResultsYear.indexOf(realm.where(StudyYear.class)
+                    .equalTo(Const.database.StudyGroups.STUDY_YEAR, sharedPreferences.getInt(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, 18))
+                    .findFirst()
+            );
+        }
+
+        final String pleaseSelectString = getString(R.string.spinner_select_option);
+        Spinner yearSpinner = findViewById(R.id.ctvJahrgang);
+        Spinner courseSpinner = findViewById(R.id.ctvStudiengang);
+        Spinner groupSpinner = findViewById(R.id.ctvStudiengruppe);
+
+        courseSpinner.setEnabled(false);
+        groupSpinner.setEnabled(false);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.jahrgang_werte, android.R.layout.simple_spinner_dropdown_item);
+        yearSpinner.setAdapter(adapter);
+
+        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> adapterView, final View view, final int i, final long l) {
+                if (i != 0) {
+                    // Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
+                    studyGroup = ((StudyGroup) adapterView.getAdapter().getItem(i)).getStudyGroup();
+
+                    StudyData studyData = new StudyData();
+                    studyData.setId(123);
+                    studyData.setStudyYear(studyYear);
+                    studyData.setStudyCourse(studyCourse);
+                    studyData.setStudyGroup(studyGroup);
+
+                    final Realm realmStudyData = Realm.getDefaultInstance();
+                    realmStudyData.beginTransaction();
+                    realmStudyData.where(StudyData.class).findAll().deleteAllFromRealm();
+                    realmStudyData.copyToRealmOrUpdate(studyData);
+                    realmStudyData.commitTransaction();
+                    realmStudyData.close();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> adapterView) {
+            }
+        });
+        courseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> adapterView, final View view, final int i, final long l) {
+                if (i == 0) {
+                    // Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
+                    groupSpinner.setAdapter(new SpinnerAdapter<>(null, "Studiengruppe " + pleaseSelectString));
+                    studyGroup = null;
+                    return;
+                }
+                // Auswahl merken
+                final StudyCourse studyCourseObject = (StudyCourse) adapterView.getAdapter().getItem(i);
+                studyCourse = studyCourseObject.getStudyCourse();
+
+                // Auswahl selektieren
+                groupSpinner.setAdapter(new SpinnerAdapter<>(((StudyCourse) adapterView.getAdapter().getItem(i)).getStudyGroups(), "Studiengruppe " + pleaseSelectString));
+                groupSpinner.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> adapterView) {
+            }
+        });
+        yearSpinner.setAdapter(new SpinnerAdapter<>(realmResultsYear, "Jahrgang " + pleaseSelectString));
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> adapterView, final View view, final int i, final long l) {
+                if (i == 0) {
+                    // Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
+                    courseSpinner.setAdapter(new SpinnerAdapter<>(null, "Studienkurs " + pleaseSelectString));
+                    studyYear = 0;
+
+                    return;
+                }
+                // Auswahl merken
+                final StudyYear studyYearObject = (StudyYear) adapterView.getAdapter().getItem(i);
+                studyYear = studyYearObject.getStudyYear();
+
+                // Nachfolgenden Spinner füllen und Auswahl selektieren
+                final RealmList<StudyCourse> studyCourses = studyYearObject.getStudyCourses();
+
+                courseSpinner.setAdapter(new SpinnerAdapter<>(studyCourses, "Studienkurs " + pleaseSelectString));
+                courseSpinner.setSelection(0);
+                courseSpinner.setEnabled(true);
+                groupSpinner.setEnabled(false);
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> adapterView) {
+            }
+        });
+        yearSpinner.setSelection(yearPosition);
+        groupSpinner.setSelection(0);
+        courseSpinner.setSelection(0);
     }
 
     @Override

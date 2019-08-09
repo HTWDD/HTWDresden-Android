@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/logo_htw"
-        android:src="@drawable/htw_logo_round"/>
+        android:src="@drawable/htw_logo_gross"/>
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -24,10 +24,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/middle_gray"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:text="Header"
+        android:text="@string/finish_text_header"
         android:textSize="32dp"/>
     <TextView
         android:id="@+id/content"
@@ -37,9 +37,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/middle_gray"
         android:textAlignment="center"
-        android:text="Content"/>
+        android:text="@string/finish_text_content"/>
     <TextView
         android:id="@+id/summary"
         android:layout_width="wrap_content"
@@ -48,18 +48,17 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/middle_gray"
         android:textAlignment="center"
         android:textStyle="italic"
-        android:text="Summary"/>
+        android:text="@string/finish_text_summary"/>
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/anim_active_crashlytics"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:lottie_fileName="check_mark_success_blue.json"
-        app:lottie_loop="false"
-        app:lottie_autoPlay="false"
-        android:layout_gravity="center">
-    </com.airbnb.lottie.LottieAnimationView>
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        app:lottie_fileName="FinishGray.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
 
 </LinearLayout>

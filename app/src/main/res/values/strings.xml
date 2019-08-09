@@ -1,9 +1,9 @@
 <resources>
     <string name="auth_type" translatable="false">de.htwdd.htwdresden</string>
     <string name="account_title">Nutzerkonto</string>
-    <string name="not_logged_in_text">Sie sind mit keinem Account eingeloggt. Um die volle Funktionalität nutzen zu können, loggen Sie sich bitte ein.</string>
+    <string name="not_logged_in_text">Du bist mit keinem Account angemeldet. Um die volle Funktionalität nutzen zu können, melde Dich bitte an.</string>
 
-    <string name="app_name" translatable="false">HTWDresden</string>
+    <string name="app_name" translatable="false">HTW Dresden</string>
     <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
     <string name="app_developer_name" translatable="false">Kay Förster</string>
     <string name="app_email" translatable="false">app@htw-dresden.de</string>
@@ -16,6 +16,7 @@
     <string name="general_update">Aktualisieren</string>
     <string name="general_delete">Löschen</string>
     <string name="general_select_option">Bitte auswählen</string>
+    <string name="spinner_select_option">auswählen...</string>
     <string name="general_concat" translatable="false">%1$s %2$s</string>
 
     <string name="navi_overview">Übersicht</string>
@@ -51,10 +52,10 @@
     <string name="settings_category_app_intern">HTWDresden intern</string>
     <string name="settings_bibNummer">Bibliotheksnummer</string>
     <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest du auf deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
+    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest Du auf Deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
     <string name="settings_rzLogin" translatable="false">RZLogin</string>
     <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches du bspw. zur Anmeldung bei OPAL verwendest</string>
+    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches Du bspw. zur Anmeldung bei OPAL verwendest.</string>
     <string name="settings_jahrgang">Jahrgang</string>
     <string name="settings_studiengang">Studiengang</string>
     <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
@@ -66,12 +67,12 @@
     <string name="settings_prof_name_summary">Verwendung: Prüfungen</string>
     <string name="settings_prof_id">Professoren-Kennung</string>
     <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
-    <string name="settings_prof_id_message">Ihre individuelle Professoren-Kennung erhalten Sie nach Anfrage! Schreiben Sie uns einfach: app@htw-dresden.de</string>
+    <string name="settings_prof_id_message">Deine individuelle Professoren-Kennung erhälst Du nach Anfrage! Schreib uns einfach: app@htw-dresden.de</string>
     <string name="settings_audio">Automatisches Stummschalten</string>
-    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird dein Handy automatisch stumm geschaltet.</string>
-    <string name="settings_audio_request_permission">Berechtigung wird benötigt zum ändern der Benachrichtigungseinstellungen</string>
+    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird Dein Handy automatisch stumm geschaltet.</string>
+    <string name="settings_audio_request_permission">Berechtigung wird benötigt zum Ändern der Benachrichtigungseinstellungen</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
-    <string name="settings_exam_results_summary">Stelle ein, ob und wie oft du über neue Noten automatisch benachrichtigt werden möchtest.</string>
+    <string name="settings_exam_results_summary">Stelle ein, ob und wie oft Du über neue Noten automatisch benachrichtigt werden möchtest.</string>
     <string name="settings_firebase_analytics" translatable="false">Analyse</string>
     <string name="settings_firebase_crashlytics" translatable="false">Bug-Reporting</string>
     <string name="settings_firebase_disabled">Eingeschaltet</string>
@@ -228,7 +229,7 @@
     <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
 
     <string name="overview_update_available">Update verfügbar!</string>
-    <string name="overview_update_available_message">Bitte Update auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
+    <string name="overview_update_available_message">Bitte aktualisiere auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
     <string name="overview_lessons_current">Aktuell</string>
     <string name="overview_lessons_noLesson">keine Veranstaltung</string>
     <string name="overview_lessons_next">Nächste</string>
@@ -242,22 +243,22 @@
     <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
     <string name="crash_dialog_ok_toast">Vielen Dank!</string>
-    <string name="crash_dialog_comment_prompt">Sie können eine Beschreibung des Problems hier hinzufügen:</string>
+    <string name="crash_dialog_comment_prompt">Du kannst eine Beschreibung des Problems hier hinzufügen:</string>
     <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
-        Bitte helfen Sie uns dieses Problem zu beheben, indem Sie uns die Fehlerdaten übermitteln.
-        Klicken Sie bitte dazu auf OK.</string>
+        Bitte hilf uns dieses Problem zu beheben, indem Du uns die Fehlerdaten übermittelst.
+        Klicken dazu bitte auf OK.</string>
     <string name="password">UNIX-Passwort</string>
     <string name="sign_in">Einloggen</string>
     <string name="change_user">Nutzer wechseln</string>
-    <string name="logged_in_as">Sie sind eingeloggt als: s</string>
+    <string name="logged_in_as">Du bist eingeloggt als: s</string>
     <string name="logged_in_as_test2">
- Sollte dies nicht Ihr Account sein, nutzen Sie bitte die "Nutzer wechseln"-Schaltfläche unten, um sich mit Ihrem Account einzuloggen.</string>
+ Sollte das nicht Dein Account sein, nutze bitte die "Nutzer wechseln"-Schaltfläche unten, um Dich mit Deinem Account einzuloggen.</string>
     <string name="sNummer">Bibliotheksnummer ohne \'s\'</string>
 
     <string name="Jahrgang">Jahrgang</string>
-    <string name="no_account">Sie sind mit keinem Nutzeraccount angemeldet.</string>
-    <string name="error_loading_grades">Noten konnten nicht geladen werden.</string>
-    <string name="swipe_to_reload">Nach unten swipen zum aktualisieren</string>
+    <string name="no_account">Du bist mit keinem Nutzeraccount angemeldet.</string>
+    <string name="error_loading_grades">Die Noten konnten nicht geladen werden.</string>
+    <string name="swipe_to_reload">Swipe nach unten, zum aktualisieren</string>
     <string-array name="jahrgang_werte">
         <item>Bitte auswählen</item>
         <item>2016</item>
@@ -265,25 +266,27 @@
         <item>2018</item>
     </string-array>
     <string name="logo_htw">Logo HTW</string>
-    <string name="welcome_text_timetable">Hab immer den Überblick, wann du welche\nVorlesung, Übung etc. hast.</string>
+    <string name="welcome_text_timetable">Hab immer den Überblick, wann Du welche\nVorlesung, Übung etc. hast.</string>
     <string name="welcome_text_mensa">Was gibt\'s heute zu Essen? &#127823;&#127829;&#129369;</string>
-    <string name="welcome_text_grades">Wer hat denn da eine 1 bekommen?\nBestimmt du!</string>
-    <string name="welcome_text_content">Schön, dass du die HTW Dresden App\nverwendest.</string>
+    <string name="welcome_text_grades">Wer hat denn da eine 1 bekommen?\nBestimmt Du!</string>
+    <string name="welcome_text_content">Schön, dass Du die HTW Dresden App\nverwendest.</string>
     <string name="welcome">Willkommen</string>
-    <string name="analytics_text_changing">Du kannst deine Entscheidung jederzeit in den Einstellungen ändern.</string>
-    <string name="analytics_text_helping">Möchtest du uns dabei helfen?</string>
+    <string name="analytics_text_changing">Du kannst Deine Entscheidung jederzeit in den Einstellungen ändern.</string>
+    <string name="analytics_text_helping">Möchtest Du uns dabei helfen?</string>
     <string name="analytics_text_summary">Dabei werden gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
     <string name="analytics">Analytics &#128202;</string>
     <string name="analytics_text_content">Wir würden gerne Google Analytics bei deinem Gerät nutzen, um die App stetig zu verbessern.</string>
     <string name="crashlytics">Crashlytics &#128202;</string>
-    <string name="crashlytics_text_content">Wir würden gern Google Crashlytics bei deinem Gerät nutzen, um die App stetig zu verbessern.</string>
+    <string name="crashlytics_text_content">Wir würden gern Google Crashlytics bei Deinem Gerät nutzen, um die App stetig zu verbessern.</string>
     <string name="crashlytics_text_summary">Dabei werden bei einem App-Absturz gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
-    <string name="yes_button">JA!</string>
-    <string name="login_with_img">Einloggen? &#128272;</string>
-    <string name="login_text_content">Möchtest du dich direkt mit deinen Daten anmelden?</string>
-    <string name="login_text_summary">Dadurch erhältst du zum Beispiel Zugriff auf deine Noten.\nKlicke einfach auf den Knopf und du wirst zum Login weitergeleitet.</string>
-    <string name="login_text_summary2">Du kannst diesen Schritt auch überspringen und dich zu einem späteren Zeitpunkt in deinem Nutzerkonto anmelden.</string>
-    <string name="login">Anmelden</string>
-    <string name="crashlytics_not_acceptable">Du musst zuerst die Analytics akzeptieren, bevor du bei den Crashlytics zustimmen kannst.</string>
+    <string name="crashlytics_not_acceptable">Du musst zuerst die Analytics akzeptieren, bevor Du Crashlytics akzeptieren kannst.</string>
+    <string name="login_with_img">Anmelden &#128272;</string>
+    <string name="login_text_content">Melde Dich hier mit Deiner \'s-Nummer\' und Deinem Passwort an.</string>
+    <string name="login_text_summary">Diese Informationen sind erforderlich, um Dir Deine Noten anzeigen zu können.</string>
+    <string name="studygroup_text_content">Wähle hier Dein Immatrikulationsjahr, Deinen Studiengang und Deine Studiengruppe aus.</string>
+    <string name="studygroup_text_summary">Diese Informationen sind erforderlich, um Dir Deinen Stundenplan anzeigen zu können.</string>
+    <string name="finish_text_summary">Viel Erfolg im Studium.</string>
+    <string name="finish_text_content">Die Einrichtung ist abgeschlossen.</string>
+    <string name="finish_text_header">Viel Spaß!</string>
 
 </resources>

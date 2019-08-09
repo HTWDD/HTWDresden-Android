@@ -8,29 +8,29 @@
         <item android:title="@string/navi_head_uni">
             <menu>
                 <item
-                    android:id="@+id/navigation_mensa"
-                    android:icon="@drawable/food"
-                    android:title="@string/navi_mensa" />
-                <item
                     android:id="@+id/navigation_timetable"
                     android:icon="@drawable/ic_access_time_black_24dp"
                     android:title="@string/navi_timetable" />
-                <item
-                    android:id="@+id/navigation_room_timetable"
-                    android:icon="@drawable/ic_room_black_24dp"
-                    android:title="@string/navi_room_timetable" />
                 <item
                     android:id="@+id/navigation_exams"
                     android:icon="@drawable/ic_mode_edit_24dp"
                     android:title="@string/navi_exams" />
                 <item
-                    android:id="@+id/navigation_uni_administration"
-                    android:icon="@drawable/ic_supervisor_account_24dp"
-                    android:title="@string/navi_uni_administration" />
+                    android:id="@+id/navigation_mensa"
+                    android:icon="@drawable/ic_fork_and_knife"
+                    android:title="@string/navi_mensa" />
+                <item
+                    android:id="@+id/navigation_room_timetable"
+                    android:icon="@drawable/ic_room_black_24dp"
+                    android:title="@string/navi_room_timetable" />
                 <item
                     android:id="@+id/navigation_campus_plan"
                     android:icon="@drawable/ic_navigation_24dp"
                     android:title="@string/navi_campus" />
+                <item
+                    android:id="@+id/navigation_uni_administration"
+                    android:icon="@drawable/ic_supervisor_account_24dp"
+                    android:title="@string/navi_uni_administration" />
             </menu>
         </item>
         <item android:title="@string/navi_head_settings">
@@ -40,13 +40,13 @@
                     android:icon="@drawable/ic_settings_24dp"
                     android:title="@string/navi_settings" />
                 <item
-                    android:id="@+id/navigation_about"
-                    android:icon="@drawable/ic_info_outline_24dp"
-                    android:title="@string/navi_about" />
-                <item
                     android:id="@+id/account_tab_activity"
                     android:icon="@drawable/ic_vpn_key_black_24dp"
                     android:title="@string/account_title" />
+                <item
+                android:id="@+id/navigation_about"
+                android:icon="@drawable/ic_info_outline_24dp"
+                android:title="@string/navi_about" />
             </menu>
         </item>
     </group>
