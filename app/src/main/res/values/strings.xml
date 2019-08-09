@@ -274,13 +274,13 @@
     <string name="analytics_text_changing">Du kannst Deine Entscheidung jederzeit in den Einstellungen ändern.</string>
     <string name="analytics_text_helping">Möchtest Du uns dabei helfen?</string>
     <string name="analytics_text_summary">Dabei werden gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
-    <string name="analytics">Analytics &#128202;</string>
+    <string name="analytics">Analytics</string>
     <string name="analytics_text_content">Wir würden gerne Google Analytics bei deinem Gerät nutzen, um die App stetig zu verbessern.</string>
-    <string name="crashlytics">Crashlytics &#128202;</string>
+    <string name="crashlytics">Crashlytics</string>
     <string name="crashlytics_text_content">Wir würden gern Google Crashlytics bei Deinem Gerät nutzen, um die App stetig zu verbessern.</string>
     <string name="crashlytics_text_summary">Dabei werden bei einem App-Absturz gerätespezifische Daten erfasst und anonymisiert an die Google Inc. Server übertragen. Die erhobenen Daten werden nicht an Dritte weitergegeben.</string>
     <string name="crashlytics_not_acceptable">Du musst zuerst die Analytics akzeptieren, bevor Du Crashlytics akzeptieren kannst.</string>
-    <string name="login_with_img">Anmelden &#128272;</string>
+    <string name="login_with_img">Anmelden</string>
     <string name="login_text_content">Melde Dich hier mit Deiner \'s-Nummer\' und Deinem Passwort an.</string>
     <string name="login_text_summary">Diese Informationen sind erforderlich, um Dir Deine Noten anzeigen zu können.</string>
     <string name="studygroup_text_content">Wähle hier Dein Immatrikulationsjahr, Deinen Studiengang und Deine Studiengruppe aus.</string>
