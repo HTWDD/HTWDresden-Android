@@ -253,7 +253,7 @@
     <string name="logged_in_as">Du bist eingeloggt als: s</string>
     <string name="logged_in_as_test2">
  Sollte das nicht Dein Account sein, nutze bitte die "Nutzer wechseln"-Schaltfläche unten, um Dich mit Deinem Account einzuloggen.</string>
-    <string name="sNummer">Bibliotheksnummer ohne \'s\'</string>
+    <string name="sNummer">s-Nummer</string>
 
     <string name="Jahrgang">Jahrgang</string>
     <string name="no_account">Du bist mit keinem Nutzeraccount angemeldet.</string>

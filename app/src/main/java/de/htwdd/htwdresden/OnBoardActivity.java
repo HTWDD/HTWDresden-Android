@@ -1,26 +1,28 @@
 package de.htwdd.htwdresden;
 
-import android.content.Context;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hololo.tutorial.library.Step;
 import com.hololo.tutorial.library.TutorialActivity;
 
-import de.htwdd.htwdresden.account.AuthenticatorActivity;
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
 import de.htwdd.htwdresden.classes.Const;
-import de.htwdd.htwdresden.types.canteen.Meal;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
 import de.htwdd.htwdresden.types.studyGroups.StudyData;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
@@ -29,11 +31,19 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static de.htwdd.htwdresden.account.AuthenticatorActivity.PARAM_USER_PASS;
+
 public class OnBoardActivity extends TutorialActivity {
 
     private int studyYear;
     private String studyCourse;
     private String studyGroup;
+
+    private AccountManager mAccountManager;
+    private String mAuthTokenType;
+    String authtoken = "123456789"; // this
+    String password = "12345";
+    String accountName;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -51,6 +61,9 @@ public class OnBoardActivity extends TutorialActivity {
         setIndicator(R.drawable.indicator_selected_inactive);
         setIndicatorSelected(R.drawable.indicator_selected);
         int i = 0;
+
+        mAccountManager = AccountManager.get(getBaseContext());
+        mAuthTokenType = getString(R.string.auth_type);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
@@ -180,6 +193,12 @@ public class OnBoardActivity extends TutorialActivity {
         if(position == 3) {
             prepareSpinners();
         }
+
+        if(position == 4) {
+            Button login = findViewById(R.id.btnLogin);
+
+            login.setOnClickListener(view -> userSignIn());
+        }
     }
 
     void prepareSpinners() {
@@ -226,6 +245,8 @@ public class OnBoardActivity extends TutorialActivity {
                     realmStudyData.copyToRealmOrUpdate(studyData);
                     realmStudyData.commitTransaction();
                     realmStudyData.close();
+
+                    buttonNext.callOnClick();
                 }
             }
 
@@ -296,5 +317,77 @@ public class OnBoardActivity extends TutorialActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    void userSignIn() {
+
+        //Alten Nutzer entfernen
+        try {
+            Account[] accounts = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.auth_type));
+
+            if(accounts.length > 0) {
+                mAccountManager.removeAccount(accounts[0], arg0 -> {
+                }, null);
+            }
+            Realm.getDefaultInstance().deleteAll();
+        } catch (Exception e) {
+            String error = e.toString();
+        }
+
+        // You should probably call your server with user credentials and get
+        // the authentication token here.
+        // For demo, I have hard-coded it.
+        authtoken = "123456789";
+
+        accountName = ((EditText) findViewById(R.id.myNumber)).getText().toString().trim();
+        password = ((EditText) findViewById(R.id.rzLogin)).getText().toString().trim();
+
+        if (accountName.length() > 0) {
+            Bundle data = new Bundle();
+            data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
+            data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAuthTokenType);
+            data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
+            data.putString(PARAM_USER_PASS, password);
+
+            // Some extra data about the user
+            Bundle userData = new Bundle();
+            userData.putString("RZLogin", password);
+            data.putBundle(AccountManager.KEY_USERDATA, userData);
+
+            //Make it an intent to be passed back to the Android Authenticator
+            final Intent res = new Intent();
+            res.putExtras(data);
+
+            //Create the new account with Account Name and TYPE
+            final Account account = new Account(accountName, mAuthTokenType);
+
+            //Add the account to the Android System
+            if (mAccountManager.addAccountExplicitly(account, password, userData)) {
+                // worked
+                mAccountManager.setAuthToken(account, mAuthTokenType, authtoken);
+                //setAccountAuthenticatorResult(data);
+                setResult(RESULT_OK, res);
+
+                Button btnLogin = findViewById(R.id.btnLogin);
+                btnLogin.setEnabled(false);
+                btnLogin.setBackground(getResources().getDrawable(R.drawable.more_rounded_corners_background_gray));
+                btnLogin.setTextColor(Color.BLACK);
+
+                EditText sNummer = findViewById(R.id.myNumber);
+                EditText pswd = findViewById(R.id.rzLogin);
+
+                sNummer.setEnabled(false);
+                pswd.setEnabled(false);
+
+                buttonNext.callOnClick();
+
+            } else {
+                // guess not
+                String error = "Account not added";
+            }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Bitte überprüfe, ob alle erforderlichen Daten angegeben wurden", Toast.LENGTH_SHORT).show();
+        }
     }
 }
