@@ -3,7 +3,7 @@
     android:id="@+id/timetableLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grey"
+    android:background="@color/gray"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical">
 

@@ -86,7 +86,7 @@
                                 android:layout_alignStart="@+id/overview_lessons_current_tag"
                                 android:layout_below="@+id/overview_lessons_current_tag"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="italic" />
                         </RelativeLayout>
                     </TableRow>
@@ -135,7 +135,7 @@
                                 android:layout_alignStart="@+id/overview_lessons_next_tag"
                                 android:layout_below="@+id/overview_lessons_next_tag"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textColor="@color/grey"
+                                android:textColor="@color/gray"
                                 android:textStyle="italic" />
                         </RelativeLayout>
                     </TableRow>

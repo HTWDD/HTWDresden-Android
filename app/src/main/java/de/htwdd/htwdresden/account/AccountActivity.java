@@ -16,7 +16,6 @@ public class AccountActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_activity);
 
-
         findViewById(R.id.button1).setOnClickListener(this);
     }
 

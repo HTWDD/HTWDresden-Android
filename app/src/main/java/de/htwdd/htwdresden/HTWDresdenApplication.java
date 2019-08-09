@@ -3,51 +3,54 @@ package de.htwdd.htwdresden;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.heinrichreimer.canteenbalance.cardreader.CardBalance;
-
-import org.acra.ACRA;
-import org.acra.ReportField;
-import org.acra.annotation.AcraCore;
-import org.acra.annotation.AcraDialog;
-import org.acra.annotation.AcraMailSender;
 
 import de.htwdd.htwdresden.classes.DatabaseMigrations;
 import de.htwdd.htwdresden.classes.PreferencesMigrations;
 import de.htwdd.htwdresden.service.MensaCreditReceiver;
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-@AcraCore(
-        buildConfigClass = BuildConfig.class,
-        resReportSendSuccessToast = R.string.crash_dialog_ok_toast,
-        reportContent = {ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.STACK_TRACE, ReportField.LOGCAT, ReportField.USER_COMMENT}
-)
-@AcraDialog(
-        resTitle = R.string.app_name,
-        resText = R.string.crash_dialog_text,
-        resIcon = R.drawable.ic_warning_24dp,
-        resTheme = R.style.AppTheme,
-        resCommentPrompt = R.string.crash_dialog_comment_prompt
-)
-@AcraMailSender(mailTo = "sven.nowak@develappers.de", resSubject = R.string.app_name)
+
 public class HTWDresdenApplication extends Application {
     private MensaCreditReceiver mensaCreditReceiver;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    Crashlytics mCrashlytics;
+    SharedPreferences sharedPreferences;
+    Realm realm;
 
     @Override
     protected void attachBaseContext(final Context base) {
         super.attachBaseContext(base);
-        // The following line triggers the initialization of ACRA
-        ACRA.init(this);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         // Migrationen durchführen
         final PreferencesMigrations preferencesMigrations = new PreferencesMigrations(getApplicationContext());
         preferencesMigrations.migrate();
+
+        if (sharedPreferences.getBoolean("firebase_analytics.enable", false)) {
+            // Obtain the FirebaseAnalytics instance.
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
+
+            if(!sharedPreferences.getBoolean("firebase_crashlytics.enable", true)){
+                //Deaktiviere Crashlytics
+                mCrashlytics = new Crashlytics.Builder().build();
+                Fabric.with(this, mCrashlytics);
+            }
+        }
 
         // Realm initialisieren
         Realm.init(this);

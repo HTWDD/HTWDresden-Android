@@ -22,6 +22,7 @@ import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.adapter.SpinnerAdapter;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.types.studyGroups.StudyCourse;
+import de.htwdd.htwdresden.types.studyGroups.StudyData;
 import de.htwdd.htwdresden.types.studyGroups.StudyGroup;
 import de.htwdd.htwdresden.types.studyGroups.StudyYear;
 import io.realm.Realm;
@@ -42,7 +43,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 	private int studyYear;
 	private String studyCourse;
 	private String studyGroup;
-	private String stgRi;
 
 	private final String TAG = this.getClass().getSimpleName();
 
@@ -95,6 +95,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 				if (i != 0) {
 					// Wenn "Bitte auswählen" ausgewählt ist, sind keine Daten für nachfolgende Spinner verfügbar.
 					studyGroup = ((StudyGroup) adapterView.getAdapter().getItem(i)).getStudyGroup();
+
+					StudyData studyData = new StudyData();
+					studyData.setId(123);
+					studyData.setStudyYear(studyYear);
+					studyData.setStudyCourse(studyCourse);
+					studyData.setStudyGroup(studyGroup);
+
+					final Realm realmStudyData = Realm.getDefaultInstance();
+					realmStudyData.beginTransaction();
+					realmStudyData.where(StudyData.class).findAll().deleteAllFromRealm();
+					realmStudyData.copyToRealmOrUpdate(studyData);
+					realmStudyData.commitTransaction();
+					realmStudyData.close();
 				}
 				hideKeyboardFrom(view);
 			}
@@ -186,9 +199,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 		accountName = ((EditText) findViewById(R.id.accountName)).getText().toString().trim();
 		password = ((EditText) findViewById(R.id.accountPassword)).getText().toString().trim();
-		stgRi = ((EditText) findViewById(R.id.stdRichtung)).getText().toString().trim();
 
-		if (accountName.length() > 0 && studyCourse != null && studyGroup != null && studyYear != 0) {
+		if (accountName.length() > 0) {
 			Bundle data = new Bundle();
 			data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
 			data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAuthTokenType);
@@ -197,11 +209,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
 			// Some extra data about the user
 			Bundle userData = new Bundle();
-			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGRUPPE, studyGroup);
-			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENGANG, studyCourse);
-			userData.putString(Const.preferencesKey.PREFERENCES_TIMETABLE_STUDIENJAHR, studyYear + "");
             userData.putString("RZLogin", password);
-            userData.putString("stdRi", stgRi);
 			data.putBundle(AccountManager.KEY_USERDATA, userData);
 
 			//Make it an intent to be passed back to the Android Authenticator

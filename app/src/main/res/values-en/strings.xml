@@ -152,8 +152,8 @@
     <string name="room_timetable_details_title">Room timetable %s</string>
     <string name="room_timetable_no_rooms">No rooms added yet!</string>
     <string name="room_timetable_update_success">Room timetable updated!</string>
-    <string name="settings_acra_disabled">Turned on</string>
-    <string name="settings_acra_enabled">Turned off</string>
+    <string name="settings_firebase_disabled">Turned on</string>
+    <string name="settings_firebase_enabled">Turned off</string>
     <string name="settings_audio">Automatic muting</string>
     <string name="settings_audio_request_permission">Permission needed to change notification settings</string>
     <string name="settings_audio_summary">Your phone will be muted during a lesson automatically.</string>
@@ -222,4 +222,26 @@
     <string name="mensa_price">student %.2f€ employee %.2f€</string>
     <string name="mensa_sold_out">sold out</string>
     <string name="account_title">Account</string>
+    <string name="Jahrgang">Studyyear</string>
+    <string name="analytics">Analytics &#128202;</string>
+    <string name="analytics_text_changing">" You can change your decision at any time in the settings."</string>
+    <string name="analytics_text_content">"We'd like to use Google Analytics on your device to keep improving the app. "</string>
+    <string name="analytics_text_helping">" Would you like to help us?"</string>
+    <string name="analytics_text_summary">"Device-specific data is collected and transferred anonymously to the Google Inc. server. The collected data will not be passed on to third parties. "</string>
+    <string name="change_user">Change Account</string>
+    <string name="crashlytics">Crashlytics &#128202;</string>
+    <string name="crashlytics_not_acceptable">" You must first accept the Analytics before you can accept Crashlytics."</string>
+    <string name="crashlytics_text_content">"We'd like to use Google Crashlytics on your device to keep improving the app. "</string>
+    <string name="crashlytics_text_summary">"During an app crash, device-specific data is collected and transferred anonymously to the Google Inc. server. The collected data will not be passed on to third parties. "</string>
+    <string name="error_loading_grades">The grades could not be loaded.</string>
+    <string name="exams_result_no_results_message">" No notes yet.\\nSwipe down to refresh"</string>
+    <string name="finish_text_content">" The OnBoarding is completed."</string>
+    <string name="finish_text_header">"Have fun! "</string>
+    <string name="finish_text_summary">"Good luck in your studies. "</string>
+    <string name="logged_in_as">You are logged in as: s</string>
+    <string name="logged_in_as_test2">" If this is not your account, please use the switch user button below to log in with your account."</string>
+    <string name="login_text_content">"Log in here with your 's number' and your password. "</string>
+    <string name="login_text_summary">This information is required to show you your grades.</string>
+    <string name="login_with_img">Log-In</string>
+    <string name="logo_htw">Logo HTW</string>
 </resources>

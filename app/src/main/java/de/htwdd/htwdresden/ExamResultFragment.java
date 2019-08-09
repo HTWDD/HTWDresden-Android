@@ -49,7 +49,7 @@ public class ExamResultFragment extends Fragment {
         // Inflate the layout for this fragment
         mLayout = inflater.inflate(R.layout.fragment_exams_result, container, false);
         realm = Realm.getDefaultInstance();
-
+        
 
         TextView info = mLayout.findViewById(R.id.info_message);
         final ExpandableListView expandableListView = mLayout.findViewById(R.id.expandableListView);

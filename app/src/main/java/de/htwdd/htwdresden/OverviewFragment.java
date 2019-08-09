@@ -48,8 +48,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.acra.ACRA.LOG_TAG;
-
 
 /**
  * Fragment für den Schnelleinstieg in die App
@@ -105,9 +103,7 @@ public class OverviewFragment extends Fragment {
             MensaHelper mensaHelperMeals = new MensaHelper(Objects.requireNonNull(getContext()), mensaId);
             mensaHelperMeals.updateWeekMeals(() -> {
                     },
-                    () -> {
-                        Log.i(LOG_TAG, "Mahlzeiten aktualisiert");
-                    });
+                    () -> {});
         }
 
         // Übersicht über Noten

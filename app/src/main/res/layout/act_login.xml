@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="#FFFFFF"
-              android:paddingLeft="17dp"
-              android:paddingRight="17dp"
-        >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp">
 
-    <EditText android:id="@+id/accountName"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="20dp"
-              android:hint="@string/sNummer"
-              android:inputType="text"
-              android:padding="10dp"
-            />
+    <EditText
+        android:id="@+id/accountName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:digits="0123456789"
+        android:hint="@string/sNummer"
+        android:inputType="numberDecimal"
+        android:maxLength="5"
+        android:padding="10dp" />
 
-    <EditText android:id="@+id/accountPassword"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
-              android:inputType="textPassword"
-              android:hint="@string/password"
-              android:padding="10dp"
-            />
-    <EditText android:id="@+id/stdRichtung"
+    <EditText
+        android:id="@+id/accountPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:inputType="text"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/stdRichtung"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:hint="@string/settings_studienrichtung"
+        android:inputType="text"
         android:padding="10dp"
-        />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="@string/settings_jahrgang" />
 
     <Spinner
@@ -46,8 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:spinnerMode="dropdown"
-        />
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/textView7"
@@ -61,8 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:spinnerMode="dropdown"
-        />
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/textView8"
@@ -76,15 +78,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:spinnerMode="dropdown"
-        />
+        android:spinnerMode="dropdown" />
 
-    <Button android:id="@+id/submit"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
-              android:text="@string/sign_in"
-              android:padding="10dp"/>
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="@string/sign_in" />
 
 </LinearLayout>
 
