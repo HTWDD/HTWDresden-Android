@@ -4,6 +4,7 @@ gen/
 out/
 
 .DS_Store
+*.hprof
 
 # Gradle files
 .gradle/

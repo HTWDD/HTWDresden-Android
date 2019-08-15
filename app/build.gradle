@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
 
@@ -21,11 +24,14 @@ android {
     }
     lintOptions {
         disable 'MissingTranslation'
+        checkReleaseBuilds false
+        abortOnError false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
@@ -55,5 +61,10 @@ dependencies {
 
     //Lottie
     implementation 'com.airbnb.android:lottie:3.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.0.2'
 }
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
