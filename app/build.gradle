@@ -16,22 +16,33 @@ android {
         versionName "1.5.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debub {
+            debuggable true
+        }
     }
+
     lintOptions {
         disable 'MissingTranslation'
         checkReleaseBuilds false
         abortOnError false
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
