@@ -36,8 +36,10 @@ class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAd
     fun item(onPosition: Int) = items[onPosition]
 
     fun update(items: Exams) {
-        this.items.clear()
-        this.items.addAll(items)
+        this.items.apply {
+            clear()
+            addAll(items)
+        }
         notifyDataSetChanged()
     }
 

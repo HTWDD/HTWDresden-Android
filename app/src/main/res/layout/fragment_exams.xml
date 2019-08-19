@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
@@ -27,6 +28,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
+            android:visibility="gone"
             android:id="@+id/emptyView"
             android:orientation="vertical"
             android:layout_width="wrap_content"
@@ -59,6 +61,53 @@
                 android:layout_height="wrap_content"
                 android:text="@string/exams_no_results_message"
                 style="@style/HTW.Empty.View.Message"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/errorView"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:foregroundGravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/swipeRefreshLayout"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeRefreshLayout"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/swipeRefreshLayout"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exams_no_results_icon"
+                style="@style/HTW.Empty.View.Icon"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exams_no_credentials_title"
+                style="@style/HTW.Empty.View.Title"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exams_no_credentials_message"
+                style="@style/HTW.Empty.View.Message"/>
+
+        <TextView
+                android:id="@+id/addStudyGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/HTW.BadgeLabel.Small.Blue"
+                android:layout_marginTop="8dp"
+                android:text="@string/general_add"
+                android:elevation="3dp"/>
 
     </LinearLayout>
 

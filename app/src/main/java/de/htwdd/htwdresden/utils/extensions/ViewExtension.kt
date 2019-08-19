@@ -36,4 +36,6 @@ fun View.toggle(condition: Boolean): View {
         }
     }
 }
+
+inline fun <reified T: View> T.click(crossinline  block: (T) -> Unit) = setOnClickListener { block(it as T) }
 // endregion

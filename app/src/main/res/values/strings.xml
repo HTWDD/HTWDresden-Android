@@ -224,6 +224,9 @@
     <string name="exams_no_results_icon" translatable="false">🤯</string>
     <string name="exams_no_results_title">Keine Prüfungen</string>
     <string name="exams_no_results_message">😖 Ich kann leider\nkeine Prüfungen für Dich finden.\nSind Deine Zugangsdaten korrekt?</string>
+    <string name="exams_no_credentials_title">Keine Studiengruppe</string>
+    <string name="exams_no_credentials_message">Bitte trage deine Studiengruppe ein,\ndamit ich Dir Prüfungen anzeigen kann.</string>
+
 
     <string name="about_info">Informationen</string>
     <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.

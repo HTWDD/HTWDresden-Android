@@ -11,10 +11,7 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.ExamItemAdapter
 import de.htwdd.htwdresden.adapter.Exams
 import de.htwdd.htwdresden.ui.viewmodels.fragments.ExamsViewModel
-import de.htwdd.htwdresden.utils.extensions.error
-import de.htwdd.htwdresden.utils.extensions.runInUiThread
-import de.htwdd.htwdresden.utils.extensions.toggle
-import de.htwdd.htwdresden.utils.extensions.weak
+import de.htwdd.htwdresden.utils.extensions.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_exams.*
@@ -57,13 +54,21 @@ class ExamsFragment: Fragment() {
             .request()
             .runInUiThread()
             .doOnSubscribe { isRefreshing = true }
-            .doOnComplete { isRefreshing = false }
+            .doOnTerminate { isRefreshing = false }
             .subscribe({ exams ->
                 weak { self ->
                     self.emptyView.toggle(exams.isEmpty())
                     self.examItemAdapter.update(exams)
                 }
-            }, { error(it) }).addTo(disposable)
+            }, {
+                error(it)
+                weak { self ->
+                    self.errorView.toggle(true)
+                    self.addStudyGroup.click {
+                        TODO("Link to StudyGroup")
+                    }
+                }
+            }).addTo(disposable)
     }
 
     override fun onStop() {
