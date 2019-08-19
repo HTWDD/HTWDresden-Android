@@ -99,9 +99,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/HTW.BadgeLabel.Small.Blue"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/default_space"
                 android:text="@string/general_add"
-                android:elevation="3dp"/>
+                android:elevation="@dimen/card_view_elevation"/>
 
     </LinearLayout>
 
