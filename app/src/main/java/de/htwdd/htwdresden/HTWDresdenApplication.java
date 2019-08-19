@@ -13,6 +13,7 @@ import com.heinrichreimer.canteenbalance.cardreader.CardBalance;
 import de.htwdd.htwdresden.classes.DatabaseMigrations;
 import de.htwdd.htwdresden.classes.PreferencesMigrations;
 import de.htwdd.htwdresden.service.MensaCreditReceiver;
+import de.htwdd.htwdresden.utils.holders.StringHolder;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -68,6 +69,9 @@ public class HTWDresdenApplication extends Application {
         // Mensa Guthaben
         mensaCreditReceiver = new MensaCreditReceiver();
         registerReceiver(mensaCreditReceiver, new IntentFilter(CardBalance.ACTION_CARD_BALANCE));
+
+        // Holders
+        StringHolder.Companion.init(this);
     }
 
     @Override

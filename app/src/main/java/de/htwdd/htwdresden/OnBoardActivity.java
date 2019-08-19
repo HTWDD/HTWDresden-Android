@@ -60,7 +60,7 @@ public class OnBoardActivity extends TutorialActivity {
 
         setIndicator(R.drawable.indicator_selected_inactive);
         setIndicatorSelected(R.drawable.indicator_selected);
-        int i = 0;
+        int i = 1;
 
         mAccountManager = AccountManager.get(getBaseContext());
         mAuthTokenType = getString(R.string.auth_type);

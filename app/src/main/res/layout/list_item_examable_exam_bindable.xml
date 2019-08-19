@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="examModel" type="de.htwdd.htwdresden.ui.models.ExamModel"/>
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/list_item_inner_space"
+                android:background="@color/white"
+                android:alpha="2">
+
+            <ImageView
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:src="@drawable/ic_exam"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"/>
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{examModel.title}"
+                    android:textAppearance="@style/TextAppearance.HTW.Medium"
+                    tools:text="Exam Title"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/tvExamTitle"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="08.07."
+                    android:layout_marginTop="@dimen/default_space"
+                    style="@style/HTW.BadgeLabel.Small.Blue"
+                    android:text="@{examModel.day}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvExamTitle"
+                    app:layout_constraintStart_toStartOf="@+id/tvExamTitle"
+                    android:id="@+id/tvDay"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="13:00 - 14:30"
+                    style="@style/HTW.BadgeLabel.Small.Orange"
+                    android:text="@{examModel.examTime}"
+                    app:layout_constraintStart_toEndOf="@+id/tvDay"
+                    app:layout_constraintTop_toTopOf="@+id/tvDay"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamTime"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Prüfer: B.Hollas"
+                    android:text="@{examModel.examiner}"
+                    style="@style/HTW.BadgeLabel.Small.DarkGrey"
+                    app:layout_constraintStart_toEndOf="@+id/tvExamTime"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamTime"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExaminier"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Zweig: -"
+                    android:text="@{examModel.studyBranch}"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDay"
+                    app:layout_constraintStart_toStartOf="@+id/tvDay"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:id="@+id/tvExamBranch"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Schriftlich"
+                    android:text="@{examModel.examType}"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    app:layout_constraintStart_toEndOf="@+id/tvExamBranch"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamBranch"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamType"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="S 227, S 228"
+                    android:text="@{examModel.rooms}"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    app:layout_constraintStart_toEndOf="@+id/tvExamType"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamType"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamRoom"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>
+

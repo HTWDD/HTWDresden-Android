@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:spotShadowAlpha">0.09</item>
+        <item name="android:ambientShadowAlpha">0.01</item>
     </style>
 
     <style name="ButtonHTWStyle" parent="Widget.AppCompat.Button.Colored">
@@ -34,7 +36,62 @@
 
     <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
     <style name="AppTheme.Launcher">
-    <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
+    <!--Text-->
+    <style name="TextAppearance.HTW.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <!--BadgeText-->
+    <style name="HTW.BadgeLabel.Small.Light" parent="AppTheme">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small.Inverse</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Dark" parent="AppTheme">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Blue" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_light_blue</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Orange" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_orange</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.DarkGrey" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_dark_grey</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.LightGrey" parent="HTW.BadgeLabel.Small.Dark">
+        <item name="android:background">@drawable/badge_label_light_grey</item>
+    </style>
+
+    <!--Empty Views-->
+    <style name="HTW.Empty.View.Icon" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
+    </style>
+
+    <style name="HTW.Empty.View.Title" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
+    </style>
+
+    <style name="HTW.Empty.View.Message" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
     </style>
 
 </resources>
