@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 setTitle(getString(R.string.navi_room_timetable));
                 break;
             case R.id.navigation_exams:
-                supportedFragment = new ExamsFragment();
+                supportedFragment = new de.htwdd.htwdresden.ExamsFragment();
                 setTitle(getString(R.string.navi_exams));
                 break;
             case R.id.navigation_item_exams:
