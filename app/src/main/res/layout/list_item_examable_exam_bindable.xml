@@ -44,7 +44,7 @@
                     android:textAppearance="@style/TextAppearance.HTW.Medium"
                     tools:text="Exam Title"
                     android:fontFamily="sans-serif-medium"
-                    android:id="@+id/textView9"
+                    android:id="@+id/tvExamTitle"
                     app:layout_constraintStart_toEndOf="@+id/imageView"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -54,11 +54,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="08.07."
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/default_space"
                     style="@style/HTW.BadgeLabel.Small.Blue"
                     android:text="@{examModel.day}"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
-                    app:layout_constraintStart_toStartOf="@+id/textView9" android:id="@+id/textView10"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tvExamTitle"
+                    app:layout_constraintStart_toStartOf="@+id/tvExamTitle"
+                    android:id="@+id/tvDay"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -66,9 +67,10 @@
                     tools:text="13:00 - 14:30"
                     style="@style/HTW.BadgeLabel.Small.Orange"
                     android:text="@{examModel.examTime}"
-                    app:layout_constraintStart_toEndOf="@+id/textView10"
-                    app:layout_constraintTop_toTopOf="@+id/textView10"
-                    android:layout_marginStart="8dp" android:id="@+id/textView11"/>
+                    app:layout_constraintStart_toEndOf="@+id/tvDay"
+                    app:layout_constraintTop_toTopOf="@+id/tvDay"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamTime"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -76,9 +78,10 @@
                     tools:text="Prüfer: B.Hollas"
                     android:text="@{examModel.examiner}"
                     style="@style/HTW.BadgeLabel.Small.DarkGrey"
-                    app:layout_constraintStart_toEndOf="@+id/textView11"
-                    app:layout_constraintTop_toTopOf="@+id/textView11"
-                    android:layout_marginStart="8dp"/>
+                    app:layout_constraintStart_toEndOf="@+id/tvExamTime"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamTime"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExaminier"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -86,9 +89,10 @@
                     tools:text="Zweig: -"
                     android:text="@{examModel.studyBranch}"
                     style="@style/HTW.BadgeLabel.Small.LightGrey"
-                    app:layout_constraintTop_toBottomOf="@+id/textView10"
-                    app:layout_constraintStart_toStartOf="@+id/textView10"
-                    android:layout_marginTop="8dp" android:id="@+id/textView12"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tvDay"
+                    app:layout_constraintStart_toStartOf="@+id/tvDay"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:id="@+id/tvExamBranch"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -96,9 +100,10 @@
                     tools:text="Schriftlich"
                     android:text="@{examModel.examType}"
                     style="@style/HTW.BadgeLabel.Small.LightGrey"
-                    app:layout_constraintStart_toEndOf="@+id/textView12"
-                    app:layout_constraintTop_toTopOf="@+id/textView12"
-                    android:layout_marginStart="8dp" android:id="@+id/textView13"/>
+                    app:layout_constraintStart_toEndOf="@+id/tvExamBranch"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamBranch"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamType"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -106,9 +111,10 @@
                     tools:text="S 227, S 228"
                     android:text="@{examModel.rooms}"
                     style="@style/HTW.BadgeLabel.Small.LightGrey"
-                    app:layout_constraintStart_toEndOf="@+id/textView13"
-                    app:layout_constraintTop_toTopOf="@+id/textView13"
-                    android:layout_marginStart="8dp"/>
+                    app:layout_constraintStart_toEndOf="@+id/tvExamType"
+                    app:layout_constraintTop_toTopOf="@+id/tvExamType"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:id="@+id/tvExamRoom"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
