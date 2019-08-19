@@ -22,6 +22,7 @@ import android.widget.EditText;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
+import de.htwdd.htwdresden.ui.views.fragments.ExamsFragment;
 
 /**
  * Hinweis zum Navigation Drawer:
@@ -159,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements INavigation {
             case R.id.navigation_exams:
                 supportedFragment = new ExamsFragment();
                 setTitle(getString(R.string.navi_exams));
+                break;
+            case R.id.navigation_item_exams:
+                supportedFragment = new ExamsFragment();
+                setTitle(getString(R.string.exams_exams));
                 break;
             case R.id.navigation_campus_plan:
                 supportedFragment = new CampusPlanFragment();

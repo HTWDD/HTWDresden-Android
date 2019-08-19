@@ -16,6 +16,10 @@
                     android:icon="@drawable/ic_mode_edit_24dp"
                     android:title="@string/navi_exams" />
                 <item
+                    android:id="@+id/navigation_item_exams"
+                    android:icon="@drawable/ic_exams"
+                    android:title="@string/exams_exams" />
+                <item
                     android:id="@+id/navigation_mensa"
                     android:icon="@drawable/ic_fork_and_knife"
                     android:title="@string/navi_mensa" />

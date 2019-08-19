@@ -57,8 +57,9 @@ dependencies {
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
     // https://github.com/square/retrofit
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     // https://square.github.io/picasso/
     implementation 'com.squareup.picasso:picasso:2.71828'
     // https://github.com/heinrichreimer/android-canteen-balance
@@ -73,7 +74,18 @@ dependencies {
     //Lottie
     implementation 'com.airbnb.android:lottie:3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Android Kotlin Core Extensions
     implementation 'androidx.core:core-ktx:1.0.2'
+
+    // Android Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+
+    // Android RX
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 repositories {

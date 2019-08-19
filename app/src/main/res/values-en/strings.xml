@@ -244,4 +244,8 @@
     <string name="login_text_summary">This information is required to show you your grades.</string>
     <string name="login_with_img">Log-In</string>
     <string name="logo_htw">Logo HTW</string>
+    <string name="exams_examinier">Examiner: %1$s</string>
+    <string name="exams_branch">Branch: %1$s</string>
+    <string name="exams_type_oral">Oral</string>
+    <string name="exams_type_written">Written</string>
 </resources>
