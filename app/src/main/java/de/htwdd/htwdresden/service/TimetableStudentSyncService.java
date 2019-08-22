@@ -3,8 +3,9 @@ package de.htwdd.htwdresden.service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import java.util.Date;
 import java.util.HashMap;

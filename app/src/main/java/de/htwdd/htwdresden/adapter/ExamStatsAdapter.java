@@ -1,10 +1,11 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import java.util.Locale;
 

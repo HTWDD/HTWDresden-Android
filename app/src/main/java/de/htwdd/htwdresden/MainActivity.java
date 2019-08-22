@@ -4,20 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.Nullable;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.navigation.NavigationView;
 
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 supportedFragment = new de.htwdd.htwdresden.ExamsFragment();
                 setTitle(getString(R.string.navi_exams));
                 break;
-            case R.id.navigation_item_exams:
+            case R.id.exams_page_fragment:
                 supportedFragment = new ExamsFragment();
                 setTitle(getString(R.string.exams_exams));
                 break;
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 supportedFragment = new AboutFragment();
                 setTitle(getString(R.string.navi_about));
                 break;
-            case R.id.navigation_uni_administration:
+            case R.id.mangement_page_fragment:
                 supportedFragment = new ManagementFragment();
                 setTitle(getString(R.string.navi_uni_administration));
                 break;

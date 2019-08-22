@@ -14,7 +14,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
-typealias Exams = ArrayList<Examable>
+typealias Exams         = ArrayList<Examable>
+typealias ExamBindables = ArrayList<Pair<Int, ExamableModels>>
 
 class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAdapter.ViewHolder>() {
 
@@ -46,7 +47,7 @@ class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAd
     // region ViewHolder
     inner class ViewHolder(private val binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root) {
 
-        internal fun bind(bindingItems: ArrayList<Pair<Int, ExamableModels>>, item: Examable) {
+        internal fun bind(bindingItems: ExamBindables, item: Examable) {
             Observable
                 .fromArray(bindingItems)
                 .debug()

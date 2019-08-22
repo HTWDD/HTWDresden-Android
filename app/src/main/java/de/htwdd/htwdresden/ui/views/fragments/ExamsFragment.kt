@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import de.htwdd.htwdresden.R
@@ -35,17 +34,10 @@ class ExamsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         swipeRefreshLayout.setOnRefreshListener { request() }
-
         examItemAdapter = ExamItemAdapter(examItems)
         examableRecycler.adapter = examItemAdapter
-
         viewModel = ViewModelProviders.of(this).get(ExamsViewModel::class.java)
-    }
-
-    override fun onResume() {
-        super.onResume()
         request()
     }
 

@@ -1,11 +1,12 @@
 package de.htwdd.htwdresden.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 

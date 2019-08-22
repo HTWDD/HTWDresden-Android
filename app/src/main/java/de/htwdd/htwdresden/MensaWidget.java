@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.widget.RemoteViews;
+
+import androidx.annotation.NonNull;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;

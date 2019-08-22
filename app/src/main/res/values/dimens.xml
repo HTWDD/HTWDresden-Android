@@ -10,7 +10,7 @@
     <dimen name="intent_enumeration">10sp</dimen>
     <dimen name="widget_space_between_content">3dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="app_bar_height">140dp</dimen>
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
@@ -19,6 +19,8 @@
 
     <!--Text Sizes-->
     <dimen name="small_text_size">11sp</dimen>
+    <dimen name="medium_text_size">13.5sp</dimen>
+    <dimen name="description_text_size">16sp</dimen>
 
     <!--List Items-->
     <dimen name="list_item_left_and_right_space">8dp</dimen>

@@ -3,14 +3,15 @@ package de.htwdd.htwdresden.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.Const;

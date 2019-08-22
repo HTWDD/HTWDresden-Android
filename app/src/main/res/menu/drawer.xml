@@ -16,7 +16,7 @@
                     android:icon="@drawable/ic_mode_edit_24dp"
                     android:title="@string/navi_exams" />
                 <item
-                    android:id="@+id/navigation_item_exams"
+                    android:id="@+id/exams_page_fragment"
                     android:icon="@drawable/ic_exams"
                     android:title="@string/exams_exams" />
                 <item
@@ -32,8 +32,8 @@
                     android:icon="@drawable/ic_navigation_24dp"
                     android:title="@string/navi_campus" />
                 <item
-                    android:id="@+id/navigation_uni_administration"
-                    android:icon="@drawable/ic_supervisor_account_24dp"
+                    android:id="@+id/mangement_page_fragment"
+                    android:icon="@drawable/ic_management"
                     android:title="@string/navi_uni_administration" />
             </menu>
         </item>

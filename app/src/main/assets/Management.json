@@ -1,0 +1,133 @@
+[
+    {
+        "type": 1,
+        "room": "Z 221",
+        "offeredServices": [
+            "Bewerbung / Immatrikulation",
+            "Rückmeldung",
+            "Bewerbung für höheres Fachsemester",
+            "Gasthörer",
+            "Beurlaubung",
+            "Exmatrikulation"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "08:30",
+                        "end": "11:00"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "17:00"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": 2,
+        "room": "Z 223, Z 224",
+        "offeredServices": [
+            "Noten: Erfassung und Verwaltung",
+            "Ausdruck von Notenbescheinigungen",
+            "Erstellung von Zeugnissen, Urkunden und Diploma Supplement",
+            "Planung der Prüfungstermine (Februar und Juli)",
+            "BAföG-Bescheinigungen nach § 48",
+            "Erfassungsbelege für den Darlehens-Teilerlass (BAföG)"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "08:30",
+                        "end": "11:00"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "17:00"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": 3,
+        "room": "A 108",
+        "offeredServices": [
+            "Beratung zu Prüfungen",
+            "Referat Sport",
+            "Informationen zu und Vermittlung von Angeboten zur Beratung",
+            "Ausstellung der ISIC-Ausweis",
+            "Gruppenausweis für Jugendherbergen",
+            "🥳 Party's"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "10:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "09:00",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "10:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ]
+    }
+]

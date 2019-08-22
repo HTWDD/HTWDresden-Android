@@ -2,9 +2,10 @@ package de.htwdd.htwdresden.service;
 
 import android.app.IntentService;
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
 
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.QueueCount;

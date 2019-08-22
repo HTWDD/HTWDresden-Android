@@ -2,11 +2,12 @@ package de.htwdd.htwdresden;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.MenuItem;
 
 
 public class PreferencesActivity extends AppCompatActivity {

@@ -96,7 +96,7 @@
             android:label="Authenticator"
             android:configChanges="orientation"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".OnBoardActivity"
+        <activity android:name=".ui.views.activities.MainActivity"
             android:theme="@style/AppTheme.Launcher"
             android:configChanges="orientation"
             android:screenOrientation="portrait">

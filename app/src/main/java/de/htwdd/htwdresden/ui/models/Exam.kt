@@ -3,18 +3,14 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.adapter.ExamBindables
+import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.utils.extensions.defaultWhenNull
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.io.Serializable
 
 // region - Examble
-interface Examable {
-
-    fun itemViewType(): Int
-
-    fun bindingTypes(): ArrayList<Pair<Int, ExamableModels>>
-}
-
+interface Examable: Identifiable<ExamBindables>
 interface ExamableModels
 // endregion
 
@@ -67,8 +63,8 @@ class Exam(
 class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
 
     // region - Properties
-    private val bindingTypes: ArrayList<Pair<Int, ExamableModels>> by lazy {
-        ArrayList<Pair<Int, ExamableModels>>().apply {
+    private val bindingTypes: ExamBindables by lazy {
+        ExamBindables().apply {
             add(Pair(BR.examModel, examModel))
         }
     }
@@ -93,7 +89,7 @@ class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
 
     override fun itemViewType() = R.layout.list_item_examable_exam_bindable
 
-    override fun bindingTypes(): ArrayList<Pair<Int, ExamableModels>> = bindingTypes
+    override fun bindingTypes() = bindingTypes
 
     override fun compareTo(other: ExamItem) = item.day.compareTo(other.item.day)
 

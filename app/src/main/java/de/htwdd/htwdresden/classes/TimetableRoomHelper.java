@@ -2,8 +2,9 @@ package de.htwdd.htwdresden.classes;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
