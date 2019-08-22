@@ -24,6 +24,6 @@
     <color name="gray">#b5c5c5</color>
     <color name="light_gray">#efefef</color>
     <color name="app_background">#e5e5e5</color>
-    <color name="light_grey">#E7E7E7</color>
+    <color name="light_grey">#EFEFEF</color>
     <color name="white">#FFF</color>
 </resources>

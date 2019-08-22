@@ -40,8 +40,26 @@
     </style>
 
     <!--Text-->
+    <style name="TextAppearance.HTW.Large" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
     <style name="TextAppearance.HTW.Medium" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Small" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/grey_600</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Small.Bold" parent="TextAppearance.HTW.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Description" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/description_text_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <!--BadgeText-->
@@ -63,8 +81,16 @@
         <item name="android:background">@drawable/badge_label_light_blue</item>
     </style>
 
+    <style name="HTW.BadgeLabel.Small.Blue.Bold" parent="HTW.BadgeLabel.Small.Blue">
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
+
     <style name="HTW.BadgeLabel.Small.Orange" parent="HTW.BadgeLabel.Small.Light">
         <item name="android:background">@drawable/badge_label_orange</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Orange.Bold" parent="HTW.BadgeLabel.Small.Orange">
+        <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
     <style name="HTW.BadgeLabel.Small.DarkGrey" parent="HTW.BadgeLabel.Small.Light">
@@ -93,5 +119,7 @@
         <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
         <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
     </style>
+
+
 
 </resources>

@@ -13,6 +13,7 @@ import com.heinrichreimer.canteenbalance.cardreader.CardBalance;
 import de.htwdd.htwdresden.classes.DatabaseMigrations;
 import de.htwdd.htwdresden.classes.PreferencesMigrations;
 import de.htwdd.htwdresden.service.MensaCreditReceiver;
+import de.htwdd.htwdresden.utils.holders.AssetHolder;
 import de.htwdd.htwdresden.utils.holders.StringHolder;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
@@ -72,6 +73,7 @@ public class HTWDresdenApplication extends Application {
 
         // Holders
         StringHolder.Companion.init(this);
+        AssetHolder.Companion.init(this);
     }
 
     @Override

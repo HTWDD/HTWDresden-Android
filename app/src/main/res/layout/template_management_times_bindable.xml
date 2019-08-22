@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+                name="timeModel"
+                type="de.htwdd.htwdresden.ui.models.TimeModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/list_item_top_and_bottom_space"
+            android:paddingBottom="@dimen/list_item_top_and_bottom_space">
+
+        <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_space"
+                android:ellipsize="none"
+                android:maxLines="2"
+                android:scrollHorizontally="false"
+                android:text="@{timeModel.day}"
+                android:textColor="@color/dark_gray"
+                app:layout_constraintEnd_toStartOf="@+id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="sans-serif"
+                tools:text="Montag" />
+
+        <TextView
+                android:id="@+id/tvTime"
+                style="@style/HTW.BadgeLabel.Small.LightGrey"
+                android:textSize="@dimen/medium_text_size"
+                android:lineSpacingMultiplier="1.25"
+                android:fontFamily="sans-serif"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{timeModel.time}"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvName"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12:30 - 15:00 Uhr" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

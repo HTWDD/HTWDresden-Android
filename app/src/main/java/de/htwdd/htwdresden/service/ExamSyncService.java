@@ -3,10 +3,11 @@ package de.htwdd.htwdresden.service;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.List;
 import java.util.Stack;
@@ -14,8 +15,8 @@ import java.util.Stack;
 import de.htwdd.htwdresden.R;
 import de.htwdd.htwdresden.classes.API.IExamResultsService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Qis;
-import de.htwdd.htwdresden.types.exams.ExamResult;
 import de.htwdd.htwdresden.types.exams.Course;
+import de.htwdd.htwdresden.types.exams.ExamResult;
 import io.realm.Realm;
 import okhttp3.Credentials;
 import retrofit2.Call;

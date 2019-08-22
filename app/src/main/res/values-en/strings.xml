@@ -248,4 +248,10 @@
     <string name="exams_branch">Branch: %1$s</string>
     <string name="exams_type_oral">Oral</string>
     <string name="exams_type_written">Written</string>
+    <string name="period_date_format">MM/dd/yyyy</string>
+    <string name="friday">Friday</string>
+    <string name="monday">Monday</string>
+    <string name="thursday">Thursday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
 </resources>

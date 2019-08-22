@@ -1,9 +1,10 @@
 package de.htwdd.htwdresden.service;
 
 import android.content.Intent;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,7 +1,8 @@
 package de.htwdd.htwdresden.classes;
 
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.Date;
 

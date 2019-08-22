@@ -3,8 +3,9 @@ package de.htwdd.htwdresden.classes;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 
 public class ConnectionHelper {

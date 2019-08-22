@@ -9,6 +9,8 @@
     <string name="app_email" translatable="false">app@htw-dresden.de</string>
     <string name="app_github" translatable="false">github.com/HTWDD/HTWDresden</string>
 
+    <string name="period_date_format">dd.MM.yyyy</string>
+
     <string name="general_repeat">Wiederholen</string>
     <string name="general_cancel">Abbrechen</string>
     <string name="general_close">Schließen</string>
@@ -299,4 +301,9 @@
     <string name="finish_text_content">Die Einrichtung ist abgeschlossen.</string>
     <string name="finish_text_header">Viel Spaß!</string>
 
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
 </resources>

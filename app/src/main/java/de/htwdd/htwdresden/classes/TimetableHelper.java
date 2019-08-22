@@ -3,9 +3,10 @@ package de.htwdd.htwdresden.classes;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.widget.LinearLayout;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;

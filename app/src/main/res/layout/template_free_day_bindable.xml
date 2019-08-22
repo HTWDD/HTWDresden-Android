@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+                name="freeDayModel"
+                type="de.htwdd.htwdresden.ui.models.FreeDayModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/list_item_top_and_bottom_space"
+            android:paddingBottom="@dimen/list_item_top_and_bottom_space">
+
+        <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_space"
+                android:ellipsize="none"
+                android:maxLines="2"
+                android:scrollHorizontally="false"
+                android:textColor="@color/dark_gray"
+                android:text="@{freeDayModel.name}"
+                app:layout_constraintEnd_toStartOf="@+id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="sans-serif"
+                tools:text="Ostern" />
+
+        <TextView
+                android:id="@+id/tvTime"
+                style="@style/HTW.BadgeLabel.Small.LightGrey"
+                android:textSize="@dimen/medium_text_size"
+                android:fontFamily="sans-serif"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{freeDayModel.time}"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvName"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19.04.2019 - 22.04.2019" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

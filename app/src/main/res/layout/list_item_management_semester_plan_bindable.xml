@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="semsterPlanModel" type="de.htwdd.htwdresden.ui.models.SemesterPlanModel"/>
+    </data>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@{semsterPlanModel.type}"
+                tools:text="Sommersemester"
+                android:textAppearance="@style/TextAppearance.HTW.Large"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginBottom="@dimen/default_space"
+                tools:text="2019"
+                android:text="@{semsterPlanModel.year}"
+                android:textAppearance="@style/TextAppearance.HTW.Small"/>
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_space"
+                app:cardCornerRadius="@dimen/card_view_corner_radius"
+                app:cardElevation="@dimen/card_view_elevation"
+                app:cardMaxElevation="@dimen/card_view_elevation">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/list_item_inner_space"
+                    android:background="@color/white">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_semesterplan_lecturePeriod"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="01.03.2018 - 31.08.2019"
+                        android:text="@{semsterPlanModel.semesterPeriod}"
+                        android:textSize="@dimen/medium_text_size"
+                        android:textAlignment="center"
+                        style="@style/HTW.BadgeLabel.Small.Blue.Bold"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_semesterplan_freeDays"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <LinearLayout
+                        android:id="@+id/llAdditionalInfo"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_semesterplan_examsPeriod"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="01.03.2018 - 31.08.2019"
+                        android:text="@{semsterPlanModel.examsPeriod}"
+                        android:textSize="@dimen/medium_text_size"
+                        android:textAlignment="center"
+                        style="@style/HTW.BadgeLabel.Small.Orange.Bold"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_semesterplan_reregistration"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="01.03.2018 - 31.08.2019"
+                        android:text="@{semsterPlanModel.reregistration}"
+                        android:textSize="@dimen/medium_text_size"
+                        android:textAlignment="center"
+                        style="@style/HTW.BadgeLabel.Small.Orange.Bold"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+
+</layout>
+

@@ -6,7 +6,6 @@ import de.htwdd.htwdresden.classes.API.ExamService
 import de.htwdd.htwdresden.types.studyGroups.StudyData
 import de.htwdd.htwdresden.ui.models.Exam
 import de.htwdd.htwdresden.ui.models.ExamItem
-import de.htwdd.htwdresden.utils.extensions.debug
 import de.htwdd.htwdresden.utils.extensions.runInThread
 import de.htwdd.htwdresden.utils.extensions.verbose
 import io.reactivex.Observable

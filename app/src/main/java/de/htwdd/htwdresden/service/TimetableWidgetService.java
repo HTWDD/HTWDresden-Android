@@ -7,8 +7,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import androidx.annotation.Nullable;
 import android.widget.RemoteViews;
+
+import androidx.annotation.Nullable;
 
 import de.htwdd.htwdresden.MainActivity;
 import de.htwdd.htwdresden.R;

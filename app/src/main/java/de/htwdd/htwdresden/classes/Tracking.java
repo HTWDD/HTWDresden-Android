@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import de.htwdd.htwdresden.classes.API.IGeneralService;
 import de.htwdd.htwdresden.classes.API.Retrofit2Rubu;
