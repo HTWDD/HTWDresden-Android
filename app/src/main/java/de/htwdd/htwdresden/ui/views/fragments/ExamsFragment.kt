@@ -10,6 +10,7 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.ExamItemAdapter
 import de.htwdd.htwdresden.adapter.Exams
 import de.htwdd.htwdresden.ui.viewmodels.fragments.ExamsViewModel
+import de.htwdd.htwdresden.utils.AutoDisposableUtil
 import de.htwdd.htwdresden.utils.extensions.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -18,15 +19,12 @@ import kotlin.properties.Delegates
 
 class ExamsFragment: Fragment() {
 
-    // region - Properties
-    private val disposable = CompositeDisposable()
-    private lateinit var viewModel: ExamsViewModel
+    private val viewModel by lazy { getViewModel<ExamsViewModel>() }
     private lateinit var examItemAdapter: ExamItemAdapter
     private val examItems: Exams = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
-    // endregion
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_exams, container, false)
@@ -37,7 +35,6 @@ class ExamsFragment: Fragment() {
         swipeRefreshLayout.setOnRefreshListener { request() }
         examItemAdapter = ExamItemAdapter(examItems)
         examableRecycler.adapter = examItemAdapter
-        viewModel = ViewModelProviders.of(this).get(ExamsViewModel::class.java)
         request()
     }
 
@@ -60,11 +57,7 @@ class ExamsFragment: Fragment() {
                         TODO("Link to StudyGroup")
                     }
                 }
-            }).addTo(disposable)
+            }).addTo(disposeBag)
     }
 
-    override fun onStop() {
-        super.onStop()
-        disposable.clear()
-    }
 }

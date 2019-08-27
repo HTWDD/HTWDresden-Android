@@ -14,11 +14,8 @@ import kotlinx.android.synthetic.main.activity_main_layout.*
 
 class MainActivity: AppCompatActivity() {
 
-
-    // region - Properties
     private val appBarConfiguration: AppBarConfiguration by lazy { AppBarConfiguration(navController.graph, drawerLayout) }
     private val navController: NavController by lazy { findNavController(R.id.navigationHost) }
-    // endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

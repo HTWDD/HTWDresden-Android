@@ -3,7 +3,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/exams_page_fragment">
+            app:startDestination="@id/timetable_page_fragment">
 
     <fragment android:id="@+id/exams_page_fragment"
               android:name="de.htwdd.htwdresden.ui.views.fragments.ExamsFragment"
@@ -14,5 +14,10 @@
               android:name="de.htwdd.htwdresden.ui.views.fragments.ManagementFragment"
               android:label="@string/navi_uni_administration"
               tools:layout="@layout/fragment_management_layout"/>
+    <fragment
+            android:id="@+id/timetable_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.TimetableFragment"
+            android:label="@string/navi_timetable"
+            tools:layout="@layout/fragment_timetable"/>
 
 </navigation>

@@ -151,6 +151,7 @@
     <string name="timetable_edit_lessonDeleteSuccess">Stunde erfolgreich gelöscht!</string>
     <string name="timetable_details_title" translatable="false">(%1$s) %2$s</string>
     <string name="timetable_details_subtitle">%1$s von %2$s</string>
+    <string name="timetable_holiday">Semesterferien 🙌🚀</string>
 
     <string name="room_timetable_no_rooms">Du hast noch keine Räume hinzugefügt!</string>
     <string name="room_timetable_add">Raum hinzufügen</string>
@@ -306,4 +307,15 @@
     <string name="wednesday">Mittwoch</string>
     <string name="thursday">Donnerstag</string>
     <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+
+    <string name="lecture">Vorlesung</string>
+    <string name="excersise">Übung</string>
+    <string name="practical">Praktikum</string>
+    <string name="block">Block</string>
+    <string name="requested">Buchung-angefragt</string>
+    <string name="unknown">Sonstiges</string>
+
+    <string name="visit_website">Webseite besuchen</string>
 </resources>

@@ -4,7 +4,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 
-// region - View
 fun View.show() {
     if (visibility != VISIBLE) {
         visibility = VISIBLE
@@ -38,4 +37,3 @@ fun View.toggle(condition: Boolean): View {
 }
 
 inline fun <reified T: View> T.click(crossinline  block: (T) -> Unit) = setOnClickListener { block(it as T) }
-// endregion

@@ -3,11 +3,8 @@ package de.htwdd.htwdresden.utils
 import android.util.Log
 import de.htwdd.htwdresden.BuildConfig
 
-// region - Properties
 private val IS_DEBUG: Boolean = BuildConfig.DEBUG
-// endregion
 
-// region - Enum with Swag
 sealed class LogLevel {
     object Verbose: LogLevel()
     object Debug: LogLevel()
@@ -15,7 +12,6 @@ sealed class LogLevel {
     object Warn: LogLevel()
     object Error: LogLevel()
 }
-// endregion
 
 private fun printLog(logLevel: LogLevel, tag: String, message: Any?) {
     if (IS_DEBUG) {

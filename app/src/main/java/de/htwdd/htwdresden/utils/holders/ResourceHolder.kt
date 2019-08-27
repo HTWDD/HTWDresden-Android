@@ -1,15 +1,16 @@
 package de.htwdd.htwdresden.utils.holders
 
 import android.content.Context
+import java.io.File
 import kotlin.properties.Delegates
 
-class AssetHolder private constructor() {
+class ResourceHolder private constructor() {
 
     private var ctx: Context by Delegates.notNull()
-    private object Holder { val INSTANCE = AssetHolder() }
+    private object Holder { val INSTANCE = ResourceHolder() }
 
     companion object {
-        val instance: AssetHolder by lazy { Holder.INSTANCE }
+        val instance: ResourceHolder by lazy { Holder.INSTANCE }
         fun init(context: Context) {
             instance.ctx = context.applicationContext
         }
@@ -25,4 +26,6 @@ class AssetHolder private constructor() {
         }
         return content
     }
+
+    fun getCacheDirectory(): File = ctx.applicationContext.cacheDir
 }

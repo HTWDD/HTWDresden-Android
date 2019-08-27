@@ -8,7 +8,7 @@
         <item android:title="@string/navi_head_uni">
             <menu>
                 <item
-                    android:id="@+id/navigation_timetable"
+                    android:id="@+id/timetable_page_fragment"
                     android:icon="@drawable/ic_access_time_black_24dp"
                     android:title="@string/navi_timetable" />
                 <item

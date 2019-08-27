@@ -22,9 +22,7 @@ typealias ManagementBindables   = ArrayList<Pair<Int, ManagementableModels>>
 
 class ManagementItemAdapter(private val items: Managements): RecyclerView.Adapter<ManagementItemAdapter.ViewHolder>() {
 
-    // region - Properties
     private val disposable = CompositeDisposable()
-    // endregion
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(DataBindingUtil.inflate(
@@ -46,7 +44,6 @@ class ManagementItemAdapter(private val items: Managements): RecyclerView.Adapte
         notifyDataSetChanged()
     }
 
-    // region - ViewHolder
     inner class ViewHolder(private val binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root) {
 
         internal fun bind(bindingItems: ManagementBindables, item: Managementable) {
@@ -75,5 +72,4 @@ class ManagementItemAdapter(private val items: Managements): RecyclerView.Adapte
 
         }
     }
-    // endregion
 }
