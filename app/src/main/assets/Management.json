@@ -42,7 +42,8 @@
                     }
                 ]
             }
-        ]
+        ],
+        "link": "https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html"
     },
     {
         "type": 2,
@@ -87,7 +88,8 @@
                     }
                 ]
             }
-        ]
+        ],
+        "link": "https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html"
     },
     {
         "type": 3,
@@ -128,6 +130,7 @@
                     }
                 ]
             }
-        ]
+        ],
+        "link": "https://www.stura.htw-dresden.de"
     }
 ]

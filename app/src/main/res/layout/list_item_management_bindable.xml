@@ -87,7 +87,14 @@
                         android:layout_marginStart="@dimen/default_space"
                         android:layout_marginEnd="@dimen/default_space"
                         android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
-                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+                        android:layout_marginBottom="@dimen/default_space"/>
+
+                <Button
+                        style="@style/Widget.AppCompat.Button.Colored.HTW"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/list_item_top_and_bottom_space"
+                        android:text="@string/visit_website"
+                        android:onClick="@{() -> managementModel.goToLink()}"/>
 
             </LinearLayout>
 

@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.utils.extensions
 
+import android.graphics.Color
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,3 +29,10 @@ fun String.toDate(withFormat: String = "yyyy-MM-dd"): Date? {
         null
     }
 }
+
+fun String.toSHA256(): String {
+    val digest = MessageDigest.getInstance("SHA-256").digest(toByteArray())
+    return digest.fold("", { str, byte -> str + "%02x".format(byte) })
+}
+
+fun String.toColor() = Color.parseColor(if (startsWith("#")) { this } else { "#$this" })

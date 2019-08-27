@@ -13,6 +13,17 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary</item>
     </style>
+
+    <style name="Widget.AppCompat.Button.Colored.HTW" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:background">@drawable/button_rounded_corners</item>
+        <item name="android:backgroundTint">@color/light_blue</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+
     <!-- Mensa Widget -->
     <style name="Widget.Mensa.Meal" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">12sp</item>

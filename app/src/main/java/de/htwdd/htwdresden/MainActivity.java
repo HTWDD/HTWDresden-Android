@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         if (intent != null && intent.getAction() != null) {
             switch (intent.getAction()) {
                 case Const.IntentParams.START_ACTION_TIMETABLE:
-                    goToNavigationItem(R.id.navigation_timetable);
+                    goToNavigationItem(R.id.timetable_page_fragment);
                     intent.setAction("");
                     return;
                 case Const.IntentParams.START_ACTION_MENSA:
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 supportedFragment = new MensaDetailListFragment();
                 setTitle(getString(R.string.navi_mensa));
                 break;
-            case R.id.navigation_timetable:
+            case R.id.timetable_page_fragment:
                 supportedFragment = new TimetableFragment();
                 setTitle(getString(R.string.navi_timetable));
                 break;

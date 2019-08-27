@@ -19,9 +19,7 @@ typealias ExamBindables = ArrayList<Pair<Int, ExamableModels>>
 
 class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAdapter.ViewHolder>() {
 
-    // region - Properties
     private val disposable = CompositeDisposable()
-    // endregion
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(DataBindingUtil.inflate(
         LayoutInflater.from(parent.context), viewType, parent, false))
@@ -44,7 +42,6 @@ class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAd
         notifyDataSetChanged()
     }
 
-    // region ViewHolder
     inner class ViewHolder(private val binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root) {
 
         internal fun bind(bindingItems: ExamBindables, item: Examable) {
@@ -62,6 +59,4 @@ class ExamItemAdapter(private val items: Exams): RecyclerView.Adapter<ExamItemAd
         }
 
     }
-    // endregion
-
 }

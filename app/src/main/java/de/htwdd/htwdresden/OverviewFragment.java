@@ -71,7 +71,7 @@ public class OverviewFragment extends Fragment {
 
         if (navigation != null) {
             // Stundenplan
-            mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_timetable));
+            mLayout.findViewById(R.id.overview_timetable).setOnClickListener(view -> navigation.goToNavigationItem(R.id.timetable_page_fragment));
 
             // Navigation zur Mensa
             mLayout.findViewById(R.id.overview_mensa).setOnClickListener(view -> navigation.goToNavigationItem(R.id.navigation_mensa));

@@ -16,7 +16,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:id="@+id/semesterPlanRecycler"
+                android:id="@+id/timetableRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/list_item_top_and_bottom_space"

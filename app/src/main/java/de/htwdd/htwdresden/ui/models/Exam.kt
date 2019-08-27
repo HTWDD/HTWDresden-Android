@@ -9,10 +9,8 @@ import de.htwdd.htwdresden.utils.extensions.defaultWhenNull
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.io.Serializable
 
-// region - Examble
 interface Examable: Identifiable<ExamBindables>
 interface ExamableModels
-// endregion
 
 // region - JSON
 data class JExam(
@@ -62,7 +60,6 @@ class Exam(
 // region - ExamItem
 class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
 
-    // region - Properties
     private val bindingTypes: ExamBindables by lazy {
         ExamBindables().apply {
             add(Pair(BR.examModel, examModel))
@@ -70,7 +67,6 @@ class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
     }
     private val examModel = ExamModel()
     private val sh: StringHolder by lazy { StringHolder.instance }
-    // endregion
 
     init {
         examModel.apply {

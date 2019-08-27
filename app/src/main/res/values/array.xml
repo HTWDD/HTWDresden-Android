@@ -27,4 +27,37 @@
         <item>12</item>
         <item>24</item>
     </string-array>
+
+    <string-array name="timetableColors">
+        <item>#F44336</item>
+        <item>#FF1744</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#4A148C</item>
+        <item>#3F51B5</item>
+        <item>#1E88E5</item>
+        <item>#03A9F4</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#43A047</item>
+        <item>#7CB342</item>
+        <item>#DCE775</item>
+        <item>#C0CA33</item>
+        <item>#F9A825</item>
+        <item>#FF6F00</item>
+        <item>#FF5722</item>
+        <item>#000000</item>
+        <item>#607D8B</item>
+    </string-array>
+
+    <string-array name="days">
+        <item>@string/monday</item>
+        <item>@string/tuesday</item>
+        <item>@string/wednesday</item>
+        <item>@string/thursday</item>
+        <item>@string/friday</item>
+        <item>@string/saturday</item>
+        <item>@string/sunday</item>
+    </string-array>
 </resources>

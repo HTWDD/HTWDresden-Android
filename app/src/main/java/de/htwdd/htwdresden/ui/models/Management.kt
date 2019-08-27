@@ -1,6 +1,10 @@
 package de.htwdd.htwdresden.ui.models
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
@@ -13,13 +17,13 @@ import de.htwdd.htwdresden.databinding.TemplateManagementTimesBindableBinding
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toDate
+import de.htwdd.htwdresden.utils.extensions.verbose
+import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
 
-// region - Managementable
 interface Managementable: Identifiable<ManagementBindables>
 interface ManagementableModels
-// endregion
 
 // region - JSON
 data class JSemesterPlan (
@@ -47,7 +51,8 @@ data class JManagement (
     val type: Int,
     val room: String,
     val offeredServices: List<String>,
-    val officeHours: List<JOfficeHour>
+    val officeHours: List<JOfficeHour>,
+    val link: String
 )
 
 data class JOfficeHour (
@@ -120,7 +125,8 @@ class Management(
     val type: Int,
     val room: String,
     val offeredServices: List<String>,
-    val officeHours: List<OfficeHour>
+    val officeHours: List<OfficeHour>,
+    val link: String
 ) {
     companion object {
         fun from(json: JManagement): Management {
@@ -128,7 +134,8 @@ class Management(
                 json.type,
                 json.room,
                 json.offeredServices,
-                json.officeHours.map { OfficeHour.from(it) }
+                json.officeHours.map { OfficeHour.from(it) },
+                json.link
             )
         }
     }
@@ -230,6 +237,7 @@ class ManagementItem(private val item: Management): Managementable, Comparable<M
                 2 -> sh.getString(R.string.management_examination_office)
                 else -> sh.getString(R.string.management_stura)
             })
+            link.set(item.link)
             room.set(item.room)
         }
     }
@@ -288,6 +296,11 @@ class SemesterPlanModel: ManagementableModels {
 class ManagementModel: ManagementableModels {
     val name = ObservableField<String>()
     val room = ObservableField<String>()
+    val link = ObservableField<String>()
+
+    private val ch: ContextHolder by lazy { ContextHolder.instance }
+
+    fun goToLink() = ch.openUrl(link.get())
 }
 
 class FreeDayModel: ManagementableModels {
