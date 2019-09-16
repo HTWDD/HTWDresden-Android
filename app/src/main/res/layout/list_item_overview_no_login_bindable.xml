@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_space">
+
+            <TextView
+                    android:id="@+id/tvGradeName"
+                    style="@style/HTW.Empty.View.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:textAlignment="textStart"
+                    android:text="@string/grades_no_credentials_title"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/textView12"
+                    style="@style/HTW.Empty.View.Message"
+                    android:layout_width="0dp"
+                    android:textAlignment="textStart"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/grades_no_credentials_message"
+                    app:layout_constraintEnd_toEndOf="@+id/tvGradeName"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName" />
+
+            <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:alpha="0.1"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_right_chevron"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

@@ -1,6 +1,7 @@
 package de.htwdd.htwdresden.utils.holders
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import java.io.File
 import kotlin.properties.Delegates
 
@@ -28,4 +29,6 @@ class ResourceHolder private constructor() {
     }
 
     fun getCacheDirectory(): File = ctx.applicationContext.cacheDir
+
+    fun getDrawable(@DrawableRes id: Int) = ctx.getDrawable(id)
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="gradeModel"
+                type="de.htwdd.htwdresden.ui.models.GradeModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation_no_action"
+            android:onClick="@{() -> gradeModel.toggleAdditionalInfos()}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_space"
+                android:animateLayoutChanges="true">
+
+            <TextView
+                    android:id="@+id/tvGrade"
+                    style="@style/TextAppearance.HTW.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:minWidth="50dp"
+                    android:textAlignment="center"
+                    android:text="@{gradeModel.grade}"
+                    android:textColor="@{safeUnbox(gradeModel.gradeColor)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="1.0" />
+
+            <TextView
+                    android:id="@+id/tvCredits"
+                    style="@style/HTW.BadgeLabel.Small.DarkGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{gradeModel.credits}"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tvGrade"
+                    app:layout_constraintStart_toStartOf="@+id/tvGrade"
+                    tools:text="5 credits" />
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/shape_rounded_corners"
+                    android:backgroundTint="@{safeUnbox(gradeModel.stateColor)}"
+                    app:fabCradleRoundedCornerRadius="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvGrade"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/tvGradeName"
+                    style="@style/TextAppearance.HTW.Description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:layout_marginEnd="8dp"
+                    android:text="@{gradeModel.examination}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvGrade"
+                    app:layout_constraintEnd_toStartOf="@+id/ivChevron"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/tvGrade"
+                    tools:text="Algorithmik und Programmierung II" />
+
+            <ImageView
+                    android:id="@+id/ivChevron"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:alpha="0.1"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@{safeUnbox(gradeModel.chevron)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvGrade"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvGrade"
+                    tools:ignore="ContentDescription" />
+
+            <TextView
+                    android:id="@+id/tvTries"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@{gradeModel.tries}"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName"
+                    tools:text="1. Versuch" />
+
+            <TextView
+                    android:id="@+id/tvState"
+                    style="@style/HTW.BadgeLabel.Small.Grey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@{safeUnbox(gradeModel.stateColor)}"
+                    android:text="@{gradeModel.state}"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"
+                    app:layout_constraintStart_toEndOf="@+id/tvType"
+                    app:layout_constraintTop_toTopOf="@+id/tvType"
+                    tools:text="Bestanden" />
+
+
+            <TextView
+                    android:id="@+id/tvType"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{gradeModel.typeOfExamination}"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5"
+                    tools:text="AP" />
+
+            <TextView
+                    android:id="@+id/tvExamDate"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@{gradeModel.examDate}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvTries"
+                    app:layout_constraintStart_toEndOf="@+id/tvTries"
+                    app:layout_constraintTop_toTopOf="@+id/tvTries"
+                    tools:text="16.10.2009"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"/>
+
+            <TextView
+                    android:id="@+id/textView5"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{gradeModel.remark}"
+                    android:visibility="@{safeUnbox(gradeModel.showAdditionalInfos) ? View.VISIBLE : View.GONE, default=gone}"
+                    app:layout_constraintStart_toEndOf="@+id/tvState"
+                    app:layout_constraintStart_toStartOf="@+id/tvTries"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTries"
+                    tools:text="Keine Bemerkung" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

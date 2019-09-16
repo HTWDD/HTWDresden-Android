@@ -3,7 +3,50 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/timetable_page_fragment">
+            app:startDestination="@id/overview_page_fragment">
+
+    <!-- GLOBAL ACTIONS-->
+    <action
+            android:id="@+id/action_overview_page_fragment_to_room_occupancy_detail_page_fragment"
+            app:destination="@id/room_occupancy_detail_page_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+
+    <action
+            android:id="@+id/action_to_web_view_page_fragment"
+            app:destination="@id/web_view_page_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    <action
+            android:id="@+id/action_to_study_group_page_fragment"
+            app:destination="@id/study_group_page_fragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+
+    <action
+            android:id="@+id/action_to_login_page_fragment"
+            app:destination="@id/login_page_fragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+
+    <action
+            android:id="@+id/action_canteen_page_fragment_to_meals_pager_page_fragment"
+            app:destination="@id/meals_pager_page_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
 
     <fragment android:id="@+id/exams_page_fragment"
               android:name="de.htwdd.htwdresden.ui.views.fragments.ExamsFragment"
@@ -13,11 +56,108 @@
     <fragment android:id="@+id/mangement_page_fragment"
               android:name="de.htwdd.htwdresden.ui.views.fragments.ManagementFragment"
               android:label="@string/navi_uni_administration"
-              tools:layout="@layout/fragment_management_layout"/>
+              tools:layout="@layout/fragment_management"/>
+
     <fragment
             android:id="@+id/timetable_page_fragment"
             android:name="de.htwdd.htwdresden.ui.views.fragments.TimetableFragment"
             android:label="@string/navi_timetable"
-            tools:layout="@layout/fragment_timetable"/>
+            tools:layout="@layout/fragment_timetable">
+        <deepLink app:uri="htw://timetable" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/campus_plan_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.CampusPlanFragment"
+            android:label="@string/navi_campus"
+            tools:layout="@layout/fragment_campus_plan">
+    </fragment>
+    <fragment
+            android:id="@+id/overview_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.OverviewFragment"
+            android:label="@string/navi_overview"
+            tools:layout="@layout/fragment_overview">
+
+    </fragment>
+    <fragment
+            android:id="@+id/grades_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.GradesFragment"
+            android:label="@string/exams_grade"
+            tools:layout="@layout/fragment_grades">
+        <deepLink app:uri="htw://grades" />
+    </fragment>
+    <fragment
+            android:id="@+id/room_occupancy_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.RoomOccupancyFragment"
+            android:label="@string/navi_room_timetable"
+            tools:layout="@layout/fragment_room_occupancy"/>
+    <fragment
+            android:id="@+id/room_occupancy_detail_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.RoomOccupancyDetailFragment"
+            android:label="{title}"
+            tools:layout="@layout/fragment_room_occupancy_detail">
+        <argument
+                android:name="title"
+                app:argType="string" />
+    </fragment>
+    <fragment
+            android:id="@+id/settings_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.SettingsFragment"
+            android:label="@string/navi_settings"
+            tools:layout="@layout/fragment_settings"/>
+    <fragment
+            android:id="@+id/web_view_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.WebViewFragment"
+            android:label="{title}"
+            tools:layout="@layout/fragment_web_view">
+        <argument
+                android:name="title"
+                app:argType="string" />
+    </fragment>
+    <fragment
+            android:id="@+id/study_group_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.StudyGroupFragment"
+            android:label="StudyGroupFragment"
+            tools:layout="@layout/fragment_study_group">
+        <argument
+                android:name="isBoarding"
+                app:argType="boolean"
+                android:defaultValue="false" />
+    </fragment>
+    <fragment
+            android:id="@+id/login_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.LoginFragment"
+            android:label="LoginFragment"
+            tools:layout="@layout/fragment_login">
+        <argument
+                android:name="isBoarding"
+                app:argType="boolean"
+                android:defaultValue="false" />
+    </fragment>
+    <fragment
+            android:id="@+id/canteen_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.CanteenFragment"
+            android:label="@string/navi_mensa"
+            tools:layout="@layout/fragment_canteen"/>
+    <fragment
+            android:id="@+id/meals_pager_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.MealsPagerFragment"
+            android:label="{title}"
+            tools:layout="@layout/fragment_meals_pager">
+        <deepLink app:uri="htw://meals" />
+        <argument
+                android:name="title"
+                app:argType="string"
+                android:defaultValue="Mensa Reichenbachstraße" />
+        <argument
+                android:name="id"
+                app:argType="integer"
+                android:defaultValue="80" />
+    </fragment>
+    <fragment
+            android:id="@+id/onboarding_page_fragment"
+            android:name="de.htwdd.htwdresden.ui.views.fragments.OnboardingFragment"
+            android:label="OnboardingFragment"
+            tools:layout="@layout/fragment_onboarding"/>
 
 </navigation>

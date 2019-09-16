@@ -18,8 +18,8 @@
             android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
             android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
             app:cardCornerRadius="@dimen/card_view_corner_radius"
-            app:cardElevation="@dimen/card_view_elevation"
-            app:cardMaxElevation="@dimen/card_view_elevation">
+            app:cardElevation="@dimen/card_view_elevation_no_action"
+            app:cardMaxElevation="@dimen/card_view_elevation_no_action">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:padding="@dimen/default_space">
 
             <TextView
-                    android:id="@+id/tvBeginTime"
+                    android:id="@+id/tvGrade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
@@ -37,14 +37,14 @@
                     android:text="@{timetableModel.beginTime}"/>
 
             <TextView
-                    android:id="@+id/tvEndTime"
+                    android:id="@+id/tvCredits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_space"
                     android:textColor="@color/dark_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/tvBeginTime"
-                    app:layout_constraintTop_toBottomOf="@+id/tvBeginTime"
+                    app:layout_constraintStart_toStartOf="@id/tvGrade"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGrade"
                     app:layout_constraintVertical_bias="1.0"
                     tools:text="07:30"
                     android:text="@{timetableModel.endTime}"/>
@@ -57,12 +57,12 @@
                     android:background="@drawable/shape_rounded_corners"
                     app:fabCradleRoundedCornerRadius="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tvBeginTime"
+                    app:layout_constraintStart_toEndOf="@+id/tvGrade"
                     app:layout_constraintTop_toTopOf="parent"
                     android:backgroundTint="@{safeUnbox(timetableModel.lessonColor)}"/>
 
             <TextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tvGradeName"
                     style="@style/TextAppearance.HTW.Description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -75,15 +75,15 @@
 
             <TextView
                     android:visibility="@{safeUnbox(timetableModel.hasProfessor) ? View.VISIBLE : View.GONE, default=visible}"
-                    android:id="@+id/tvProfessor"
+                    android:id="@+id/tvTries"
                     style="@style/TextAppearance.HTW.Small"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
                     android:text="@{timetableModel.professor}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tvName"
-                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName"
                     tools:text="Herr Prof. Dr.-Ing. Beck" />
 
             <TextView
@@ -93,8 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_space"
                     android:text="@{timetableModel.type}"
-                    app:layout_constraintStart_toStartOf="@+id/tvName"
-                    app:layout_constraintTop_toBottomOf="@+id/tvProfessor"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTries"
                     tools:text="Pratikum" />
 
             <TextView

@@ -1,10 +1,6 @@
 package de.htwdd.htwdresden.ui.models
 
-import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
@@ -17,7 +13,6 @@ import de.htwdd.htwdresden.databinding.TemplateManagementTimesBindableBinding
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toDate
-import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*

@@ -7,24 +7,6 @@
     <string name="management_services">Leistungsangebot</string>
     <string name="management_opening_hours">Sprechzeiten</string>
     <string name="management_office">Studentensekretariat</string>
-    <string name="management_office_room" translatable="false">Z 221</string>
-    <string name="management_office_services">&#8226; Bewerbung / Immatrikulation\n&#8226; Rückmeldung\n&#8226; Bewerbung für höheres Fachsemester\n&#8226; Gasthörer\n&#8226; Beurlaubung\n&#8226; Exmatrikulation</string>
-    <string name="management_services_office_services1">Mo., Do.</string>
-    <string name="management_services_office_services2">12:30 – 15:00 Uhr</string>
-    <string name="management_services_office_services3">Di.</string>
-    <string name="management_services_office_services4">08.30 – 11.00 Uhr &amp;\n12.30 – 17.00 Uhr</string>
     <string name="management_examination_office">Zentrales Prüfungsamt</string>
-    <string name="management_examination_office_room" translatable="false">Z 223, Z 224</string>
-    <string name="management_examination_office_services">&#8226; Noten: Erfassung und Verwaltung\n&#8226; Ausdruck von Notenbescheinigungen\n&#8226; Erstellung von Zeugnissen, Urkunden und Diploma Supplement\n&#8226; Planung der Prüfungstermine (Februar und Juli)\n&#8226; BAföG-Bescheinigungen nach § 48\n&#8226; Erfassungsbelege für den Darlehens-Teilerlass (BAföG)</string>
-    <string name="management_examination_services_office_services1">Mo., Do.</string>
-    <string name="management_examination_services_office_services2">12:30 – 15:00 Uhr</string>
-    <string name="management_examination_services_office_services3">Di.</string>
-    <string name="management_examination_services_office_services4">08.30 – 11.00 &amp;\n12.30 – 17.00 Uhr</string>
     <string name="management_stura" translatable="false">StuRa HTW Dresden</string>
-    <string name="management_stura_room" translatable="false">A 108</string>
-    <string name="management_stura_services">&#8226; Beratung zu Prüfungen\n&#8226; Referat Sport\n&#8226; Informationen zu und Vermittlung von Angeboten zur Beratung\n&#8226; Ausstellung der ISIC-Ausweis\n&#8226; Gruppenausweis für Jugendherbergen\n&#8226; Party\'s</string>
-    <string name="management_stura_office_services1">Mo, Do.</string>
-    <string name="management_stura_office_services2">10:30 – 15:00 Uhr</string>
-    <string name="management_stura_office_services3">Di.</string>
-    <string name="management_stura_office_services4">09:00 – 15:00 Uhr</string>
 </resources>

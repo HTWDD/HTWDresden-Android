@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="overviewGradeModel"
+                type="de.htwdd.htwdresden.ui.models.OverviewGradeModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_space">
+
+            <TextView
+                    android:id="@+id/tvGradeName"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{overviewGradeModel.grades}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="10 Noten" />
+
+            <TextView
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{overviewGradeModel.credits}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName"
+                    tools:text="15 Credits" />
+
+            <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:alpha="0.1"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_right_chevron"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

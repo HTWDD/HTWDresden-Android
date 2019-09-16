@@ -6,20 +6,22 @@ import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.models.TimetableItem
-import de.htwdd.htwdresden.utils.extensions.*
+import de.htwdd.htwdresden.utils.extensions.format
+import de.htwdd.htwdresden.utils.extensions.runInThread
+import de.htwdd.htwdresden.utils.extensions.toDate
+import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
 import java.util.*
-import java.util.Calendar.WEEK_OF_YEAR
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
+
 
 class TimetableViewModel: ViewModel() {
 
+    private val cph by lazy { CryptoSharedPreferencesHolder.instance }
+
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
-        verbose("Starting request for timetable")
-        return RestApi.timetableService.timetable("61", "041", "17")
-            .debug()
+        val auth = cph.getStudyAuth() ?: return Observable.error(Exception("No Credentials"))
+        return RestApi.timetableService.timetable(auth.group, auth.major, auth.studyYear)
             .runInThread()
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
             .map { timetables ->                                                                    // Grouping to lesson days and lessons
@@ -33,7 +35,7 @@ class TimetableViewModel: ViewModel() {
             }
             .map {                                                                                  // Pair -> Single List -> Lesson Days[ Lessons ]
                 val result = Timetables()
-                it.first.forEach { dateKey ->
+                it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
                     result.add(dateStringToHeaderItem(dateKey))
                     result.addAll(it.second.filter { p -> p.lessonDays.contains(dateKey) }
                         .map { filteredItem -> TimetableItem(filteredItem) }
@@ -45,6 +47,6 @@ class TimetableViewModel: ViewModel() {
 
     private fun dateStringToHeaderItem(date: String): TimetableHeaderItem {
         val d = date.toDate("MM-dd-yyyy")
-        return TimetableHeaderItem(d?.format("EEEE") ?: "", d?.format("dd. MMMM") ?: "")
+        return TimetableHeaderItem(d?.format("EEEE") ?: "", d ?: Date())
     }
 }

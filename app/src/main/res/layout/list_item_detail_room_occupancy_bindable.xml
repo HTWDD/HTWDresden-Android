@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="detailRoomOccupancyModel"
+                type="de.htwdd.htwdresden.ui.models.DetailRoomOccupancyModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation_no_action"
+            app:cardMaxElevation="@dimen/card_view_elevation_no_action">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_space">
+
+            <TextView
+                    android:id="@+id/tvGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/dark_gray"
+                    tools:text="07:30"
+                    android:text="@{detailRoomOccupancyModel.beginTime}"/>
+
+            <TextView
+                    android:id="@+id/tvCredits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvGrade"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGrade"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="07:30"
+                    android:text="@{detailRoomOccupancyModel.endTime}"/>
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:background="@drawable/shape_rounded_corners"
+                    app:fabCradleRoundedCornerRadius="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvGrade"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@{safeUnbox(detailRoomOccupancyModel.lessonColor)}"/>
+
+            <TextView
+                    android:id="@+id/tvGradeName"
+                    style="@style/TextAppearance.HTW.Description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:text="@{detailRoomOccupancyModel.name}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Programmierung II" />
+
+            <TextView
+                    android:id="@+id/tvTries"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                    android:text="@{detailRoomOccupancyModel.professor}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName"
+                    tools:text="Herr Prof. Dr.-Ing. Beck" />
+
+            <TextView
+                    android:id="@+id/tvType"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@{detailRoomOccupancyModel.type}"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTries"
+                    tools:text="Pratikum" />
+
+
+
+            <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@+id/tvTries"
+                    app:layout_constraintStart_toStartOf="@+id/tvTries"
+                    app:layout_constraintTop_toBottomOf="@+id/tvType"
+                    android:scrollbars="none">
+
+                <LinearLayout
+                        android:id="@+id/llRooms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/default_space"
+                        android:showDividers="middle"
+                        android:divider="@drawable/shape_empty_divider"/>
+
+            </HorizontalScrollView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

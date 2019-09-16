@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+                name="mealModel"
+                type="de.htwdd.htwdresden.ui.models.MealModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation_no_action"
+            app:cardMaxElevation="@dimen/card_view_elevation_no_action">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/list_item_inner_space">
+
+            <ImageView
+                    android:id="@+id/ivForkAndKnife"
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.35"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_knife_and_fork"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView11"
+                    tools:ignore="ContentDescription" />
+
+            <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@{mealModel.name}"
+                    android:textAppearance="@style/TextAppearance.HTW.Description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivForkAndKnife"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Chili Cheese Burger" />
+
+
+            <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:baselineAligned="false"
+                    android:divider="@drawable/shape_empty_divider"
+                    android:orientation="horizontal"
+                    android:showDividers="middle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView11"
+                    app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_pork"
+                        android:text="@string/mensa_meal_info_pork"
+                        android:visibility="@{safeUnbox(mealModel.hasPork) ? View.VISIBLE : View.GONE, default=gone}" />
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_beef"
+                        android:text="@string/mensa_meal_info_beef"
+                        android:visibility="@{safeUnbox(mealModel.hasBeef) ? View.VISIBLE : View.GONE, default=gone}" />
+
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_veggie"
+                        android:text="@string/mensa_meal_info_vegetarian"
+                        android:visibility="@{safeUnbox(mealModel.isVeggie) ? View.VISIBLE : View.GONE, default=gone}" />
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_vegan"
+                        android:text="@string/mensa_meal_info_vegan"
+                        android:visibility="@{safeUnbox(mealModel.isVegan) ? View.VISIBLE : View.GONE, default=gone}" />
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_garlic"
+                        android:text="@string/mensa_meal_info_garlic"
+                        android:visibility="@{safeUnbox(mealModel.hasGarlic) ? View.VISIBLE : View.GONE, default=gone}" />
+
+                <TextView
+                        style="@style/HTW.Chip"
+                        android:drawableStart="@drawable/ic_alcohol"
+                        android:text="@string/mensa_meal_info_alcohol"
+                        android:visibility="@{safeUnbox(mealModel.hasAlcohol) ? View.VISIBLE : View.GONE, default=gone}" />
+
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/tvPriceStudent"
+                    style="@style/HTW.BadgeLabel.Small.Orange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{mealModel.priceStudent}"
+                    android:textAlignment="center"
+                    app:layout_constraintStart_toStartOf="@+id/textView11"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                    tools:text="Studenten: 2.49 EUR" />
+
+            <TextView
+                    android:id="@+id/tvPricePupils"
+                    style="@style/HTW.BadgeLabel.Small.Blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{mealModel.priceEmployees}"
+                    android:textAlignment="center"
+                    app:layout_constraintStart_toEndOf="@+id/tvPriceStudent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                    tools:text="Mitarbeiter: 2.49 EUR" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

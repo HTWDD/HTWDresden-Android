@@ -1,7 +1,6 @@
 package de.htwdd.htwdresden.ui.models
 
 import androidx.databinding.ObservableField
-import androidx.versionedparcelable.ParcelImpl
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.TimetableBindables
@@ -12,9 +11,7 @@ import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.extensions.toSHA256
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
-import java.util.Calendar.DAY_OF_WEEK
-import java.util.Calendar.WEEK_OF_YEAR
-import kotlin.collections.ArrayList
+import java.util.Calendar.*
 
 interface Timetableable: Identifiable<TimetableBindables> {
     override fun equals(other: Any?): Boolean
@@ -24,7 +21,7 @@ interface TimetableModels
 
 data class JTimetable(
     val id: String,
-    val moduleId: String,
+    val moduleId: String? = null,
     val lessonTag: String,
     val name: String,
     val type: String,
@@ -40,7 +37,7 @@ data class JTimetable(
 
 class Timetable(
     val id: String,
-    val moduleId: String,
+    val moduleId: String? = null,
     val lessonTag: String,
     val name: String,
     val type: String,
@@ -77,8 +74,13 @@ class Timetable(
         private fun lessonDays(dayOfWeek: Long, weeksOnly: List<Long>): List<String> {
             val calendar = GregorianCalendar.getInstance(Locale.GERMANY)
             calendar.set(DAY_OF_WEEK, (dayOfWeek.toInt() % 7) + 1)
+            var lastWeek = 0
             return weeksOnly.map {
                 calendar.set(WEEK_OF_YEAR, it.toInt())
+                if ((lastWeek - it.toInt()) > 1) {
+                    calendar.set(YEAR, calendar.get(YEAR) + 1)
+                }
+                lastWeek = it.toInt()
                 calendar.time.format("MM-dd-yyyy")
             }
         }
@@ -117,7 +119,6 @@ class TimetableItem(private val item: Timetable): Timetableable, Comparable<Time
             val colorPosition = Integer.parseInt("${item.name} - ${item.professor}".toSHA256().subSequence(0..5).toString(), 16) % colors.size
             lessonColor.set(colors[colorPosition].toColor())
 
-
             setRooms(item.rooms)
         }
     }
@@ -133,7 +134,7 @@ class TimetableItem(private val item: Timetable): Timetableable, Comparable<Time
     override fun hashCode() = item.id.hashCode() * 31
 }
 
-class TimetableHeaderItem(private val header: String, private val subheader: String): Timetableable {
+class TimetableHeaderItem(private val header: String, private val subheader: Date): Timetableable {
 
 
     private val bindingTypes: TimetableBindables by lazy {
@@ -146,11 +147,11 @@ class TimetableHeaderItem(private val header: String, private val subheader: Str
     init {
         model.apply {
             header.set(this@TimetableHeaderItem.header)
-            subheader.set(this@TimetableHeaderItem.subheader)
+            subheader.set(this@TimetableHeaderItem.subheader.format("dd. MMMM"))
         }
     }
 
-    fun subheader(): String = subheader
+    fun subheader(): Date = subheader
 
 
     override fun itemViewType() = R.layout.list_item_timetable_header_bindable
@@ -210,8 +211,8 @@ class TimetableModel: TimetableModels {
 }
 
 class TimetableHeaderModel: TimetableModels {
-    val header = ObservableField<String>()
-    val subheader = ObservableField<String>()
+    val header      = ObservableField<String>()
+    val subheader   = ObservableField<String>()
 }
 
 class TimetableFreeModel: TimetableModels {

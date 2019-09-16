@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/widget_meals_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="#80000000"
+        android:orientation="vertical">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reichenbachstraße"
+            android:drawableStart="@drawable/ic_fork_and_knife_widget"
+            android:drawablePadding="6dp"
+            android:textAppearance="@style/Widget.HTW.Meals.Header"
+            tools:ignore="HardcodedText" />
+
+    <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Date"
+            tools:text="16. September"/>
+
+    <LinearLayout
+            android:id="@+id/llMeals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:padding="@dimen/default_space"
+            android:background="@drawable/meals_widget_background"/>
+
+</LinearLayout>

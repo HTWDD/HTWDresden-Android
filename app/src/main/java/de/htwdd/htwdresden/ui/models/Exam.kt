@@ -89,6 +89,9 @@ class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
 
     override fun compareTo(other: ExamItem) = item.day.compareTo(other.item.day)
 
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = 31 * item.day.hashCode() + item.title.hashCode()
 }
 // endregion
 

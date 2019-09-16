@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.htwdd.htwdresden">
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="de.htwdd.htwdresden">
 
     <!-- client -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -17,171 +18,136 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission
-        android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions" />
+            android:name="android.permission.READ_LOGS"
+            tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
-        android:name=".HTWDresdenApplication"
-        tools:replace="android:allowBackup"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-        <!-- Activities -->
-        <activity
-            android:name=".MainActivity"
+            android:name=".app.HTWApplication"
+            tools:replace="android:allowBackup"
+            android:allowBackup="false"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme"
+            android:largeHeap="true">
+
+        <activity
+                android:name=".ui.views.activities.MainActivity"
+                android:label="@string/app_name"
+                android:windowSoftInputMode="adjustPan"
+                android:theme="@style/AppTheme.Launcher"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "https://www.htw-dresden.de/app” -->
                 <data
-                    android:host="www.htw-dresden.de/app"
-                    android:scheme="https" />
+                        android:host="www.htw-dresden.de/app"
+                        android:scheme="https" />
             </intent-filter>
-
             <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
+                    android:name="android.app.shortcuts"
+                    android:resource="@xml/shortcuts" />
         </activity>
-        <activity
-            android:name=".account.AccountActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
 
-        </activity>
         <activity
-            android:name=".TimetableEditActivity"
-            android:label="@string/timetable_edit_activity_titel"
-            android:parentActivityName=".MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
-        </activity>
+                android:name=".account.AccountActivity"
+                android:label="@string/app_name"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait"/>
+        <activity android:name=".ui.views.activities.MensaCreditActivity"
+                android:label=" "
+                android:launchMode="singleTask"
+                android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait"/>
         <activity
-            android:name=".RoomTimetableDetailsActivity"
-            android:label="@string/navi_room_timetable"
-            android:parentActivityName=".MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity" />
-        </activity>
-        <activity
-            android:name=".MensaCreditActivity"
-            android:label="@string/mensa_credit_title"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".PreferencesActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".account.AuthenticatorActivity"
-            android:label="Authenticator"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.views.activities.MainActivity"
-            android:theme="@style/AppTheme.Launcher"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                android:name=".account.AuthenticatorActivity"
+                android:label="Authenticator"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity><!-- Services -->
+        <!-- Services -->
         <service
-            android:name=".account.AuthenticatorService"
-            android:exported="true"
-            android:process=":auth">
+                android:name=".account.AuthenticatorService"
+                android:exported="true"
+                android:process=":auth">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
 
             <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator" />
         </service>
         <service
-            android:name=".service.VolumeControllerService"
-            android:exported="false" />
+                android:name=".service.VolumeControllerService"
+                android:exported="false" />
         <service
-            android:name=".service.TimetableWidgetService"
-            android:enabled="true" />
+                android:name=".service.TimetableWidgetService"
+                android:enabled="true" />
         <service
-            android:name=".service.ExamSyncService"
-            android:enabled="true" />
+                android:name=".service.ExamSyncService"
+                android:enabled="true" />
         <service
-            android:name=".service.ExamAutoUpdateService"
-            android:enabled="true" />
+                android:name=".service.ExamAutoUpdateService"
+                android:enabled="true" />
         <service
-            android:name=".service.TimetableStudentSyncService"
-            android:enabled="true" />
+                android:name=".service.TimetableStudentSyncService"
+                android:enabled="true" />
         <service
-            android:name=".service.TimetableRoomSyncService"
-            android:enabled="true" />
+                android:name=".service.TimetableRoomSyncService"
+                android:enabled="true" />
         <service
-            android:name=".service.TimetableProfessorSyncService"
-            android:enabled="true" /> <!-- Receiver -->
+                android:name=".service.TimetableProfessorSyncService"
+                android:enabled="true" /> <!-- Receiver -->
         <receiver
-            android:name=".service.VolumeControllerService$HtwddBootReceiver"
-            android:enabled="false">
+                android:name=".service.VolumeControllerService$HtwddBootReceiver"
+                android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
-            android:enabled="false">
+                android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
+                android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".MensaWidget"
-            android:label="@string/navi_mensa">
+                android:name=".TimetableWidget"
+                android:label="@string/navi_timetable">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/mensa_widget_info" />
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/timetable_widget_info" />
         </receiver>
         <receiver
-            android:name=".TimetableWidget"
-            android:label="@string/navi_timetable">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
+                android:name=".ui.views.widgets.MealsWidget"
+                android:label="@string/meals_widget_label">
+                <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                </intent-filter>
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/timetable_widget_info" />
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_meals_info" />
         </receiver>
 
         <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
+                android:name="firebase_analytics_collection_enabled"
+                android:value="false" />
         <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="false" />
+                android:name="firebase_crashlytics_collection_enabled"
+                android:value="false" />
     </application>
 
 </manifest>

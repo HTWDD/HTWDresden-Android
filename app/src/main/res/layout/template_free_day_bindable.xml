@@ -18,7 +18,7 @@
             android:paddingBottom="@dimen/list_item_top_and_bottom_space">
 
         <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/tvGradeName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/default_space"
@@ -43,7 +43,7 @@
                 android:text="@{freeDayModel.time}"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvName"
+                app:layout_constraintStart_toEndOf="@+id/tvGradeName"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="19.04.2019 - 22.04.2019" />
 

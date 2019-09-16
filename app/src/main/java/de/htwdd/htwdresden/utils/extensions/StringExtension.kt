@@ -35,4 +35,18 @@ fun String.toSHA256(): String {
     return digest.fold("", { str, byte -> str + "%02x".format(byte) })
 }
 
+private fun String.toMD5(): String {
+    val digest = MessageDigest.getInstance("MD5").digest(toByteArray())
+    return digest.fold("", { str, byte -> str + "%02x".format(byte) })
+}
+
+val String.uid: String
+    get() = this.toMD5().mapIndexed { index, c ->
+        if (index % 8 == 0 && index != 0) {
+            "$c-"
+        } else {
+            "$c"
+        }
+    }.joinToString("")
+
 fun String.toColor() = Color.parseColor(if (startsWith("#")) { this } else { "#$this" })

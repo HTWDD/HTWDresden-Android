@@ -3,20 +3,17 @@ package de.htwdd.htwdresden.ui.views.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
-import de.htwdd.htwdresden.ui.models.TimetableFreeDayItem
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.utils.extensions.*
+import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_timetable.*
-import kotlinx.android.synthetic.main.fragment_timetable.swipeRefreshLayout
-import kotlinx.android.synthetic.main.fragment_timetable_overview.*
+import kotlinx.android.synthetic.main.layout_empty_view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
@@ -30,6 +27,7 @@ class TimetableFragment: Fragment() {
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
+    private val cph by lazy { CryptoSharedPreferencesHolder.instance }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -38,11 +36,39 @@ class TimetableFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setup()
+        request()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cph.onChanged()
+            .runInUiThread()
+            .subscribe {
+                when (it) {
+                    is CryptoSharedPreferencesHolder.SubscribeType.StudyToken -> {
+                        weak { self ->
+                            self.request()
+                        }
+                    }
+                }
+            }
+            .addTo(disposeBag)
+    }
+
+    private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
         timetableItemAdapter = TimetableItemAdapter(timetableItems)
         timetableItemAdapter.onItemsLoaded { goToToday(smooth = false) }
         timetableRecycler.adapter = timetableItemAdapter
-        request()
+        timetableItemAdapter.onEmpty {
+            weak { self ->
+                self.includeEmptyLayout.toggle(it)
+                self.tvIcon.text    = getString(R.string.exams_no_results_icon)
+                self.tvTitle.text   = getString(R.string.timetable_no_results_title)
+                self.tvMessage.text = getString(R.string.timetable_no_results_message)
+            }
+        }
     }
 
     private fun request() {
@@ -55,15 +81,24 @@ class TimetableFragment: Fragment() {
             .subscribe({ timetables ->
                 weak { self ->
                     if (timetables.isNotEmpty()) {
-                        if (timetables.filterIsInstance<TimetableHeaderItem>().none { it.subheader() == Date().format("dd. MMMM")}) {
-                            timetables.add(TimetableHeaderItem(Date().format("EEEE"), Date().format("dd. MMMM")))
-                            timetables.add(TimetableFreeDayItem(getString(R.string.timetable_holiday)))
-                        }
                         self.timetableItemAdapter.update(timetables)
                     }
                 }
             }, {
                 error(it)
+                weak { self ->
+                    self.includeEmptyLayout.show()
+                    self.tvIcon.text    = getString(R.string.exams_no_results_icon)
+                    self.tvTitle.text   = getString(R.string.exams_no_credentials_title)
+                    self.tvMessage.text = getString(R.string.timetable_no_credentials_message)
+                    self.btnEmptyAction.apply {
+                        show()
+                        text = getString(R.string.general_add)
+                        click {
+                            self.findNavController().navigate(R.id.action_to_study_group_page_fragment)
+                        }
+                    }
+                }
             })
             .addTo(disposeBag)
     }
@@ -84,8 +119,15 @@ class TimetableFragment: Fragment() {
     }
 
     private fun findTodayPosition(): Int {
+        val first = timetableItems.firstOrNull().guard { return 0 }
+
+        (first as? TimetableHeaderItem)?.let {
+            if (Date() < it.subheader()) {
+                return 0
+            }
+        }
         var position = 0
-        val currentDate = Date().format("dd. MMMM")
+        val currentDate = Date()
         timetableItems.forEach {
             position += 1
             if (it is TimetableHeaderItem) {

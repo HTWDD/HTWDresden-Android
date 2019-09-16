@@ -7,12 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.views.activities.MainActivity"
-        android:background="@color/light_grey">
+        android:background="@color/light_grey"
+        android:animateLayoutChanges="true"
+        android:animationCache="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true" >
+            android:fitsSystemWindows="true"
+            android:animateLayoutChanges="true"
+            android:animationCache="true">
 
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
