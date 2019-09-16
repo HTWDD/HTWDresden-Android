@@ -39,8 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_space"
                 app:cardCornerRadius="@dimen/card_view_corner_radius"
-                app:cardElevation="@dimen/card_view_elevation"
-                app:cardMaxElevation="@dimen/card_view_elevation">
+                app:cardElevation="@dimen/card_view_elevation_no_action"
+                app:cardMaxElevation="@dimen/card_view_elevation_no_action">
 
             <LinearLayout
                     android:orientation="vertical"

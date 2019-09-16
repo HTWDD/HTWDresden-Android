@@ -24,7 +24,6 @@ import com.google.android.material.navigation.NavigationView;
 import de.htwdd.htwdresden.classes.Const;
 import de.htwdd.htwdresden.classes.Tracking;
 import de.htwdd.htwdresden.interfaces.INavigation;
-import de.htwdd.htwdresden.ui.views.fragments.ExamsFragment;
 
 /**
  * Hinweis zum Navigation Drawer:
@@ -41,15 +40,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
     private ActionBar actionBar;
     private final NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = item -> {
         final int resId = item.getItemId();
-        // Activity starten
-        final boolean result = selectActivity(resId);
-        // Wenn keine Activity gestartet wurde, Fragments suchen
-        if (!result) {
-            // Markiere im NavigationDrawer
-            setNavigationItem(item);
-            // Ändere Inhalt
-            selectFragment(resId);
-        }
         return false;
     };
 
@@ -118,22 +108,22 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                     goToNavigationItem(R.id.timetable_page_fragment);
                     intent.setAction("");
                     return;
-                case Const.IntentParams.START_ACTION_MENSA:
-                    goToNavigationItem(R.id.navigation_mensa);
-                    intent.setAction("");
-                    return;
-                case Const.IntentParams.START_ACTION_EXAM_RESULTS:
-                    goToNavigationItem(R.id.navigation_exams);
-                    intent.setAction("");
-                    return;
+//                case Const.IntentParams.START_ACTION_MENSA:
+//                    goToNavigationItem(R.id.navigation_mensa);
+//                    intent.setAction("");
+//                    return;
+//                case Const.IntentParams.START_ACTION_EXAM_RESULTS:
+//                    goToNavigationItem(R.id.navigation_exams);
+//                    intent.setAction("");
+//                    return;
             }
         }
         // Setze Start-Fragment
-        if (savedInstanceState == null) {
-            onNavigationItemSelectedListener.onNavigationItemSelected(getMenu(mNavigationView).findItem(R.id.navigation_overview));
-            mPreviousMenuItem = getMenu(mNavigationView).findItem(R.id.navigation_overview);
-            mPreviousMenuItem.setChecked(true);
-        }
+//        if (savedInstanceState == null) {
+//            onNavigationItemSelectedListener.onNavigationItemSelected(getMenu(mNavigationView).findItem(R.id.navigation_overview));
+//            mPreviousMenuItem = getMenu(mNavigationView).findItem(R.id.navigation_overview);
+//            mPreviousMenuItem.setChecked(true);
+//        }
     }
 
     private void selectFragment(@IdRes final int position) {
@@ -142,47 +132,47 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         String tag = null;
 
         switch (position) {
-            case R.id.navigation_overview:
-                supportedFragment = new OverviewFragment();
-                setTitle(getString(R.string.navi_overview));
-                tag = "overview";
-                break;
-            case R.id.navigation_mensa:
-                supportedFragment = new MensaDetailListFragment();
-                setTitle(getString(R.string.navi_mensa));
-                break;
-            case R.id.timetable_page_fragment:
-                supportedFragment = new TimetableFragment();
-                setTitle(getString(R.string.navi_timetable));
-                break;
-            case R.id.navigation_room_timetable:
-                supportedFragment = new RoomTimetableFragment();
-                setTitle(getString(R.string.navi_room_timetable));
-                break;
-            case R.id.navigation_exams:
-                supportedFragment = new de.htwdd.htwdresden.ExamsFragment();
-                setTitle(getString(R.string.navi_exams));
-                break;
-            case R.id.exams_page_fragment:
-                supportedFragment = new ExamsFragment();
-                setTitle(getString(R.string.exams_exams));
-                break;
-            case R.id.navigation_campus_plan:
-                supportedFragment = new CampusPlanFragment();
-                setTitle(getString(R.string.navi_campus));
-                break;
-            case R.id.navigation_about:
-                supportedFragment = new AboutFragment();
-                setTitle(getString(R.string.navi_about));
-                break;
-            case R.id.mangement_page_fragment:
-                supportedFragment = new ManagementFragment();
-                setTitle(getString(R.string.navi_uni_administration));
-                break;
-            case R.id.account_tab_activity:
-                supportedFragment = new AccountFragment();
-                setTitle(getString(R.string.account_title));
-                break;
+//            case R.id.navigation_overview:
+//                supportedFragment = new OverviewFragment();
+//                setTitle(getString(R.string.navi_overview));
+//                tag = "overview";
+//                break;
+//            case R.id.navigation_mensa:
+//                supportedFragment = new MensaDetailListFragment();
+//                setTitle(getString(R.string.navi_mensa));
+//                break;
+//            case R.id.timetable_page_fragment:
+//                supportedFragment = new TimetableFragment();
+//                setTitle(getString(R.string.navi_timetable));
+//                break;
+//            case R.id.navigation_room_timetable:
+//                supportedFragment = new RoomTimetableFragment();
+//                setTitle(getString(R.string.navi_room_timetable));
+//                break;
+//            case R.id.navigation_exams:
+//                supportedFragment = new de.htwdd.htwdresden.ExamsFragment();
+//                setTitle(getString(R.string.navi_exams));
+//                break;
+//            case R.id.exams_page_fragment:
+//                supportedFragment = new ExamsFragment();
+//                setTitle(getString(R.string.exams_exams));
+//                break;
+////            case R.id.campus_plan_page_fragment:
+////                supportedFragment = new CampusPlanFragment();
+////                setTitle(getString(R.string.navi_campus));
+////                break;
+//            case R.id.navigation_about:
+//                supportedFragment = new AboutFragment();
+//                setTitle(getString(R.string.navi_about));
+//                break;
+////            case R.id.action_timetable_page_fragment_to_mangement_page_fragment:
+////                supportedFragment = new ManagementFragment();
+////                setTitle(getString(R.string.navi_uni_administration));
+////                break;
+//            case R.id.account_tab_activity:
+//                supportedFragment = new AccountFragment();
+//                setTitle(getString(R.string.account_title));
+//                break;
             default:
                 supportedFragment = new Fragment();
                 break;
@@ -194,21 +184,6 @@ public class MainActivity extends AppCompatActivity implements INavigation {
 
         // NavigationDrawer schließen
         mDrawerLayout.closeDrawers();
-    }
-
-    /**
-     * Prüft ob Auswahl eine Activity starten soll und startet diese ggf.
-     *
-     * @param position Ausgewähltes Item
-     * @return True wenn Activity gefunden wurde, sonst false
-     */
-    private boolean selectActivity(@IdRes final int position) {
-        if (position == R.id.navigation_settings) {
-            final Intent startPreferences = new Intent(this, PreferencesActivity.class);
-            startActivity(startPreferences);
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -252,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
                 finish();
             else {
                 // Zur Übersichtsseite springen
-                goToNavigationItem(R.id.navigation_overview);
+//                goToNavigationItem(R.id.navigation_overview);
             }
         else fragmentManager.popBackStack();
     }
@@ -291,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements INavigation {
         if (savedInstanceState != null)
             if (savedInstanceState.containsKey("mPreviousMenuItem")) {
                 Menu menu = getMenu(null);
-                mPreviousMenuItem = menu.findItem(R.id.navigation_overview);
+//                mPreviousMenuItem = menu.findItem(R.id.navigation_overview);
                 mPreviousMenuItem.setChecked(false);
                 mPreviousMenuItem = menu.findItem(savedInstanceState.getInt("mPreviousMenuItem"));
                 mPreviousMenuItem.setChecked(true);

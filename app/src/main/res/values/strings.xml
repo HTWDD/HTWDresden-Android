@@ -1,17 +1,13 @@
 <resources>
     <string name="auth_type" translatable="false">de.htwdd.htwdresden</string>
-    <string name="account_title">Nutzerkonto</string>
     <string name="not_logged_in_text">Du bist mit keinem Account angemeldet. Um die volle Funktionalität nutzen zu können, melde Dich bitte an.</string>
 
     <string name="app_name" translatable="false">HTW Dresden</string>
-    <string name="app_slogan">Die App für Studenten der HTW Dresden</string>
-    <string name="app_developer_name" translatable="false">Kay Förster</string>
-    <string name="app_email" translatable="false">app@htw-dresden.de</string>
-    <string name="app_github" translatable="false">github.com/HTWDD/HTWDresden</string>
 
     <string name="period_date_format">dd.MM.yyyy</string>
 
-    <string name="general_repeat">Wiederholen</string>
+    <string name="yes">Ja</string>
+
     <string name="general_cancel">Abbrechen</string>
     <string name="general_close">Schließen</string>
     <string name="general_add">Hinzufügen</string>
@@ -22,10 +18,10 @@
     <string name="general_concat" translatable="false">%1$s %2$s</string>
 
     <string name="navi_overview">Übersicht</string>
-    <string name="navi_mensa">Mensa</string>
+    <string name="navi_mensa">Mensen</string>
     <string name="navi_timetable">Stundenplan</string>
     <string name="navi_room_timetable">Belegungsplan</string>
-    <string name="navi_exams">Noten / Prüfungen</string>
+    <string name="navi_exams">Noten</string>
     <string name="navi_uni_administration">Verwaltung</string>
     <string name="navi_campus">Campusplan</string>
     <string name="navi_settings">Einstellungen</string>
@@ -33,94 +29,47 @@
     <string name="navi_head_uni">Uni Alltag</string>
     <string name="navi_head_settings">Optionen</string>
 
-    <string name="info_no_settings">Kein korrektes Nutzerkonto!</string>
     <string name="info_error">[ERROR] Sorry, hier ging was schief :( Bitte melde diesen Fehler!</string>
-    <string name="info_error_parse">Fehler beim Parsen</string>
     <string name="info_error_save">Fehler beim Speichern</string>
-    <string name="info_error_error">Fehler beim Löschen</string>
-    <string name="info_no_internet">Keine Internetverbindung!</string>
-    <string name="info_internet_timeout">Zeitüberschreitung bei der Anfrage!</string>
     <string name="info_internet_no_connection">Konnte keine Verbindung mit dem Webservice herstellen!</string>
     <string name="info_internet_error">Unbekannter Netzwerkfehler</string>
 
     <string name="academic_year_winter">Wintersemester</string>
     <string name="academic_year_summer">Sommersemester</string>
 
-    <string name="settings_category_access_data">Zugangsdaten</string>
-    <string name="settings_category_study">Studium</string>
-    <string name="settings_category_profs">Professoren</string>
-    <string name="settings_category_profs_summary">Einstellungen ausschließlich für Professoren</string>
-    <string name="settings_category_other">sonstige Einstellungen</string>
-    <string name="settings_category_app_intern">HTWDresden intern</string>
-    <string name="settings_bibNummer">Bibliotheksnummer</string>
-    <string name="settings_bibNummer_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_bibNummer_dialogMessage">Die Bibliotheksnummer findest Du auf Deinem Studentenausweis. Sie hat die Form sXXXXX. Eingabe ohne führendes s!</string>
-    <string name="settings_rzLogin" translatable="false">RZLogin</string>
-    <string name="settings_rzLogin_summary">Wird zur Notenabfrage benötigt</string>
-    <string name="settings_rzLogin_dialogMessage">Dein UNIX-Passwort welches Du bspw. zur Anmeldung bei OPAL verwendest.</string>
     <string name="settings_jahrgang">Jahrgang</string>
     <string name="settings_studiengang">Studiengang</string>
-    <string name="settings_studiengang_summary">Verwendung: Stundenplan, Prüfungen</string>
     <string name="settings_studiengruppe">Studiengruppe</string>
     <string name="settings_studienrichtung">Studienrichtung (Optional: Filter für Prüfungen)</string>
-    <string name="settings_studienrichtung_summary">(Optional: Filter für Prüfungen)</string>
-    <string name="settings_prof_only">Die Funktion steht ausschließlich für Professoren zur Verfügung!</string>
-    <string name="settings_prof_name">Prüfer-Name</string>
-    <string name="settings_prof_name_summary">Verwendung: Prüfungen</string>
-    <string name="settings_prof_id">Professoren-Kennung</string>
-    <string name="settings_prof_id_summary">Verwendung: Stundenplan</string>
-    <string name="settings_prof_id_message">Deine individuelle Professoren-Kennung erhälst Du nach Anfrage! Schreib uns einfach: app@htw-dresden.de</string>
-    <string name="settings_audio">Automatisches Stummschalten</string>
-    <string name="settings_audio_summary">Während einer Lehrveranstaltung wird Dein Handy automatisch stumm geschaltet.</string>
-    <string name="settings_audio_request_permission">Berechtigung wird benötigt zum Ändern der Benachrichtigungseinstellungen</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
-    <string name="settings_exam_results_summary">Stelle ein, ob und wie oft Du über neue Noten automatisch benachrichtigt werden möchtest.</string>
-    <string name="settings_firebase_analytics" translatable="false">Analyse</string>
-    <string name="settings_firebase_crashlytics" translatable="false">Bug-Reporting</string>
-    <string name="settings_firebase_disabled">Eingeschaltet</string>
-    <string name="settings_firebase_enabled">Ausgeschaltet</string>
 
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
     <string name="mensa_no_offer">Kein Angebot vorhanden!</string>
-    <string name="mensa_no_offer_image">&#127869;</string>
     <string name="mensa_no_meals">Kein Essen</string>
-    <string name="mensa_no_offer_day">Hier gibt es heute nichts zu essen &#128556;</string>
-    <string name="mensa_no_offer_week">In der Woche gibt es hier leider nichts zu essen &#128542;</string>
-    <string name="mensa_euro" translatable="false">%.2f€</string>
-    <string name="mensa_euro_string" translatable="false">%s€</string>
-    <string name="mensa_credit_title">Mensa Guthaben</string>
-    <string name="mensa_credit_current">Aktuelles Guthaben:</string>
-    <string name="mensa_credit_last_transaction">letzte Abbuchung:</string>
-    <string name="mensa_price_student">Student %.2f€ </string>
-    <string name="mensa_price_employee">Mitarbeiter %.2f€</string>
-    <string name="mensa_price_student_no_price">Student: keine Angabe</string>
-    <string name="mensa_price_employee_no_price">Mitarbeiter: keine Angabe</string>
-    <string name="mensa_sold_out">Ausverkauft</string>
-    <string name="mensa_meal_info_image">Vorschau</string>
+    <string name="mensa_no_offer_day">Heute gibt es nichts zu essen 😕</string>
+    <string name="mensa_no_offer_week">Für die Woche gibt es nichts zu essen 🥺</string>
+    <string name="mensa_euro" translatable="false">%s €</string>
+    <string name="mensa_euro_widget" translatable="false">%.2f €</string>
+    <string name="meal_price_student">Studenten: %.2f €</string>
+    <string name="meal_price_employee">Mitarbeiter: %.2f €</string>
+    <string name="mensa_credit_current">Guthaben</string>
+    <string name="mensa_credit_last_transaction">Letzte Abbuchung</string>
     <string name="mensa_meal_info_pork">Schweinefleisch</string>
     <string name="mensa_meal_info_beef">Rindfleisch</string>
     <string name="mensa_meal_info_vegetarian">Vegetarisch</string>
     <string name="mensa_meal_info_vegan">Vegan</string>
     <string name="mensa_meal_info_garlic">Knoblauch</string>
     <string name="mensa_meal_info_alcohol">Alkohol</string>
+    <string name="mensa">Mensa</string>
+    <string name="meals_widget_label">Mensa Reichenbachstraße | Speisen</string>
 
-    <string name="timetable_overview_today">Heute</string>
     <string name="timetable_overview_lessons" translatable="false">%1$s (%2$s)</string>
     <string name="timetable_overview_options_menu_filter_week">Wochenfilter</string>
     <string name="timetable_overview_options_menu_filter_hidden">versteckte Stunden</string>
     <string name="timetable_overview_options_menu_timetable_reset">Stundenplan zurücksetzen</string>
-    <string name="timetable_overview_options_menu_timetable_reset_message">Bei diesem Schritt werden alle individuellen Änderungen verworfen und der Stundenplan neu synchronisiert.</string>
-    <string name="timetable_sync_success">Stundenplan erfolgreich aktualisiert!</string>
-    <string name="timetable_sync_notFound">Studiengruppe oder Webservice nicht gefunden.</string>
     <string name="timetable_save_error">Fehler beim Speichern des Stundenplans!</string>
-    <string name="timetable_add">Stunde hinzufügen</string>
-    <string name="timetable_details">Stunden-Details</string>
-    <string name="timetable_tab_current_week">Aktuelle Woche (%d)</string>
-    <string name="timetable_tab_next_week">Nächste Woche (%d)</string>
-    <string name="timetable_tab_even_week">gerade Woche</string>
-    <string name="timetable_tab_odd_week">ungerade Woche</string>
     <string name="timetable_moreLessons">mehrere Stunden</string>
     <string name="timetable_moreLessonsPoints" translatable="false">***</string>
     <string name="timetable_only_KW">einige KW</string>
@@ -152,45 +101,36 @@
     <string name="timetable_details_title" translatable="false">(%1$s) %2$s</string>
     <string name="timetable_details_subtitle">%1$s von %2$s</string>
     <string name="timetable_holiday">Semesterferien 🙌🚀</string>
+    <string name="timetable_no_results_title">Kein Stundenplan</string>
+    <string name="timetable_no_results_message">Ich konnte kein Stundenplan für Dich finden.</string>
 
-    <string name="room_timetable_no_rooms">Du hast noch keine Räume hinzugefügt!</string>
     <string name="room_timetable_add">Raum hinzufügen</string>
-    <string name="room_timetable_add_success">Raum erfolgreich hinzugefügt!</string>
-    <string name="room_timetable_add_save_error">Fehler beim Speichern des Belegungsplanes!</string>
-    <string name="room_timetable_add_no_Lessons">Raum nicht gefunden!</string>
-    <string name="room_timetable_addDialog_message">Bitte gib die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer ein.</string>
-    <string name="room_timetable_addDialog_hint">z.B. S 531</string>
+    <string name="room_timetable_add_save_error">😖 Beim Laden der Daten ist etwas schief gelaufen, ist \'%1$s\' eine Korrekte Raumnummer?</string>
+    <string name="room_timetable_add_no_Lessons">Fehler</string>
+    <string name="room_timetable_addDialog_message">Bitte die Raumnummer mit Leerzeichen zwischen Gebäude und Zimmernummer eingeben.</string>
+    <string name="room_timetable_addDialog_hint">s 531</string>
     <string name="room_timetable_update_success">Belegungsplan aktualisiert!</string>
-    <string name="room_timetable_info">Der Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
-    <string name="room_timetable_details_title">Belegungsplan %s</string>
+    <string name="room_timetable_invalid">Keine gültige Raumnummer</string>
+    <string name="room_occupancy_no_room">Keine Räume</string>
 
     <string name="exams_grade">Noten</string>
-    <string name="exams_statistic">Statistik</string>
     <string name="exams_exams">Prüfungen</string>
-    <string name="exams_no_settings">Bitte Studiengruppe im Nutzerkonto richtig setzen!</string>
-    <string name="exams_no_exams">Keine passenden Prüfungen gefunden!</string>
     <string name="exams_type">Art</string>
-    <string name="exams_studyBranch">Richtung</string>
-    <string name="exams_day">Datum</string>
-    <string name="exams_time">Zeit</string>
-    <string name="exams_time_value" translatable="false">%1$s - %2$s</string>
-    <string name="exams_room">Raum</string>
-    <string name="exams_note">Hinweis</string>
-    <string name="exams_note_summary">*) Einteilung bzw. Terminfestlegung erfolgt in der Fakultät\nWeitere N/W-Prüfungen siehe Termine untere Semester</string>
-    <string name="exams_from_Jhr">Jahrgang %s</string>
-    <string name="exams_result_no_results_dashboard">Noch keine Noten vorhanden.</string>
-    <string name="exams_result_no_results_message">Noch keine Noten vorhanden. \nSwipe nach unten zum Aktualisieren.</string>
-    <string name="exams_result_no_settings">Bitte die Zugangsdaten in den Einstellungen richtig setzen!</string>
-    <string name="exams_result_update_newGrades">Neue Noten hinzugefügt.</string>
-    <string name="exams_result_update_noNewGrades">Keine neuen Noten vorhanden.</string>
+    <string name="exams_no_grades_title">Keine Noten</string>
+    <string name="exams_no_grades_message">Ich habe keine Noten gefunden.</string>
     <string name="exams_result_wrong_auth">Fehler bei der Authentifikation! Bitte überprüfe deine Zugangsdaten.</string>
-    <string name="exams_result_info_5ue">Die Korrektur von 5ue bei vorliegenden Krankenscheinen erfolgt mit Zeitverzug. Bitte von Nachfragen absehen.</string>
-    <string name="exams_result_info_qis">Die Rechtsbehelfsbelehrung und den Beginn der Widerspruchsfrist (Veröffentlichungsdatum) bitte dem QIS-Portal entnehmen.</string>
     <string name="exams_result_note_recognized">Anerkannt</string>
     <string name="exams_result_note_ill">Krankgeschrieben</string>
     <string name="exams_result_note_blocked">Gesperrt</string>
     <string name="exams_result_note_sign_off">Abgemeldet</string>
+    <string name="exams_result_enrolled">Angemeldet</string>
+    <string name="exams_result_passed">Bestanden</string>
+    <string name="exams_result_failed">Durchgefallen</string>
+    <string name="exams_result_tries">%d. Versuch</string>
+    <string name="exams_result_final_failed">Endgültig Durchgefallen</string>
+    <string name="exams_result_no_date">Kein Datum</string>
     <string name="exams_result_note_not_allowed">Nicht zugelassen</string>
+    <string name="exams_result_note_unkown">Unbekannter Status</string>
     <string name="exams_result_note_unexcused_missing">Unentschuldigt gefehlt</string>
     <string name="exams_result_note_not_started">nicht angetreten, Fristüberschreitung</string>
     <string name="exams_result_note_no_retest">kein Antrag 2. Wdh.-Prüfung gestellt</string>
@@ -201,18 +141,9 @@
     <string name="exams_result_note_voluntary_appointment">freiwilliger Termin nicht wahrgenommen</string>
     <string name="exams_result_note_conditional">unter Vorbehalt</string>
     <string name="exams_result_note_attempt">Täuschungsversuch</string>
-    <string name="exams_result_credits" translatable="false">Credits: %.1f</string>
-    <string name="exams_result_grade">Note:</string>
-    <string name="exams_result_note">Vermerk:</string>
-    <string name="exams_stats_study">Studium</string>
-    <string name="exams_stats_average">Durchschnitt: %s</string>
-    <plurals name="exams_stats_count_grade">
-        <item quantity="one">%s Note</item>
-        <item quantity="other">%d Noten</item>
-    </plurals>
+    <string name="exams_result_no_remark">Keine Bemerkungen</string>
+    <string name="exams_grade_average" translatable="false">Ø %.2f</string>
     <string name="exams_stats_count_credits" translatable="false">%.0f Credits</string>
-    <string name="exams_stats_gradeBest">beste Note: %.1f</string>
-    <string name="exams_stats_gradeWorst">schlechteste Note: %.1f</string>
     <string name="exams_notification_contentText">Zum Anzeigen berühren</string>
     <plurals name="exams_notification_title">
         <item quantity="one">Neues Prüfungsergebnis</item>
@@ -229,38 +160,17 @@
     <string name="exams_no_results_message">😖 Ich kann leider\nkeine Prüfungen für Dich finden.\nSind Deine Zugangsdaten korrekt?</string>
     <string name="exams_no_credentials_title">Keine Studiengruppe</string>
     <string name="exams_no_credentials_message">Bitte trage deine Studiengruppe ein,\ndamit ich Dir Prüfungen anzeigen kann.</string>
+    <string name="timetable_no_credentials_message">Bitte trage deine Studiengruppe ein,\ndamit ich Dir deinen Stundenplan anzeigen kann.</string>
 
-
-    <string name="about_info">Informationen</string>
-    <string name="about_info_message">Die HTWDresden-App ist ein privates Projekt. Es ist keine offizielle App der HTW Dresden oder einer anderen Institution.
-        \n\nEntwickelt mit der freundlichen Unterstützung des HTW-Rechenzentrums.\n\nZu keinem Zeitpunkt werden private Daten wie S-Nummer oder Passwörter an nicht
-        HTW-Server übertragen.</string>
-    <string name="about_developer">Entwickler</string>
-    <string name="about_version">Version</string>
     <string name="about_contact">Kontakt</string>
-    <string name="about_project">Projekt</string>
-    <string name="about_mail_info_message">Schreibe eine Mail an die Entwickler</string>
 
-    <string name="overview_update_available">Update verfügbar!</string>
-    <string name="overview_update_available_message">Bitte aktualisiere auf die neueste Version! Zum Download einfach auf diese Kachel klicken.</string>
-    <string name="overview_lessons_current">Aktuell</string>
-    <string name="overview_lessons_noLesson">keine Veranstaltung</string>
-    <string name="overview_lessons_next">Nächste</string>
     <string name="overview_lessons_remaining_start">in %1$d Minuten</string>
     <string name="overview_lessons_remaining_end">noch %1$d Minuten</string>
     <string name="overview_lessons_remaining_final">Ende seit %1$d Minuten</string>
     <string name="overview_lessons_tomorrow_param">morgen %s</string>
-    <string name="overview_lessons_tomorrow">Morgen</string>
     <string name="overview_lessons_future" translatable="false">%1$s %2$s</string>
-    <string name="overview_mensa_load">Lade Daten</string>
-    <string name="overview_mensa_error">Fehler beim Laden der Daten</string>
 
-    <string name="crash_dialog_ok_toast">Vielen Dank!</string>
-    <string name="crash_dialog_comment_prompt">Du kannst eine Beschreibung des Problems hier hinzufügen:</string>
-    <string name="crash_dialog_text">Ein unerwarteter Fehler ist aufgetreten und zwingt die Anwendung zum beenden.
-        Bitte hilf uns dieses Problem zu beheben, indem Du uns die Fehlerdaten übermittelst.
-        Klicken dazu bitte auf OK.</string>
-    <string name="password">UNIX-Passwort</string>
+    <string name="password">Passwort</string>
     <string name="sign_in">Einloggen</string>
     <string name="change_user">Nutzer wechseln</string>
     <string name="logged_in_as">Du bist eingeloggt als: s</string>
@@ -268,19 +178,16 @@
  Sollte das nicht Dein Account sein, nutze bitte die "Nutzer wechseln"-Schaltfläche unten, um Dich mit Deinem Account einzuloggen.</string>
     <string name="sNummer">s-Nummer</string>
 
-    <string name="Jahrgang">Jahrgang</string>
     <string name="no_account">Du bist mit keinem Nutzeraccount angemeldet.</string>
     <string name="error_loading_grades">Die Noten konnten nicht geladen werden.</string>
-    <string name="swipe_to_reload">Swipe nach unten, zum aktualisieren</string>
     <string-array name="jahrgang_werte">
         <item>Bitte auswählen</item>
         <item>2016</item>
         <item>2017</item>
         <item>2018</item>
     </string-array>
-    <string name="logo_htw">Logo HTW</string>
     <string name="welcome_text_timetable">Hab immer den Überblick, wann Du welche\nVorlesung, Übung etc. hast.</string>
-    <string name="welcome_text_mensa">Was gibt\'s heute zu Essen? &#127823;&#127829;&#129369;</string>
+    <string name="welcome_text_mensa">Was gibt\'s heute zu Essen? &#127823;&#127829;&#129369;\nWieviel 💶 ist noch auf der Karte?</string>
     <string name="welcome_text_grades">Wer hat denn da eine 1 bekommen?\nBestimmt Du!</string>
     <string name="welcome_text_content">Schön, dass Du die HTW Dresden App\nverwendest.</string>
     <string name="welcome">Willkommen</string>
@@ -297,7 +204,7 @@
     <string name="login_text_content">Melde Dich hier mit Deiner \'s-Nummer\' und Deinem Passwort an.</string>
     <string name="login_text_summary">Diese Informationen sind erforderlich, um Dir Deine Noten anzeigen zu können.</string>
     <string name="studygroup_text_content">Wähle hier Dein Immatrikulationsjahr, Deinen Studiengang und Deine Studiengruppe aus.</string>
-    <string name="studygroup_text_summary">Diese Informationen sind erforderlich, um Dir Deinen Stundenplan anzeigen zu können.</string>
+    <string name="studygroup_text_summary">Diese Informationen sind erforderlich, um Dir Deinen Stundenplan und Prüfungen anzeigen zu können.</string>
     <string name="finish_text_summary">Viel Erfolg im Studium.</string>
     <string name="finish_text_content">Die Einrichtung ist abgeschlossen.</string>
     <string name="finish_text_header">Viel Spaß!</string>
@@ -318,4 +225,38 @@
     <string name="unknown">Sonstiges</string>
 
     <string name="visit_website">Webseite besuchen</string>
+    <string name="occupancies">Belegungen</string>
+    <string name="free">Dieser Raum ist derzeit nicht belegt.</string>
+    <string name="no_professor">Keine Angabe zum Dozenten</string>
+    <string name="no_lesson">Keine Angabe zum Kurs</string>
+    <string name="change_user_group_and_login">Zugangs- und Studiengruppendaten</string>
+    <string name="change_studygroup">Studiengruppe ändern</string>
+    <string name="google_inc" translatable="false">Google Inc.</string>
+    <string name="analytics_and_crashlytics">Analytics und Crashlytics</string>
+    <string name="open_source">Wir sind Open Source!</string>
+    <string name="more_on_git_hub">Mehr auf GitHub</string>
+    <string name="feedback_are_requested">Feedback erwünscht.</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="delete_all_data">Alle Daten löschen.</string>
+    <string name="developed_credits">Entwickelt in Dresden ❤️</string>
+    <string name="change_login">Zugangsdaten ändern</string>
+    <string name="htw_android" translatable="false">HTW Android</string>
+    <string name="mail" translatable="false">Mail</string>
+    <string name="imprint">Impressum</string>
+    <string name="delete_all_saved_data">Gespeicherte Daten löschen</string>
+    <string name="delete_all_saved_data_question">Möchtest Du wirklich alle in der HTW Dresden App gespeicherten Daten löschen?</string>
+    <string name="year">Jahr</string>
+    <string name="major">Fach</string>
+    <string name="group">Gruppe</string>
+    <string name="later">Später</string>
+    <string name="login_error">Fehler beim Login</string>
+    <string name="login_error_message">😖 Beim Loginversuch ist etwas schiefgelaufen, sind Deine Zugangsdaten korrekt?</string>
+    <string name="grades_no_credentials_title">Keine Zugangsdaten</string>
+    <string name="grades_no_credentials_message">Bitte trage deine Zugangsdaten ein, damit ich Dir Noten anzeigen kann.</string>
+    <string name="room_occupancy_add_new_rooms">Über + können neue Räume hinzugefügt werden.\n\nDer Belegungsplan berücksichtigt keine Zusatzveranstaltungen oder Umlegungen. Raumreservierung bitte mit Frau Neumann (Z 228 A) absprechen.</string>
+    <string name="mensa_reichenbach" translatable="false">⭐️ Reichenbachstraße</string>
+    <string name="enjoy_your_day">Genieße Deinen freien Tag 🎉</string>
+    <string name="grades">%s Noten</string>
+    <string name="double_tap_to_exit">Drücke erneut Zurück, um die App zu verlassen.</string>
+    <string name="lets_go">Los geht\'s</string>
 </resources>

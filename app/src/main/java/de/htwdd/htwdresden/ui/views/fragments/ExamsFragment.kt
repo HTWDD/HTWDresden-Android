@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.ExamItemAdapter
 import de.htwdd.htwdresden.adapter.Exams
 import de.htwdd.htwdresden.ui.viewmodels.fragments.ExamsViewModel
-import de.htwdd.htwdresden.utils.AutoDisposableUtil
 import de.htwdd.htwdresden.utils.extensions.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_exams.*
+import kotlinx.android.synthetic.main.layout_empty_view.*
 import kotlin.properties.Delegates
 
 class ExamsFragment: Fragment() {
@@ -25,16 +24,47 @@ class ExamsFragment: Fragment() {
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
+    private val cph by lazy { CryptoSharedPreferencesHolder.instance }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_exams, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_exams, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setup()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cph.onChanged()
+            .runInUiThread()
+            .subscribe {
+                when (it) {
+                    is CryptoSharedPreferencesHolder.SubscribeType.StudyToken -> {
+                        weak { self ->
+                            self.request()
+                        }
+                    }
+                }
+            }
+            .addTo(disposeBag)
+    }
+
+    private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
         examItemAdapter = ExamItemAdapter(examItems)
         examableRecycler.adapter = examItemAdapter
+        examItemAdapter.onEmpty {
+            weak { self ->
+                self.includeEmptyLayout.toggle(it)
+                self.tvIcon.text    = getString(R.string.exams_no_results_icon)
+                self.tvTitle.text   = getString(R.string.exams_no_results_title)
+                self.tvMessage.text = getString(R.string.exams_no_results_message)
+            }
+        }
         request()
     }
 
@@ -46,18 +76,23 @@ class ExamsFragment: Fragment() {
             .doOnTerminate { isRefreshing = false }
             .subscribe({ exams ->
                 weak { self ->
-                    self.emptyView.toggle(exams.isEmpty())
                     self.examItemAdapter.update(exams)
                 }
             }, {
                 error(it)
                 weak { self ->
-                    self.errorView.toggle(true)
-                    self.addStudyGroup.click {
-                        TODO("Link to StudyGroup")
+                    self.includeEmptyLayout.show()
+                    self.tvIcon.text    = getString(R.string.exams_no_results_icon)
+                    self.tvTitle.text   = getString(R.string.exams_no_credentials_title)
+                    self.tvMessage.text = getString(R.string.exams_no_credentials_message)
+                    self.btnEmptyAction.apply {
+                        show()
+                        text = getString(R.string.general_add)
+                        click {
+                            self.findNavController().navigate(R.id.action_to_study_group_page_fragment)
+                        }
                     }
                 }
             }).addTo(disposeBag)
     }
-
 }

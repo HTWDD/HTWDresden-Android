@@ -5,23 +5,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.models.TimetableModels
 import de.htwdd.htwdresden.ui.models.Timetableable
 import de.htwdd.htwdresden.utils.extensions.contentDeepEquals
-import de.htwdd.htwdresden.utils.extensions.runInThread
-import de.htwdd.htwdresden.utils.extensions.runInUiThread
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 
 typealias Timetables            = ArrayList<Timetableable>
 typealias TimetableBindables    = ArrayList<Pair<Int, TimetableModels>>
 
 class TimetableItemAdapter(private val items: Timetables): RecyclerView.Adapter<TimetableItemAdapter.ViewHolder>() {
 
-    private val disposable = CompositeDisposable()
     private var itemsLoadedClosure: () -> Unit = {}
+    private var emptyItemsClosure: (isEmpty: Boolean) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(DataBindingUtil.inflate(
         LayoutInflater.from(parent.context), viewType, parent, false))
@@ -34,7 +28,12 @@ class TimetableItemAdapter(private val items: Timetables): RecyclerView.Adapter<
 
     fun item(onPosition: Int) = items[onPosition]
 
+    fun onEmpty(callback: (isEmpty: Boolean) -> Unit) {
+        emptyItemsClosure = callback
+    }
+
     fun update(items: Timetables) {
+        emptyItemsClosure(items.isEmpty())
         if (!(items contentDeepEquals this.items)) {
             this.items.apply {
                 clear()
@@ -50,14 +49,10 @@ class TimetableItemAdapter(private val items: Timetables): RecyclerView.Adapter<
     }
 
     inner class ViewHolder(private val binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root) {
+        @Suppress("UNUSED_PARAMETER")
         internal fun bind(bindingTypes: TimetableBindables, item: Timetableable) {
-            Observable
-                .fromArray(bindingTypes)
-                .runInThread()
-                .map { bItem -> bItem.map { binding.setVariable(it.first, it.second) } }
-                .runInUiThread()
-                .subscribe { binding.executePendingBindings() }
-                .addTo(disposable)
+            bindingTypes.map { binding.setVariable(it.first, it.second) }
+            binding.executePendingBindings()
         }
     }
 }

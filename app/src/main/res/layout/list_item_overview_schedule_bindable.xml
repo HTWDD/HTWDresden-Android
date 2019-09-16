@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="overviewScheduleModel"
+                type="de.htwdd.htwdresden.ui.models.OverviewScheduleModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_space">
+
+            <TextView
+                    android:id="@+id/tvGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/dark_gray"
+                    tools:text="07:30"
+                    android:text="@{overviewScheduleModel.beginTime}"/>
+
+            <TextView
+                    android:id="@+id/tvCredits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvGrade"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGrade"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="07:30"
+                    android:text="@{overviewScheduleModel.endTime}"/>
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:background="@drawable/shape_rounded_corners"
+                    app:fabCradleRoundedCornerRadius="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvGrade"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@{safeUnbox(overviewScheduleModel.lessonColor)}"/>
+
+            <TextView
+                    android:id="@+id/tvGradeName"
+                    style="@style/TextAppearance.HTW.Description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_space"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{overviewScheduleModel.name}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Programmierung II" />
+
+            <TextView
+                    android:id="@+id/tvTries"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{overviewScheduleModel.professor}"
+                    android:visibility="@{safeUnbox(overviewScheduleModel.hasProfessor) ? View.VISIBLE : View.GONE, default=visible}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGradeName"
+                    tools:text="Herr Prof. Dr.-Ing. Beck" />
+
+            <TextView
+                    android:id="@+id/tvType"
+                    style="@style/HTW.BadgeLabel.Small.LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@{overviewScheduleModel.type}"
+                    app:layout_constraintStart_toStartOf="@+id/tvGradeName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTries"
+                    tools:text="Pratikum" />
+
+            <TextView
+                    android:visibility="@{safeUnbox(overviewScheduleModel.hasRooms) ? View.VISIBLE : View.GONE, default=visible}"
+                    style="@style/HTW.BadgeLabel.Small.Blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_space"
+                    app:layout_constraintStart_toEndOf="@+id/tvType"
+                    app:layout_constraintTop_toTopOf="@+id/tvType"
+                    tools:text="S 228"
+                    android:text="@{overviewScheduleModel.rooms}"/>
+
+            <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:alpha="0.1"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_right_chevron"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

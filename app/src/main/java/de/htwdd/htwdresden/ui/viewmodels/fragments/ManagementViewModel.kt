@@ -7,7 +7,6 @@ import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.debug
 import de.htwdd.htwdresden.utils.extensions.runInThread
-import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.ResourceHolder
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables

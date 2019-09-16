@@ -4,7 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_grey">
+        android:animateLayoutChanges="true"
+        android:animationCache="true">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -27,82 +28,9 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/emptyView"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_margin="@dimen/default_space"
-            android:foregroundGravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/swipeRefreshLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeRefreshLayout"
-            app:layout_constraintTop_toTopOf="@+id/swipeRefreshLayout">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_results_icon"
-                style="@style/HTW.Empty.View.Icon"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_results_title"
-                style="@style/HTW.Empty.View.Title"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_results_message"
-                style="@style/HTW.Empty.View.Message"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/errorView"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:foregroundGravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/swipeRefreshLayout"
-            android:layout_margin="@dimen/default_space"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeRefreshLayout"
-            app:layout_constraintTop_toTopOf="@+id/swipeRefreshLayout">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_results_icon"
-                style="@style/HTW.Empty.View.Icon"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_credentials_title"
-                style="@style/HTW.Empty.View.Title"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/exams_no_credentials_message"
-                style="@style/HTW.Empty.View.Message"/>
-
-        <TextView
-                android:id="@+id/addStudyGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/HTW.BadgeLabel.Small.Blue"
-                android:layout_marginTop="@dimen/default_space"
-                android:text="@string/general_add"
-                android:elevation="@dimen/card_view_elevation"/>
-
-    </LinearLayout>
+    <include
+            android:id="@+id/includeEmptyLayout"
+            layout="@layout/layout_empty_view"
+            android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

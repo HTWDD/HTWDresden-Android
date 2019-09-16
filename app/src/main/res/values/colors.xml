@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_dark">#0d47a1</color>
-    <color name="primary">#1565c0</color>
+    <color name="primary_dark">#024e80</color>
+    <color name="primary">#005c98</color>
     <color name="colorAccent">#1976d2</color>
     <color name="timetable_blue">#90CAF9</color>
     <color name="light_blue">#0288D1</color>
 
     <color name="red">#FF2E00</color>
+    <color name="red_500">#f44336</color>
     <color name="timetable_red">#f56545</color>
     <color name="htw_orange">#f49e00</color>
     <color name="timetable_organge">#ffbb22</color>
@@ -15,14 +16,17 @@
     <color name="exam_results_green">#090</color>
     <color name="overview_header">#8BC34A</color>
     <color name="timetable_green">#bbe535</color>
+    <color name="green_500">#4caf50</color>
 
     <color name="black">#000</color>
     <color name="dark_gray">#262626</color>
     <color name="middle_gray">#4E4E4E</color>
+    <color name="grey_300">#E0E0E0</color>
     <color name="grey_600">#757575</color>
     <color name="lighter_middle_gray">#99A5A5</color>
     <color name="gray">#b5c5c5</color>
     <color name="light_gray">#efefef</color>
+    <color name="text_input_background">#E7E7E7</color>
     <color name="app_background">#e5e5e5</color>
     <color name="light_grey">#EFEFEF</color>
     <color name="white">#FFF</color>

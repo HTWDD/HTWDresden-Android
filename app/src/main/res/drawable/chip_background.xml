@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:dither="true">
+    <solid android:color="@color/gray"/>
+    <corners
+        android:radius="50dp"/>
+    <padding
+        android:left="1dp"
+        android:right="@dimen/badge_label_right_and_left_space"
+        android:top="1dp"
+        android:bottom="1dp"/>
+</shape>

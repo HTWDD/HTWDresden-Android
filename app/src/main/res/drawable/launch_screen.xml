@@ -8,11 +8,9 @@
 
     <!-- Your product logo - color version of your app icon -->
     <item>
-
         <bitmap
             android:src="@drawable/htw_logo_gross"
             android:gravity="center"/>
-
     </item>
 
 </layer-list>

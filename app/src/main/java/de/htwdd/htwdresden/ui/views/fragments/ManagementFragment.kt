@@ -10,7 +10,7 @@ import de.htwdd.htwdresden.adapter.ManagementItemAdapter
 import de.htwdd.htwdresden.adapter.Managements
 import de.htwdd.htwdresden.ui.viewmodels.fragments.ManagementViewModel
 import de.htwdd.htwdresden.utils.extensions.*
-import kotlinx.android.synthetic.main.fragment_management_layout.*
+import kotlinx.android.synthetic.main.fragment_management.*
 import kotlin.properties.Delegates
 
 class ManagementFragment: Fragment() {
@@ -23,7 +23,7 @@ class ManagementFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_management_layout, container, false)
+        return inflater.inflate(R.layout.fragment_management, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

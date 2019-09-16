@@ -18,7 +18,7 @@
             android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
             android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
             app:cardCornerRadius="@dimen/card_view_corner_radius"
-            app:cardElevation="@dimen/card_view_elevation"
+            app:cardElevation="@dimen/card_view_elevation_no_action"
             app:cardMaxElevation="@dimen/card_view_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
 
 
             <TextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tvGradeName"
                     style="@style/TextAppearance.HTW.Description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

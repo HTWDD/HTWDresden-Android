@@ -3,9 +3,7 @@ package de.htwdd.htwdresden.network
 import android.annotation.SuppressLint
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import de.htwdd.htwdresden.network.services.ExamService
-import de.htwdd.htwdresden.network.services.ManagementService
-import de.htwdd.htwdresden.network.services.TimetableService
+import de.htwdd.htwdresden.network.services.*
 import de.htwdd.htwdresden.utils.holders.ResourceHolder
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -21,8 +19,11 @@ import javax.net.ssl.X509TrustManager
 
 object RestApi {
 
-    private const val WW2_URL  = "https://www2.htw-dresden.de/~app/API/"
-    private const val RUBU_URL = "https://rubu2.rz.htw-dresden.de/API/v0/"
+    private const val WW2_URL   = "https://www2.htw-dresden.de/~app/API/"
+    private const val RUBU_URL  = "https://rubu2.rz.htw-dresden.de/API/v0/"
+    private const val QIS_URL   = "https://wwwqis.htw-dresden.de/appservice/v2/"
+    private const val MENSA_URL = "https://openmensa.org/api/v2/"
+
     private val rh: ResourceHolder by lazy { ResourceHolder.instance }
     private const val cacheSize: Long = 10L * (1024L * 1024L)
 
@@ -44,10 +45,22 @@ object RestApi {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(WW2_URL)
+            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         retrofit.create(ExamService::class.java)
+    }
+
+    val generalService: GeneralService by lazy {
+        val gson = GsonBuilder().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RUBU_URL)
+            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        retrofit.create(GeneralService::class.java)
     }
 
     val managementService: ManagementService by lazy {
@@ -60,6 +73,39 @@ object RestApi {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         retrofit.create(ManagementService::class.java)
+    }
+
+    val courseService: CourseService by lazy {
+        val gson = GsonBuilder().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(QIS_URL)
+            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        retrofit.create(CourseService::class.java)
+    }
+
+    val gradeService: GradeService by lazy {
+        val gson = GsonBuilder().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(QIS_URL)
+            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        retrofit.create(GradeService::class.java)
+    }
+
+    val canteenService: CanteenService by lazy {
+        val gson = GsonBuilder().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(MENSA_URL)
+            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        retrofit.create(CanteenService::class.java)
     }
 
     private fun unsafeOkHttpClient(cache: Cache? = null): OkHttpClient {

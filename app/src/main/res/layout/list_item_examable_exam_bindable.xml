@@ -17,8 +17,7 @@
             android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
             android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
             app:cardCornerRadius="@dimen/card_view_corner_radius"
-            app:cardElevation="@dimen/card_view_elevation"
-            app:cardMaxElevation="@dimen/card_view_elevation">
+            app:cardElevation="@dimen/card_view_elevation_no_action">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -44,7 +43,7 @@
                     android:textAppearance="@style/TextAppearance.HTW.Medium"
                     tools:text="Exam Title"
                     android:fontFamily="sans-serif-medium"
-                    android:id="@+id/tvExamTitle"
+                    android:id="@+id/tvName"
                     app:layout_constraintStart_toEndOf="@+id/imageView"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -57,9 +56,9 @@
                     android:layout_marginTop="@dimen/default_space"
                     style="@style/HTW.BadgeLabel.Small.Blue"
                     android:text="@{examModel.day}"
-                    app:layout_constraintTop_toBottomOf="@+id/tvExamTitle"
-                    app:layout_constraintStart_toStartOf="@+id/tvExamTitle"
-                    android:id="@+id/tvDay"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    app:layout_constraintStart_toStartOf="@+id/tvName"
+                    android:id="@+id/tvCity"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -67,8 +66,8 @@
                     tools:text="13:00 - 14:30"
                     style="@style/HTW.BadgeLabel.Small.Orange"
                     android:text="@{examModel.examTime}"
-                    app:layout_constraintStart_toEndOf="@+id/tvDay"
-                    app:layout_constraintTop_toTopOf="@+id/tvDay"
+                    app:layout_constraintStart_toEndOf="@+id/tvCity"
+                    app:layout_constraintTop_toTopOf="@+id/tvCity"
                     android:layout_marginStart="@dimen/default_space"
                     android:id="@+id/tvExamTime"/>
 
@@ -81,7 +80,7 @@
                     app:layout_constraintStart_toEndOf="@+id/tvExamTime"
                     app:layout_constraintTop_toTopOf="@+id/tvExamTime"
                     android:layout_marginStart="@dimen/default_space"
-                    android:id="@+id/tvExaminier"/>
+                    android:id="@+id/tvAdress"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -89,8 +88,8 @@
                     tools:text="Zweig: -"
                     android:text="@{examModel.studyBranch}"
                     style="@style/HTW.BadgeLabel.Small.LightGrey"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDay"
-                    app:layout_constraintStart_toStartOf="@+id/tvDay"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCity"
+                    app:layout_constraintStart_toStartOf="@+id/tvCity"
                     android:layout_marginTop="@dimen/default_space"
                     android:id="@+id/tvExamBranch"/>
 

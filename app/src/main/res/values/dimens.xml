@@ -29,15 +29,20 @@
 
     <!--List Items Small Icon-->
     <dimen name="list_item_small_icon_size">24dp</dimen>
+    <dimen name="list_item_small_icon_padding">3dp</dimen>
 
     <!--Card Views-->
     <dimen name="card_view_corner_radius">4dp</dimen>
     <dimen name="card_view_elevation">3dp</dimen>
+    <dimen name="card_view_elevation_no_action">1dp</dimen>
 
 
     <!--Badge Labels-->
     <dimen name="badge_label_corner_radius">4dp</dimen>
     <dimen name="badge_label_top_and_bottom_space">2dp</dimen>
     <dimen name="badge_label_right_and_left_space">8dp</dimen>
+
+    <!-- Detail Indicator -->
+    <dimen name="detail_indicator_size">20dp</dimen>
 
 </resources>
