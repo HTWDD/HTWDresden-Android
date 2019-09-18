@@ -3,16 +3,17 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.ExamBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.defaultWhenNull
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.io.Serializable
 
-interface Examable: Identifiable<ExamBindables>
-interface ExamableModels
+//-------------------------------------------------------------------------------------------------- Protocols
+interface Examable: Identifiable<ExamableModels>
+interface ExamableModels: Modelable
 
-// region - JSON
+//-------------------------------------------------------------------------------------------------- JSON
 data class JExam(
     val title: String,
     val examType: String,
@@ -24,9 +25,8 @@ data class JExam(
     val nextChance: String,
     val rooms: List<String>
 ): Serializable
-// endregion
 
-// region - Model
+//-------------------------------------------------------------------------------------------------- Concrete Model
 class Exam(
     val title: String,
     val examType: String,
@@ -36,7 +36,7 @@ class Exam(
     val endTime: String,
     val examiner: String,
     val nextChance: String,
-    val rooms: List<String>) {
+    val rooms: List<String>): Comparable<Exam> {
 
     companion object {
         fun from(json: JExam): Exam {
@@ -54,22 +54,42 @@ class Exam(
         }
     }
 
+    override fun compareTo(other: Exam) = day.compareTo(other.day)
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + examType.hashCode()
+        result = 31 * result + studyBranch.hashCode()
+        result = 31 * result + day.hashCode()
+        result = 31 * result + startTime.hashCode()
+        result = 31 * result + endTime.hashCode()
+        result = 31 * result + examiner.hashCode()
+        result = 31 * result + nextChance.hashCode()
+        result = 31 * result + rooms.hashCode()
+        return result
+    }
 }
-// endregion
 
-// region - ExamItem
-class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
+//-------------------------------------------------------------------------------------------------- Item
+class ExamItem(private val item: Exam): Examable {
 
-    private val bindingTypes: ExamBindables by lazy {
-        ExamBindables().apply {
-            add(Pair(BR.examModel, examModel))
+    override val viewType: Int
+        get() =  R.layout.list_item_examable_exam_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, ExamableModels>>().apply {
+            add(BR.examModel to model)
         }
     }
-    private val examModel = ExamModel()
+
+    private val model = ExamModel()
+
     private val sh: StringHolder by lazy { StringHolder.instance }
 
     init {
-        examModel.apply {
+        model.apply {
             title.set(item.title)
             examType.set(item.examType
                 .replace("SP", sh.getString(R.string.exams_type_written))
@@ -83,19 +103,12 @@ class ExamItem(private val item: Exam): Examable, Comparable<ExamItem> {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_examable_exam_bindable
-
-    override fun bindingTypes() = bindingTypes
-
-    override fun compareTo(other: ExamItem) = item.day.compareTo(other.item.day)
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun hashCode() = 31 * item.day.hashCode() + item.title.hashCode()
+    override fun hashCode() = item.hashCode()
 }
-// endregion
 
-// region - ExamModel
+//-------------------------------------------------------------------------------------------------- Modelable
 class ExamModel: ExamableModels {
     val title       = ObservableField<String>()
     val examType    = ObservableField<String>()
@@ -106,4 +119,3 @@ class ExamModel: ExamableModels {
     val nextChance  = ObservableField<String>()
     val rooms       = ObservableField<String>()
 }
-// endregion

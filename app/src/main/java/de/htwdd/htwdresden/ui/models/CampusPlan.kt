@@ -6,24 +6,27 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.CampusPlanBindables
 import de.htwdd.htwdresden.databinding.TemplateBuildingsBindableBinding
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 
-interface CampusPlanable: Identifiable<CampusPlanBindables>
-interface CampusPlanModels
+//-------------------------------------------------------------------------------------------------- Protocols
+interface CampusPlanable: Identifiable<CampusPlanModels>
+interface CampusPlanModels: Modelable
 
+//-------------------------------------------------------------------------------------------------- JSON
 data class JCampusPlan(
     val building: String,
     val image: Long,
     val buildings: List<String>
 )
 
+//-------------------------------------------------------------------------------------------------- Concrete Model
 class CampusPlan(
     val building: String,
     val image: Long,
     val buildings: List<String>
-) {
+): Comparable<CampusPlan> {
     companion object {
         fun from(json: JCampusPlan): CampusPlan {
             return CampusPlan(
@@ -33,6 +36,8 @@ class CampusPlan(
             )
         }
     }
+
+    override fun compareTo(other: CampusPlan): Int = building.compareTo(other.building)
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
@@ -44,11 +49,15 @@ class CampusPlan(
     }
 }
 
+//-------------------------------------------------------------------------------------------------- Item
 class CampusPlanItem(private val item: CampusPlan): CampusPlanable, Comparable<CampusPlanItem> {
 
-    private val bindingTypes: CampusPlanBindables by lazy {
-        CampusPlanBindables().apply {
-            add(Pair(BR.campusPlanItem, model))
+    override val viewType: Int
+        get() = R.layout.list_item_campus_plan_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, CampusPlanModels>>().apply {
+            add(BR.campusPlanItem to model)
         }
     }
     private val model = CampusPlanModel()
@@ -79,18 +88,14 @@ class CampusPlanItem(private val item: CampusPlan): CampusPlanable, Comparable<C
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_campus_plan_bindable
-
-    override fun bindingTypes() = bindingTypes
-
-    override fun compareTo(other: CampusPlanItem) = item.building.compareTo(other.item.building)
+    override fun compareTo(other: CampusPlanItem) = item.compareTo(other.item)
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode() = item.hashCode()
 }
 
-
+//-------------------------------------------------------------------------------------------------- Modable
 class CampusPlanModel: CampusPlanModels {
     val title = ObservableField<String>()
     val image = ObservableField<Int>()

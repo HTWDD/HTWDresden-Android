@@ -21,9 +21,10 @@ class TimetableViewModel: ViewModel() {
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
         val auth = cph.getStudyAuth() ?: return Observable.error(Exception("No Credentials"))
-        return RestApi.timetableService.timetable(auth.group, auth.major, auth.studyYear)
+        return RestApi.timetableEndpoint.timetable(auth.group, auth.major, auth.studyYear)
             .runInThread()
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
+            .map { it.sortedWith(compareBy { c -> c }) }
             .map { timetables ->                                                                    // Grouping to lesson days and lessons
                 val sortedKeySet = mutableSetOf<String>()
                 val sortedValueSet = mutableSetOf<Timetable>()
@@ -38,8 +39,7 @@ class TimetableViewModel: ViewModel() {
                 it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
                     result.add(dateStringToHeaderItem(dateKey))
                     result.addAll(it.second.filter { p -> p.lessonDays.contains(dateKey) }
-                        .map { filteredItem -> TimetableItem(filteredItem) }
-                        .sortedWith(compareBy { c -> c }))
+                        .map { filteredItem -> TimetableItem(filteredItem) })
                 }
                 result
             }

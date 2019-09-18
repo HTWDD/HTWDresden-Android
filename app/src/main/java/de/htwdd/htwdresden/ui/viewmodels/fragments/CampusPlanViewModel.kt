@@ -23,6 +23,7 @@ class CampusPlanViewModel: ViewModel() {
         }
         .runInThread()
         .map { it.map { jCampusPlan ->  CampusPlan.from(jCampusPlan) } }
+        .map { it.sortedWith(compareBy { c -> c }) }
         .map { it.map { campusPlan -> CampusPlanItem(campusPlan) }.toCollection(ArrayList()) as CampusPlans }
     }
 }

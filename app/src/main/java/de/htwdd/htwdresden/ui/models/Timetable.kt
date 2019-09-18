@@ -3,8 +3,8 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.TimetableBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toColor
 import de.htwdd.htwdresden.utils.extensions.toDate
@@ -12,13 +12,13 @@ import de.htwdd.htwdresden.utils.extensions.toSHA256
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
 import java.util.Calendar.*
+import kotlin.collections.ArrayList
 
-interface Timetableable: Identifiable<TimetableBindables> {
-    override fun equals(other: Any?): Boolean
-}
-interface TimetableModels
+//-------------------------------------------------------------------------------------------------- Protocols
+interface Timetableable: Identifiable<TimetableableModels>
+interface TimetableableModels: Modelable
 
-
+//-------------------------------------------------------------------------------------------------- JSON
 data class JTimetable(
     val id: String,
     val moduleId: String? = null,
@@ -35,6 +35,7 @@ data class JTimetable(
     val lastChanged: String
 )
 
+//-------------------------------------------------------------------------------------------------- Concrete Model
 class Timetable(
     val id: String,
     val moduleId: String? = null,
@@ -49,7 +50,7 @@ class Timetable(
     val professor: String? = null,
     val rooms: List<String>,
     val lastChanged: String,
-    val lessonDays: List<String>) {
+    val lessonDays: List<String>): Comparable<Timetable> {
 
     companion object {
         fun from(json: JTimetable): Timetable {
@@ -86,16 +87,43 @@ class Timetable(
         }
     }
 
+    override fun compareTo(other: Timetable) = compareValuesBy(this, other, { it.day }, { it.beginTime })
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (moduleId?.hashCode() ?: 0)
+        result = 31 * result + lessonTag.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + day.hashCode()
+        result = 31 * result + beginTime.hashCode()
+        result = 31 * result + endTime.hashCode()
+        result = 31 * result + week.hashCode()
+        result = 31 * result + weeksOnly.hashCode()
+        result = 31 * result + (professor?.hashCode() ?: 0)
+        result = 31 * result + rooms.hashCode()
+        result = 31 * result + lastChanged.hashCode()
+        result = 31 * result + lessonDays.hashCode()
+        return result
+    }
 }
 
-class TimetableItem(private val item: Timetable): Timetableable, Comparable<TimetableItem> {
+//-------------------------------------------------------------------------------------------------- Item
+class TimetableItem(private val item: Timetable): Timetableable {
 
-    private val bindingTypes: TimetableBindables by lazy {
-        TimetableBindables().apply {
-            add(Pair(BR.timetableModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_timetable_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, TimetableableModels>>().apply {
+            add(BR.timetableModel to model)
         }
     }
+
     private val model = TimetableModel()
+
     private val sh: StringHolder by lazy { StringHolder.instance }
 
     init {
@@ -123,25 +151,23 @@ class TimetableItem(private val item: Timetable): Timetableable, Comparable<Time
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_timetable_bindable
-
-    override fun bindingTypes() = bindingTypes
-
-    override fun compareTo(other: TimetableItem) = compareValuesBy(this, other, { it.item.day }, { it.item.beginTime })
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun hashCode() = item.id.hashCode() * 31
+    override fun hashCode() = item.hashCode()
 }
 
+//-------------------------------------------------------------------------------------------------- Header Item
 class TimetableHeaderItem(private val header: String, private val subheader: Date): Timetableable {
 
+    override val viewType: Int
+        get() =  R.layout.list_item_timetable_header_bindable
 
-    private val bindingTypes: TimetableBindables by lazy {
-        TimetableBindables().apply {
-            add(Pair(BR.timetableHeaderModel, model))
+    override val bindings by lazy {
+        ArrayList<Pair<Int, TimetableableModels>>().apply {
+            add(BR.timetableHeaderModel to model)
         }
     }
+
     private val model = TimetableHeaderModel()
 
     init {
@@ -153,23 +179,24 @@ class TimetableHeaderItem(private val header: String, private val subheader: Dat
 
     fun subheader(): Date = subheader
 
-
-    override fun itemViewType() = R.layout.list_item_timetable_header_bindable
-
-    override fun bindingTypes() = bindingTypes
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode() = 31 * header.hashCode() + subheader.hashCode()
 
-    override fun equals(other: Any?) = hashCode() == other.hashCode()
 }
 
+//-------------------------------------------------------------------------------------------------- Freeday Item
 class TimetableFreeDayItem(private val freeDayText: String): Timetableable {
 
-    private val bindingTypes: TimetableBindables by lazy {
-        TimetableBindables().apply {
-            add(Pair(BR.timetableFreeModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_timetable_freeday_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, TimetableableModels>>().apply {
+            add(BR.timetableFreeModel to model)
         }
     }
+
     private val model = TimetableFreeModel()
 
     init {
@@ -178,17 +205,13 @@ class TimetableFreeDayItem(private val freeDayText: String): Timetableable {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_timetable_freeday_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun hashCode() = freeDayText.hashCode()
 
     override fun equals(other: Any?) = freeDayText.hashCode() == other.hashCode()
-
 }
 
-class TimetableModel: TimetableModels {
+//-------------------------------------------------------------------------------------------------- Modable
+class TimetableModel: TimetableableModels {
     val name            = ObservableField<String>()
     val professor       = ObservableField<String>()
     val type            = ObservableField<String>()
@@ -210,11 +233,11 @@ class TimetableModel: TimetableModels {
     }
 }
 
-class TimetableHeaderModel: TimetableModels {
+class TimetableHeaderModel: TimetableableModels {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
 }
 
-class TimetableFreeModel: TimetableModels {
+class TimetableFreeModel: TimetableableModels {
     val freeDayText = ObservableField<String>()
 }

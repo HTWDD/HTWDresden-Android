@@ -20,8 +20,8 @@ import kotlin.properties.Delegates
 class GradesFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<GradesViewModel>() }
-    private lateinit var gradeItemAdapter: GradeItemAdapter
-    private val gradableItems: Grades = ArrayList()
+    private lateinit var adapter: GradeItemAdapter
+    private val items: Grades = ArrayList()
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
@@ -41,9 +41,9 @@ class GradesFragment: Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        gradeItemAdapter = GradeItemAdapter(gradableItems)
-        gradesRecycler.adapter = gradeItemAdapter
-        gradeItemAdapter.onEmpty {
+        adapter = GradeItemAdapter(items)
+        gradesRecycler.adapter = adapter
+        adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text    = "\uD83D\uDE35"
@@ -76,7 +76,7 @@ class GradesFragment: Fragment() {
             .doOnTerminate { isRefreshing = false }
             .subscribe({ grades ->
                 weak { self ->
-                    self.gradeItemAdapter.update(grades)
+                    self.adapter.update(grades)
                 }
             }, {
                 error(it)

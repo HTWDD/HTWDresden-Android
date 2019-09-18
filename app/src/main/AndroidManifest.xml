@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme"
             android:largeHeap="true">
 
+        <!-- Activities-->
         <activity
                 android:name=".ui.views.activities.MainActivity"
                 android:label="@string/app_name"
@@ -55,20 +56,10 @@
                     android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity
-                android:name=".account.AccountActivity"
-                android:label="@string/app_name"
-                android:configChanges="orientation"
-                android:screenOrientation="portrait"/>
         <activity android:name=".ui.views.activities.MensaCreditActivity"
                 android:label=" "
                 android:launchMode="singleTask"
                 android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
-                android:configChanges="orientation"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".account.AuthenticatorActivity"
-                android:label="Authenticator"
                 android:configChanges="orientation"
                 android:screenOrientation="portrait"/>
 
@@ -85,52 +76,18 @@
                     android:name="android.accounts.AccountAuthenticator"
                     android:resource="@xml/authenticator" />
         </service>
-        <service
-                android:name=".service.VolumeControllerService"
-                android:exported="false" />
-        <service
-                android:name=".service.TimetableWidgetService"
-                android:enabled="true" />
-        <service
-                android:name=".service.ExamSyncService"
-                android:enabled="true" />
-        <service
-                android:name=".service.ExamAutoUpdateService"
-                android:enabled="true" />
-        <service
-                android:name=".service.TimetableStudentSyncService"
-                android:enabled="true" />
-        <service
-                android:name=".service.TimetableRoomSyncService"
-                android:enabled="true" />
-        <service
-                android:name=".service.TimetableProfessorSyncService"
-                android:enabled="true" /> <!-- Receiver -->
-        <receiver
-                android:name=".service.VolumeControllerService$HtwddBootReceiver"
-                android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-                android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
-                android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-                android:name=".TimetableWidget"
+
+        <!-- Receivers -->
+        <receiver android:name=".ui.views.widgets.TimetableWidget"
                 android:label="@string/navi_timetable">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                     android:name="android.appwidget.provider"
-                    android:resource="@xml/timetable_widget_info" />
+                    android:resource="@xml/widget_timetable_info" />
         </receiver>
+
         <receiver
                 android:name=".ui.views.widgets.MealsWidget"
                 android:label="@string/meals_widget_label">
@@ -142,6 +99,7 @@
                     android:resource="@xml/widget_meals_info" />
         </receiver>
 
+        <!-- Meta Datas -->
         <meta-data
                 android:name="firebase_analytics_collection_enabled"
                 android:value="false" />

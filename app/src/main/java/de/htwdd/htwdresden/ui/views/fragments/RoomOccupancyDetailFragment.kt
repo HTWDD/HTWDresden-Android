@@ -20,16 +20,16 @@ class RoomOccupancyDetailFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<RoomOccupancyDetailViewModel>() }
     private val roomId: String? by lazy { arguments?.getString(BUNDLE_ARG_ID) }
-    private lateinit var roomOccupancyDetailItemAdapter: RoomOccupancyDetailItemAdapter
-    private val roomOccupancyDetailItems: DetailOccupancies = ArrayList()
+    private lateinit var adapter: RoomOccupancyDetailItemAdapter
+    private val items: DetailOccupancies = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_room_occupancy_detail, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        roomOccupancyDetailItemAdapter = RoomOccupancyDetailItemAdapter(roomOccupancyDetailItems)
-        roomOccupancyDetailRecycler.adapter = roomOccupancyDetailItemAdapter
+        adapter = RoomOccupancyDetailItemAdapter(items)
+        roomOccupancyDetailRecycler.adapter = adapter
     }
 
     override fun onResume() {
@@ -38,7 +38,7 @@ class RoomOccupancyDetailFragment: Fragment() {
             .runInUiThread()
             .subscribe({ items ->
                 weak { self ->
-                    self.roomOccupancyDetailItemAdapter.update(items)
+                    self.adapter.update(items)
                 }
             }, { error(it) })
             .addTo(disposeBag)

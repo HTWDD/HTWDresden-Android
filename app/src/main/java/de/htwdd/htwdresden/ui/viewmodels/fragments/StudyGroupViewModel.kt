@@ -16,7 +16,7 @@ class StudyGroupViewModel: ViewModel() {
 
     fun request(): Observable<List<StudyYear>> {
         return RestApi
-            .generalService
+            .generalEndpoint
             .studyGroups()
             .runInThread(Schedulers.io())
             .map { jItems -> jItems.map { StudyYear.from(it) } }

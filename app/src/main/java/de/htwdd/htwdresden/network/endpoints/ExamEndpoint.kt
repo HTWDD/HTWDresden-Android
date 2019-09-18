@@ -1,11 +1,11 @@
-package de.htwdd.htwdresden.network.services
+package de.htwdd.htwdresden.network.endpoints
 
 import de.htwdd.htwdresden.ui.models.JExam
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ExamService {
+interface ExamEndpoint {
 
     @GET("GetExams.php")
     fun exams(

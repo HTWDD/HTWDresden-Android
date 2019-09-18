@@ -123,6 +123,7 @@
                 android:name="isBoarding"
                 app:argType="boolean"
                 android:defaultValue="false" />
+        <deepLink app:uri="htw://studygroup" />
     </fragment>
     <fragment
             android:id="@+id/login_page_fragment"

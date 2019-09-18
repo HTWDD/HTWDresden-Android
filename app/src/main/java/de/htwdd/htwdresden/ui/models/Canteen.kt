@@ -3,16 +3,16 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.CanteensBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.holders.ColorHolder
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Canteenable: Identifiable<CanteensBindables> {
+interface Canteenable: Identifiable<CanteenableModels> {
     val name: String
     val id: Int
 }
-interface CanteenableModel
+interface CanteenableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- JSON
 data class JCanteen (
@@ -75,12 +75,16 @@ class Canteen(
 //-------------------------------------------------------------------------------------------------- Item
 class CanteenItem(private val item: Canteen): Canteenable {
 
-    private val bindingTypes by lazy {
-        CanteensBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_canteen_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, CanteenableModels>>().apply {
             add(BR.canteenModel to model)
         }
     }
     private val model = CanteenModel()
+
     private val ch by lazy { ColorHolder.instance }
 
     override val name: String
@@ -101,17 +105,13 @@ class CanteenItem(private val item: Canteen): Canteenable {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_canteen_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode() = item.hashCode()
 }
 
 //-------------------------------------------------------------------------------------------------- Model
-class CanteenModel: CanteenableModel {
+class CanteenModel: CanteenableModels {
     val name        = ObservableField<String>()
     val address     = ObservableField<String>()
     val city        = ObservableField<String>()

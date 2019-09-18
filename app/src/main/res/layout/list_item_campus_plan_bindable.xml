@@ -44,14 +44,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@{safeUnbox(campusPlanItem.image)}"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
                         android:adjustViewBounds="true"
                         tools:ignore="ContentDescription"
                         tools:src="@drawable/campusplan_dresden"
                         app:zoomage_zoomable="true"
                         app:zoomage_animateOnReset="false"
-                        app:zoomage_minScale="0.5"
-                        app:zoomage_maxScale="3"/>
+                        app:zoomage_minScale="0.1"
+                        app:zoomage_maxScale="3"
+                        app:zoomage_autoResetMode="NEVER"/>
 
                 <LinearLayout
                         android:id="@+id/llBuildings"

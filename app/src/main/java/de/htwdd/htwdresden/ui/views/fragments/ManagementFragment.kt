@@ -16,8 +16,8 @@ import kotlin.properties.Delegates
 class ManagementFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<ManagementViewModel>() }
-    private lateinit var managementItemAdapter: ManagementItemAdapter
-    private val managementItems: Managements = ArrayList()
+    private lateinit var adapter: ManagementItemAdapter
+    private val items: Managements = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -28,9 +28,13 @@ class ManagementFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setup()
+    }
+
+    private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        managementItemAdapter = ManagementItemAdapter(managementItems)
-        semesterPlanRecycler.adapter = managementItemAdapter
+        adapter = ManagementItemAdapter(items)
+        semesterPlanRecycler.adapter = adapter
         request()
     }
 
@@ -41,7 +45,7 @@ class ManagementFragment: Fragment() {
             .doOnTerminate { isRefreshing = false }
             .subscribe({ managements ->
                 weak { self ->
-                    self.managementItemAdapter.update(managements)
+                    self.adapter.update(managements)
                 }
             }, {
                 error(it)

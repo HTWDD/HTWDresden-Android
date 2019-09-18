@@ -37,8 +37,8 @@ class MealsFragment: Fragment() {
     }
 
     private val viewModel by lazy { getViewModel<MealsViewModel>() }
-    private lateinit var mealItemAdapter: MealItemAdapter
-    private val mealItems: Meals = ArrayList()
+    private lateinit var adapter: MealItemAdapter
+    private val items: Meals = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,9 +53,9 @@ class MealsFragment: Fragment() {
     }
 
     private fun setup() {
-        mealItemAdapter = MealItemAdapter(mealItems)
-        mealRecycler.adapter = mealItemAdapter
-        mealItemAdapter.onEmpty {
+        adapter = MealItemAdapter(items)
+        mealRecycler.adapter = adapter
+        adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text = "🍽"
@@ -72,7 +72,7 @@ class MealsFragment: Fragment() {
             .runInUiThread()
             .subscribe({ meals ->
                 weak { self ->
-                    self.mealItemAdapter.update(meals)
+                    self.adapter.update(meals)
                 }
             }, {
                 error(it)

@@ -32,6 +32,6 @@
             android:orientation="vertical"
             android:layout_marginTop="8dp"
             android:padding="@dimen/default_space"
-            android:background="@drawable/meals_widget_background"/>
+            android:background="@drawable/widget_background"/>
 
 </LinearLayout>

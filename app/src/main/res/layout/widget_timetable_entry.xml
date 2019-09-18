@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="#40000000">
+
+    <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Name"
+            tools:text="10:30 - 12:30"
+            android:textAlignment="viewStart"
+            android:layout_marginEnd="@dimen/default_space"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Name"
+            android:text="|"
+            android:textAlignment="center"
+            android:layout_marginEnd="@dimen/default_space"
+            tools:ignore="HardcodedText" />
+
+    <TextView
+            android:id="@+id/tvTimetableName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Price"
+            tools:text="Betriebssysteme II"
+            android:textAlignment="viewStart"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+</LinearLayout>

@@ -17,7 +17,7 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.utils.extensions.dp
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.activity_main_layout.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity: AppCompatActivity() {
@@ -41,7 +41,7 @@ class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_layout)
+        setContentView(R.layout.activity_main)
         setupNavigation()
 
         if (cph.needsOnboarding()) {

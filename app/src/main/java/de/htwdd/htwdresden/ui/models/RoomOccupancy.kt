@@ -4,26 +4,28 @@ import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.ItemTouchHelper.LEFT
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.OccupancyBindables
 import de.htwdd.htwdresden.db.RoomRealm
 import de.htwdd.htwdresden.db.delete
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.week
 import de.htwdd.htwdresden.utils.holders.ColorHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
+import kotlin.collections.ArrayList
 
 //-------------------------------------------------------------------------------------------------- Interface
-interface RoomOccupancable: Identifiable<OccupancyBindables> {
-    fun getMovementFlags(): Int {
-        return when(this) {
+interface RoomOccupancable: Identifiable<RoomOccupancableModels> {
+
+    override val movementFlags: Int
+        get() = when (this) {
             is RoomOccupancyItem -> LEFT
             else -> 0
         }
-    }
 
-    fun onLeftSwiped(action: () -> Unit) {
+    override fun onLeftSwiped(action: () -> Unit) {
+        super.onLeftSwiped(action)
         when (this) {
             is RoomOccupancyItem -> action()
         }
@@ -35,18 +37,27 @@ interface RoomOccupancable: Identifiable<OccupancyBindables> {
 
     fun name(): String
 }
-interface RoomOccupancableModels
+interface RoomOccupancableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- Item
 class RoomOccupancyItem(private val item: RoomRealm): RoomOccupancable {
 
-    private val bindingTypes: OccupancyBindables by lazy {
-        OccupancyBindables().apply {
-            add(Pair(BR.roomOccupancyModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_room_occupancy_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, RoomOccupancableModels>>().apply {
+            add(BR.roomOccupancyModel to model)
         }
     }
+
+    override val leftAction: () -> Unit
+        get() = { item.delete() }
+
     private val model = RoomOccupancyModel()
+
     private val sh: StringHolder by lazy { StringHolder.instance }
+
     private val ch: ColorHolder by lazy { ColorHolder.instance }
 
     init {
@@ -67,15 +78,15 @@ class RoomOccupancyItem(private val item: RoomRealm): RoomOccupancable {
         }
     }
 
-    override fun bindingTypes() = bindingTypes
-
-    override fun itemViewType() = R.layout.list_item_room_occupancy_bindable
-
     override fun removeFromDb() = item.delete()
 
     override fun id() = item.id
 
     override fun name() = item.name
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = item.hashCode()
 }
 
 //-------------------------------------------------------------------------------------------------- Model

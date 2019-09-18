@@ -6,21 +6,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.ManagementBindables
 import de.htwdd.htwdresden.databinding.TemplateFreeDayBindableBinding
 import de.htwdd.htwdresden.databinding.TemplateManagementOffersBindableBinding
 import de.htwdd.htwdresden.databinding.TemplateManagementTimesBindableBinding
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
+import kotlin.collections.ArrayList
 
-interface Managementable: Identifiable<ManagementBindables>
-interface ManagementableModels
+//-------------------------------------------------------------------------------------------------- Protocols
+interface Managementable: Identifiable<ManagementableModels>
+interface ManagementableModels: Modelable
 
-// region - JSON
+//-------------------------------------------------------------------------------------------------- JSON
 data class JSemesterPlan (
     val year: Long,
     val type: String,
@@ -59,9 +61,8 @@ data class JTime (
     val begin: String,
     val end: String
 )
-// endregion
 
-// region - Models
+//-------------------------------------------------------------------------------------------------- Concrete Models
 class SemesterPlan(
     val year: Long,
     val type: String,
@@ -84,6 +85,19 @@ class SemesterPlan(
             )
         }
     }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = year.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + period.hashCode()
+        result = 31 * result + freeDays.hashCode()
+        result = 31 * result + lecturePeriod.hashCode()
+        result = 31 * result + examsPeriod.hashCode()
+        result = 31 * result + reregistration.hashCode()
+        return result
+    }
 }
 
 class Period(
@@ -97,6 +111,14 @@ class Period(
                 json.endDay.toDate()!!
             )
         }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = beginDay.hashCode()
+        result = 31 * result + endDay.hashCode()
+        return result
     }
 }
 
@@ -113,6 +135,15 @@ class FreeDay(
                 json.endDay.toDate()!!
             )
         }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + beginDay.hashCode()
+        result = 31 * result + endDay.hashCode()
+        return result
     }
 }
 
@@ -134,6 +165,17 @@ class Management(
             )
         }
     }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = type
+        result = 31 * result + room.hashCode()
+        result = 31 * result + offeredServices.hashCode()
+        result = 31 * result + officeHours.hashCode()
+        result = 31 * result + link.hashCode()
+        return result
+    }
 }
 
 class OfficeHour(
@@ -147,6 +189,14 @@ class OfficeHour(
                 json.times.map { Time.from(it) }
             )
         }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = day.hashCode()
+        result = 31 * result + times.hashCode()
+        return result
     }
 }
 
@@ -162,17 +212,28 @@ class Time(
             )
         }
     }
-}
-// endregion
 
-// region - ManagetableItems
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = begin.hashCode()
+        result = 31 * result + end.hashCode()
+        return result
+    }
+}
+
+//-------------------------------------------------------------------------------------------------- Semester Plan Item
 class SemesterPlanItem(private val item: SemesterPlan): Managementable, Comparable<SemesterPlanItem> {
 
-    private val bindingTypes: ManagementBindables by lazy {
-        ManagementBindables().apply {
-            add(Pair(BR.semsterPlanModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_management_semester_plan_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, ManagementableModels>>().apply {
+            add(BR.semsterPlanModel to model)
         }
     }
+
     private val model = SemesterPlanModel()
     private val sh: StringHolder by lazy { StringHolder.instance }
 
@@ -207,19 +268,22 @@ class SemesterPlanItem(private val item: SemesterPlan): Managementable, Comparab
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_management_semester_plan_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun compareTo(other: SemesterPlanItem) = item.year.compareTo(other.item.year)
 
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = item.hashCode()
 }
 
+//-------------------------------------------------------------------------------------------------- Management Item
 class ManagementItem(private val item: Management): Managementable, Comparable<ManagementItem> {
 
-    private val bindingTypes: ManagementBindables by lazy {
-        ManagementBindables().apply {
-            add(Pair(BR.managementModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_management_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, ManagementableModels>>().apply {
+            add(BR.managementModel to model)
         }
     }
     private val model = ManagementModel()
@@ -271,15 +335,14 @@ class ManagementItem(private val item: Management): Managementable, Comparable<M
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_management_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun compareTo(other: ManagementItem) = item.type.compareTo(other.item.type)
-}
-// endregion
 
-// region ManagementModels
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = item.hashCode()
+}
+
+//-------------------------------------------------------------------------------------------------- Modelable
 class SemesterPlanModel: ManagementableModels {
     val year            = ObservableField<String>()
     val type            = ObservableField<String>()
@@ -311,4 +374,3 @@ class TimeModel: ManagementableModels {
     val day  = ObservableField<String>()
     val time = ObservableField<String>()
 }
-// endregion

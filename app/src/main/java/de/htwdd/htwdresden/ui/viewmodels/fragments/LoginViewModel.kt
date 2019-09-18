@@ -14,7 +14,7 @@ class LoginViewModel: ViewModel() {
 
     fun login(token: String): Observable<List<Course>> {
         return RestApi
-            .courseService
+            .courseEndpoint
             .getCourses("Basic $token")
             .runInThread(Schedulers.io())
             .map { it.map { jCourse -> Course.from(jCourse) } }

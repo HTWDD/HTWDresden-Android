@@ -22,8 +22,8 @@ import kotlin.properties.Delegates
 class TimetableFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
-    private lateinit var timetableItemAdapter: TimetableItemAdapter
-    private val timetableItems: Timetables = ArrayList()
+    private lateinit var adapter: TimetableItemAdapter
+    private val items: Timetables = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -58,10 +58,10 @@ class TimetableFragment: Fragment() {
 
     private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        timetableItemAdapter = TimetableItemAdapter(timetableItems)
-        timetableItemAdapter.onItemsLoaded { goToToday(smooth = false) }
-        timetableRecycler.adapter = timetableItemAdapter
-        timetableItemAdapter.onEmpty {
+        adapter = TimetableItemAdapter(items)
+        adapter.onItemsLoaded { goToToday(smooth = false) }
+        timetableRecycler.adapter = adapter
+        adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text    = getString(R.string.exams_no_results_icon)
@@ -81,7 +81,7 @@ class TimetableFragment: Fragment() {
             .subscribe({ timetables ->
                 weak { self ->
                     if (timetables.isNotEmpty()) {
-                        self.timetableItemAdapter.update(timetables)
+                        self.adapter.update(timetables)
                     }
                 }
             }, {
@@ -104,7 +104,7 @@ class TimetableFragment: Fragment() {
     }
 
     private fun goToToday(smooth: Boolean = false) {
-        if (timetableItems.isNotEmpty()) {
+        if (items.isNotEmpty()) {
             val todayPosition = findTodayPosition()
             if (!smooth) {
                 Handler().postDelayed({
@@ -119,7 +119,7 @@ class TimetableFragment: Fragment() {
     }
 
     private fun findTodayPosition(): Int {
-        val first = timetableItems.firstOrNull().guard { return 0 }
+        val first = items.firstOrNull().guard { return 0 }
 
         (first as? TimetableHeaderItem)?.let {
             if (Date() < it.subheader()) {
@@ -128,7 +128,7 @@ class TimetableFragment: Fragment() {
         }
         var position = 0
         val currentDate = Date()
-        timetableItems.forEach {
+        items.forEach {
             position += 1
             if (it is TimetableHeaderItem) {
                 if (it.subheader() == currentDate) {
@@ -136,7 +136,7 @@ class TimetableFragment: Fragment() {
                 }
             }
         }
-        return timetableItems.size
+        return items.size
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

@@ -19,8 +19,8 @@ import kotlin.properties.Delegates
 class ExamsFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<ExamsViewModel>() }
-    private lateinit var examItemAdapter: ExamItemAdapter
-    private val examItems: Exams = ArrayList()
+    private lateinit var adapter: ExamItemAdapter
+    private val items: Exams = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -55,9 +55,9 @@ class ExamsFragment: Fragment() {
 
     private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        examItemAdapter = ExamItemAdapter(examItems)
-        examableRecycler.adapter = examItemAdapter
-        examItemAdapter.onEmpty {
+        adapter = ExamItemAdapter(items)
+        examableRecycler.adapter = adapter
+        adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text    = getString(R.string.exams_no_results_icon)
@@ -76,7 +76,7 @@ class ExamsFragment: Fragment() {
             .doOnTerminate { isRefreshing = false }
             .subscribe({ exams ->
                 weak { self ->
-                    self.examItemAdapter.update(exams)
+                    self.adapter.update(exams)
                 }
             }, {
                 error(it)
