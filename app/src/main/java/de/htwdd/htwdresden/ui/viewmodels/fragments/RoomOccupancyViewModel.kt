@@ -43,7 +43,7 @@ class RoomOccupancyViewModel: ViewModel() {
 
     fun request(room: String): Observable<List<Timetable>> {
         return RestApi
-            .timetableService
+            .timetableEndpoint
             .roomTimetable(room)
             .runInThread(Schedulers.io())
             .map { json -> json.map { Timetable.from(it) } }

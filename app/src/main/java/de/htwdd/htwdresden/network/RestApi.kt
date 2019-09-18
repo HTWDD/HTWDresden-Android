@@ -3,7 +3,7 @@ package de.htwdd.htwdresden.network
 import android.annotation.SuppressLint
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import de.htwdd.htwdresden.network.services.*
+import de.htwdd.htwdresden.network.endpoints.*
 import de.htwdd.htwdresden.utils.holders.ResourceHolder
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -27,7 +27,7 @@ object RestApi {
     private val rh: ResourceHolder by lazy { ResourceHolder.instance }
     private const val cacheSize: Long = 10L * (1024L * 1024L)
 
-    val timetableService: TimetableService by lazy {
+    val timetableEndpoint: TimetableEndpoint by lazy {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(RUBU_URL)
@@ -35,10 +35,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(TimetableService::class.java)
+        retrofit.create(TimetableEndpoint::class.java)
     }
 
-    val examService: ExamService by lazy {
+    val examEndpoint: ExamEndpoint by lazy {
         val gson = GsonBuilder().apply {
             setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
         }.create()
@@ -49,10 +49,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(ExamService::class.java)
+        retrofit.create(ExamEndpoint::class.java)
     }
 
-    val generalService: GeneralService by lazy {
+    val generalEndpoint: GeneralEndpoint by lazy {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(RUBU_URL)
@@ -60,10 +60,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(GeneralService::class.java)
+        retrofit.create(GeneralEndpoint::class.java)
     }
 
-    val managementService: ManagementService by lazy {
+    val managementEndpoint: ManagementEndpoint by lazy {
         val gson = GsonBuilder().create()
 
         val retrofit = Retrofit.Builder()
@@ -72,10 +72,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(ManagementService::class.java)
+        retrofit.create(ManagementEndpoint::class.java)
     }
 
-    val courseService: CourseService by lazy {
+    val courseEndpoint: CourseEndpoint by lazy {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(QIS_URL)
@@ -83,10 +83,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(CourseService::class.java)
+        retrofit.create(CourseEndpoint::class.java)
     }
 
-    val gradeService: GradeService by lazy {
+    val gradeEndpoint: GradeEndpoint by lazy {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(QIS_URL)
@@ -94,10 +94,10 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(GradeService::class.java)
+        retrofit.create(GradeEndpoint::class.java)
     }
 
-    val canteenService: CanteenService by lazy {
+    val canteenEndpoint: CanteenEnpoint by lazy {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(MENSA_URL)
@@ -105,7 +105,7 @@ object RestApi {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-        retrofit.create(CanteenService::class.java)
+        retrofit.create(CanteenEnpoint::class.java)
     }
 
     private fun unsafeOkHttpClient(cache: Cache? = null): OkHttpClient {

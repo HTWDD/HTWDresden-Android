@@ -31,7 +31,7 @@ class MealsViewModel: ViewModel() {
 
     private fun requestForDay(id: String): Observable<Meals> {
         return RestApi
-            .canteenService
+            .canteenEndpoint
             .getMeals(id, Date().format("yyyy-MM-dd"))                                      // api call
             .runInThread(Schedulers.io())
             .map { it.map { jMeal -> Meal.from(jMeal) } }                                           // json to model
@@ -65,7 +65,7 @@ class MealsViewModel: ViewModel() {
         return Observable.combineLatest(
             weeks                                                                                   // combine all requested dates
             .map { it.format("yyyy-MM-dd") }
-            .map { RestApi.canteenService.getMeals(id, it).runInThread(Schedulers.io()) }
+            .map { RestApi.canteenEndpoint.getMeals(id, it).runInThread(Schedulers.io()) }
             .map { it.map {  jMeals -> jMeals.map { jMeal -> Meal.from(jMeal) } } }
         ) { it.toCollection(ArrayList()) as ArrayList<List<Meal>> }
             .runInThread()

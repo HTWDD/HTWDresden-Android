@@ -44,13 +44,14 @@ class OverviewViewModel: ViewModel() {
         }
 
         return RestApi
-            .timetableService
+            .timetableEndpoint
             .timetable(auth.group, auth.major, auth.studyYear)
             .map { it.map { jTimetable -> Timetable.from(jTimetable) } }
             .map { it.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) } }
+            .map { it.sortedWith(compareBy { c -> c }) }
             .map {
                 result.apply {
-                    addAll(it.map { OverviewScheduleItem(it) }.sortedWith(compareBy { it }))
+                    addAll(it.map { OverviewScheduleItem(it) })
                     if (it.isEmpty()) {
                         add(OverviewFreeDayItem())
                     }
@@ -61,7 +62,7 @@ class OverviewViewModel: ViewModel() {
 
     private fun requestMealsForToday(): Observable<Overviews> {
         return RestApi
-            .canteenService
+            .canteenEndpoint
             .getMeals("80", Date().format("yyyy-MM-dd"))
             .runInThread(Schedulers.io())
             .map { it.map { jMeal -> Meal.from(jMeal) } }
@@ -117,7 +118,7 @@ class OverviewViewModel: ViewModel() {
 
     private fun requestCourses(auth: String): Observable<List<Course>> {
         return RestApi
-            .courseService
+            .courseEndpoint
             .getCourses("Basic $auth")
             .runInThread(Schedulers.io())
             .map { it.map { jCourse -> Course.from(jCourse) } }
@@ -125,7 +126,7 @@ class OverviewViewModel: ViewModel() {
 
     private fun requestGrades(forCourse: Course, auth: String): Observable<List<Grade>> {
         return RestApi
-            .gradeService
+            .gradeEndpoint
             .getGrades(
                 "Basic $auth",
                 forCourse.examinationRegulations.toString(),

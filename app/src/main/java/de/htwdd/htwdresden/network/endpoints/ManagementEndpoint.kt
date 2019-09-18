@@ -1,10 +1,10 @@
-package de.htwdd.htwdresden.network.services
+package de.htwdd.htwdresden.network.endpoints
 
 import de.htwdd.htwdresden.ui.models.JSemesterPlan
 import io.reactivex.Observable
 import retrofit2.http.GET
 
-interface ManagementService {
+interface ManagementEndpoint {
 
     @GET("semesterplan.json")
     fun semesterPlan(): Observable<List<JSemesterPlan>>

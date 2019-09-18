@@ -6,27 +6,32 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.DetailOccupancyBindables
 import de.htwdd.htwdresden.db.OccupancyRealm
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
+import kotlin.collections.ArrayList
 
-//-------------------------------------------------------------------------------------------------- Interface
-interface DetailRoomOccupancable: Identifiable<DetailOccupancyBindables>
-interface DetailRoomOccupancableModels
+//-------------------------------------------------------------------------------------------------- Protocols
+interface DetailRoomOccupancable: Identifiable<DetailRoomOccupancableModels>
+interface DetailRoomOccupancableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- Item
 class DetailRoomOccupancyItem(private val item: OccupancyRealm): DetailRoomOccupancable, Comparable<DetailRoomOccupancyItem> {
 
+    override val viewType: Int
+        get() = R.layout.list_item_detail_room_occupancy_bindable
 
-    private val bindingTypes: DetailOccupancyBindables by lazy {
-        DetailOccupancyBindables().apply {
-            add(Pair(BR.detailRoomOccupancyModel, model))
+    override val bindings by lazy {
+        ArrayList<Pair<Int, DetailRoomOccupancableModels>>().apply {
+            add(BR.detailRoomOccupancyModel to model)
         }
     }
+
     private val model = DetailRoomOccupancyModel()
+
     private val sh: StringHolder by lazy { StringHolder.instance }
 
     init {
@@ -50,13 +55,8 @@ class DetailRoomOccupancyItem(private val item: OccupancyRealm): DetailRoomOccup
             val colors = sh.getStringArray(R.array.timetableColors)
             val colorPosition = Integer.parseInt("${item.name} - ${item.professor}".toSHA256().subSequence(0..5).toString(), 16) % colors.size
             lessonColor.set(colors[colorPosition].toColor())
-
         }
     }
-
-    override fun itemViewType() = R.layout.list_item_detail_room_occupancy_bindable
-
-    override fun bindingTypes() = bindingTypes
 
     fun addRooms(layout: LinearLayout) {
         layout.removeAllViews()
@@ -73,15 +73,25 @@ class DetailRoomOccupancyItem(private val item: OccupancyRealm): DetailRoomOccup
     }
 
     override fun compareTo(other: DetailRoomOccupancyItem) = item.beginTime.compareTo(other.item.beginTime)
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = item.hashCode()
 }
 
+//-------------------------------------------------------------------------------------------------- Header Item
 class DetailRoomOccupancyHeaderItem(private val header: String, private val subheader: String): DetailRoomOccupancable {
 
-    private val bindingTypes: DetailOccupancyBindables by lazy {
-        DetailOccupancyBindables().apply {
-            add(Pair(BR.detailRoomOccupancyHeaderModel, model))
+    override val viewType: Int
+        get() = R.layout.list_item_room_occupancy_detail_header_bindable
+
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, DetailRoomOccupancableModels>>().apply {
+            add(BR.detailRoomOccupancyHeaderModel to model)
         }
     }
+
     private val model = DetailRoomOccupancyHeaderModel()
 
     init {
@@ -91,12 +101,16 @@ class DetailRoomOccupancyHeaderItem(private val header: String, private val subh
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_room_occupancy_detail_header_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun bindingTypes() = bindingTypes
+    override fun hashCode(): Int {
+        var result = header.hashCode()
+        result = 31 * result + subheader.hashCode()
+        return result
+    }
 }
 
-//-------------------------------------------------------------------------------------------------- Model
+//-------------------------------------------------------------------------------------------------- Modelable
 class DetailRoomOccupancyModel: DetailRoomOccupancableModels {
 
     val name            = ObservableField<String>()
@@ -107,7 +121,6 @@ class DetailRoomOccupancyModel: DetailRoomOccupancableModels {
     val rooms           = ObservableField<String>()
     val hasRooms        = ObservableField<Boolean>()
     val lessonColor     = ObservableField<Int>()
-
 
     fun setRooms(list: List<String>) {
         hasRooms.set(!list.isNullOrEmpty())

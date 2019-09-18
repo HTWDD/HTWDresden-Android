@@ -16,8 +16,8 @@ import kotlin.properties.Delegates
 class CampusPlanFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<CampusPlanViewModel>() }
-    private lateinit var campusPlanItemAdapter: CampusPlanItemAdapter
-    private val campusPlanItems: CampusPlans = ArrayList()
+    private lateinit var adapter: CampusPlanItemAdapter
+    private val items: CampusPlans = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -29,8 +29,8 @@ class CampusPlanFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener { request() }
-        campusPlanItemAdapter = CampusPlanItemAdapter(campusPlanItems)
-        campusPlanRecycler.adapter = campusPlanItemAdapter
+        adapter = CampusPlanItemAdapter(items)
+        campusPlanRecycler.adapter = adapter
         request()
     }
 
@@ -43,7 +43,7 @@ class CampusPlanFragment: Fragment() {
             .doOnComplete { isRefreshing = false }
             .subscribe({ campusPlans ->
                 weak { self ->
-                    self.campusPlanItemAdapter.update(campusPlans)
+                    self.adapter.update(campusPlans)
                 }
             }, {
                 error(it)

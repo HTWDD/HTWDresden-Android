@@ -61,6 +61,7 @@ class MealsWidget: AppWidgetProvider() {
                 }, {
                     @Suppress("SENSELESS_COMPARISON")
                     if (context != null) {
+                        views.removeAllViews(R.id.llMeals)
                         val entryView = RemoteViews(context.packageName, R.layout.widget_meals_entry)
                         entryView.setTextViewText(R.id.tvMealName, context.getString(R.string.info_internet_no_connection))
                         views.addView(R.id.llMeals, entryView)
@@ -73,7 +74,7 @@ class MealsWidget: AppWidgetProvider() {
 
         private fun request(): Observable<List<Meal>> {
             return RestApi
-                .canteenService
+                .canteenEndpoint
                 .getMeals("80", Date().format("yyyy-MM-dd"))
                 .runInThread(Schedulers.io())
                 .map { it.map { jMeal -> Meal.from(jMeal) } }

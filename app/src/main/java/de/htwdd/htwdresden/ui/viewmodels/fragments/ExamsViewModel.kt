@@ -18,9 +18,10 @@ class ExamsViewModel: ViewModel() {
     fun request(): Observable<Exams> {
         val auth = cph.getStudyAuth() ?: return Observable.error(Exception("No Credentials"))
 
-        return RestApi.examService.exams(auth.graduation, auth.major, auth.studyYear, auth.group)
+        return RestApi.examEndpoint.exams(auth.graduation, auth.major, auth.studyYear, auth.group)
             .runInThread(Schedulers.io())
             .map { jExams -> jExams.map { jExam -> Exam.from(jExam) } }
-            .map { exams -> exams.map { ExamItem(it) }.sortedBy { it }.toCollection(ArrayList()) as Exams }
+            .map { it.sortedWith(compareBy { it }) }
+            .map { exams -> exams.map { ExamItem(it) }.toCollection(ArrayList()) as Exams }
     }
 }

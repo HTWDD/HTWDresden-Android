@@ -5,18 +5,19 @@ import androidx.annotation.StringRes
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.GradesBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.playAnimation
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.holders.ColorHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.util.*
+import kotlin.collections.ArrayList
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Gradable: Identifiable<GradesBindables>
-interface GradableModel
+interface Gradable: Identifiable<GradableModels>
+interface GradableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- JSON
 data class JGrade(
@@ -58,6 +59,23 @@ class Grade (
         } else {
             1
         }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = tries.hashCode()
+        result = 31 * result + remark.hashCode()
+        result = 31 * result + examNumber.hashCode()
+        result = 31 * result + (examDate?.hashCode() ?: 0)
+        result = 31 * result + typeOfExamination.hashCode()
+        result = 31 * result + credits.hashCode()
+        result = 31 * result + (grade?.hashCode() ?: 0)
+        result = 31 * result + semester.hashCode()
+        result = 31 * result + examination.hashCode()
+        result = 31 * result + state.hashCode()
+        result = 31 * result + id.hashCode()
+        return result
     }
 
     companion object {
@@ -132,11 +150,15 @@ sealed class GradeRemark(@StringRes val resId: Int) {
 //-------------------------------------------------------------------------------------------------- Grade Item
 class GradeItem(private val item: Grade): Gradable {
 
-    private val bindingTypes by lazy {
-        GradesBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_grade_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, GradableModels>>().apply {
             add(BR.gradeModel to model)
         }
     }
+
     private val model = GradeModel()
     private val ch by lazy { ColorHolder.instance }
     private val sh by lazy { StringHolder.instance }
@@ -204,10 +226,6 @@ class GradeItem(private val item: Grade): Gradable {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_grade_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     fun setChevron(imageView: ImageView) {
@@ -224,11 +242,15 @@ class GradeItem(private val item: Grade): Gradable {
 //-------------------------------------------------------------------------------------------------- Grade Item Header
 class GradeHeaderItem(private val header: String, private val subheader: String): Gradable {
 
-    private val bindingTypes by lazy {
-        GradesBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_grade_header_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, GradableModels>>().apply {
             add(BR.gradeHeaderModel to model)
         }
     }
+
     private val model = GradeHeaderModel()
 
     init {
@@ -238,10 +260,6 @@ class GradeHeaderItem(private val header: String, private val subheader: String)
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_grade_header_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode() = 31 * header.hashCode() + subheader.hashCode() * 37
@@ -250,12 +268,17 @@ class GradeHeaderItem(private val header: String, private val subheader: String)
 //-------------------------------------------------------------------------------------------------- Grade Item Average
 class GradeAverageItem(private val gradeAverage: Float, private val credits: Float): Gradable {
 
-    private val bindingTypes by lazy {
-        GradesBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_grade_average_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, GradableModels>>().apply {
             add(BR.gradeAverageModel to model)
         }
     }
+
     private val model = GradeAverageModel()
+
     private val sh by lazy { StringHolder.instance }
 
     init {
@@ -265,17 +288,13 @@ class GradeAverageItem(private val gradeAverage: Float, private val credits: Flo
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_grade_average_bindable
-
-    override fun bindingTypes() = bindingTypes
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode() = gradeAverage.hashCode() * 37 + credits.hashCode() * 31
 }
 
 //-------------------------------------------------------------------------------------------------- Model
-class GradeModel: GradableModel {
+class GradeModel: GradableModels {
     val tries               = ObservableField<String>()
     val triesColor          = ObservableField<Int>()
     val remark              = ObservableField<String>()
@@ -303,12 +322,12 @@ class GradeModel: GradableModel {
     }
 }
 
-class GradeHeaderModel: GradableModel {
+class GradeHeaderModel: GradableModels {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
 }
 
-class GradeAverageModel: GradableModel {
+class GradeAverageModel: GradableModels {
     val gradeAverage = ObservableField<String>()
     val credits      = ObservableField<String>()
 }

@@ -3,26 +3,31 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.OverviewBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toColor
 import de.htwdd.htwdresden.utils.extensions.toSHA256
 import de.htwdd.htwdresden.utils.holders.StringHolder
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Overviewable: Identifiable<OverviewBindables>
-interface OverviewableModel
+interface Overviewable: Identifiable<OverviewableModels>
+interface OverviewableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- Schedule Item
-class OverviewScheduleItem(private val item: Timetable): Overviewable, Comparable<OverviewScheduleItem> {
+class OverviewScheduleItem(private val item: Timetable): Overviewable {
 
-    private val bindingTypes by lazy {
-        OverviewBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_overview_schedule_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, OverviewableModels>>().apply {
             add(BR.overviewScheduleModel to model)
         }
     }
+
     private val model = OverviewScheduleModel()
+
     private val sh: StringHolder by lazy { StringHolder.instance }
 
     init {
@@ -50,33 +55,37 @@ class OverviewScheduleItem(private val item: Timetable): Overviewable, Comparabl
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_overview_schedule_bindable
-
-    override fun bindingTypes() = bindingTypes
-
-    override fun compareTo(other: OverviewScheduleItem) = compareValuesBy(this, other, { it.item.day }, { it.item.beginTime })
-
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun hashCode() = item.id.hashCode() * 31
+    override fun hashCode() = item.hashCode()
 }
 
 //-------------------------------------------------------------------------------------------------- FreeDay Item
 class OverviewFreeDayItem: Overviewable {
 
-    override fun itemViewType() = R.layout.list_item_overview_free_day_bindable
+    override val viewType: Int
+        get() = R.layout.list_item_overview_free_day_bindable
 
-    override fun bindingTypes() = OverviewBindables()
+    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+        get() = ArrayList()
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = viewType * 31
 }
 
 //-------------------------------------------------------------------------------------------------- Mensa Item
 class OverviewMensaItem(private val item: Meal): Overviewable {
 
-    private val bindingTypes by lazy {
-        OverviewBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_overview_mensa_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, OverviewableModels>>().apply {
             add(BR.overviewMensaModel to model)
         }
     }
+
     private val model = OverviewMensaModel()
 
     init {
@@ -85,20 +94,25 @@ class OverviewMensaItem(private val item: Meal): Overviewable {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_overview_mensa_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun bindingTypes() = bindingTypes
+    override fun hashCode() = item.hashCode()
 }
 
 //-------------------------------------------------------------------------------------------------- Grade Item
 class OverviewGradeItem(private val grades: String, private val credits: Float): Overviewable {
 
-    private val bindingTypes by lazy {
-        OverviewBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_overview_grade_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, OverviewableModels>>().apply {
             add(BR.overviewGradeModel to model)
         }
     }
+
     private val model = OverviewGradeModel()
+
     private val sh by lazy { StringHolder.instance }
 
     init {
@@ -108,19 +122,27 @@ class OverviewGradeItem(private val grades: String, private val credits: Float):
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_overview_grade_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun bindingTypes() = bindingTypes
+    override fun hashCode(): Int {
+        var result = grades.hashCode()
+        result = 31 * result + credits.hashCode()
+        return result
+    }
 }
 
 //-------------------------------------------------------------------------------------------------- Header Item
 class OverviewHeaderItem(private val header: String, private val subheader: String): Overviewable {
 
-    private val bindingTypes by lazy {
-        OverviewBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_overview_header_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, OverviewableModels>>().apply {
             add(BR.overviewHeaderModel to model)
         }
     }
+
     private val model = OverviewHeaderModel()
 
     var credits: String
@@ -134,24 +156,45 @@ class OverviewHeaderItem(private val header: String, private val subheader: Stri
         }
     }
 
-    override fun bindingTypes() = bindingTypes
-    override fun itemViewType() = R.layout.list_item_overview_header_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = header.hashCode()
+        result = 31 * result + subheader.hashCode()
+        return result
+    }
 }
 
 //-------------------------------------------------------------------------------------------------- StudyGroup Item
 class OverviewStudyGroupItem: Overviewable {
-    override fun bindingTypes() = OverviewBindables()
-    override fun itemViewType() = R.layout.list_item_overview_no_studygroup_bindable
+
+    override val viewType: Int
+        get() = R.layout.list_item_overview_no_studygroup_bindable
+
+    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+        get() = ArrayList()
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = 31 * viewType
 }
 
 //-------------------------------------------------------------------------------------------------- Login Item
 class OverviewLoginItem: Overviewable {
-    override fun itemViewType() = R.layout.list_item_overview_no_login_bindable
-    override fun bindingTypes() = OverviewBindables()
+
+    override val viewType: Int
+        get() = R.layout.list_item_overview_no_login_bindable
+
+    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+        get() = ArrayList()
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode() = 31 * viewType
 }
 
 //-------------------------------------------------------------------------------------------------- Schedule Model
-class OverviewScheduleModel: OverviewableModel {
+class OverviewScheduleModel: OverviewableModels {
     val name            = ObservableField<String>()
     val professor       = ObservableField<String>()
     val type            = ObservableField<String>()
@@ -174,19 +217,19 @@ class OverviewScheduleModel: OverviewableModel {
 }
 
 //-------------------------------------------------------------------------------------------------- Mensa Model
-class OverviewMensaModel: OverviewableModel {
+class OverviewMensaModel: OverviewableModels {
     val name = ObservableField<String>()
 }
 
 //-------------------------------------------------------------------------------------------------- Grade Model
-class OverviewGradeModel: OverviewableModel {
+class OverviewGradeModel: OverviewableModels {
     val grades = ObservableField<String>()
     val credits = ObservableField<String>()
 }
 
 
 //-------------------------------------------------------------------------------------------------- Header Model
-class OverviewHeaderModel: OverviewableModel {
+class OverviewHeaderModel: OverviewableModels {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
 }

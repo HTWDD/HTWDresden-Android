@@ -32,7 +32,7 @@ class ManagementViewModel: ViewModel() {
 
     @Suppress("UNCHECKED_CAST")
     private fun requestSemesterPlan(): Observable<Managements> {
-        return RestApi.managementService.semesterPlan()
+        return RestApi.managementEndpoint.semesterPlan()
             .runInThread(Schedulers.io())
             .map { jSemesterPlans -> jSemesterPlans.map { jSemesterPlan -> SemesterPlan.from(jSemesterPlan) } }
             .map { semesterPlans -> semesterPlans.filter { Date() in it.period.beginDay..it.period.endDay } }

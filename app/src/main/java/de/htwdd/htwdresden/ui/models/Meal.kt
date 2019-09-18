@@ -3,13 +3,13 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.MealsBindables
 import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.holders.StringHolder
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Mealable: Identifiable<MealsBindables>
-interface MealableModel
+interface Mealable: Identifiable<MealableModel>
+interface MealableModel: Modelable
 
 //-------------------------------------------------------------------------------------------------- JSON
 data class JMeal (
@@ -47,6 +47,17 @@ class Meal(
             )
         }
     }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + category.hashCode()
+        result = 31 * result + prices.hashCode()
+        result = 31 * result + notes.hashCode()
+        return result
+    }
 }
 
 class Prices(
@@ -66,16 +77,32 @@ class Prices(
             )
         }
     }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+
+    override fun hashCode(): Int {
+        var result = students?.hashCode() ?: 0
+        result = 31 * result + (employees?.hashCode() ?: 0)
+        result = 31 * result + (pupils?.hashCode() ?: 0)
+        result = 31 * result + (others?.hashCode() ?: 0)
+        return result
+    }
 }
 
 //-------------------------------------------------------------------------------------------------- Item
 class MealItem(private val item: Meal): Mealable {
-    private val bindingTypes by lazy {
-        MealsBindables().apply {
+
+    override val viewType: Int
+        get() = R.layout.list_item_meal_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, MealableModel>>().apply {
             add(BR.mealModel to model)
         }
     }
+
     private val model = MealModel()
+
     private val sh by lazy { StringHolder.instance }
 
     init {
@@ -92,16 +119,19 @@ class MealItem(private val item: Meal): Mealable {
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_meal_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun bindingTypes() = bindingTypes
+    override fun hashCode() = item.hashCode()
 }
 
 //-------------------------------------------------------------------------------------------------- Header Item
 class MealHeaderItem(private val header: String, private val subheader: String): Mealable {
 
-    private val bindingTypes by lazy {
-        MealsBindables().apply {
+    override val viewType: Int
+        get() = R.layout.list_item_meal_header_bindable
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, MealableModel>>().apply {
             add(BR.mealHeaderModel to model)
         }
     }
@@ -115,9 +145,13 @@ class MealHeaderItem(private val header: String, private val subheader: String):
         }
     }
 
-    override fun itemViewType() = R.layout.list_item_meal_header_bindable
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
 
-    override fun bindingTypes() = bindingTypes
+    override fun hashCode(): Int {
+        var result = header.hashCode()
+        result = 31 * result + subheader.hashCode()
+        return result
+    }
 }
 
 //-------------------------------------------------------------------------------------------------- Model

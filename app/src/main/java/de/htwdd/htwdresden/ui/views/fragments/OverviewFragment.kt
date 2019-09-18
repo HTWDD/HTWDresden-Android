@@ -18,8 +18,8 @@ import kotlin.properties.Delegates
 class OverviewFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<OverviewViewModel>() }
-    private lateinit var overviewItemAdapter: OverviewItemAdapter
-    private val overviewItems: Overviews = ArrayList()
+    private lateinit var adapter: OverviewItemAdapter
+    private val items: Overviews = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -37,9 +37,9 @@ class OverviewFragment: Fragment() {
 
     private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        overviewItemAdapter = OverviewItemAdapter(overviewItems)
-        overviewRecycler.adapter = overviewItemAdapter
-        overviewItemAdapter.onClick { item ->
+        adapter = OverviewItemAdapter(items)
+        overviewRecycler.adapter = adapter
+        adapter.onItemClick { item ->
             when (item) {
                 is OverviewMensaItem        -> findNavController().navigate(R.id.action_canteen_page_fragment_to_meals_pager_page_fragment)
                 is OverviewStudyGroupItem   -> findNavController().navigate(R.id.action_to_study_group_page_fragment)
@@ -62,7 +62,7 @@ class OverviewFragment: Fragment() {
             .doOnComplete { isRefreshing = false }
             .subscribe({ overviews ->
                 weak { self ->
-                    self.overviewItemAdapter.update(overviews)
+                    self.adapter.update(overviews)
                 }
             }, {
                 error(it)

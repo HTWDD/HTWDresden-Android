@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
@@ -17,11 +17,25 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['file'])
+            storePassword keystoreProperties['password']
+            keyAlias keystoreProperties['alias']
+            keyPassword keystoreProperties['password']
+        }
+    }
+
     buildTypes {
         release {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
 
         debug {
@@ -59,17 +73,22 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
+
     // https://github.com/square/retrofit
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
+    def retrofit2_version = "2.6.1"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
+
     // https://square.github.io/picasso/
     implementation 'com.squareup.picasso:picasso:2.71828'
+
     // https://github.com/heinrichreimer/android-canteen-balance
     implementation 'com.heinrichreimersoftware:android-canteen-balance:0.1.2'
 

@@ -19,8 +19,8 @@ import kotlin.properties.Delegates
 class CanteenFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<CanteenViewModel>() }
-    private lateinit var canteenItemAdapter: CanteenItemAdapter
-    private val canteenItems: Canteens = ArrayList()
+    private lateinit var adapter: CanteenItemAdapter
+    private val items: Canteens = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -38,9 +38,9 @@ class CanteenFragment: Fragment() {
 
     private fun setup() {
         swipeRefreshLayout.setOnRefreshListener { request() }
-        canteenItemAdapter = CanteenItemAdapter(canteenItems)
-        canteenRecycler.adapter = canteenItemAdapter
-        canteenItemAdapter.onItemClick {
+        adapter = CanteenItemAdapter(items)
+        canteenRecycler.adapter = adapter
+        adapter.onItemClick {
             findNavController()
                 .navigate(R.id.action_canteen_page_fragment_to_meals_pager_page_fragment,
                 bundleOf(MealsPagerFragment.ARG_TITLE to it.name, MealsPagerFragment.ARG_ID to it.id))
@@ -55,7 +55,7 @@ class CanteenFragment: Fragment() {
             .doOnTerminate { isRefreshing = false }
             .subscribe({ grades ->
                 weak { self ->
-                    self.canteenItemAdapter.update(grades)
+                    self.adapter.update(grades)
                 }
             }, {
                 error(it)

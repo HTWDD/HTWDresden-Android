@@ -61,7 +61,7 @@ class GradesViewModel: ViewModel() {
 
     private fun requestCourses(): Observable<List<Course>> {
         return RestApi
-            .courseService
+            .courseEndpoint
             .getCourses("Basic ${cph.getAuthToken()}")
             .runInThread(Schedulers.io())
             .map { it.map { jCourse -> Course.from(jCourse) } }
@@ -69,7 +69,7 @@ class GradesViewModel: ViewModel() {
 
     private fun requestGrades(forCourse: Course): Observable<List<JGrade>> {
         return RestApi
-            .gradeService
+            .gradeEndpoint
             .getGrades(
                 "Basic ${cph.getAuthToken()}",
                 forCourse.examinationRegulations.toString(),

@@ -41,7 +41,7 @@ class CanteenViewModel: ViewModel() {
 
     private fun requestCanteens(): Observable<List<Canteen>> {
         return RestApi
-            .canteenService
+            .canteenEndpoint
             .getCanteens()
             .runInThread(Schedulers.io())
             .map { it.map { jCanteen -> Canteen.from(jCanteen) }.sortedWith(compareBy { c -> c }) }
@@ -50,7 +50,7 @@ class CanteenViewModel: ViewModel() {
 
     private fun requestMeals(id: String, date: String): Observable<List<Meal>> {
         return RestApi
-            .canteenService
+            .canteenEndpoint
             .getMeals(id, date)
             .runInThread(Schedulers.io())
             .map { it.map { jMeal -> Meal.from(jMeal) } }

@@ -28,8 +28,8 @@ import kotlin.properties.Delegates
 class RoomOccupancyFragment: Fragment() {
 
     private val viewModel by lazy { getViewModel<RoomOccupancyViewModel>() }
-    private lateinit var roomOccupancyItemAdapter: RoomOccupancyItemAdapter
-    private val roomOccupancyItems: Occupancies = ArrayList()
+    private lateinit var adapter: RoomOccupancyItemAdapter
+    private val items: Occupancies = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout?.isRefreshing = new }
     }
@@ -42,18 +42,18 @@ class RoomOccupancyFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout?.isEnabled = false
-        roomOccupancyItemAdapter = RoomOccupancyItemAdapter(roomOccupancyItems)
-        roomOccupancyRecycler.adapter = roomOccupancyItemAdapter
-        roomOccupancyItemAdapter.addOnItemClickListener {
+        adapter = RoomOccupancyItemAdapter(items)
+        roomOccupancyRecycler.adapter = adapter
+        adapter.onItemClick {
             findNavController()
                 .navigate(R.id.action_overview_page_fragment_to_room_occupancy_detail_page_fragment,
                     bundleOf(RoomOccupancyDetailFragment.BUNDLE_ARG_ID to it.id(), "title" to it.name().toUpperCase(
                         Locale.getDefault())))
         }
-        ItemTouchHelper(RoomOccupancySwipeController(roomOccupancyItemAdapter)).apply {
+        ItemTouchHelper(RoomOccupancySwipeController(adapter)).apply {
             attachToRecyclerView(roomOccupancyRecycler)
         }
-        roomOccupancyItemAdapter.onEmpty {
+        adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text = "💡"
@@ -75,19 +75,19 @@ class RoomOccupancyFragment: Fragment() {
         viewModel.query()
         viewModel.onRoomChanged { items, deletions, insertions, changes ->
             weak { self ->
-                self.roomOccupancyItems.apply {
+                self.items.apply {
                     clear()
                     addAll(items)
                 }
                 if (deletions.isEmpty() && insertions.isEmpty() && changes.isEmpty()) {
-                    self.roomOccupancyItemAdapter.update(items)
+                    self.adapter.update(items)
                 } else {
                     for (i in deletions.indices.reversed()) {
                         val range = deletions[i]
-                        self.roomOccupancyItemAdapter.remove(range)
+                        self.adapter.remove(range)
                     }
-                    insertions.forEach { self.roomOccupancyItemAdapter.insert(it) }
-                    changes.forEach { self.roomOccupancyItemAdapter.modify(it) }
+                    insertions.forEach { self.adapter.insert(it) }
+                    changes.forEach { self.adapter.modify(it) }
                 }
             }
         }
