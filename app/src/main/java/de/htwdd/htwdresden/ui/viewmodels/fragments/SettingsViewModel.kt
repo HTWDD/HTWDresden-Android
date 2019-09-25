@@ -1,8 +1,8 @@
 package de.htwdd.htwdresden.ui.viewmodels.fragments
 
 import androidx.lifecycle.ViewModel
-import de.htwdd.htwdresden.BuildConfig
 import de.htwdd.htwdresden.ui.models.SettingsModel
+import de.htwdd.htwdresden.utils.holders.ResourceHolder
 
 class SettingsViewModel: ViewModel() {
 
@@ -12,10 +12,11 @@ class SettingsViewModel: ViewModel() {
     private var onLoginClickClosure: () -> Unit = {}
 
     val model: SettingsModel by lazy { SettingsModel() }
+    private val rh by lazy { ResourceHolder.instance }
 
     init {
         model.apply {
-            version.set("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            version.set("v ${rh.versionName} (${rh.versionCode})")
             onImprintClick { onImprintClosure() }
             onDeleteAllDataClick { onDeleteAllDataClosure() }
             onStudyGroupClick { onStudyGroupClosure() }

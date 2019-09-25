@@ -12,7 +12,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.databinding.FragmentSettingsBinding
 import de.htwdd.htwdresden.ui.viewmodels.fragments.SettingsViewModel
+import de.htwdd.htwdresden.utils.extensions.error
 import de.htwdd.htwdresden.utils.extensions.getViewModel
+import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 
 class SettingsFragment: Fragment() {
@@ -32,6 +34,15 @@ class SettingsFragment: Fragment() {
 
     private fun setup() {
         viewModel.apply {
+            try {
+                val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName, 0)
+                verbose("${packageInfo?.versionName}")
+                verbose("${packageInfo?.versionCode}")
+
+            } catch (e: Exception) {
+                error(e)
+            }
+
             onImprintClick {
                 findNavController()
                     .navigate(R.id.action_to_web_view_page_fragment,
