@@ -178,7 +178,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center"
                         android:layout_marginEnd="@dimen/default_space"
-                        android:enabled="true"
                         android:checked="@{safeUnbox(settingsModel.hasCrashlytics)}"
                         android:onCheckedChanged="@{(switch, checked) -> settingsModel.onCrashlytics(checked)}"/>
 
