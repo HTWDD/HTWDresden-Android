@@ -148,41 +148,7 @@
                     android:layout_marginBottom="@dimen/default_space"
                     android:text="@string/analytics_and_crashlytics"
                     android:textAppearance="@style/TextAppearance.HTW.Small"/>
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="1dp"
-                    android:background="@color/white"
-                    android:padding="@dimen/default_space">
 
-                <ImageView
-                        android:layout_width="@dimen/list_item_small_icon_size"
-                        android:layout_height="@dimen/list_item_small_icon_size"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/ic_analytics"
-                        android:layout_gravity="start|center"
-                        tools:ignore="ContentDescription" />
-
-                <TextView
-                        style="@style/TextAppearance.HTW.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="40dp"
-                        android:text="@string/analytics"
-                        android:layout_gravity="start|center"/>
-
-
-                <!--suppress AndroidUnknownAttribute -->
-                <androidx.appcompat.widget.SwitchCompat
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center"
-                        android:layout_marginEnd="@dimen/default_space"
-                        android:checked="@{safeUnbox(settingsModel.hasAnalytics)}"
-                        android:onCheckedChanged="@{(switch, checked) -> settingsModel.onAnalytics(checked)}"/>
-
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -206,18 +172,16 @@
                         android:text="@string/crashlytics"
                         android:layout_gravity="start|center"/>
 
-
                 <!--suppress AndroidUnknownAttribute -->
                 <androidx.appcompat.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center"
                         android:layout_marginEnd="@dimen/default_space"
-                        android:enabled="@{safeUnbox(settingsModel.hasAnalytics)}"
+                        android:enabled="true"
                         android:checked="@{safeUnbox(settingsModel.hasCrashlytics)}"
                         android:onCheckedChanged="@{(switch, checked) -> settingsModel.onCrashlytics(checked)}"/>
-
-
+                
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <!-- GitHub -->
