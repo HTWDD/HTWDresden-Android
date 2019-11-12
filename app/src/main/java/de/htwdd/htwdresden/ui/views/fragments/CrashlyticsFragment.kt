@@ -53,10 +53,6 @@ class CrashlyticsFragment: Fragment(), Swipeable {
     }
 
     private fun checkState() {
-        btnYes.isEnabled = cph.hasAnalytics()
-
-        if (cph.hasAnalytics()) {
-            tvNeedsAnalytics.hide()
             lottieAnimationView.apply {
                 setAnimation("PulseBlue.json")
                 repeatCount = LottieDrawable.INFINITE
@@ -75,7 +71,5 @@ class CrashlyticsFragment: Fragment(), Swipeable {
                     playAnimation()
                 }
             }
-        }
-
     }
 }
