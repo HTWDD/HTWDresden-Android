@@ -181,7 +181,7 @@
                         android:enabled="true"
                         android:checked="@{safeUnbox(settingsModel.hasCrashlytics)}"
                         android:onCheckedChanged="@{(switch, checked) -> settingsModel.onCrashlytics(checked)}"/>
-                
+
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <!-- GitHub -->
