@@ -29,7 +29,6 @@ class SettingsModel {
     val studyGroup      = ObservableField<String>(readStudyToken(cph.getStudyToken()))
     val loginData       = ObservableField<String>(readAuthToken(cph.getAuthToken()))
     val version         = ObservableField<String>()
-    val hasAnalytics    = ObservableField<Boolean>(cph.hasAnalytics())
     val hasCrashlytics  = ObservableField<Boolean>(cph.hasCrashlytics())
 
     init {
@@ -43,15 +42,8 @@ class SettingsModel {
                     loginData.set(readAuthToken(cph.getAuthToken()))
                 }
 
-                is CryptoSharedPreferencesHolder.SubscribeType.Anaytics -> {
-                    hasAnalytics.set(cph.hasAnalytics())
-                }
-
                 is CryptoSharedPreferencesHolder.SubscribeType.Crashlytics -> {
                     hasCrashlytics.set(cph.hasCrashlytics())
-                    if (!cph.hasCrashlytics()) {
-                        cph.setAnayltics(false)
-                    }
                 }
             }
         }.addTo(disposable)
@@ -94,8 +86,6 @@ class SettingsModel {
     }
 
     fun changeLogin() = onLoginClosure()
-
-    fun onAnalytics(checked: Boolean) = cph.setAnayltics(checked)
 
     fun onCrashlytics(checked: Boolean) = cph.setCrashlytics(checked)
 

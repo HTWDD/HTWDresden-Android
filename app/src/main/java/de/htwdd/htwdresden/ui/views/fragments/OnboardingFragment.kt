@@ -39,7 +39,6 @@ class OnboardingFragment: Fragment(), SwipeDelegate {
     private fun setup() {
         viewPager.adapter = pagerAdapter.apply {
             addFragment(WelcomeFragment.newInstance(this@OnboardingFragment))
-            addFragment(AnalyticsFragment.newInstance(this@OnboardingFragment))
             addFragment(CrashlyticsFragment.newInstance(this@OnboardingFragment))
             addFragment(StudyGroupFragment.newInstance(this@OnboardingFragment))
             addFragment(LoginFragment.newInstance(this@OnboardingFragment))

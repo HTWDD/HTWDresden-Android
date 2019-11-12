@@ -19,7 +19,6 @@ class CryptoSharedPreferencesHolder private constructor() {
     sealed class SubscribeType {
         object StudyToken: SubscribeType()
         object AuthToken: SubscribeType()
-        object Anaytics: SubscribeType()
         object Crashlytics: SubscribeType()
     }
 
@@ -39,7 +38,6 @@ class CryptoSharedPreferencesHolder private constructor() {
         private const val STUDY_TOKEN       = "STUDY_TOKEN"
         private const val AUTH_TOKEN        = "AUTH_TOKEN"
         private const val IS_FIRST_RUN      = "IS_FIRST_RUN"
-        private const val HAS_ANALYTICS     = "HAS_ANALYTICS"
         private const val HAS_CRASHLYTICS   = "HAS_CRASHLYTICS"
     }
 
@@ -67,15 +65,6 @@ class CryptoSharedPreferencesHolder private constructor() {
 
     fun needsOnboarding() = sharedPreferences.getBoolean(IS_FIRST_RUN, true)
 
-    fun hasAnalytics() = sharedPreferences.getBoolean(HAS_ANALYTICS, false)
-
-    fun setAnayltics(active: Boolean) {
-        sharedPreferences.edit {
-            subject.onNext(SubscribeType.Anaytics)
-            putBoolean(HAS_ANALYTICS, active)
-        }
-    }
-
     fun hasCrashlytics() = sharedPreferences.getBoolean(HAS_CRASHLYTICS, false)
 
     fun setCrashlytics(active: Boolean) {
@@ -93,8 +82,6 @@ class CryptoSharedPreferencesHolder private constructor() {
             subject.onNext(SubscribeType.StudyToken)
             remove(AUTH_TOKEN)
             subject.onNext(SubscribeType.AuthToken)
-            remove(HAS_ANALYTICS)
-            subject.onNext(SubscribeType.Anaytics)
             remove(HAS_CRASHLYTICS)
             subject.onNext(SubscribeType.Crashlytics)
             remove(IS_FIRST_RUN)

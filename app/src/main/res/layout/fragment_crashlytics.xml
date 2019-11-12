@@ -110,34 +110,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCanteen" />
 
-        <TextView
-                android:id="@+id/tvNeedsAnalytics"
-                style="@style/TextAppearance.HTW.Small"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/default_space"
-                android:text="@string/crashlytics_not_acceptable"
-                android:textAlignment="center"
-                android:textColor="@color/htw_orange"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCanteenSubtitle" />
-
-
         <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieAnimationView"
                 android:layout_width="0dp"
-                android:layout_height="128dp"
+                android:layout_height="110dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/default_space"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="@dimen/default_space"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvNeedsAnalytics"
+                app:layout_constraintTop_toBottomOf="@+id/tvCanteenSubtitle"
                 app:lottie_autoPlay="false"
                 app:lottie_fileName="PulseGray.json"
                 app:lottie_loop="false" />

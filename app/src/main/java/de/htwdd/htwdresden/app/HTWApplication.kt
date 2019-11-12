@@ -48,12 +48,8 @@ class HTWApplication: Application() {
 
     private fun initializeGoogleServices() {
         val cph = CryptoSharedPreferencesHolder.instance
-        if (cph.hasAnalytics()) {
-            val analytics = FirebaseAnalytics.getInstance(this)
-            analytics.setAnalyticsCollectionEnabled(true)
-            if (cph.hasCrashlytics()) {
-                Fabric.with(this, Crashlytics())
-            }
+        if (cph.hasCrashlytics()) {
+            Fabric.with(this, Crashlytics())
         }
     }
 
