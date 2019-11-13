@@ -66,7 +66,7 @@ class CampusPlanItem(private val item: CampusPlan): CampusPlanable, Comparable<C
         model.apply {
             title.set(item.building)
             image.set(when (item.image) {
-                1L -> R.drawable.campusplan_dresden
+                1L -> R.drawable.campus_plan_dresden
                 else -> R.drawable.campusplan_pillnitz
             })
         }

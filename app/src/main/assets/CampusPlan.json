@@ -1,18 +1,21 @@
 [
     {
-        "building": "Fridrich-List-Platz",
+        "building": "Friedrich-List-Platz",
         "image" : 1,
         "buildings": [
-            "A:Gebäude Andreas-Schubert-Straße 23",
+            "A:A Gebäude, Andreas-Schubert-Straße 23",
             "B:Bibliothek, Andreas-Schubert-Straße 8",
             "G:Lehrgebäude Fahrzeugtechnik, Gutzkowstraße 22",
+            "F:Fahrzeug- und Lagerhalle",
             "H:Lehrgebäude Schnorrstraße 56",
+            "K:Technikum, Kfz-Technik, Uhlandstraße 25",
             "L:Laborgebäude Schnorrstraße 29 (LGS)",
-            "M:Mensa Reichenbachstraße / Fakultät Geoinformation",
-            "N:Laborgebäude Natur- und Ingenieurwissenschaften, Andreas-Schubert-Str. 10",
+            "M:Mensagebäude, Reichenbachstraße",
+            "N:Laborgebäude Natur- u. Ingenieurwissenschaften, Andreas-Schubert-Str. 10",
             "S:Seminargebäude",
+            "SW:Studentenwerk",
             "T:Technikgebäude, Andreas-Schubert-Straße 19",
-            "W:Modellwerkstatt Fakultät Gestaltung, Andreas-Schubert-Straße 21",
+            "W:Modellwerkstatt, Andreas-Schubert-Straße 21",
             "Z:Zentralgebäude Friedrich-List-Platz 1"
         ]
     },

@@ -47,7 +47,7 @@
                         android:scaleType="fitCenter"
                         android:adjustViewBounds="true"
                         tools:ignore="ContentDescription"
-                        tools:src="@drawable/campusplan_dresden"
+                        tools:src="@drawable/campus_plan_dresden"
                         app:zoomage_zoomable="true"
                         app:zoomage_animateOnReset="false"
                         app:zoomage_minScale="0.1"
