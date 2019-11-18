@@ -50,6 +50,13 @@ class SettingsFragment: Fragment() {
                     )
             }
 
+            onDataProtectionClick {
+                findNavController()
+                    .navigate(R.id.action_to_web_view_page_fragment,
+                        bundleOf(WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz.html", "title" to getString(R.string.data_protection))
+                    )
+            }
+
             onDeleteAllDataClick {
                 MaterialDialog(context!!).show {
                     title(R.string.delete_all_saved_data)

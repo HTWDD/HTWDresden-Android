@@ -14,14 +14,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import java.nio.charset.Charset
 
-
-
 class SettingsModel {
     private val ch: ContextHolder by lazy { ContextHolder.instance }
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
     private val disposable = CompositeDisposable()
 
     private var onImprintClosure: () -> Unit = {}
+    private var onDataProtectionClosure: () -> Unit = {}
     private var onDeleteAllDataClosure: () -> Unit = {}
     private var onStudyGroupClosure: () -> Unit = {}
     private var onLoginClosure: () -> Unit = {}
@@ -64,9 +63,13 @@ class SettingsModel {
     }
 
     fun openImprint() = onImprintClosure()
+    fun openDataProtection() = onDataProtectionClosure()
 
     fun onImprintClick(callback: () -> Unit) {
         onImprintClosure = callback
+    }
+    fun onDataProtectionClick(callback: () -> Unit) {
+        onDataProtectionClosure = callback
     }
 
     fun deleteAllData() = onDeleteAllDataClosure()

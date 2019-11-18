@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
+import de.htwdd.htwdresden.ui.viewmodels.fragments.SettingsViewModel
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_crashlytics.*
@@ -49,6 +52,12 @@ class CrashlyticsFragment: Fragment(), Swipeable {
         btnYes.click {
             cph.setCrashlytics(true)
             delegate?.moveNext()
+        }
+        btnLogin.click {
+            findNavController()
+                .navigate(R.id.action_to_web_view_page_fragment,
+                    bundleOf(WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz.html", "title" to getString(R.string.data_protection))
+                )
         }
     }
 

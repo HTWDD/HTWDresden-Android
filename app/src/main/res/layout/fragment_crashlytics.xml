@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -9,12 +9,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 
-        <ImageView
+            <ImageView
                 android:id="@+id/ivLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
@@ -25,7 +25,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
-        <TextView
+            <TextView
                 android:id="@+id/tvTitle"
                 style="@style/TextAppearance.HTW.Header"
                 android:layout_width="0dp"
@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
 
-        <com.airbnb.lottie.LottieAnimationView
+            <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
@@ -51,9 +51,9 @@
                 app:lottie_autoPlay="true"
                 app:lottie_fileName="BarchartsGray.json"
                 app:lottie_loop="false"
-                app:lottie_repeatCount="3"/>
+                app:lottie_repeatCount="3" />
 
-        <TextView
+            <TextView
                 android:id="@+id/tvSubtitle"
                 style="@style/TextAppearance.HTW.Medium"
                 android:layout_width="0dp"
@@ -67,7 +67,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-        <TextView
+            <TextView
                 android:id="@+id/tvTimetableSummary"
                 style="@style/TextAppearance.HTW.Small"
                 android:layout_width="0dp"
@@ -82,7 +82,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
 
-        <TextView
+            <Button
+                android:id="@+id/btnLogin"
+                style="@style/Widget.AppCompat.Button.Colored.HTW"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:enabled="true"
+                android:text="@string/data_protection"
+                app:layout_constraintBottom_toTopOf="@+id/tvCanteen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTimetableSummary" />
+
+
+            <TextView
                 android:id="@+id/tvCanteen"
                 style="@style/TextAppearance.HTW.Description"
                 android:layout_width="wrap_content"
@@ -92,9 +106,9 @@
                 android:textColor="@color/primary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTimetableSummary" />
+                app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
-        <TextView
+            <TextView
                 android:id="@+id/tvCanteenSubtitle"
                 style="@style/TextAppearance.HTW.Small"
                 android:layout_width="0dp"
@@ -110,13 +124,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCanteen" />
 
-        <com.airbnb.lottie.LottieAnimationView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieAnimationView"
                 android:layout_width="0dp"
                 android:layout_height="110dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="@dimen/default_space"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +139,7 @@
                 app:lottie_fileName="PulseGray.json"
                 app:lottie_loop="false" />
 
-        <Button
+            <Button
                 android:id="@+id/btnYes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,6 +152,6 @@
                 app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
