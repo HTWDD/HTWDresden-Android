@@ -53,7 +53,7 @@ class CrashlyticsFragment : Fragment(), Swipeable {
             cph.setCrashlytics(true)
             delegate?.moveNext()
         }
-        btnLogin.click {
+        tvTimetableSummary.click {
 //            if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
                 findNavController()
                     .navigate(

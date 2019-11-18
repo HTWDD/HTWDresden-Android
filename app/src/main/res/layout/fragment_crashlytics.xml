@@ -1,157 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.core.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/htw_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextAppearance.HTW.Header"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/default_space"
+            android:text="@string/crashlytics"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
 
-            <ImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/htw_logo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+            app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="BarchartsGray.json"
+            app:lottie_loop="false"
+            app:lottie_repeatCount="3"/>
 
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/TextAppearance.HTW.Header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="@dimen/default_space"
-                android:text="@string/crashlytics"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+        <TextView
+            android:id="@+id/tvSubtitle"
+            style="@style/TextAppearance.HTW.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/crashlytics_text_content"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
-                app:layout_constraintEnd_toEndOf="@+id/tvTitle"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toStartOf="@+id/tvTitle"
-                app:layout_constraintTop_toTopOf="@+id/tvTitle"
-                app:lottie_autoPlay="true"
-                app:lottie_fileName="BarchartsGray.json"
-                app:lottie_loop="false"
-                app:lottie_repeatCount="3" />
+        <TextView
+            android:id="@+id/tvTimetableSummary"
+            style="@style/TextAppearance.HTW.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/default_space"
+            android:text="@string/crashlytics_text_summary"
+            android:textAlignment="center"
+            android:textColor="@color/middle_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
 
-            <TextView
-                android:id="@+id/tvSubtitle"
-                style="@style/TextAppearance.HTW.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/crashlytics_text_content"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        <TextView
+            android:id="@+id/tvCanteen"
+            style="@style/TextAppearance.HTW.Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/analytics_text_helping"
+            android:textColor="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTimetableSummary" />
 
-            <TextView
-                android:id="@+id/tvTimetableSummary"
-                style="@style/TextAppearance.HTW.Small"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/default_space"
-                android:text="@string/crashlytics_text_summary"
-                android:textAlignment="center"
-                android:textColor="@color/middle_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
+        <TextView
+            android:id="@+id/tvCanteenSubtitle"
+            style="@style/TextAppearance.HTW.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/default_space"
+            android:text="@string/analytics_text_changing"
+            android:textAlignment="center"
+            android:textColor="@color/htw_orange"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCanteen" />
 
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/Widget.AppCompat.Button.Colored.HTW"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:enabled="true"
-                android:text="@string/data_protection"
-                app:layout_constraintBottom_toTopOf="@+id/tvCanteen"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTimetableSummary" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/default_space"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCanteenSubtitle"
+            app:lottie_autoPlay="false"
+            app:lottie_fileName="PulseGray.json"
+            app:lottie_loop="false" />
 
-
-            <TextView
-                android:id="@+id/tvCanteen"
-                style="@style/TextAppearance.HTW.Description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/analytics_text_helping"
-                android:textColor="@color/primary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
-
-            <TextView
-                android:id="@+id/tvCanteenSubtitle"
-                style="@style/TextAppearance.HTW.Small"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/default_space"
-                android:text="@string/analytics_text_changing"
-                android:textAlignment="center"
-                android:textColor="@color/htw_orange"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCanteen" />
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieAnimationView"
-                android:layout_width="0dp"
-                android:layout_height="110dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/default_space"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="@dimen/default_space"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCanteenSubtitle"
-                app:lottie_autoPlay="false"
-                app:lottie_fileName="PulseGray.json"
-                app:lottie_loop="false" />
-
-            <Button
-                android:id="@+id/btnYes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="@string/yes"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView"
-                app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
-                app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
-                app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
+        <Button
+            android:id="@+id/btnYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="@string/yes"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView"
+            app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+            app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+            app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
