@@ -17,13 +17,22 @@ import de.htwdd.htwdresden.utils.extensions.getViewModel
 import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 
-class SettingsFragment: Fragment() {
+class SettingsFragment : Fragment() {
 
     private val viewModel by lazy { getViewModel<SettingsViewModel>() }
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        DataBindingUtil.inflate<FragmentSettingsBinding>(inflater, R.layout.fragment_settings, container, false).apply {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
+        DataBindingUtil.inflate<FragmentSettingsBinding>(
+            inflater,
+            R.layout.fragment_settings,
+            container,
+            false
+        ).apply {
             settingsModel = viewModel.model
         }.root
 
@@ -45,16 +54,35 @@ class SettingsFragment: Fragment() {
 
             onImprintClick {
                 findNavController()
-                    .navigate(R.id.action_to_web_view_page_fragment,
-                        bundleOf(WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Impressum.html", "title" to getString(R.string.imprint))
+                    .navigate(
+                        R.id.action_to_web_view_page_fragment,
+                        bundleOf(
+                            WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Impressum.html",
+                            "title" to getString(R.string.imprint)
+                        )
                     )
             }
 
             onDataProtectionClick {
+                //            if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
                 findNavController()
-                    .navigate(R.id.action_to_web_view_page_fragment,
-                        bundleOf(WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz.html", "title" to getString(R.string.data_protection))
+                    .navigate(
+                        R.id.action_to_web_view_page_fragment,
+                        bundleOf(
+                            WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz.html",
+                            "title" to getString(R.string.data_protection)
+                        )
                     )
+//            } else {
+//                findNavController()
+//                    .navigate(
+//                        R.id.action_to_web_view_page_fragment,
+//                        bundleOf(
+//                            WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz_dark.html",
+//                            "title" to getString(R.string.data_protection)
+//                        )
+//                    )
+//            }
             }
 
             onDeleteAllDataClick {
