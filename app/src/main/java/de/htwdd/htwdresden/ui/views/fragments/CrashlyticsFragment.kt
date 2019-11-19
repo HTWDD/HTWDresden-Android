@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
@@ -12,7 +15,7 @@ import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_crashlytics.*
 
-class CrashlyticsFragment: Fragment(), Swipeable {
+class CrashlyticsFragment : Fragment(), Swipeable {
 
     companion object {
         private var delegate: SwipeDelegate? = null
@@ -50,26 +53,47 @@ class CrashlyticsFragment: Fragment(), Swipeable {
             cph.setCrashlytics(true)
             delegate?.moveNext()
         }
+        tvTimetableSummary.click {
+//            if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                findNavController()
+                    .navigate(
+                        R.id.action_to_web_view_page_fragment,
+                        bundleOf(
+                            WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz.html",
+                            "title" to getString(R.string.data_protection)
+                        )
+                    )
+//            } else {
+//                findNavController()
+//                    .navigate(
+//                        R.id.action_to_web_view_page_fragment,
+//                        bundleOf(
+//                            WebViewFragment.BUNDLE_ARG_URL to "file:///android_asset/HTW-Datenschutz_dark.html",
+//                            "title" to getString(R.string.data_protection)
+//                        )
+//                    )
+//            }
+        }
     }
 
     private fun checkState() {
+        lottieAnimationView.apply {
+            setAnimation("PulseBlue.json")
+            repeatCount = LottieDrawable.INFINITE
+            playAnimation()
+        }
+
+        if (cph.hasCrashlytics()) {
+            btnYes.apply {
+                isEnabled = false
+                text = "✓"
+            }
+
             lottieAnimationView.apply {
-                setAnimation("PulseBlue.json")
+                setAnimation("PulseGray.json")
                 repeatCount = LottieDrawable.INFINITE
                 playAnimation()
             }
-
-            if (cph.hasCrashlytics()) {
-                btnYes.apply {
-                    isEnabled = false
-                    text = "✓"
-                }
-
-                lottieAnimationView.apply {
-                    setAnimation("PulseGray.json")
-                    repeatCount = LottieDrawable.INFINITE
-                    playAnimation()
-                }
-            }
+        }
     }
 }

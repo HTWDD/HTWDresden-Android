@@ -7,6 +7,7 @@ import de.htwdd.htwdresden.utils.holders.ResourceHolder
 class SettingsViewModel: ViewModel() {
 
     private var onImprintClosure: () -> Unit = {}
+    private var onDataProtectionClosure: () -> Unit = {}
     private var onDeleteAllDataClosure: () -> Unit = {}
     private var onStudyGroupClosure: () -> Unit = {}
     private var onLoginClickClosure: () -> Unit = {}
@@ -18,6 +19,7 @@ class SettingsViewModel: ViewModel() {
         model.apply {
             version.set("v ${rh.versionName} (${rh.versionCode})")
             onImprintClick { onImprintClosure() }
+            onDataProtectionClick { onDataProtectionClosure() }
             onDeleteAllDataClick { onDeleteAllDataClosure() }
             onStudyGroupClick { onStudyGroupClosure() }
             onLoginClick { onLoginClickClosure() }
@@ -26,6 +28,9 @@ class SettingsViewModel: ViewModel() {
 
     fun onImprintClick(callback: () -> Unit) {
         onImprintClosure = callback
+    }
+    fun onDataProtectionClick(callback: () -> Unit) {
+        onDataProtectionClosure = callback
     }
 
     fun onDeleteAllDataClick(callback: () -> Unit) {

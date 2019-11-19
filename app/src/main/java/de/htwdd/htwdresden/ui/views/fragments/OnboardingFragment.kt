@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
 import de.htwdd.htwdresden.ui.viewmodels.fragments.OnboardingViewModel
+import de.htwdd.htwdresden.utils.extensions.TAG
 import de.htwdd.htwdresden.utils.extensions.getViewModel
 import kotlinx.android.synthetic.main.fragment_onboarding.*
 
@@ -21,7 +22,7 @@ interface SwipeDelegate {
 }
 
 //-------------------------------------------------------------------------------------------------- Fragment
-class OnboardingFragment: Fragment(), SwipeDelegate {
+class OnboardingFragment : Fragment(), SwipeDelegate {
     private val viewModel by lazy { getViewModel<OnboardingViewModel>() }
     private val pagerAdapter by lazy { PagerAdapter(childFragmentManager) }
 
@@ -38,6 +39,7 @@ class OnboardingFragment: Fragment(), SwipeDelegate {
 
     private fun setup() {
         viewPager.adapter = pagerAdapter.apply {
+            clear()
             addFragment(WelcomeFragment.newInstance(this@OnboardingFragment))
             addFragment(CrashlyticsFragment.newInstance(this@OnboardingFragment))
             addFragment(StudyGroupFragment.newInstance(this@OnboardingFragment))
@@ -62,8 +64,8 @@ class OnboardingFragment: Fragment(), SwipeDelegate {
     }
 
     //---------------------------------------------------------------------------------------------- ViewPager Adapter
-    private inner class PagerAdapter(fm: FragmentManager)
-        : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private inner class PagerAdapter(fm: FragmentManager) :
+        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private val items = ArrayList<Swipeable>()
 
@@ -72,7 +74,14 @@ class OnboardingFragment: Fragment(), SwipeDelegate {
         override fun getCount() = items.size
 
         fun addFragment(fragment: Swipeable) {
+
             items.add(fragment)
+            notifyDataSetChanged()
+
+        }
+
+        fun clear() {
+            items.clear()
             notifyDataSetChanged()
         }
     }
