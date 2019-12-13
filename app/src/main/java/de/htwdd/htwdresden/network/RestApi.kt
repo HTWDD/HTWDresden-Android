@@ -101,7 +101,7 @@ object RestApi {
         val gson = GsonBuilder().create()
         val retrofit = Retrofit.Builder()
             .baseUrl(MENSA_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
+            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
