@@ -27,6 +27,15 @@ object RestApi {
     private val rh: ResourceHolder by lazy { ResourceHolder.instance }
     private const val cacheSize: Long = 10L * (1024L * 1024L)
 
+    private val safeOrUnsafeClient: OkHttpClient
+        get() {
+            return if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+                unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize))
+            } else {
+                OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build()
+            }
+        }
+
     val timetableEndpoint: TimetableEndpoint by lazy {
         val gson = GsonBuilder().create()
 
@@ -138,13 +147,4 @@ object RestApi {
             .sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier { _, _ -> true }.build()
     }
-
-    private val safeOrUnsafeClient: OkHttpClient
-        get() {
-            return if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-                unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize))
-            } else {
-                OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build()
-            }
-        }
 }
