@@ -19,23 +19,34 @@ import javax.net.ssl.X509TrustManager
 
 object RestApi {
 
-    private const val WW2_URL   = "https://www2.htw-dresden.de/~app/API/"
-    private const val RUBU_URL  = "https://rubu2.rz.htw-dresden.de/API/v0/"
-    private const val QIS_URL   = "https://wwwqis.htw-dresden.de/appservice/v2/"
+    private const val WW2_URL = "https://www2.htw-dresden.de/~app/API/"
+    private const val RUBU_URL = "https://rubu2.rz.htw-dresden.de/API/v0/"
+    private const val QIS_URL = "https://wwwqis.htw-dresden.de/appservice/v2/"
     private const val MENSA_URL = "https://openmensa.org/api/v2/"
 
     private val rh: ResourceHolder by lazy { ResourceHolder.instance }
     private const val cacheSize: Long = 10L * (1024L * 1024L)
 
+    private val safeOrUnsafeClient: OkHttpClient
+        get() {
+            return if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+                unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize))
+            } else {
+                OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build()
+            }
+        }
+
     val timetableEndpoint: TimetableEndpoint by lazy {
         val gson = GsonBuilder().create()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(RUBU_URL)
-            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+            .client(safeOrUnsafeClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         retrofit.create(TimetableEndpoint::class.java)
+
     }
 
     val examEndpoint: ExamEndpoint by lazy {
@@ -45,30 +56,32 @@ object RestApi {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(WW2_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
+            .client(safeOrUnsafeClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         retrofit.create(ExamEndpoint::class.java)
+
     }
 
     val generalEndpoint: GeneralEndpoint by lazy {
         val gson = GsonBuilder().create()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(RUBU_URL)
-            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+            .client(safeOrUnsafeClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         retrofit.create(GeneralEndpoint::class.java)
+
     }
 
     val managementEndpoint: ManagementEndpoint by lazy {
         val gson = GsonBuilder().create()
-
         val retrofit = Retrofit.Builder()
             .baseUrl(RUBU_URL)
-            .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+            .client(safeOrUnsafeClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
@@ -112,11 +125,13 @@ object RestApi {
         val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
             @SuppressLint("TrustAllX509TrustManager")
             @Throws(CertificateException::class)
-            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
+            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+            }
 
             @SuppressLint("TrustAllX509TrustManager")
             @Throws(CertificateException::class)
-            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
+            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+            }
 
             override fun getAcceptedIssuers(): Array<X509Certificate?> {
                 return arrayOfNulls(0)

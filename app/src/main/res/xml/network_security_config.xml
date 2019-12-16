@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="true">rubu2.rz.htw-dresden.de</domain>
+        <trust-anchors>
+            <certificates src="@raw/rubu_cert"/>
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
