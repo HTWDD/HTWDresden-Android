@@ -29,13 +29,27 @@ object RestApi {
 
     val timetableEndpoint: TimetableEndpoint by lazy {
         val gson = GsonBuilder().create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(RUBU_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        retrofit.create(TimetableEndpoint::class.java)
+
+        if (android.os.Build.VERSION.SDK_INT < 24)
+        {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(TimetableEndpoint::class.java)
+        }
+        else
+        {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(TimetableEndpoint::class.java)
+        }
     }
 
     val examEndpoint: ExamEndpoint by lazy {
@@ -43,36 +57,93 @@ object RestApi {
             setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
         }.create()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(WW2_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        retrofit.create(ExamEndpoint::class.java)
+        if (android.os.Build.VERSION.SDK_INT < 24)
+        {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(WW2_URL)
+                .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(ExamEndpoint::class.java)
+        }
+        else {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(WW2_URL)
+                .client(
+                    OkHttpClient.Builder().cache(
+                        Cache(
+                            rh.getCacheDirectory(),
+                            cacheSize
+                        )
+                    ).build()
+                )
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(ExamEndpoint::class.java)
+        }
     }
 
     val generalEndpoint: GeneralEndpoint by lazy {
         val gson = GsonBuilder().create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(RUBU_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        retrofit.create(GeneralEndpoint::class.java)
+
+        if (android.os.Build.VERSION.SDK_INT < 24) {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(GeneralEndpoint::class.java)
+        }
+        else
+        {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(
+                    OkHttpClient.Builder().cache(
+                        Cache(
+                            rh.getCacheDirectory(),
+                            cacheSize
+                        )
+                    ).build()
+                )
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(GeneralEndpoint::class.java)
+        }
     }
 
     val managementEndpoint: ManagementEndpoint by lazy {
         val gson = GsonBuilder().create()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(RUBU_URL)
-            .client(OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        retrofit.create(ManagementEndpoint::class.java)
+        if (android.os.Build.VERSION.SDK_INT < 24) {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(unsafeOkHttpClient(Cache(rh.getCacheDirectory(), cacheSize)))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(ManagementEndpoint::class.java)
+        }
+        else {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(RUBU_URL)
+                .client(
+                    OkHttpClient.Builder().cache(
+                        Cache(
+                            rh.getCacheDirectory(),
+                            cacheSize
+                        )
+                    ).build()
+                )
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+            retrofit.create(ManagementEndpoint::class.java)
+        }
     }
 
     val courseEndpoint: CourseEndpoint by lazy {
