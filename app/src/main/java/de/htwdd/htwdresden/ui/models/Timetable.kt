@@ -73,13 +73,17 @@ class Timetable(
         }
 
         private fun lessonDays(dayOfWeek: Long, weeksOnly: List<Long>): List<String> {
-            val calendar = GregorianCalendar.getInstance(Locale.GERMANY)
-            calendar.set(DAY_OF_WEEK, (dayOfWeek.toInt() % 7) + 1)
+            val calendar = GregorianCalendar.getInstance(Locale.GERMANY).apply {
+                set(DAY_OF_WEEK, (dayOfWeek.toInt() % 7) + 1)
+            }
+            val currentYear = calendar.get(YEAR)
+            calendar.set(YEAR, currentYear - 1)
+
             var lastWeek = 0
             return weeksOnly.map {
                 calendar.set(WEEK_OF_YEAR, it.toInt())
                 if ((lastWeek - it.toInt()) > 1) {
-                    calendar.set(YEAR, calendar.get(YEAR) + 1)
+                    calendar.set(YEAR, currentYear)
                 }
                 lastWeek = it.toInt()
                 calendar.time.format("MM-dd-yyyy")

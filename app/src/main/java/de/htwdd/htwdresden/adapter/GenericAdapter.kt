@@ -67,7 +67,7 @@ abstract class GenericAdapter<T: Identifiable<K>, K: Modelable>(private val item
                 addAll(items)
             }
             notifyDataSetChanged()
-            itemsLoadedClosure
+            itemsLoadedClosure.invoke()
         }
     }
 

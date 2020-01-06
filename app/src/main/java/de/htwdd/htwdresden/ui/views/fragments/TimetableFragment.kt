@@ -5,6 +5,9 @@ import android.os.Handler
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
@@ -28,6 +31,13 @@ class TimetableFragment: Fragment() {
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
+    private val smoothScroller: SmoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -105,15 +115,16 @@ class TimetableFragment: Fragment() {
 
     private fun goToToday(smooth: Boolean = false) {
         if (items.isNotEmpty()) {
-            val todayPosition = findTodayPosition()
+            val todayPosition = (findTodayPosition() - 1) % items.size
             if (!smooth) {
-                Handler().postDelayed({
-                    timetableRecycler.scrollToPosition(todayPosition)
-                }, 200)
+                Handler().post {
+                    (timetableRecycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(todayPosition, 0)
+                }
             } else {
                 Handler().postDelayed({
-                    timetableRecycler.smoothScrollToPosition(todayPosition)
-                }, 200)
+                    smoothScroller.targetPosition = todayPosition
+                    timetableRecycler.layoutManager?.startSmoothScroll(smoothScroller)
+                }, 25)
             }
         }
     }
@@ -131,7 +142,7 @@ class TimetableFragment: Fragment() {
         items.forEach {
             position += 1
             if (it is TimetableHeaderItem) {
-                if (it.subheader() == currentDate) {
+                if (it.subheader().format("dd.MM.yyyy") == currentDate.format("dd.MM.yyyy")) {
                     return position
                 }
             }
@@ -144,9 +155,7 @@ class TimetableFragment: Fragment() {
             goToToday(smooth = true)
             true
         }
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

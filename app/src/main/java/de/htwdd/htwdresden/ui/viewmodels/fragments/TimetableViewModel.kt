@@ -1,11 +1,13 @@
 package de.htwdd.htwdresden.ui.viewmodels.fragments
 
+import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.models.TimetableItem
+import de.htwdd.htwdresden.utils.extensions.TAG
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.runInThread
 import de.htwdd.htwdresden.utils.extensions.toDate
@@ -46,6 +48,7 @@ class TimetableViewModel: ViewModel() {
     }
 
     private fun dateStringToHeaderItem(date: String): TimetableHeaderItem {
+        d(TAG(), date)
         val d = date.toDate("MM-dd-yyyy")
         return TimetableHeaderItem(d?.format("EEEE") ?: "", d ?: Date())
     }
