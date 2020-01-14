@@ -43,7 +43,7 @@
                 ]
             }
         ],
-        "link": "https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/studentensekretariat.html"
+        "link": "https://www.htw-dresden.de/studium/im-studium/qualifizierungsangebote-und-sprachen/schluesselqualifikationen-und-fremdsprachen/fremdsprachen/organisatorische-informationen"
     },
     {
         "type": 2,
@@ -89,25 +89,29 @@
                 ]
             }
         ],
-        "link": "https://www.htw-dresden.de/de/hochschule/hochschulstruktur/zentrale-verwaltung-dezernate/dezernat-studienangelegenheiten/pruefungsamt.html"
+        "link": "https://www.htw-dresden.de/studium/im-studium/pruefungsangelegenheiten"
     },
     {
         "type": 3,
-        "room": "A 108",
+        "room": "A101 - A110",
         "offeredServices": [
-            "Beratung zu Prüfungen",
-            "Referat Sport",
-            "Informationen zu und Vermittlung von Angeboten zur Beratung",
-            "Ausstellung der ISIC-Ausweis",
-            "Gruppenausweis für Jugendherbergen",
-            "🥳 Party's"
+            "Studentische Vertretung",
+            "Semesterticket",
+            "Härtefallanerkennung",
+            "Ausstellung der ISIC-Ausweise",
+            "Informationen und Vermittlung von Angeboten zur Beratung",
+            "Veranstaltungen für Studierende"
         ],
         "officeHours": [
             {
                 "day": "Mo",
                 "times": [
                     {
-                        "begin": "10:30",
+                        "begin": "09:00",
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
                         "end": "15:00"
                     }
                 ]
@@ -117,7 +121,11 @@
                 "times": [
                     {
                         "begin": "09:00",
-                        "end": "15:00"
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "16:30"
                     }
                 ]
             },
@@ -125,7 +133,11 @@
                 "day": "Do",
                 "times": [
                     {
-                        "begin": "10:30",
+                        "begin": "09:00",
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
                         "end": "15:00"
                     }
                 ]
