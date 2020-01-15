@@ -93,7 +93,6 @@ class CanteenItem(private val item: Canteen): Canteenable {
     override val id: Int
         get() = item.id.toInt()
 
-
     init {
         model.apply {
             name.set(item.name)
@@ -101,7 +100,8 @@ class CanteenItem(private val item: Canteen): Canteenable {
             city.set(item.city)
             meals.set("${item.meals.size}")
             mealsColor.set(ch.getColor(if (item.meals.isEmpty()) R.color.red_500 else R.color.grey_600))
-            textColor.set(ch.getColor(if(item.meals.isEmpty()) R.color.grey_600 else R.color.dark_gray ))
+            textColor.set(ch.getColor(if(item.meals.isEmpty()) R.color.grey_600 else R.color.dark_gray))
+            disabled.set(item.meals.isEmpty())
         }
     }
 
@@ -118,4 +118,5 @@ class CanteenModel: CanteenableModels {
     val meals       = ObservableField<String>()
     val mealsColor  = ObservableField<Int>()
     val textColor   = ObservableField<Int>()
+    val disabled    = ObservableField<Boolean>()
 }
