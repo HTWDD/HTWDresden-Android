@@ -143,12 +143,12 @@ class RoomOccupancyFragment: Fragment() {
 
             input(waitForPositiveButton = false, maxLength = 7, hintRes = R.string.room_timetable_addDialog_hint) { dialog, text ->
                 val inputField = dialog.getInputField()
-                val isValid = text.matches(Regex("^[a-z] [a-z0-9]{3,5}\$"))
+                val isValid = text.matches(Regex("^[a-zA-Z] [a-zA-Z0-9]{3,5}\$"))
                 inputField.error = if (isValid) null else getString(R.string.room_timetable_invalid)
                 dialog.setActionButtonEnabled(WhichButton.POSITIVE, isValid)
             }
             positiveButton(R.string.general_add) {
-                request(it.getInputField().text.toString())
+                request(it.getInputField().text.toString().toLowerCase())
             }
             negativeButton(R.string.general_cancel)
         }
