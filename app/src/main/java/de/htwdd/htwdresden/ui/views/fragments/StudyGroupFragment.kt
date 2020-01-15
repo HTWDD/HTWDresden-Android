@@ -47,7 +47,7 @@ class StudyGroupFragment: Fragment(), Swipeable {
         val majors: ArrayList<StudyCourse>
                 get() {
                     if (years.isEmpty() || year == null) { return ArrayList() }
-                    return years.first { it.studyYear == year?.studyYear }.studyCourses.toCollection(ArrayList())
+                    return years.first { it.studyYear == year?.studyYear }.studyCourses.filter { it.name.isNotEmpty() }.toCollection(ArrayList())
                 }
         var major: StudyCourse? by observable<StudyCourse?>(null) { _, _, newValue ->
             btnGroup.isEnabled = newValue != null
