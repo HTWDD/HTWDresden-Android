@@ -27,7 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/list_item_inner_space"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:clickable="@{canteenModel.disabled}">
 
             <ImageView
                     android:id="@+id/ivStar"
