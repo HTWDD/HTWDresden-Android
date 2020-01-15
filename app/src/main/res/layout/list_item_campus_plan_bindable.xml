@@ -50,9 +50,10 @@
                         tools:src="@drawable/campus_plan_dd"
                         app:zoomage_zoomable="true"
                         app:zoomage_animateOnReset="false"
-                        app:zoomage_minScale="0.1"
+                        app:zoomage_minScale="1"
                         app:zoomage_maxScale="3"
-                        app:zoomage_autoResetMode="NEVER"/>
+                        app:zoomage_autoResetMode="NEVER"
+                        app:zoomage_restrictBounds="true"/>
 
                 <LinearLayout
                         android:id="@+id/llBuildings"
