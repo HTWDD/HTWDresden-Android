@@ -46,6 +46,7 @@ class CanteenViewModel: ViewModel() {
             .runInThread(Schedulers.io())
             .map { it.map { jCanteen -> Canteen.from(jCanteen) }.sortedWith(compareBy { c -> c }) }
             .map { it.sortedBy { canteen -> !canteen.name.contains("reichenbach", ignoreCase = true) } }
+            .map { p -> p.filterNot { it.name.contains( "Kreuzgymnasium", ignoreCase = true) || it.name.contains("Palucca Schule", ignoreCase = true)}}
     }
 
     private fun requestMeals(id: String, date: String): Observable<List<Meal>> {
