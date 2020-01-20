@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="campusPlanItem"
+                type="de.htwdd.htwdresden.ui.models.CampusPlanModel" />
+    </data>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@{campusPlanItem.title}"
+                tools:text="Campus Name"
+                android:textAppearance="@style/TextAppearance.HTW.Large"/>
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_space"
+                app:cardCornerRadius="@dimen/card_view_corner_radius"
+                app:cardElevation="@dimen/card_view_elevation"
+                app:cardMaxElevation="@dimen/card_view_elevation_no_action">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/list_item_inner_space"
+                    android:background="@color/white">
+
+                <com.jsibbold.zoomage.ZoomageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@{safeUnbox(campusPlanItem.image)}"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/campus_plan_dd"
+                        app:zoomage_zoomable="true"
+                        app:zoomage_animateOnReset="false"
+                        app:zoomage_minScale="1"
+                        app:zoomage_maxScale="3"
+                        app:zoomage_autoResetMode="NEVER"
+                        app:zoomage_restrictBounds="true"/>
+
+                <LinearLayout
+                        android:id="@+id/llBuildings"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</layout>

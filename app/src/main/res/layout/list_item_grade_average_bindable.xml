@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+                name="gradeAverageModel"
+                type="de.htwdd.htwdresden.ui.models.GradeAverageModel" />
+    </data>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_space"
+            android:paddingBottom="@dimen/default_space"
+            android:background="@color/primary"
+            android:layout_marginBottom="@dimen/default_space"
+            android:elevation="@dimen/card_view_elevation">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@{gradeAverageModel.gradeAverage}"
+                android:textColor="@color/white"
+                tools:text="Ø 1.77"
+                android:fontFamily="@font/ubuntu"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.HTW.Header"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginBottom="@dimen/default_space"
+                tools:text="15 Credits"
+                android:fontFamily="@font/ubuntu"
+                android:textColor="@color/white"
+                android:text="@{gradeAverageModel.credits}"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.HTW.Large"/>
+
+    </LinearLayout>
+
+</layout>

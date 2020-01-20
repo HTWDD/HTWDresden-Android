@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+        <Button
+                android:id="@+id/btnLater"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@null"
+                android:text="@string/later"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"
+                android:layout_marginTop="32dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/htw_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnLater"
+                tools:ignore="ContentDescription" />
+
+        <TextView
+                android:id="@+id/textView9"
+                style="@style/TextAppearance.HTW.Header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_space"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/default_space"
+                android:text="@string/settings_studiengruppe"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+
+        <TextView
+                android:id="@+id/content"
+                style="@style/TextAppearance.HTW.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/studygroup_text_content"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <TextView
+                android:id="@+id/summary"
+                style="@style/TextAppearance.HTW.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:layout_marginEnd="@dimen/default_space"
+                android:text="@string/studygroup_text_summary"
+                android:textAlignment="center"
+                android:textColor="@color/middle_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/content" />
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/default_space"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/default_space"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/summary"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="UserGray.json"
+                app:lottie_loop="false" />
+
+        <Button
+                android:id="@+id/btnYear"
+                style="@style/Widget.AppCompat.Button.Colored.HTW"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:enabled="false"
+                android:text="@string/year"
+                app:layout_constraintEnd_toStartOf="@+id/btnMajor"
+                app:layout_constraintTop_toTopOf="@+id/btnMajor"/>
+
+        <TextView
+                android:id="@+id/tvS"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/btnYear"
+                app:layout_constraintStart_toStartOf="@+id/btnYear"
+                app:layout_constraintTop_toBottomOf="@+id/btnYear"
+                tools:text="2017" />
+
+        <Button
+                android:id="@+id/btnMajor"
+                style="@style/Widget.AppCompat.Button.Colored.HTW"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/major"
+                app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+                app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView"
+                android:enabled="false"/>
+
+        <TextView
+                android:id="@+id/tvMajor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/btnMajor"
+                app:layout_constraintStart_toStartOf="@+id/btnMajor"
+                app:layout_constraintTop_toBottomOf="@+id/btnMajor"
+                tools:text="041 | Informatik" />
+
+
+        <Button
+                android:id="@+id/btnGroup"
+                style="@style/Widget.AppCompat.Button.Colored.HTW"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="32dp"
+                android:enabled="false"
+                android:text="@string/group"
+                app:layout_constraintStart_toEndOf="@+id/btnMajor"
+                app:layout_constraintTop_toTopOf="@+id/btnMajor" />
+
+        <TextView
+                android:id="@+id/tvGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/btnGroup"
+                app:layout_constraintStart_toStartOf="@+id/btnGroup"
+                app:layout_constraintTop_toBottomOf="@+id/btnGroup"
+                tools:text="01 | Bachlor" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

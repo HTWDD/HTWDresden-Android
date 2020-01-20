@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+                name="roomOccupancyModel"
+                type="de.htwdd.htwdresden.ui.models.RoomOccupancyModel"/>
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/list_item_inner_space"
+                android:background="@color/white"
+                android:alpha="2">
+
+            <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_room"
+                    app:layout_constraintEnd_toEndOf="@+id/tvCity"
+                    app:layout_constraintStart_toStartOf="@+id/tvCity"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/shape_rounded_corners"
+                    android:backgroundTint="@{safeUnbox(roomOccupancyModel.lessonColor)}"
+                    app:fabCradleRoundedCornerRadius="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvCity"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/tvCity"
+                    style="@style/HTW.BadgeLabel.Small.Orange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@{roomOccupancyModel.occupancies}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    android:minWidth="36dp"
+                    android:textAlignment="center"
+                    tools:text="64" />
+
+            <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@{roomOccupancyModel.roomName}"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.HTW.Medium"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="s 228" />
+
+
+            <TextView
+                    android:id="@+id/tvAdress"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@{safeUnbox(roomOccupancyModel.lessonColor)}"
+                    android:text="@{roomOccupancyModel.currentLesson}"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tvName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    tools:text="Frei" />
+
+            <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_right_chevron"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    android:alpha="0.1"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>
+

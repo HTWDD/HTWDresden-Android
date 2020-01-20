@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <import type="android.view.View" />
+        <variable
+                name="settingsModel"
+                type="de.htwdd.htwdresden.ui.models.SettingsModel" />
+    </data>
+    
+    <androidx.core.widget.NestedScrollView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <!-- HTW Dresen -->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/TextAppearance.HTW.Large"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginBottom="@dimen/default_space"
+                    android:text="@string/change_user_group_and_login"
+                    android:textAppearance="@style/TextAppearance.HTW.Small"/>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.changeStudyGroup() }">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_study_group"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/change_studygroup"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/HTW.BadgeLabel.Small.Orange"
+                        android:visibility="@{settingsModel.studyGroup.length() > 0 ? View.VISIBLE : View.GONE, default=gone}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="32dp"
+                        android:text="@{settingsModel.studyGroup}"
+                        android:layout_gravity="end|center"/>
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.changeLogin()}">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_login"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/change_login"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        android:visibility="@{settingsModel.loginData.length() > 0 ? View.VISIBLE : View.GONE, default=gone }"
+                        style="@style/HTW.BadgeLabel.Small.Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="32dp"
+                        android:text="@{settingsModel.loginData}"
+                        android:layout_gravity="end|center"/>
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <!-- Google Inc. -->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@string/google_inc"
+                    android:textAppearance="@style/TextAppearance.HTW.Large"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginBottom="@dimen/default_space"
+                    android:text="@string/analytics_and_crashlytics"
+                    android:textAppearance="@style/TextAppearance.HTW.Small"/>
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@color/white"
+                    android:padding="@dimen/default_space">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_crashlytics"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/crashlytics"
+                        android:layout_gravity="start|center"/>
+
+                <!--suppress AndroidUnknownAttribute -->
+                <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:checked="@{safeUnbox(settingsModel.hasCrashlytics)}"
+                        android:onCheckedChanged="@{(switch, checked) -> settingsModel.onCrashlytics(checked)}"/>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <!-- GitHub -->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@string/open_source"
+                    android:textAppearance="@style/TextAppearance.HTW.Large"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginBottom="@dimen/default_space"
+                    android:text="@string/more_on_git_hub"
+                    android:textAppearance="@style/TextAppearance.HTW.Small"/>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.openGitHub()}">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_github"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/htw_android"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <!-- Contact -->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@string/about_contact"
+                    android:textAppearance="@style/TextAppearance.HTW.Large"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginBottom="@dimen/default_space"
+                    android:text="@string/feedback_are_requested"
+                    android:textAppearance="@style/TextAppearance.HTW.Small"/>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.composEmail()}">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_send_mail"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/mail"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.openImprint()}">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_imprint"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/imprint"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/selector_list_item_click"
+                android:padding="@dimen/default_space"
+                android:onClick="@{() -> settingsModel.openDataProtection()}">
+
+                <ImageView
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_imprint"
+                    android:layout_gravity="start|center"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="@string/data_protection"
+                    android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                    style="@style/HTW.List.Item.Idicator"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="end|center"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <!-- Reset -->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:text="@string/reset"
+                    android:textAppearance="@style/TextAppearance.HTW.Large"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                    android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                    android:layout_marginBottom="@dimen/default_space"
+                    android:text="@string/delete_all_data"
+                    android:textAppearance="@style/TextAppearance.HTW.Small"/>
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_list_item_click"
+                    android:padding="@dimen/default_space"
+                    android:onClick="@{() -> settingsModel.deleteAllData()}">
+
+                <ImageView
+                        android:layout_width="@dimen/list_item_small_icon_size"
+                        android:layout_height="@dimen/list_item_small_icon_size"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_trash_delete"
+                        android:layout_gravity="start|center"
+                        tools:ignore="ContentDescription" />
+
+                <TextView
+                        style="@style/TextAppearance.HTW.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:text="@string/delete_all_saved_data"
+                        android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                        style="@style/HTW.List.Item.Idicator"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="end|center"
+                        tools:ignore="ContentDescription" />
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <!-- Footer -->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@string/developed_credits"
+                    android:layout_marginTop="32dp"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@{settingsModel.version}"
+                    android:layout_marginTop="@dimen/default_space"
+                    android:layout_marginBottom="32dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

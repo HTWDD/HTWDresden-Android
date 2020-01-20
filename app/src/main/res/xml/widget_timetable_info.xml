@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/widget_timetable"
+    android:initialLayout="@layout/widget_timetable"
+    android:previewImage="@drawable/timetable_widget_preview"
+    android:minHeight="80dp"
+    android:minWidth="280dp"
+    android:updatePeriodMillis="86400000"
+    android:widgetCategory="home_screen"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="#40000000"
+        android:weightSum="5">
+
+    <TextView
+            android:id="@+id/tvMealName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Name"
+            tools:text="Chilicheesse Burger"
+            android:textAlignment="viewStart"
+            android:layout_weight="4"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+    <TextView
+            android:id="@+id/tvMealPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.HTW.Meals.Price"
+            tools:text="2,45 €"
+            android:textAlignment="viewEnd"
+            android:layout_weight="1"/>
+
+</LinearLayout>

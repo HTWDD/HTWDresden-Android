@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+                name="canteenModel"
+                type="de.htwdd.htwdresden.ui.models.CanteenModel"/>
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_item_left_and_right_space"
+            android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+            android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+            android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_view_elevation"
+            app:cardMaxElevation="@dimen/card_view_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/list_item_inner_space"
+                android:background="@color/white"
+                android:clickable="@{canteenModel.disabled}">
+
+            <ImageView
+                    android:id="@+id/ivStar"
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_star"
+                    android:visibility="@{canteenModel.name.contains(`Reichenbach`) ? View.VISIBLE : View.GONE, default=visible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvName" />
+
+            <TextView
+                    android:id="@+id/tvCity"
+                    style="@style/HTW.BadgeLabel.Small.Orange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:minWidth="36dp"
+                    android:text="@{canteenModel.city}"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvAdress"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                    app:layout_constraintTop_toTopOf="@+id/tvAdress"
+                    tools:text="Dresden" />
+
+            <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@{canteenModel.name}"
+                    android:textAppearance="@style/TextAppearance.HTW.Description"
+                    android:textColor="@{safeUnbox(canteenModel.textColor)}"
+                    app:layout_constraintStart_toEndOf="@+id/ivStar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Mensa Reichenbachstraße" />
+
+
+            <TextView
+                    android:id="@+id/tvAdress"
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{canteenModel.address}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    tools:text="Reichenbachstr. 1" />
+
+            <TextView
+                    android:id="@+id/textView10"
+                    style="@style/HTW.BadgeLabel.Small.DarkGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@{safeUnbox(canteenModel.mealsColor)}"
+                    android:text="@{canteenModel.meals}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvName"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                    app:layout_constraintTop_toTopOf="@+id/tvName"
+                    tools:text="0" />
+
+            <ImageView
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:src="@drawable/ic_knife_and_fork"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView10"
+                    app:layout_constraintEnd_toStartOf="@+id/textView10"
+                    app:layout_constraintTop_toTopOf="@+id/textView10"
+                    android:alpha="0.5"
+                    tools:ignore="ContentDescription" />
+
+            <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="@dimen/detail_indicator_size"
+                    android:layout_height="@dimen/detail_indicator_size"
+                    android:padding="@dimen/list_item_small_icon_padding"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_right_chevron"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    android:alpha="0.1"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>
+

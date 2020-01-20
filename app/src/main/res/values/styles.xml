@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:spotShadowAlpha">0.08</item>
+        <item name="android:ambientShadowAlpha">0.01</item>
+        <item name="md_corner_radius">8dp</item>
     </style>
 
     <style name="ButtonHTWStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary</item>
     </style>
+
+    <style name="Widget.AppCompat.Button.Colored.HTW" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">3dp</item>
+        <item name="android:background">@drawable/selector_button_rounded_corners_light_blue</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:translationZ">3dp</item>
+    </style>
+
+
     <!-- Mensa Widget -->
     <style name="Widget.Mensa.Meal" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">12sp</item>
@@ -17,7 +31,179 @@
         <item name="android:includeFontPadding">false</item>
         <item name="android:ellipsize">end</item>
     </style>
+
     <style name="Widget.Mensa.Price" parent="Widget.Mensa.Meal">
         <item name="android:textColor">@color/htw_orange</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Meals Widget -->
+    <style name="Widget.HTW.Meals.Header" parent="TextAppearance.AppCompat.Large.Inverse">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:shadowColor">#80000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">5</item>
+    </style>
+
+    <style name="Widget.HTW.Meals.Date" parent="TextAppearance.AppCompat.Medium.Inverse">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:shadowColor">#80000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">4</item>
+    </style>
+
+    <style name="Widget.HTW.Meals.Name" parent="TextAppearance.AppCompat.Small.Inverse">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:shadowColor">#80000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <!-- Timetable Widget -->
+    <style name="Widget.HTW.Timetable.Small" parent="TextAppearance.AppCompat.Small.Inverse">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:shadowColor">#80000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <style name="Widget.HTW.Meals.Price" parent="TextAppearance.AppCompat.Small.Inverse">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:shadowColor">#80000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
+    <!--Text-->
+    <style name="TextAppearance.HTW.Header" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Large" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Small" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/grey_600</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Small.Bold" parent="TextAppearance.HTW.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.HTW.Description" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/description_text_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!--BadgeText-->
+    <style name="HTW.BadgeLabel.Small.Light" parent="AppTheme">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small.Inverse</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Dark" parent="AppTheme">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Blue" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_light_blue</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Blue.Bold" parent="HTW.BadgeLabel.Small.Blue">
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Orange" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_orange</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Orange.Bold" parent="HTW.BadgeLabel.Small.Orange">
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.DarkGrey" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_dark_grey</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.LightGrey" parent="HTW.BadgeLabel.Small.Dark">
+        <item name="android:background">@drawable/badge_label_light_grey</item>
+    </style>
+
+    <style name="HTW.BadgeLabel.Small.Grey" parent="HTW.BadgeLabel.Small.Light">
+        <item name="android:background">@drawable/badge_label_grey</item>
+    </style>
+
+    <!-- Empty Views -->
+    <style name="HTW.Empty.View.Icon" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
+    </style>
+
+    <style name="HTW.Empty.View.Title" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
+    </style>
+
+    <style name="HTW.Empty.View.Message" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/list_item_top_and_bottom_space</item>
+        <item name="android:layout_marginBottom">@dimen/list_item_top_and_bottom_space</item>
+    </style>
+
+    <!-- Settings-List-Items -->
+    <style name="HTW.List.Item.Idicator" parent="AppTheme">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:src">@drawable/ic_right_chevron</item>
+        <item name="android:alpha">0.15</item>
+    </style>
+
+    <!-- CHIP -->
+    <style name="HTW.Chip" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:backgroundTint">#555555</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/chip_background</item>
     </style>
 </resources>

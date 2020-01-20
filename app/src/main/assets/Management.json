@@ -1,0 +1,148 @@
+[
+    {
+        "type": 1,
+        "room": "Z 221",
+        "offeredServices": [
+            "Bewerbung / Immatrikulation",
+            "Rückmeldung",
+            "Bewerbung für höheres Fachsemester",
+            "Gasthörer",
+            "Beurlaubung",
+            "Exmatrikulation"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "08:30",
+                        "end": "11:00"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "17:00"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ],
+        "link": "https://www.htw-dresden.de/studium/im-studium/qualifizierungsangebote-und-sprachen/schluesselqualifikationen-und-fremdsprachen/fremdsprachen/organisatorische-informationen"
+    },
+    {
+        "type": 2,
+        "room": "Z 223, Z 224",
+        "offeredServices": [
+            "Noten: Erfassung und Verwaltung",
+            "Ausdruck von Notenbescheinigungen",
+            "Erstellung von Zeugnissen, Urkunden und Diploma Supplement",
+            "Planung der Prüfungstermine (Februar und Juli)",
+            "BAföG-Bescheinigungen nach § 48",
+            "Erfassungsbelege für den Darlehens-Teilerlass (BAföG)"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "08:30",
+                        "end": "11:00"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "17:00"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ],
+        "link": "https://www.htw-dresden.de/studium/im-studium/pruefungsangelegenheiten"
+    },
+    {
+        "type": 3,
+        "room": "A101 - A110",
+        "offeredServices": [
+            "Studentische Vertretung",
+            "Semesterticket",
+            "Härtefallanerkennung",
+            "Ausstellung der ISIC-Ausweise",
+            "Informationen und Vermittlung von Angeboten zur Beratung",
+            "Veranstaltungen für Studierende"
+        ],
+        "officeHours": [
+            {
+                "day": "Mo",
+                "times": [
+                    {
+                        "begin": "09:00",
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            },
+            {
+                "day": "Di",
+                "times": [
+                    {
+                        "begin": "09:00",
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "16:30"
+                    }
+                ]
+            },
+            {
+                "day": "Do",
+                "times": [
+                    {
+                        "begin": "09:00",
+                        "end": "11:30"
+                    },
+                    {
+                        "begin": "12:30",
+                        "end": "15:00"
+                    }
+                ]
+            }
+        ],
+        "link": "https://www.stura.htw-dresden.de"
+    }
+]

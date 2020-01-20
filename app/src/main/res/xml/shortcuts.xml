@@ -3,36 +3,39 @@
            xmlns:tools="http://schemas.android.com/tools"
            tools:targetApi="25">
     <shortcut
+            android:enabled="true"
+            android:icon="@drawable/ic_timetable_shortcut"
+            android:shortcutId="navi_timetable"
+            android:shortcutShortLabel="@string/navi_timetable">
+        <intent
+                android:action="de.htwdd.htwdresden.timetable"
+                android:targetClass="de.htwdd.htwdresden.ui.views.activities.MainActivity"
+                android:targetPackage="de.htwdd.htwdresden"
+                android:data="htw://timetable"/>
+        <categories android:name="android.intent.action.MAIN"/>
+    </shortcut>
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/ic_grades_shortcut"
+            android:shortcutId="navi_exams"
+            android:shortcutShortLabel="@string/navi_exams">
+        <intent
+                android:action="de.htwdd.htwdresden.grades"
+                android:targetClass="de.htwdd.htwdresden.ui.views.activities.MainActivity"
+                android:targetPackage="de.htwdd.htwdresden"
+                android:data="htw://grades"/>
+        <categories android:name="android.intent.action.MAIN"/>
+    </shortcut>
+    <shortcut
         android:enabled="true"
-        android:icon="@drawable/food"
+        android:icon="@drawable/ic_meals_shortcurt"
         android:shortcutId="navi_mensa"
-        android:shortcutShortLabel="@string/navi_mensa">
+        android:shortcutShortLabel="@string/mensa_reichenbach">
         <intent
-            android:action="de.htwdd.htwdresden.mensa"
-            android:targetClass="de.htwdd.htwdresden.MainActivity"
-            android:targetPackage="de.htwdd.htwdresden"/>
-        <categories android:name="android.intent.action.MAIN"/>
-    </shortcut>
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/ic_access_time_black_24dp"
-        android:shortcutId="navi_timetable"
-        android:shortcutShortLabel="@string/navi_timetable">
-        <intent
-            android:action="de.htwdd.htwdresden.timetable"
-            android:targetClass="de.htwdd.htwdresden.MainActivity"
-            android:targetPackage="de.htwdd.htwdresden"/>
-        <categories android:name="android.intent.action.MAIN"/>
-    </shortcut>
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/ic_mode_edit_24dp"
-        android:shortcutId="navi_exams"
-        android:shortcutShortLabel="@string/navi_exams">
-        <intent
-            android:action="de.htwdd.htwdresden.examResults"
-            android:targetClass="de.htwdd.htwdresden.MainActivity"
-            android:targetPackage="de.htwdd.htwdresden"/>
+            android:action="de.htwdd.htwdresden.meals"
+            android:targetClass="de.htwdd.htwdresden.ui.views.activities.MainActivity"
+            android:targetPackage="de.htwdd.htwdresden"
+                android:data="htw://meals"/>
         <categories android:name="android.intent.action.MAIN"/>
     </shortcut>
 </shortcuts>

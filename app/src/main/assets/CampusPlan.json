@@ -1,0 +1,36 @@
+[
+    {
+        "building": "Friedrich-List-Platz",
+        "image" : 1,
+        "buildings": [
+            "A:A Gebäude, Andreas-Schubert-Straße 23",
+            "B:Bibliothek, Andreas-Schubert-Straße 8",
+            "G:Lehrgebäude Fahrzeugtechnik, Gutzkowstraße 22",
+            "F:Fahrzeug- und Lagerhalle",
+            "H:Lehrgebäude Schnorrstraße 56",
+            "K:Technikum, Kfz-Technik, Uhlandstraße 25",
+            "L:Laborgebäude Schnorrstraße 29 (LGS)",
+            "M:Mensagebäude, Reichenbachstraße",
+            "N:Laborgebäude Natur- u. Ingenieurwissenschaften, Andreas-Schubert-Str. 10",
+            "S:Seminargebäude",
+            "SW:Studentenwerk",
+            "T:Technikgebäude, Andreas-Schubert-Straße 19",
+            "W:Modellwerkstatt, Andreas-Schubert-Straße 21",
+            "Z:Zentralgebäude Friedrich-List-Platz 1"
+        ]
+    },
+    {
+        "building": "Pillnitz",
+        "image": 2,
+        "buildings": [
+            "P1:Lehrgebäude Pillnitzer Platz 1",
+            "P2:Laborgebäude Mitschurinbau, Pillnitzer Platz 2",
+            "PD:Technikzentrum Dampfschiffstraße",
+            "PW:Tierökologie GaLaBau",
+            "PN:Hörsaalgebäude",
+            "PS:Gewächshausanlage Söbrigener Straße 5",
+            "PB:Lehrgebäude Bergweg 23",
+            "GB:Gemeinschaftsbibliothek HTW Dresden und LfULG"
+        ]
+    }
+]

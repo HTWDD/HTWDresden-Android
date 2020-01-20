@@ -1,7 +1,7 @@
 package de.htwdd.htwdresden.interfaces;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import de.htwdd.htwdresden.types.LessonWeek;
 import io.realm.RealmList;

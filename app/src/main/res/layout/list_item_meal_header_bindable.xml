@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+                name="mealHeaderModel"
+                type="de.htwdd.htwdresden.ui.models.MealHeaderModel" />
+    </data>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@{mealHeaderModel.header}"
+                tools:text="Angebote"
+                android:textAppearance="@style/TextAppearance.HTW.Large"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginBottom="@dimen/default_space"
+                tools:text="09. September"
+                android:text="@{mealHeaderModel.subheader}"
+                android:textAppearance="@style/TextAppearance.HTW.Small"/>
+
+    </LinearLayout>
+
+</layout>

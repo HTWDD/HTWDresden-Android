@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+                name="campusPlanBuildingModel"
+                type="de.htwdd.htwdresden.ui.models.CampusPlanBuildingModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/list_item_top_and_bottom_space"
+            android:paddingBottom="@dimen/list_item_top_and_bottom_space">
+
+        <TextView
+                style="@style/HTW.BadgeLabel.Small.Blue.Bold"
+                android:id="@+id/tvGradeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="35dp"
+                android:layout_marginEnd="@dimen/default_space"
+                android:ellipsize="none"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:scrollHorizontally="false"
+                android:text="@{campusPlanBuildingModel.legend}"
+                app:layout_constraintEnd_toStartOf="@+id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Legende" />
+
+        <TextView
+                android:id="@+id/tvTime"
+                android:textSize="@dimen/medium_text_size"
+                android:fontFamily="sans-serif"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{campusPlanBuildingModel.description}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvGradeName"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Beschreibung" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

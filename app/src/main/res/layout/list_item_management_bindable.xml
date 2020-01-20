@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="managementModel" type="de.htwdd.htwdresden.ui.models.ManagementModel"/>
+    </data>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginTop="@dimen/default_space"
+                android:text="@{managementModel.name}"
+                tools:text="@string/management_office"
+                android:textAppearance="@style/TextAppearance.HTW.Large"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_left_and_right_space"
+                android:layout_marginEnd="@dimen/list_item_left_and_right_space"
+                android:layout_marginBottom="@dimen/default_space"
+                tools:text="Z 221"
+                android:text="@{managementModel.room}"
+                android:textAppearance="@style/TextAppearance.HTW.Small"/>
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_space"
+                app:cardCornerRadius="@dimen/card_view_corner_radius"
+                app:cardElevation="@dimen/card_view_elevation_no_action"
+                app:cardMaxElevation="@dimen/card_view_elevation_no_action">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/list_item_inner_space"
+                    android:background="@color/white">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_services"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <LinearLayout
+                        android:id="@+id/llOffers"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/management_opening_hours"
+                        style="@style/TextAppearance.HTW.Description"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/list_item_top_and_bottom_space"/>
+
+                <LinearLayout
+                        android:id="@+id/llTimes"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_space"
+                        android:layout_marginEnd="@dimen/default_space"
+                        android:layout_marginTop="@dimen/list_item_top_and_bottom_space"
+                        android:layout_marginBottom="@dimen/default_space"/>
+
+                <Button
+                        style="@style/Widget.AppCompat.Button.Colored.HTW"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/list_item_top_and_bottom_space"
+                        android:text="@string/visit_website"
+                        android:onClick="@{() -> managementModel.goToLink()}"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+
+</layout>
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:dither="true">
+    <solid android:color="@color/medium_organge"/>
+    <corners
+        android:radius="@dimen/badge_label_corner_radius"/>
+    <padding
+        android:left="@dimen/badge_label_right_and_left_space"
+        android:right="@dimen/badge_label_right_and_left_space"
+        android:top="@dimen/badge_label_top_and_bottom_space"
+        android:bottom="@dimen/badge_label_top_and_bottom_space"/>
+</shape>

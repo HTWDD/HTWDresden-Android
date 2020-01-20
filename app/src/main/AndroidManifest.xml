@@ -1,129 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.htwdd.htwdresden">
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="de.htwdd.htwdresden">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <!-- client -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission
+            android:name="android.permission.READ_LOGS"
+            tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
-        android:name=".HTWDresdenApplication"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+            android:name=".app.HTWApplication"
+            tools:replace="android:allowBackup"
+            android:allowBackup="false"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:largeHeap="true"
+            android:networkSecurityConfig="@xml/network_security_config">
 
-        <!-- Activities -->
+        <!-- Activities-->
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
+                android:name=".ui.views.activities.MainActivity"
+                android:label="@string/app_name"
+                android:windowSoftInputMode="adjustPan"
+                android:theme="@style/AppTheme.Launcher"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <!-- Accepts URIs that begin with "https://www.htw-dresden.de/app” -->
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:host="www.htw-dresden.de/app"
-                    android:scheme="https"/>
+                        android:host="www.htw-dresden.de/app"
+                        android:scheme="https" />
             </intent-filter>
-
             <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
-        </activity>
-        <activity
-            android:name=".TimetableEditActivity"
-            android:label="@string/timetable_edit_activity_titel"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity"/>
-        </activity>
-        <activity
-            android:name=".RoomTimetableDetailsActivity"
-            android:label="@string/navi_room_timetable"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.htwdd.htwdresden.MainActivity"/>
-        </activity>
-        <activity
-            android:name=".MensaCreditActivity"
-            android:label="@string/mensa_credit_title"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert">
-        </activity>
-        <activity android:name=".PreferencesActivity">
+                    android:name="android.app.shortcuts"
+                    android:resource="@xml/shortcuts" />
         </activity>
 
-        <!-- Services -->
-        <service
-            android:name=".service.VolumeControllerService"
-            android:exported="false"/>
-        <service
-            android:name=".service.TimetableWidgetService"
-            android:enabled="true"/>
-        <service
-            android:name=".service.ExamSyncService"
-            android:enabled="true"/>
-        <service
-            android:name=".service.ExamAutoUpdateService"
-            android:enabled="true"/>
-        <service
-            android:name=".service.TimetableStudentSyncService"
-            android:enabled="true"/>
-        <service
-            android:name=".service.TimetableRoomSyncService"
-            android:enabled="true"/>
-        <service
-            android:name=".service.TimetableProfessorSyncService"
-            android:enabled="true"/>
+        <activity android:name=".ui.views.activities.MensaCreditActivity"
+                android:label=" "
+                android:launchMode="singleTask"
+                android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait"/>
 
-        <!-- Receiver -->
-        <receiver
-            android:name=".service.VolumeControllerService$HtwddBootReceiver"
-            android:enabled="false">
+        <!-- Receivers -->
+        <receiver android:name=".ui.views.widgets.TimetableWidget"
+                android:label="@string/navi_timetable">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".service.ExamAutoUpdateService$UpdateExamsReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".MensaWidget"
-            android:label="@string/navi_mensa">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/mensa_widget_info"/>
-        </receiver>
-        <receiver
-            android:name=".TimetableWidget"
-            android:label="@string/navi_timetable">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/timetable_widget_info"/>
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_timetable_info" />
         </receiver>
 
+        <receiver
+                android:name=".ui.views.widgets.MealsWidget"
+                android:label="@string/meals_widget_label">
+                <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                </intent-filter>
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_meals_info" />
+        </receiver>
+
+        <!-- Meta Datas -->
+        <meta-data
+                android:name="firebase_crashlytics_collection_enabled"
+                android:value="false" />
     </application>
 
 </manifest>
