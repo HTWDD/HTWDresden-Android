@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,9 +45,14 @@ class SettingsFragment : Fragment() {
     private fun setup() {
         viewModel.apply {
             try {
-                val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName, 0)
+                val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName ?: "de.htwdd.htwdresden", 0)
                 verbose("${packageInfo?.versionName}")
-                verbose("${packageInfo?.versionCode}")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    verbose("${packageInfo?.longVersionCode}")
+                } else {
+                    @Suppress("DEPRECATION")
+                    verbose("${packageInfo?.versionCode}")
+                }
 
             } catch (e: Exception) {
                 error(e)

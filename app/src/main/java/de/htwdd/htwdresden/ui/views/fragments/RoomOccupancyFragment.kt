@@ -25,18 +25,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-class RoomOccupancyFragment: Fragment() {
+class RoomOccupancyFragment: Fragment(R.layout.fragment_room_occupancy) {
 
     private val viewModel by lazy { getViewModel<RoomOccupancyViewModel>() }
     private lateinit var adapter: RoomOccupancyItemAdapter
     private val items: Occupancies = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout?.isRefreshing = new }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_room_occupancy, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,9 +1,7 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
@@ -16,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_exams.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
 import kotlin.properties.Delegates
 
-class ExamsFragment: Fragment() {
+class ExamsFragment: Fragment(R.layout.fragment_exams) {
 
     private val viewModel by lazy { getViewModel<ExamsViewModel>() }
     private lateinit var adapter: ExamItemAdapter
@@ -25,12 +23,6 @@ class ExamsFragment: Fragment() {
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_exams, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

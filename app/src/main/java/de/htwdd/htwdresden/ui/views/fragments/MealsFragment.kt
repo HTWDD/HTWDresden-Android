@@ -1,9 +1,7 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import de.htwdd.htwdresden.R
@@ -15,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_meals.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
 import java.util.*
 
-class MealsFragment: Fragment() {
+class MealsFragment: Fragment(R.layout.fragment_meals) {
 
     companion object {
         private const val ARG_TYPE  = "type"
@@ -39,12 +37,6 @@ class MealsFragment: Fragment() {
     private val viewModel by lazy { getViewModel<MealsViewModel>() }
     private lateinit var adapter: MealItemAdapter
     private val items: Meals = ArrayList()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_meals, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

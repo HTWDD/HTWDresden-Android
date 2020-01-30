@@ -2,7 +2,10 @@ package de.htwdd.htwdresden.ui.views.fragments
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +25,7 @@ import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-class TimetableFragment: Fragment() {
+class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
     private lateinit var adapter: TimetableItemAdapter
@@ -37,11 +40,6 @@ class TimetableFragment: Fragment() {
                 return SNAP_TO_START
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_timetable, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
