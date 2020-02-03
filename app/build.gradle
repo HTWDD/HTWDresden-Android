@@ -101,7 +101,7 @@ dependencies {
 
     //Lottie
     implementation 'com.airbnb.android:lottie:3.3.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Android Kotlin Core Extensions
     implementation 'androidx.core:core-ktx:1.1.0'

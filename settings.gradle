@@ -1,7 +1,7 @@
 include ':app'
 
 buildCache {
-    local(DirectoryBuildCache) {
+    local {
         directory = new File(rootDir, 'build-cache')
         removeUnusedEntriesAfterDays = 30
     }
