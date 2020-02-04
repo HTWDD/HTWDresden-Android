@@ -52,8 +52,7 @@ class SettingsModel {
 
     fun composEmail() {
         val intent = Intent(ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
-            putExtra(EXTRA_EMAIL, "app@htw-dresden.de")
+            data = Uri.parse("mailto:app@htw-dresden.de")
             putExtra(EXTRA_SUBJECT, "Android App")
             flags = FLAG_ACTIVITY_NEW_TASK
         }
