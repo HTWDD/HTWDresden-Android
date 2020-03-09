@@ -3,9 +3,7 @@ package de.htwdd.htwdresden.ui.views.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -24,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_study_group.*
 import kotlin.properties.Delegates.observable
 
 @SuppressLint("SetTextI18n")
-class StudyGroupFragment: Fragment(), Swipeable {
+class StudyGroupFragment: Fragment(R.layout.fragment_study_group), Swipeable {
 
     companion object {
         const val ARG_IS_BOARDING = "isBoarding"
@@ -75,12 +73,6 @@ class StudyGroupFragment: Fragment(), Swipeable {
         }
     }
     private val state by lazy { State() }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_study_group, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

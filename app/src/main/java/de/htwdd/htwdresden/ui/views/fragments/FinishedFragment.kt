@@ -2,9 +2,7 @@ package de.htwdd.htwdresden.ui.views.fragments
 
 import android.animation.Animator
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
@@ -13,7 +11,7 @@ import de.htwdd.htwdresden.utils.extensions.emit
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_finished.*
 
-class FinishedFragment: Fragment(), Swipeable {
+class FinishedFragment: Fragment(R.layout.fragment_finished), Swipeable {
 
     companion object {
         private var delegate: SwipeDelegate? = null
@@ -23,12 +21,6 @@ class FinishedFragment: Fragment(), Swipeable {
     }
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_finished, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
