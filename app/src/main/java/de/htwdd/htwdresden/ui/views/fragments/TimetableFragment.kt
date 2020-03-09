@@ -113,14 +113,15 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     private fun goToToday(smooth: Boolean = false) {
         if (items.isNotEmpty()) {
-            val todayPosition = (findTodayPosition() - 1) % items.size
+            val todayPosition = findTodayPosition()
+            val targetPosition = if (todayPosition == 0) todayPosition else (todayPosition - 1) % items.size
             if (!smooth) {
                 Handler().post {
-                    (timetableRecycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(todayPosition, 0)
+                    (timetableRecycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(targetPosition, 0)
                 }
             } else {
                 Handler().postDelayed({
-                    smoothScroller.targetPosition = todayPosition
+                    smoothScroller.targetPosition = targetPosition
                     timetableRecycler.layoutManager?.startSmoothScroll(smoothScroller)
                 }, 25)
             }
