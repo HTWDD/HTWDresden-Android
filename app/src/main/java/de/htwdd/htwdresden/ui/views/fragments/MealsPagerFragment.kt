@@ -1,16 +1,14 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import de.htwdd.htwdresden.R
 import kotlinx.android.synthetic.main.fragment_meals_pager.*
 
-class MealsPagerFragment: Fragment() {
+class MealsPagerFragment: Fragment(R.layout.fragment_meals_pager) {
 
     companion object {
         const val ARG_TITLE = "title"
@@ -18,12 +16,6 @@ class MealsPagerFragment: Fragment() {
     }
 
     private val pagerAdapter by lazy { PagerAdapter(childFragmentManager) }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_meals_pager, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

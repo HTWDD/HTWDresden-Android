@@ -2,9 +2,7 @@ package de.htwdd.htwdresden.ui.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
@@ -17,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_grades.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
 import kotlin.properties.Delegates
 
-class GradesFragment: Fragment() {
+class GradesFragment: Fragment(R.layout.fragment_grades) {
 
     private val viewModel by lazy { getViewModel<GradesViewModel>() }
     private lateinit var adapter: GradeItemAdapter
@@ -26,12 +24,6 @@ class GradesFragment: Fragment() {
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_grades, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

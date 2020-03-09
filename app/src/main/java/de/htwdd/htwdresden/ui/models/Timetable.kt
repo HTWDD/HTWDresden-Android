@@ -10,6 +10,7 @@ import de.htwdd.htwdresden.utils.extensions.toColor
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.extensions.toSHA256
 import de.htwdd.htwdresden.utils.holders.StringHolder
+import java.lang.Math.abs
 import java.util.*
 import java.util.Calendar.*
 import kotlin.collections.ArrayList
@@ -50,7 +51,8 @@ class Timetable(
     val professor: String? = null,
     val rooms: List<String>,
     val lastChanged: String,
-    val lessonDays: List<String>): Comparable<Timetable> {
+    val lessonDays: List<String>
+) : Comparable<Timetable> {
 
     companion object {
         fun from(json: JTimetable): Timetable {
@@ -76,22 +78,30 @@ class Timetable(
             val calendar = GregorianCalendar.getInstance(Locale.GERMANY).apply {
                 set(DAY_OF_WEEK, (dayOfWeek.toInt() % 7) + 1)
             }
-            val currentYear = calendar.get(YEAR)
-            calendar.set(YEAR, currentYear - 1)
+            var currentYear = calendar.get(YEAR)
+            var lastWeek = getInstance().get(WEEK_OF_YEAR)
+            val diffWeeks = weeksOnly.dropLast(0).zip(weeksOnly).map {
+                it.first - it.second
+            }.filter { it < 0 }
 
-            var lastWeek = 0
             return weeksOnly.map {
-                calendar.set(WEEK_OF_YEAR, it.toInt())
-                if ((lastWeek - it.toInt()) > 1) {
-                    calendar.set(YEAR, currentYear)
+                if (diffWeeks.isNotEmpty()) {
+                    if (lastWeek - it < -1) {
+                        currentYear -= 1
+                    } else if (lastWeek - it >= kotlin.math.abs(diffWeeks.first())) {
+                        currentYear += 1
+                    }
                 }
                 lastWeek = it.toInt()
+                calendar.set(WEEK_OF_YEAR, it.toInt())
+                calendar.set(YEAR, currentYear)
                 calendar.time.format("MM-dd-yyyy")
             }
         }
     }
 
-    override fun compareTo(other: Timetable) = compareValuesBy(this, other, { it.day }, { it.beginTime })
+    override fun compareTo(other: Timetable) =
+        compareValuesBy(this, other, { it.day }, { it.beginTime })
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import de.htwdd.htwdresden.utils.AutoDisposable
 import java.lang.ref.WeakReference
 
@@ -34,7 +34,7 @@ private fun <T: Fragment> T.disposeBag(): AutoDisposable {
 val <T: Fragment> T.disposeBag: AutoDisposable
     get() = disposeBag()
 
-inline fun <reified T: ViewModel> Fragment.getViewModel(): T = ViewModelProviders.of(this).get(T::class.java)
+inline fun <reified T: ViewModel> Fragment.getViewModel(): T = ViewModelProvider(this).get(T::class.java)
 
 fun <T: Fragment> T.hideKeyboard() {
     context?.let {
