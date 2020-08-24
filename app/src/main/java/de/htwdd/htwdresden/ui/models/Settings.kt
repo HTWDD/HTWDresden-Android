@@ -48,7 +48,7 @@ class SettingsModel {
         }.addTo(disposable)
     }
 
-    fun openGitHub() = ch.openUrl("https://github.com/HTWDD/HTWDresden")
+    fun openGitHub() = ch.openUrl("https://github.com/HTWDD/HTWDresden-Android")
 
     fun composEmail() {
         val intent = Intent(ACTION_SENDTO).apply {
