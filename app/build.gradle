@@ -19,29 +19,19 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
-    def keystorePropertiesFile = rootProject.file("keystore.properties")
-    def keystoreProperties = new Properties()
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
     signingConfigs {
-        release {
-            storeFile file(keystoreProperties['file'])
-            storePassword keystoreProperties['password']
-            keyAlias keystoreProperties['alias']
-            keyPassword keystoreProperties['password']
-        }
+        release
     }
 
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-        }
-
-        debug {
-            debuggable true
         }
     }
 
@@ -63,6 +53,18 @@ android {
     dataBinding {
         enabled = true
     }
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+if (keystorePropertiesFile.canRead()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    android.signingConfigs.release.storeFile = file(keystoreProperties['file'])
+    android.signingConfigs.release.storePassword = keystoreProperties['password']
+    android.signingConfigs.release.keyAlias = keystoreProperties['alias']
+    android.signingConfigs.release.keyPassword = keystoreProperties['password']
+} else {
+    android.buildTypes.release.signingConfig = null
 }
 
 realm {
