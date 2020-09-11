@@ -10,12 +10,12 @@ apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "de.htwdd.htwdresden"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
