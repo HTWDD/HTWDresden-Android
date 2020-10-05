@@ -10,7 +10,6 @@ import de.htwdd.htwdresden.utils.extensions.toColor
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.extensions.toSHA256
 import de.htwdd.htwdresden.utils.holders.StringHolder
-import java.lang.Math.abs
 import java.util.*
 import java.util.Calendar.*
 import kotlin.collections.ArrayList
@@ -80,13 +79,13 @@ class Timetable(
             }
             var currentYear = calendar.get(YEAR)
             var lastWeek = getInstance().get(WEEK_OF_YEAR)
-            val diffWeeks = weeksOnly.dropLast(0).zip(weeksOnly).map {
+            val diffWeeks = weeksOnly.drop(1).zip(weeksOnly).map {
                 it.first - it.second
             }.filter { it < 0 }
 
             return weeksOnly.map {
                 if (diffWeeks.isNotEmpty()) {
-                    if (lastWeek - it < -1) {
+                    if (lastWeek - it < -10) {
                         currentYear -= 1
                     } else if (lastWeek - it >= kotlin.math.abs(diffWeeks.first())) {
                         currentYear += 1
