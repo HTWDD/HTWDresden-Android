@@ -27,6 +27,7 @@ import kotlin.properties.Delegates
 
 class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
+    private val defaultPattern = "dd.MM.yyyy"
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
     private lateinit var adapter: TimetableItemAdapter
     private val items: Timetables = ArrayList()
@@ -141,7 +142,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         items.forEach {
             position += 1
             if (it is TimetableHeaderItem) {
-                if (it.subheader().format("dd.MM.yyyy") == currentDate.format("dd.MM.yyyy")) {
+                if (it.subheader().format(defaultPattern) == currentDate.format(defaultPattern) || it.subheader().after(currentDate)) {
                     return position
                 }
             }

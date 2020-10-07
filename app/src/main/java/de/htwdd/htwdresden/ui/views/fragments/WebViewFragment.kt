@@ -10,7 +10,7 @@ import de.htwdd.htwdresden.ui.viewmodels.fragments.WebViewModel
 import de.htwdd.htwdresden.utils.extensions.getViewModel
 import kotlinx.android.synthetic.main.fragment_web_view.*
 
-class WebViewFragment: Fragment(R.layout.fragment_web_view) {
+class WebViewFragment : Fragment(R.layout.fragment_web_view) {
 
     companion object {
         const val BUNDLE_ARG_URL = "URL"
@@ -28,7 +28,7 @@ class WebViewFragment: Fragment(R.layout.fragment_web_view) {
                 cacheMode = LOAD_DEFAULT
                 javaScriptEnabled = true
             }
-            loadUrl(this@WebViewFragment.url)
+            if(this@WebViewFragment.url!=null) loadUrl(this@WebViewFragment.url!!)
         }
     }
 

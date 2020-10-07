@@ -44,5 +44,6 @@
 
     <!-- Detail Indicator -->
     <dimen name="detail_indicator_size">20dp</dimen>
+    <dimen name="list_item_overview_schedule_textview_min_width">45dp</dimen>
 
 </resources>
