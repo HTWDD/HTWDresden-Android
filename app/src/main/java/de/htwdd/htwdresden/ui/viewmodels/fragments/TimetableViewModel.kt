@@ -41,7 +41,7 @@ class TimetableViewModel: ViewModel() {
                 it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
                     result.add(dateStringToHeaderItem(dateKey))
                     result.addAll(it.second.filter { p -> p.lessonDays.contains(dateKey) }
-                        .map { filteredItem -> TimetableItem(filteredItem) })
+                        .sortedBy { it.beginTime }.map { filteredItem -> TimetableItem(filteredItem) })
                 }
                 result
             }
