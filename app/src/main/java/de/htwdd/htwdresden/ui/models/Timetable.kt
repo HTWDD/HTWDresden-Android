@@ -3,13 +3,16 @@ package de.htwdd.htwdresden.ui.models
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.db.OccupancyRealm
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.interfaces.Modelable
-import de.htwdd.htwdresden.utils.extensions.format
-import de.htwdd.htwdresden.utils.extensions.toColor
-import de.htwdd.htwdresden.utils.extensions.toDate
-import de.htwdd.htwdresden.utils.extensions.toSHA256
+import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import io.realm.kotlin.createObject
 import java.util.*
 import java.util.Calendar.*
 import kotlin.collections.ArrayList
@@ -20,56 +23,56 @@ interface TimetableableModels: Modelable
 
 //-------------------------------------------------------------------------------------------------- JSON
 data class JTimetable(
-    val id: String,
-    val moduleId: String? = null,
-    val lessonTag: String,
-    val name: String,
-    val type: String,
-    val day: Long,
-    val beginTime: String,
-    val endTime: String,
-    val week: Long,
-    val weeksOnly: List<Long>,
-    val professor: String? = null,
-    val rooms: List<String>,
-    val lastChanged: String
+        val id: String,
+        val moduleId: String? = null,
+        val lessonTag: String,
+        val name: String,
+        val type: String,
+        val day: Long,
+        val beginTime: String,
+        val endTime: String,
+        val week: Long,
+        val weeksOnly: List<Long>,
+        val professor: String? = null,
+        val rooms: List<String>,
+        val lastChanged: String
 )
 
 //-------------------------------------------------------------------------------------------------- Concrete Model
 class Timetable(
-    val id: String,
-    val moduleId: String? = null,
-    val lessonTag: String,
-    val name: String,
-    val type: String,
-    val day: Long,
-    val beginTime: Date,
-    val endTime: Date,
-    val week: Long,
-    val weeksOnly: List<Long>,
-    val professor: String? = null,
-    val rooms: List<String>,
-    val lastChanged: String,
-    val lessonDays: List<String>
+       val id: String,
+       val moduleId: String? = null,
+       val lessonTag: String,
+       val name: String,
+       val type: String,
+       val day: Long,
+       val beginTime: Date,
+       val endTime: Date,
+       val week: Long,
+       val weeksOnly: List<Long>,
+       val professor: String? = null,
+       val rooms: List<String>,
+       val lastChanged: String,
+       val lessonDays: List<String>
 ) : Comparable<Timetable> {
 
     companion object {
         fun from(json: JTimetable): Timetable {
             return Timetable(
-                json.id,
-                json.moduleId,
-                json.lessonTag,
-                json.name,
-                json.type,
-                json.day,
-                json.beginTime.toDate("HH:mm:ss")!!,
-                json.endTime.toDate("HH:mm:ss")!!,
-                json.week,
-                json.weeksOnly,
-                json.professor,
-                json.rooms,
-                json.lastChanged,
-                lessonDays(json.day, json.weeksOnly)
+                    json.id,
+                    json.moduleId,
+                    json.lessonTag,
+                    json.name,
+                    json.type,
+                    json.day,
+                    json.beginTime.toDate("HH:mm:ss")!!,
+                    json.endTime.toDate("HH:mm:ss")!!,
+                    json.week,
+                    json.weeksOnly,
+                    json.professor,
+                    json.rooms,
+                    json.lastChanged,
+                    lessonDays(json.day, json.weeksOnly)
             )
         }
 
@@ -120,6 +123,49 @@ class Timetable(
         result = 31 * result + lastChanged.hashCode()
         result = 31 * result + lessonDays.hashCode()
         return result
+    }
+}
+
+open class TimetableRealm(
+        @PrimaryKey
+        var id: String = "",
+        var moduleId:  String? = null,
+        var lessonTag: String = "",
+        var name:  String = "",
+        var type:  String = "",
+        var day: Long = 0,
+        var beginTime: Date? = null,
+        var endTime: Date? = null,
+        var week: Long = 0,
+        var weeksOnly: RealmList<Long> = RealmList(),
+        var professor: String? = null,
+        var rooms: RealmList<String> = RealmList(),
+        var lastChanged: String = "",
+        var lessonDays: RealmList<String> = RealmList()
+) : RealmObject() {
+
+    companion object {
+        fun fromTimetable(timetable: Timetable) = with(timetable) {
+            TimetableRealm(id, moduleId, lessonTag, name, type, day, beginTime, endTime, week, RealmList<Long>().apply { addAll(weeksOnly) }, professor,
+                    RealmList<String>().apply { addAll(rooms) }, lastChanged, RealmList<String>().apply { addAll(lessonDays) })
+        }
+
+        fun toTimetable(timetableRealm: TimetableRealm) = with(timetableRealm) {
+            Timetable(id, moduleId, lessonTag, name, type, day, beginTime!!, endTime!!, week, weeksOnly?.toCollection(ArrayList())  ?: emptyList(), professor,
+                    rooms?.toCollection(ArrayList())  ?: emptyList(), lastChanged, lessonDays?.toCollection(ArrayList()) ?: emptyList())
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TimetableRealm
+        if (id != other.id) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
     }
 }
 
@@ -253,4 +299,34 @@ class TimetableHeaderModel: TimetableableModels {
 
 class TimetableFreeModel: TimetableableModels {
     val freeDayText = ObservableField<String>()
+}
+
+fun TimetableRealm.update(timetable: Timetable) {
+    verbose("update($timetable)")
+    val realm = Realm.getDefaultInstance()
+    realm.use { r ->
+        r.executeTransaction { transaction ->
+            var result = TimetableRealm.fromTimetable(timetable)
+            r.insertOrUpdate(result)
+        }
+    }
+//    return timetableRealm
+}
+
+fun TimetableRealm.delete() {
+    val realm = Realm.getDefaultInstance()
+    realm.use {
+        it.executeTransaction {
+            this.deleteFromRealm()
+        }
+    }
+}
+
+fun Any.deleteAllTimetable() {
+    val realm = Realm.getDefaultInstance()
+    realm.use {
+        it.executeTransaction {
+            it.delete(TimetableRealm::class.java)
+        }
+    }
 }

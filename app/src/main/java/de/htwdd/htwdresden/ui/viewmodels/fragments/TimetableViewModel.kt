@@ -4,30 +4,36 @@ import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
-import de.htwdd.htwdresden.ui.models.Timetable
-import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
-import de.htwdd.htwdresden.ui.models.TimetableItem
+import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.TAG
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.runInThread
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
+import io.realm.Realm
 import java.util.*
-
 
 class TimetableViewModel: ViewModel() {
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
+    private val realm: Realm by lazy { Realm.getDefaultInstance() }
 
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
         val auth = cph.getStudyAuth() ?: return Observable.error(Exception("No Credentials"))
+
+
         return RestApi.timetableEndpoint.timetable(auth.group, auth.major, auth.studyYear)
             .runInThread()
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
             .map { it.sortedWith(compareBy { c -> c }) }
-            .map { timetables ->                                                                    // Grouping to lesson days and lessons
+            .map { timetableList ->                                                                    // Grouping to lesson days and lessons
+
+                deleteAllTimetable()
+                timetableList.forEach { TimetableRealm().update(it) }
+
+                val timetables = realm.where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(it) }
                 val sortedKeySet = mutableSetOf<String>()
                 val sortedValueSet = mutableSetOf<Timetable>()
                 timetables.groupBy { it.lessonDays }.apply {

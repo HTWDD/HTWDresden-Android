@@ -33,7 +33,7 @@ class HTWApplication: Application() {
         Realm.init(this)
         val realmConfiguration = RealmConfiguration.Builder()
             .migration(DatabaseMigrations())
-            .schemaVersion(6)
+            .schemaVersion(7)
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(realmConfiguration)
