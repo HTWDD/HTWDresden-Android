@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.adapter.TimetableGridAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
+import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.utils.extensions.*
@@ -45,6 +48,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        timetableWeeklyOverview.adapter = TimetableGridAdapter(activity as Context, ArrayList())
         setup()
         request()
     }
@@ -90,6 +94,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             .subscribe({ timetables ->
                 weak { self ->
                     if (timetables.isNotEmpty()) {
+
                         self.adapter.update(timetables)
                     }
                 }

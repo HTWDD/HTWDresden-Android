@@ -7,6 +7,15 @@
         android:animateLayoutChanges="true"
         android:animationCache="true">
 
+    <GridView
+        android:id="@+id/timetableWeeklyOverview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
+        android:background="@color/light_grey"
+        android:numColumns="6" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
@@ -21,6 +30,7 @@
                 android:id="@+id/timetableRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:paddingTop="@dimen/list_item_top_and_bottom_space"
                 android:paddingBottom="@dimen/list_item_top_and_bottom_space"
                 android:clipToPadding="false"

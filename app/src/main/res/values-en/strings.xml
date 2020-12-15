@@ -227,4 +227,21 @@
     <string name="welcome_text_mensa">What\'s planned for lunch today? 🍏🍕🥙 How much 💶 is still on your card?</string>
     <string name="welcome_text_timetable">Know when lectures and seminars start.</string>
     <string name="meals_widget_label">Canteen Reichenbachstraße | Meals</string>
+
+    <string name="lesson1_begin_time">7:30 AM</string>
+    <string name="lesson1_end_time">9:00 AM</string>
+    <string name="lesson2_begin_time">9:20 AM</string>
+    <string name="lesson2_end_time">10:50 AM</string>
+    <string name="lesson3_begin_time">11:10 AM</string>
+    <string name="lesson3_end_time">12:40 PM</string>
+    <string name="lesson4_begin_time">1:20 PM</string>
+    <string name="lesson4_end_time">2:50 PM</string>
+    <string name="lesson5_begin_time">3:10 PM</string>
+    <string name="lesson5_end_time">4:40 PM</string>
+    <string name="lesson6_begin_time">5:00 PM</string>
+    <string name="lesson6_end_time">6:30 PM</string>
+    <string name="lesson7_begin_time">6:40 PM</string>
+    <string name="lesson7_end_time">8:10 PM</string>
+    <string name="lesson8_begin_time">8:20 PM</string>
+    <string name="lesson8_end_time">9:50 PM</string>
 </resources>

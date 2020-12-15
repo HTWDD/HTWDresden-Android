@@ -170,7 +170,7 @@ open class TimetableRealm(
 }
 
 //-------------------------------------------------------------------------------------------------- Item
-class TimetableItem(private val item: Timetable): Timetableable {
+class TimetableItem(val item: Timetable): Timetableable {
 
     override val viewType: Int
         get() = R.layout.list_item_timetable_bindable

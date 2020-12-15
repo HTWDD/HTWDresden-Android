@@ -5,7 +5,9 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.GridView
 import androidx.annotation.AnimRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import de.htwdd.htwdresden.R
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
@@ -40,6 +42,14 @@ fun View.toggle(condition: Boolean): View {
         } else {
             hide()
         }
+    }
+}
+
+fun ConstraintLayout.configureForBreak(rowNumber: Int) {
+    layoutParams = when(rowNumber) {
+        6 -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 120)
+        12, 14 -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 30)
+        else -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 60)
     }
 }
 
