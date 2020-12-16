@@ -330,3 +330,8 @@ fun Any.deleteAllTimetable() {
         }
     }
 }
+
+fun Timetable.getLessonNumber() : Int {
+    val beginTimes = arrayOf("07:30", "09:20", "11:10", "13:20", "15:10", "17:00", "18:40", "20:20").map { it.toDate("HH:mm") }
+    return beginTimes.indexOf(beginTime)+1
+}

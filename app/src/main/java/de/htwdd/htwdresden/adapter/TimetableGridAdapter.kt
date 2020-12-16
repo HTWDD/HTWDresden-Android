@@ -9,8 +9,11 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.ui.models.Timetable
+import de.htwdd.htwdresden.ui.models.getLessonNumber
 import de.htwdd.htwdresden.utils.ViewUtils
+import de.htwdd.htwdresden.utils.extensions.calendar
 import de.htwdd.htwdresden.utils.extensions.configureForBreak
+import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.extensions.toRowNumber
 import java.text.DateFormatSymbols
 import java.util.*
@@ -77,7 +80,16 @@ class TimetableGridAdapter(val context: Context, val items: ArrayList<Timetable>
         val lessonItemRoot: ConstraintLayout = view.findViewById(R.id.lessonItemRoot)
         val lessonItemContainer: LinearLayout = view.findViewById(R.id.lessonItemContainer)
 
+        //7,8,9,10,11 for Monday to Friday
+
         init {
+            val lessonsForThisDay = items.filter { it.day == position.toLong() % 6 }
+            val lesson = lessonsForThisDay.find { it.getLessonNumber() == ((position.toRowNumber() + 1) / 2) }
+            if (lesson != null) {
+                tag.text = lesson.lessonTag
+                type.text = lesson.type
+                room.text = lesson.rooms.firstOrNull() ?: ""
+            }
         }
     }
 

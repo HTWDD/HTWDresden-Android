@@ -16,6 +16,13 @@ val Date.week: Int
         return calendar.get(WEEK_OF_YEAR)
     }
 
+val Date.calendar: Calendar
+    get() {
+        val calendar = Calendar.getInstance()
+        calendar.time = this
+        return calendar
+    }
+
 //-------------------------------------------------------------------------------------------------- Calendar
 val Calendar.datesOfCurrentWeek: ArrayList<Date>
     get() {

@@ -18,8 +18,8 @@ class TimetableViewModel: ViewModel() {
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
-    private val currentWeekLessons = ArrayList<Timetable>()
-    private val nextWeekLessons = ArrayList<Timetable>()
+    val currentWeekLessons = ArrayList<Timetable>()
+    val nextWeekLessons = ArrayList<Timetable>()
 
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {

@@ -16,7 +16,6 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.TimetableGridAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
-import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.utils.extensions.*
@@ -27,13 +26,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-
 class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     private val defaultPattern = "dd.MM.yyyy"
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
     private lateinit var adapter: TimetableItemAdapter
     private val items: Timetables = ArrayList()
+    private var gridAdapter: TimetableGridAdapter? = null
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
@@ -48,7 +47,8 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        timetableWeeklyOverview.adapter = TimetableGridAdapter(activity as Context, ArrayList())
+        gridAdapter = TimetableGridAdapter(activity as Context, viewModel.currentWeekLessons)
+        timetableWeeklyOverview.adapter = gridAdapter
         setup()
         request()
     }
@@ -94,7 +94,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             .subscribe({ timetables ->
                 weak { self ->
                     if (timetables.isNotEmpty()) {
-
+                        gridAdapter?.notifyDataSetChanged()
                         self.adapter.update(timetables)
                     }
                 }
