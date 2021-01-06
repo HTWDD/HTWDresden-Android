@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -74,7 +75,6 @@ class MainActivity: AppCompatActivity() {
                 R.id.room_occupancy_detail_page_fragment -> {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
-
                 R.id.study_group_page_fragment,
                 R.id.login_page_fragment,
                 R.id.onboarding_page_fragment -> {
@@ -87,6 +87,9 @@ class MainActivity: AppCompatActivity() {
                         layoutParams = lp
                         invalidate()
                     }
+                }
+                R.id.timetable_page_fragment, R.id.calender_add_event_fragment -> {
+                    appBarLayout.setExpanded(false)
                 }
                 else -> {
                     window.statusBarColor = getColor(R.color.primary_dark)

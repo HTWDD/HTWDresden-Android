@@ -83,6 +83,8 @@ dependencies {
 
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
     // https://github.com/square/retrofit
     def retrofit2_version = '2.9.0'
@@ -106,7 +108,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Android Kotlin Core Extensions
-    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
 
     // Android Security
     def security_version = '1.0.0-rc02'

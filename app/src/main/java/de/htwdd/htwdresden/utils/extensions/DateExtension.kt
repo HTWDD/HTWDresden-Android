@@ -47,3 +47,10 @@ val Calendar.datesOfNextWeek: ArrayList<Date>
         }
         return result.toCollection(ArrayList())
     }
+
+val Date.timeInDpForCalendar: Int
+    get() {
+        val calendar = Calendar.getInstance()
+        calendar.time = this
+        return calendar.get(Calendar.MINUTE) + 60 * (calendar.get(Calendar.HOUR_OF_DAY) - 7)
+    }

@@ -7,14 +7,22 @@
         android:animateLayoutChanges="true"
         android:animationCache="true">
 
-    <GridView
-        android:id="@+id/timetableWeeklyOverview"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:verticalSpacing="1dp"
-        android:horizontalSpacing="1dp"
-        android:background="@color/light_grey"
-        android:numColumns="6" />
+        android:layout_height="match_parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/primary"
+            app:tabIndicatorColor="@color/white"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    </androidx.viewpager.widget.ViewPager>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -30,11 +38,11 @@
                 android:id="@+id/timetableRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:paddingTop="@dimen/list_item_top_and_bottom_space"
                 android:paddingBottom="@dimen/list_item_top_and_bottom_space"
                 android:clipToPadding="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

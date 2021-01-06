@@ -1,7 +1,11 @@
 package de.htwdd.htwdresden.utils.extensions
 
 import android.content.Context
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -44,3 +48,10 @@ fun <T: Fragment> T.hideKeyboard() {
         }
     }
 }
+
+fun Fragment.withArgumentsOf(vararg pairs: Pair<String, Any?>): Fragment {
+    arguments = bundleOf(*pairs)
+    return this
+}
+
+inline fun <reified T : ViewDataBinding> Fragment.inflateDataBinding(layoutId: Int, container: ViewGroup?): T = DataBindingUtil.inflate<T>(layoutInflater, layoutId, container, false).apply { lifecycleOwner = viewLifecycleOwner }

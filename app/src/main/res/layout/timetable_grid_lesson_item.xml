@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lessonItemRoot"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lessonItemContainer"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="@color/white"
-    android:gravity="center_vertical|center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/red_300"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp">
 
     <LinearLayout
-        android:id="@+id/lessonItemContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="@color/white"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <TextView
@@ -34,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <TextView
@@ -42,6 +45,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/timetable_moreLessonsPoints"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <TextView
@@ -50,7 +54,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/timetable_only_KW"
+            android:textColor="@color/white"
             android:textSize="10sp"
             android:visibility="gone" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

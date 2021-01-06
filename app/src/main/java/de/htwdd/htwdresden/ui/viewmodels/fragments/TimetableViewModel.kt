@@ -17,7 +17,6 @@ import java.util.*
 class TimetableViewModel: ViewModel() {
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
     val currentWeekLessons = ArrayList<Timetable>()
     val nextWeekLessons = ArrayList<Timetable>()
 
@@ -31,7 +30,7 @@ class TimetableViewModel: ViewModel() {
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
             .map { it.sortedWith(compareBy { c -> c }) }
             .map { timetableList ->                                                                    // Grouping to lesson days and lessons
-
+                val realm = Realm.getDefaultInstance()
                 deleteAllTimetable()
                 timetableList.forEach { TimetableRealm().update(it) }
 
@@ -54,32 +53,8 @@ class TimetableViewModel: ViewModel() {
                         .sortedBy { it.beginTime }
                         .map { filteredItem -> TimetableItem(filteredItem) })
                 }
-                setWeekOverviewData(it.second)
                 result
             }
-    }
-
-    private fun setWeekOverviewData(timetables: MutableSet<Timetable>) {
-        val calendar = Calendar.getInstance()
-        val currentWeek = calendar[Calendar.WEEK_OF_YEAR]
-        val currentYear = calendar[Calendar.YEAR]
-        currentWeekLessons.clear()
-        nextWeekLessons.clear()
-
-        timetables.forEach { timetable ->
-            timetable.lessonDays.forEach {
-                val date = it.toDate("MM-dd-yyyy")
-                if(date!=null) {
-                    val targetCalender = Calendar.getInstance()
-                    targetCalender.time = date
-                    if(targetCalender.get(Calendar.WEEK_OF_YEAR)==currentWeek && targetCalender.get(Calendar.YEAR)==currentYear) {
-                        currentWeekLessons.add(timetable)
-                    } else if (targetCalender.get(Calendar.WEEK_OF_YEAR)==currentWeek+1 && targetCalender.get(Calendar.YEAR)==currentYear) {
-                        nextWeekLessons.add(timetable)
-                    }
-                }
-            }
-        }
     }
 
     private fun dateStringToHeaderItem(date: String): TimetableHeaderItem {

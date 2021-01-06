@@ -12,12 +12,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.adapter.TimetableGridAdapter
+import de.htwdd.htwdresden.adapter.SectionsPagerAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
+import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_CURRENT_WEEK
+import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_NEXT_WEEK
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_timetable.*
@@ -32,10 +36,10 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
     private lateinit var adapter: TimetableItemAdapter
     private val items: Timetables = ArrayList()
-    private var gridAdapter: TimetableGridAdapter? = null
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
         weak { self -> self.swipeRefreshLayout.isRefreshing = new }
     }
+    private var isCalendarView: Boolean = false
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
     private val smoothScroller: SmoothScroller by lazy {
         object : LinearSmoothScroller(context) {
@@ -47,10 +51,15 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gridAdapter = TimetableGridAdapter(activity as Context, viewModel.currentWeekLessons)
-        timetableWeeklyOverview.adapter = gridAdapter
+        activity ?: return
+        setHasOptionsMenu(true)
+        configureViewPager()
         setup()
-        request()
+        if(isCalendarView) {
+            handleViewChange()
+        } else {
+            request()
+        }
     }
 
     override fun onResume() {
@@ -67,6 +76,21 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
                 }
             }
             .addTo(disposeBag)
+    }
+
+    private fun configureViewPager() {
+        val tabs: TabLayout? = view?.findViewById(R.id.tabs)
+        val viewPager = view?.findViewById<ViewPager>(R.id.viewPager)
+        viewPager?.adapter = SectionsPagerAdapter(activity as Context, childFragmentManager).apply {
+            clear()
+            addFragment(
+                TimetableCalendarFragment.newInstance(CALENDAR_CURRENT_WEEK), R.string.mensa_tab_this_week
+            )
+            addFragment(
+                TimetableCalendarFragment.newInstance(CALENDAR_NEXT_WEEK), R.string.mensa_tab_next_week
+            )
+        }
+        tabs?.setupWithViewPager(viewPager)
     }
 
     private fun setup() {
@@ -94,7 +118,6 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             .subscribe({ timetables ->
                 weak { self ->
                     if (timetables.isNotEmpty()) {
-                        gridAdapter?.notifyDataSetChanged()
                         self.adapter.update(timetables)
                     }
                 }
@@ -160,7 +183,23 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             goToToday(smooth = true)
             true
         }
+        R.id.menu_calendar -> {
+            isCalendarView = !isCalendarView
+            handleViewChange()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun handleViewChange() {
+        includeEmptyLayout.hide(isCalendarView)
+        swipeRefreshLayout.isEnabled = !isCalendarView
+        swipeRefreshLayout.isRefreshing = false
+        timetableRecycler.toggle(!isCalendarView)
+        viewPager.toggle(isCalendarView)
+        if(!isCalendarView) {
+            request()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.ui.models
 
+import androidx.cardview.widget.CardView
 import androidx.databinding.ObservableField
 import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R

@@ -7,7 +7,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.GridView
 import androidx.annotation.AnimRes
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import de.htwdd.htwdresden.R
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
@@ -20,8 +22,8 @@ fun View.show() {
     }
 }
 
-fun View.hide() {
-    if (visibility != GONE) {
+fun View.hide(condition: Boolean = true) {
+    if (condition && visibility != GONE) {
         visibility = GONE
     }
 }
@@ -43,6 +45,16 @@ fun View.toggle(condition: Boolean): View {
             hide()
         }
     }
+}
+
+fun CardView.setColorForLessonType(lessonType: String) {
+    val color = when(lessonType[0]) {
+        'V' -> R.color.red_300
+        'Ü' -> R.color.green_300
+        'B' -> R.color.blue_grey_300
+        else -> R.color.indigo_400
+    }
+    setCardBackgroundColor(ContextCompat.getColor(context, color))
 }
 
 fun ConstraintLayout.configureForBreak(rowNumber: Int) {

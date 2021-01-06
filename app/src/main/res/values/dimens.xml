@@ -36,7 +36,6 @@
     <dimen name="card_view_elevation">3dp</dimen>
     <dimen name="card_view_elevation_no_action">1dp</dimen>
 
-
     <!--Badge Labels-->
     <dimen name="badge_label_corner_radius">4dp</dimen>
     <dimen name="badge_label_top_and_bottom_space">2dp</dimen>
@@ -45,5 +44,9 @@
     <!-- Detail Indicator -->
     <dimen name="detail_indicator_size">20dp</dimen>
     <dimen name="list_item_overview_schedule_textview_min_width">45dp</dimen>
+
+    <dimen name="calendar_header_height">50dp</dimen>
+    <dimen name="calendar_header_height_plus_space">51dp</dimen>
+    <dimen name="calendar_divider">1dp</dimen>
 
 </resources>
