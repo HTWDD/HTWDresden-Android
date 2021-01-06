@@ -19,6 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/primary"
+            app:tabMaxWidth="0dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
             app:tabIndicatorColor="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
