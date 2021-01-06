@@ -2,6 +2,7 @@ package de.htwdd.htwdresden.custom
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
@@ -20,21 +21,18 @@ class LessonView @JvmOverloads constructor(
 
     private val type: TextView
     private val tag: TextView
-    private val room: TextView
-    private val kw: TextView
+    private val rooms: TextView
     private val lessonItemContainer: CardView
 
     init {
         val view = inflate(context, R.layout.timetable_grid_lesson_item, this)
         type = view.findViewById(R.id.timetableType)
         tag = view.findViewById(R.id.timetableTag)
-        room = view.findViewById(R.id.timetableMoreLessons)
-        kw = view.findViewById(R.id.timetableOnlyKW)
+        rooms = view.findViewById(R.id.timetableRoom)
         lessonItemContainer = view.findViewById(R.id.lessonItemContainer)
         tag.text = timetable.lessonTag
         type.text = timetable.type
-        room.text = timetable.rooms.firstOrNull() ?: ""
-        lessonItemContainer.visibility = View.VISIBLE
+        rooms.text = TextUtils.join(", ", timetable.rooms)
         lessonItemContainer.setColorForLessonType(timetable.type)
 //        lessonItemRoot.setOnClickListener { onClick(lesson) }
     }

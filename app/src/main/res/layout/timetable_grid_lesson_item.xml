@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lessonItemContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,6 +22,11 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="13sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="Mathe"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:textStyle="bold" />
 
         <TextView
@@ -29,6 +35,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/white"
+            tools:text="V(p)"
             android:textSize="10sp" />
 
         <TextView
@@ -36,27 +43,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:textColor="@color/white"
             android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/timetableMoreLessons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/timetable_moreLessonsPoints"
-            android:textColor="@color/white"
-            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/timetableOnlyKW"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/timetable_only_KW"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            android:visibility="gone" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
