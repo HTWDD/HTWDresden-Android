@@ -54,3 +54,19 @@ val Date.timeInDpForCalendar: Int
         calendar.time = this
         return calendar.get(Calendar.MINUTE) + 60 * (calendar.get(Calendar.HOUR_OF_DAY) - 7)
     }
+
+val Calendar.getStartDateForLesson: Date
+    get() {
+        set(Calendar.HOUR_OF_DAY, 8)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        return time
+    }
+
+val Calendar.getEndDateForLesson: Date
+    get() {
+        set(Calendar.HOUR_OF_DAY, 9)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        return time
+    }

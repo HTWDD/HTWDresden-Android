@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.GridView
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
@@ -16,11 +18,12 @@ import de.htwdd.htwdresden.adapter.TimestampAdapter
 import de.htwdd.htwdresden.databinding.TimetableCalendarFragmentBinding
 import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.viewmodels.fragments.factories.TimetableCalendarViewModelFactory
+import de.htwdd.htwdresden.utils.extensions.currentWeek
 import de.htwdd.htwdresden.utils.extensions.inflateDataBinding
 import de.htwdd.htwdresden.utils.extensions.withArgumentsOf
 import kotlinx.android.synthetic.main.timetable_calendar_fragment.*
 
-class TimetableCalendarFragment : Fragment() {
+class TimetableCalendarFragment : Fragment(), ClickListener{
 
     companion object {
         fun newInstance(calenderType: Int) = TimetableCalendarFragment().withArgumentsOf(CALENDER_TYPE_KEY to calenderType)
@@ -40,21 +43,35 @@ class TimetableCalendarFragment : Fragment() {
         val binding = inflateDataBinding<TimetableCalendarFragmentBinding>(R.layout.timetable_calendar_fragment, container).apply {
             timetableCalendarViewModel = viewModel
         }
+        binding.clickListener = this
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val isCurrentWeek = calenderType == CALENDAR_CURRENT_WEEK
         calendar = timetableCalendar
-        calendar?.adapter = TimetableGridAdapter(activity as Context,true) { onEventClick(it) }
+        calendar?.adapter = TimetableGridAdapter(activity as Context, isCurrentWeek) { onEventClick() }
         timetableTimestampsGrid.adapter = TimestampAdapter(activity as Context)
-        calendar?.viewTreeObserver?.addOnGlobalLayoutListener {
-            val cWidth = calendar?.columnWidth
-        }
-        viewModel.request()
     }
 
-    private fun onEventClick(item: Timetable?) {
-        findNavController().navigate(R.id.calender_add_event_fragment)
+    private fun onEventClick() {
+//        findNavController()
+//            .navigate(R.id.action_calender_add_event_fragment)
     }
+
+    override fun onResume() {
+        viewModel.request()
+        super.onResume()
+    }
+
+    override fun onLessonClick(timetable: Timetable) {
+        findNavController()
+            .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_ID to timetable.id))
+    }
+
+}
+
+interface ClickListener {
+    fun onLessonClick(timetable: Timetable)
 }

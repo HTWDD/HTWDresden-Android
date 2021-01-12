@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -178,6 +179,16 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         return items.size
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val todayItem = menu.findItem(R.id.menu_today)
+        val exportItem = menu.findItem(R.id.menu_export)
+        val addEventItem = menu.findItem(R.id.menu_add_event)
+        todayItem.isVisible = !isCalendarView
+        exportItem.isVisible = isCalendarView
+        addEventItem.isVisible = isCalendarView
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_today -> {
             goToToday(smooth = true)
@@ -186,9 +197,19 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         R.id.menu_calendar -> {
             isCalendarView = !isCalendarView
             handleViewChange()
+            activity?.invalidateOptionsMenu()
+            true
+        }
+        R.id.menu_add_event -> {
+            onEventClick()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun onEventClick() {
+        findNavController()
+            .navigate(R.id.action_calender_add_event_fragment)
     }
 
     private fun handleViewChange() {

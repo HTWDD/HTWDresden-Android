@@ -43,18 +43,21 @@ data class JTimetable(
 class Timetable(
        val id: String,
        val moduleId: String? = null,
-       val lessonTag: String,
-       val name: String,
-       val type: String,
-       val day: Long,
-       val beginTime: Date,
-       val endTime: Date,
-       val week: Long,
-       val weeksOnly: List<Long>,
-       val professor: String? = null,
-       val rooms: List<String>,
+       var lessonTag: String,
+       var name: String,
+       var type: String,
+       var day: Long,
+       var beginTime: Date,
+       var endTime: Date,
+       var week: Long,
+       var weeksOnly: List<Long>,
+       var professor: String? = null,
+       var rooms: List<String>,
        val lastChanged: String,
-       val lessonDays: List<String>
+       var lessonDays: List<String>,
+       var createdByUser: Boolean = false,
+       var exactDay: Date? = null,
+       var weekRotation: String? = null
 ) : Comparable<Timetable> {
 
     companion object {
@@ -77,7 +80,7 @@ class Timetable(
             )
         }
 
-        private fun lessonDays(dayOfWeek: Long, weeksOnly: List<Long>): List<String> {
+        fun lessonDays(dayOfWeek: Long, weeksOnly: List<Long>): List<String> {
             val calendar = GregorianCalendar.getInstance(Locale.GERMANY).apply {
                 set(DAY_OF_WEEK, (dayOfWeek.toInt() % 7) + 1)
             }
@@ -142,18 +145,21 @@ open class TimetableRealm(
         var professor: String? = null,
         var rooms: RealmList<String> = RealmList(),
         var lastChanged: String = "",
-        var lessonDays: RealmList<String> = RealmList()
-) : RealmObject() {
+        var lessonDays: RealmList<String> = RealmList(),
+        var createdByUser: Boolean = false,
+        var exactDay: Date? = null,
+        var weekRotation: String? = null
+        ) : RealmObject() {
 
     companion object {
         fun fromTimetable(timetable: Timetable) = with(timetable) {
             TimetableRealm(id, moduleId, lessonTag, name, type, day, beginTime, endTime, week, RealmList<Long>().apply { addAll(weeksOnly) }, professor,
-                    RealmList<String>().apply { addAll(rooms) }, lastChanged, RealmList<String>().apply { addAll(lessonDays) })
+                    RealmList<String>().apply { addAll(rooms) }, lastChanged, RealmList<String>().apply { addAll(lessonDays) }, createdByUser, exactDay, weekRotation)
         }
 
         fun toTimetable(timetableRealm: TimetableRealm) = with(timetableRealm) {
-            Timetable(id, moduleId, lessonTag, name, type, day, beginTime!!, endTime!!, week, weeksOnly?.toCollection(ArrayList())  ?: emptyList(), professor,
-                    rooms?.toCollection(ArrayList())  ?: emptyList(), lastChanged, lessonDays?.toCollection(ArrayList()) ?: emptyList())
+            Timetable(id, moduleId, lessonTag, name, type, day, beginTime!!, endTime!!, week, weeksOnly.toCollection(ArrayList()), professor,
+                    rooms.toCollection(ArrayList()), lastChanged, lessonDays.toCollection(ArrayList()), createdByUser, exactDay, weekRotation)
         }
     }
 
@@ -323,6 +329,17 @@ fun TimetableRealm.delete() {
     }
 }
 
+fun Any.getTimetableById(id: String) : Timetable? {
+    val realm = Realm.getDefaultInstance()
+    var timetableRealm: TimetableRealm? = null
+    timetableRealm = realm.where(TimetableRealm::class.java).equalTo("id", id).findFirst()
+    var timetable: Timetable? = null
+    timetableRealm?.let {
+        timetable = TimetableRealm.toTimetable(it)
+    }
+    return timetable
+}
+
 fun Any.deleteAllTimetable() {
     val realm = Realm.getDefaultInstance()
     realm.use {
@@ -332,7 +349,28 @@ fun Any.deleteAllTimetable() {
     }
 }
 
-fun Timetable.getLessonNumber() : Int {
-    val beginTimes = arrayOf("07:30", "09:20", "11:10", "13:20", "15:10", "17:00", "18:40", "20:20").map { it.toDate("HH:mm") }
-    return beginTimes.indexOf(beginTime)+1
+fun Any.deleteAllIfNotCreatedByUser() {
+    val realm = Realm.getDefaultInstance()
+    realm.use {
+        it.executeTransaction {
+            val result = realm.where(TimetableRealm::class.java).equalTo("createdByUser", false).findAll()
+            result.deleteAllFromRealm()
+        }
+    }
+}
+
+fun Any.deleteById(id: String) {
+    val realm = Realm.getDefaultInstance()
+    realm.use {
+        it.executeTransaction {
+            val result = realm.where(TimetableRealm::class.java).equalTo("id", id).findFirst()
+            result?.deleteFromRealm()
+        }
+    }
+}
+
+fun Any.getAllTimetables() : List<Timetable> {
+   return Realm.getDefaultInstance().where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
+        it
+    ) }
 }

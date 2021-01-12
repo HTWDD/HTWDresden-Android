@@ -32,9 +32,10 @@ class TimetableCalendarViewModel(private val calenderType: Int) : ViewModel() {
     fun request() {
         viewModelScope.launch {
             try {
-                val auth = cph.getStudyAuth() ?: return@launch
+//                val auth = cph.getStudyAuth() ?: return@launch
                 withContext(Dispatchers.IO) {
-                    val timetableList = RestApi.timetableEndpoint.getTimetableList(auth.group, auth.major, auth.studyYear).map { Timetable.from(it) }
+//                    val timetableList = RestApi.timetableEndpoint.getTimetableList(auth.group, auth.major, auth.studyYear).map { Timetable.from(it) }
+                    val timetableList = getAllTimetables()
                     setWeekOverviewData(timetableList)
                 }
             } catch (e: Exception) {

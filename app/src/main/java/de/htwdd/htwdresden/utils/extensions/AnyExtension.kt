@@ -33,17 +33,34 @@ val Any.currentWeek: Int
         return calendar[Calendar.WEEK_OF_YEAR]
     }
 
-fun Any.getDaysOfWeek(): Array<Date?> {
+val Any.today: String
+    get() {
+        val calendar = Calendar.getInstance()
+        return calendar.time.format("dd.MM.yyyy")
+    }
+
+
+fun Any.getDaysOfWeek(currentWeek: Boolean = true): Array<Date?> {
     val refCalendar = Calendar.getInstance()
     refCalendar.add(Calendar.DAY_OF_WEEK, Calendar.getInstance().firstDayOfWeek)
     val calendar = Calendar.getInstance()
-    calendar.time =  refCalendar.time
+    calendar.time = refCalendar.time
     calendar[Calendar.DAY_OF_WEEK] = Calendar.getInstance().firstDayOfWeek
     val daysOfWeek = arrayOfNulls<Date>(5)
+    val daysOfNextWeek = arrayOfNulls<Date>(5)
     for (i in 0..4) {
         daysOfWeek[i] = calendar.time
+        Calendar.getInstance().apply {
+            time = calendar.time
+            add(Calendar.DAY_OF_MONTH, 7)
+            daysOfNextWeek[i] = time
+        }
         calendar.add(Calendar.DAY_OF_MONTH, 1)
     }
-    return daysOfWeek
+    return if (currentWeek) {
+        daysOfWeek
+    } else {
+        daysOfNextWeek
+    }
 }
 

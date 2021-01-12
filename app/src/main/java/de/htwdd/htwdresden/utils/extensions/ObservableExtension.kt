@@ -1,5 +1,6 @@
 package de.htwdd.htwdresden.utils.extensions
 
+import androidx.databinding.ObservableField
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -38,4 +39,13 @@ fun <T> Flowable<T>.runInThread(type: Scheduler = Schedulers.newThread()): Flowa
 fun <T> Flowable<T>.runInUiThread(): Flowable<T> {
     return this
         .observeOn(AndroidSchedulers.mainThread())
+}
+
+fun ObservableField<String>.getOrEmpty() : String {
+    return this.get() ?: ""
+}
+
+fun ObservableField<String?>.setAndResetOld(text: String) {
+    set("")
+    set(text)
 }

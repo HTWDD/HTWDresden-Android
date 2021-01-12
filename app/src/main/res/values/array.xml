@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="lesson_type">
-        <item>Vorlesung</item>
-        <item>Praktikum</item>
-        <item>Übung</item>
-        <item>sonstiges</item>
+        <item>@string/lecture</item>
+        <item>@string/excersise</item>
+        <item>@string/practical</item>
+        <item>@string/block</item>
+        <item>@string/requested</item>
+        <item>@string/unknown</item>
     </string-array>
 
     <string-array name="lesson_week">
         <item>jede KW</item>
-        <item>ungerade KW</item>
         <item>gerade KW</item>
+        <item>ungerade KW</item>
+        <item>@string/one_time</item>
     </string-array>
 
     <string-array name="autoExamsUpdateInterval">
@@ -57,8 +60,6 @@
         <item>@string/wednesday</item>
         <item>@string/thursday</item>
         <item>@string/friday</item>
-        <item>@string/saturday</item>
-        <item>@string/sunday</item>
     </string-array>
 
     <string-array name="hours">

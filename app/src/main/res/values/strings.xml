@@ -43,6 +43,8 @@
     <string name="settings_studienrichtung">Studienrichtung (Optional: Filter für Prüfungen)</string>
     <string name="settings_exam_results">Benachrichtigung über neue Noten</string>
 
+    <string name="export">Export</string>
+
     <string name="mensa_tab_today">Heute</string>
     <string name="mensa_tab_this_week">Aktuelle Woche</string>
     <string name="mensa_tab_next_week">Nächste Woche</string>
@@ -78,14 +80,20 @@
     <string name="timetable_ds_list_simple" translatable="false">%1$s - %2$s</string>
     <string name="timetable_calendar_week">%d. KW</string>
     <string name="timetable_edit_activity_title">Veranstaltung bearbeiten</string>
-    <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung</string>
+    <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung*</string>
     <string name="timetable_edit_lessonTag_hint">Kurzform</string>
     <string name="timetable_edit_lessonType">Art</string>
+    <string name="timetable_edit_lessonType_description">Wähle Art aus</string>
+    <string name="timetable_edit_lesson_rotation_description">Wähle Turnus aus</string>
+    <string name="timetable_edit_lesson_week_day_description">Wähle Wochentag aus</string>
     <string name="timetable_edit_lessonProf_hint">Name des Dozenten</string>
     <string name="timetable_edit_lessonRoom">Raum</string>
+    <string name="timetable_edit_lesson_block">Vorlesungsblock</string>
     <string name="timetable_edit_label_time">Zeitpunkt</string>
     <string name="timetable_edit_label_general">Allgemein</string>
     <string name="timetable_edit_lessonWeek">Woche</string>
+    <string name="timetable_edit_lesson_week_rotation">Turnus*</string>
+    <string name="timetable_edit_lesson_week_day">Wochentag*</string>
     <string name="timetable_edit_lessonDay">Tag</string>
     <string name="timetable_edit_lessonDS">Zeit</string>
     <string name="timetable_edit_lessonDS_value">Zeit individuell festlegen</string>
@@ -104,6 +112,10 @@
     <string name="timetable_no_results_title">Kein Stundenplan</string>
     <string name="timetable_no_results_message">Ich konnte kein Stundenplan für Dich finden.</string>
     <string name="timetable_tab_calendar">Kalender</string>
+
+    <string name="add_event">Event hinzufügen</string>
+
+    <string name="one_time">einmalig</string>
 
     <string name="room_timetable_add">Raum hinzufügen</string>
     <string name="room_timetable_add_save_error">😖 Beim Laden der Daten ist etwas schief gelaufen, ist \'%1$s\' eine Korrekte Raumnummer?</string>
@@ -265,5 +277,15 @@
     <string name="am_7">07:00</string>
 
     <string name="hyphen">|</string>
+
+    <string name="start">Start</string>
+    <string name="end">Ende</string>
+
+    <string name="time_format">HH:mm</string>
+    <string name="fill_all_fields">Bitte füllen Sie alle Pflichtfelder aus</string>
+    <string name="required">* Pflichtfeld</string>
+    <string name="remove_event">Event löschen</string>
+    <string name="event_removed">Event gelöscht</string>
+    <string name="empty_field_error">Das Pflichtfeld kann nicht leer sein</string>
 
 </resources>

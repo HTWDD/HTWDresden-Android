@@ -99,14 +99,20 @@
     <string name="timetable_edit_lessonDS_value">set time individually</string>
     <string name="timetable_edit_lessonDay">Day</string>
     <string name="timetable_edit_lessonDeleteSuccess">Lesson successfully deleted</string>
-    <string name="timetable_edit_lessonName_hint">Name of the lesson</string>
+    <string name="timetable_edit_lessonName_hint">Name of the lesson*</string>
     <string name="timetable_edit_lessonProf_hint">Name of the docent</string>
     <string name="timetable_edit_lessonRoom">Room</string>
     <string name="timetable_edit_lessonSaveSuccess">Lesson successfully saved!</string>
     <string name="timetable_edit_lessonTag_hint">Abbreviation</string>
-    <string name="timetable_edit_lessonType">Type</string>
+    <string name="timetable_edit_lessonType">Lesson type</string>
+    <string name="timetable_edit_lessonType_description">Choose lesson type</string>
+    <string name="timetable_edit_lesson_rotation_description">Choose week rotation</string>
+    <string name="timetable_edit_lesson_week_day_description">Choose weekday</string>
     <string name="timetable_edit_lessonWeek">Week</string>
+    <string name="timetable_edit_lesson_week_rotation">Week Rotation*</string>
+    <string name="timetable_edit_lesson_block">Lesson Block</string>
     <string name="timetable_edit_lessonWeeks">Only in CW</string>
+    <string name="timetable_edit_lesson_week_day">Weekday*</string>
     <string name="timetable_edit_lessonWeeks_hint">only in these calender weeks</string>
     <string name="timetable_edit_lessonWeeks_title">Lesson only takes place in the following calender weeks</string>
     <string name="timetable_edit_time_individual_to">to</string>
@@ -230,5 +236,17 @@
     <string name="meals_widget_label">Canteen Reichenbachstraße | Meals</string>
 
     <string name="am_7">7 AM</string>
+    <string name="add_event">Add event</string>
 
+    <string name="start">Start</string>
+    <string name="end">End</string>
+
+    <string name="time_format">h:mm aa</string>
+    <string name="one_time">one time</string>
+    <string name="fill_all_fields">Please fill all required fields</string>
+
+    <string name="required">* required</string>
+    <string name="remove_event">Remove event</string>
+    <string name="event_removed">Event removed</string>
+    <string name="empty_field_error">This field cannot be empty</string>
 </resources>

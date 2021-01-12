@@ -17,8 +17,6 @@ import java.util.*
 class TimetableViewModel: ViewModel() {
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
-    val currentWeekLessons = ArrayList<Timetable>()
-    val nextWeekLessons = ArrayList<Timetable>()
 
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
@@ -30,13 +28,11 @@ class TimetableViewModel: ViewModel() {
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
             .map { it.sortedWith(compareBy { c -> c }) }
             .map { timetableList ->                                                                    // Grouping to lesson days and lessons
-                val realm = Realm.getDefaultInstance()
-                deleteAllTimetable()
+                deleteAllIfNotCreatedByUser()
+//                deleteAllTimetable()
                 timetableList.forEach { TimetableRealm().update(it) }
 
-                val timetables = realm.where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
-                    it
-                ) }
+                val timetables = getAllTimetables()
                 val sortedKeySet = mutableSetOf<String>()
                 val sortedValueSet = mutableSetOf<Timetable>()
                 timetables.groupBy { it.lessonDays }.apply {

@@ -131,7 +131,10 @@ public class DatabaseMigrations implements RealmMigration {
                     .addField("professor", String.class)
                     .addRealmListField("rooms", String.class)
                     .addField("lastChanged", String.class)
-                    .addRealmListField("lessonDays", String.class);
+                    .addRealmListField("lessonDays", String.class)
+                    .addField("createdByUser", Boolean.class)
+                    .addField("exactDay", Date.class)
+                    .addField("weekRotation", String.class);
             oldVersion++;
         }
 

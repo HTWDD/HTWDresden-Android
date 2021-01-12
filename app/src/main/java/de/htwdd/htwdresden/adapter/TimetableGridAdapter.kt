@@ -15,7 +15,7 @@ import java.lang.Exception
 import java.text.DateFormatSymbols
 import java.util.*
 
-class TimetableGridAdapter(val context: Context, val isCurrentWeek: Boolean, function: (timetable: Timetable) -> Unit) : BaseAdapter() {
+class TimetableGridAdapter(val context: Context, val isCurrentWeek: Boolean, private val callback: () -> Unit) : BaseAdapter() {
 
     companion object {
         const val HEADER_ITEM = 0
@@ -48,7 +48,7 @@ class TimetableGridAdapter(val context: Context, val isCurrentWeek: Boolean, fun
                 inflatedView = LayoutInflater.from(context)
                     .inflate(R.layout.default_grid_item, parent, false)
 //                inflatedView.setOnClickListener {
-//
+//                    callback.invoke()
 //                }
             }
         }
@@ -63,7 +63,7 @@ class TimetableGridAdapter(val context: Context, val isCurrentWeek: Boolean, fun
         init {
             try {
                 title.text = DateFormatSymbols.getInstance().shortWeekdays[position + 2]
-                val days = getDaysOfWeek()
+                val days = getDaysOfWeek(isCurrentWeek)
                 days[position]?.let {
                     Calendar.getInstance().apply {
                         time = it

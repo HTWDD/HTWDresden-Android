@@ -34,6 +34,5 @@ class LessonView @JvmOverloads constructor(
         type.text = timetable.type
         rooms.text = TextUtils.join(", ", timetable.rooms)
         lessonItemContainer.setColorForLessonType(timetable.type)
-//        lessonItemRoot.setOnClickListener { onClick(lesson) }
     }
 }
