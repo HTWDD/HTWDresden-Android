@@ -22,6 +22,42 @@ object DataBindingAdapters {
     fun setImageResource(imageView: ImageView, resource: Int) = imageView.setImageResource(resource)
 }
 
+private fun drawLessons(layout: RelativeLayout, listener: ClickListener, root: Timetable, rootConflicts: ArrayList<Timetable>, conflictPosition: Int = -1, rootWidth: Int = 0) {
+    val grid = layout.findViewById<GridView>(R.id.timetableCalendar)
+    grid?.columnWidth ?: return
+
+    val lessonView = LessonView(layout.context, null, 0, root)
+    lessonView.setOnClickListener {
+        listener.onLessonClick(root)
+    }
+
+    val start = root.beginTime.timeInDpForCalendar
+    val end = root.endTime.timeInDpForCalendar
+
+    val width =
+        if (rootConflicts.size > 2) grid.columnWidth / 3 else if(rootConflicts.isEmpty()) rootWidth else grid.columnWidth / (rootConflicts.size+1)
+    val defaultLessonHeight = 60f
+    val divider =  layout.context.resources.getDimension(R.dimen.calendar_divider)
+    val defaultTopMargin = layout.context.resources.getDimension(R.dimen.calendar_header_height_plus_space)
+    val conflictMargin = if(conflictPosition>=0) width*conflictPosition else 0
+    val marginStart = ((root.day-1)*grid.columnWidth + (root.day-1) * divider) + conflictMargin
+    val lessonDuration = (end-start).toFloat()
+
+    val params = RelativeLayout.LayoutParams(width,
+        layout.context.convertDpToPixel(lessonDuration).toInt() + (divider * floor(lessonDuration/defaultLessonHeight)).toInt()
+    )
+
+    params.topMargin = (defaultTopMargin + layout.context.convertDpToPixel(start.toFloat()) +divider * floor(start/defaultLessonHeight)).toInt()
+    params.marginStart = marginStart.toInt()
+    lessonView.layoutParams = params
+
+    lessonView.id = View.generateViewId()
+    layout.addView(lessonView)
+    rootConflicts.forEachIndexed { index, timetable ->
+        drawLessons(layout, listener, timetable, ArrayList(), index+1, width)
+    }
+}
+
 @BindingAdapter(value = ["lessons", "listener"], requireAll = true)
 @Suppress("UNCHECKED_CAST")
 fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener: ClickListener) {
@@ -29,7 +65,21 @@ fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener:
         layout.removeViewsInLayout(1,layout.childCount-1)
         layout.invalidate()
     }
-    items.forEach {timetable ->
+    val days = ArrayList<Pair<Long, List<Timetable>>>()
+    val itemsWithoutConflicts = items.toCollection(ArrayList())
+    for(i in 1..5L) {
+        days.add(Pair(i, items.filter { it.day==i }))
+    }
+    items.forEach { root ->
+        val rootConflicts = items.filter{ it.id != root.id && it.day == root.day }.filter { it.beginTime.after(root.beginTime) && it.beginTime.before(root.endTime) }.toCollection(ArrayList())
+        if(rootConflicts.isNotEmpty()) {
+            itemsWithoutConflicts.remove(root)
+            itemsWithoutConflicts.removeAll(rootConflicts)
+            drawLessons(layout,listener,root, rootConflicts)
+        }
+    }
+
+    itemsWithoutConflicts.forEach {timetable ->
         val grid = layout.findViewById<GridView>(R.id.timetableCalendar)
         grid?.columnWidth ?: return@forEach
 

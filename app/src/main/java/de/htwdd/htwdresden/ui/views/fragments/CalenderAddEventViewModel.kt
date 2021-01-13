@@ -118,16 +118,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
     }
 
     private fun handleLessonType(type: String) {
-        lessonType.set(with(type) {
-            when {
-                startsWith("v", true) -> sh.getString(R.string.lecture)
-                startsWith("ü", true) -> sh.getString(R.string.excersise)
-                startsWith("p", true) -> sh.getString(R.string.practical)
-                startsWith("b", true) -> sh.getString(R.string.block)
-                startsWith("r", true) -> sh.getString(R.string.requested)
-                else -> sh.getString(R.string.unknown)
-            }
-        })
+        lessonType.set(type.fullLessonType)
     }
 
     private fun handleLessonWeekDay(day: Long) {

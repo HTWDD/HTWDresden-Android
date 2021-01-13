@@ -1,19 +1,28 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.CalendarContract.Calendars
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.core.os.bundleOf
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import androidx.viewpager.widget.ViewPager
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.list.listItems
 import com.google.android.material.tabs.TabLayout
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.SectionsPagerAdapter
@@ -29,10 +38,13 @@ import kotlinx.android.synthetic.main.fragment_timetable.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.properties.Delegates
+
 
 class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
+    private val PERMISSION_REQUEST_CODE: Int = 10
     private val defaultPattern = "dd.MM.yyyy"
     private val viewModel by lazy { getViewModel<TimetableViewModel>() }
     private lateinit var adapter: TimetableItemAdapter
@@ -85,10 +97,12 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         viewPager?.adapter = SectionsPagerAdapter(activity as Context, childFragmentManager).apply {
             clear()
             addFragment(
-                TimetableCalendarFragment.newInstance(CALENDAR_CURRENT_WEEK), R.string.mensa_tab_this_week
+                TimetableCalendarFragment.newInstance(CALENDAR_CURRENT_WEEK),
+                R.string.mensa_tab_this_week
             )
             addFragment(
-                TimetableCalendarFragment.newInstance(CALENDAR_NEXT_WEEK), R.string.mensa_tab_next_week
+                TimetableCalendarFragment.newInstance(CALENDAR_NEXT_WEEK),
+                R.string.mensa_tab_next_week
             )
         }
         tabs?.setupWithViewPager(viewPager)
@@ -126,14 +140,15 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
                 error(it)
                 weak { self ->
                     self.includeEmptyLayout.show()
-                    self.tvIcon.text    = getString(R.string.exams_no_results_icon)
-                    self.tvTitle.text   = getString(R.string.exams_no_credentials_title)
+                    self.tvIcon.text = getString(R.string.exams_no_results_icon)
+                    self.tvTitle.text = getString(R.string.exams_no_credentials_title)
                     self.tvMessage.text = getString(R.string.timetable_no_credentials_message)
                     self.btnEmptyAction.apply {
                         show()
                         text = getString(R.string.general_add)
                         click {
-                            self.findNavController().navigate(R.id.action_to_study_group_page_fragment)
+                            self.findNavController()
+                                .navigate(R.id.action_to_study_group_page_fragment)
                         }
                     }
                 }
@@ -147,7 +162,10 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             val targetPosition = if (todayPosition == 0) todayPosition else (todayPosition - 1) % items.size
             if (!smooth) {
                 Handler().post {
-                    (timetableRecycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(targetPosition, 0)
+                    (timetableRecycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(
+                        targetPosition,
+                        0
+                    )
                 }
             } else {
                 Handler().postDelayed({
@@ -171,7 +189,9 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         items.forEach {
             position += 1
             if (it is TimetableHeaderItem) {
-                if (it.subheader().format(defaultPattern) == currentDate.format(defaultPattern) || it.subheader().after(currentDate)) {
+                if (it.subheader().format(defaultPattern) == currentDate.format(defaultPattern) || it.subheader().after(
+                        currentDate
+                    )) {
                     return position
                 }
             }
@@ -204,7 +224,62 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             onEventClick()
             true
         }
+        R.id.menu_export -> {
+            showExportMenu()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun showExportMenu() {
+        (activity as Context?)?.let {
+            MaterialDialog(it, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.export_title)
+                .message(R.string.export_message).show {
+                listItems(R.array.export_options) { _, index, text ->
+                    (activity as Context?)?.let {
+                        if (ActivityCompat.checkSelfPermission(
+                                it,
+                                Manifest.permission.WRITE_CALENDAR
+                            ) != PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(
+                                it,
+                                Manifest.permission.READ_CALENDAR
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            requestPermissions(
+                                arrayOf(
+                                    Manifest.permission.WRITE_CALENDAR,
+                                    Manifest.permission.READ_CALENDAR
+                                ),
+                                PERMISSION_REQUEST_CODE
+                            )
+                        } else {
+                            showCalendarList(index)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showCalendarList(optionIndex: Int) {
+        (activity as Context?)?.let { context ->
+            val calendars = getCalendars(context)
+            MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.export_calendar_list).show {
+                    listItems(items = calendars.map { it.value }) { _, index, _ ->
+                        (activity as Context?)?.let {
+                            val calendarId = calendars.keys.toCollection(ArrayList())[index]
+                            try {
+                                viewModel.exportCalendar(context.contentResolver, optionIndex, calendarId)
+                                Toast.makeText(it, R.string.export_success_message, Toast.LENGTH_SHORT).show()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                Toast.makeText(it, R.string.export_failure_message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+        }
     }
 
     private fun onEventClick() {
@@ -223,9 +298,45 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if(requestCode==PERMISSION_REQUEST_CODE) {
+            val a = permissions
+//            viewModel.exportCalendar(activity.contentResolver)
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.timetable, menu)
         return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun getCalendars(context: Context): HashMap<Long,String> {
+        val fields = arrayOf(Calendars.CALENDAR_DISPLAY_NAME, Calendars._ID)
+        val uri = Uri.parse("content://com.android.calendar/calendars");
+        val calendars = HashMap<Long,String>()
+        val cursor = context.contentResolver.query(uri, fields, null, null, null) ?: return calendars
+
+        try {
+            if (cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val name: String = cursor.getString(0)
+                    val id = cursor.getString(1).toLongOrNull()
+                    if(id!=null) calendars[id] = name
+                }
+            }
+            cursor.close()
+        } catch (ex: Error) {
+            ex.printStackTrace()
+        }
+        finally {
+            cursor.close()
+        }
+        return calendars
     }
 }

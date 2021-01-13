@@ -70,3 +70,12 @@ val Calendar.getEndDateForLesson: Date
         set(Calendar.SECOND, 0)
         return time
     }
+
+fun Calendar.addTime(date: Date): Calendar {
+    set(Calendar.HOUR_OF_DAY, 0)
+    set(Calendar.MINUTE, 0)
+    set(Calendar.SECOND, 0)
+    add(Calendar.HOUR_OF_DAY, date.calendar[Calendar.HOUR_OF_DAY])
+    add(Calendar.MINUTE, date.calendar[Calendar.MINUTE])
+    return this
+}

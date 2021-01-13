@@ -81,6 +81,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.activity:activity-ktx:1.1.0"
 
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'

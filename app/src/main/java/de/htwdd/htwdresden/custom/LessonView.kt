@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.ui.models.Timetable
+import de.htwdd.htwdresden.utils.extensions.fullLessonType
 import de.htwdd.htwdresden.utils.extensions.setColorForLessonType
 
 @SuppressLint("ViewConstructor")
@@ -30,8 +31,12 @@ class LessonView @JvmOverloads constructor(
         tag = view.findViewById(R.id.timetableTag)
         rooms = view.findViewById(R.id.timetableRoom)
         lessonItemContainer = view.findViewById(R.id.lessonItemContainer)
-        tag.text = timetable.lessonTag
-        type.text = timetable.type
+        if(timetable.lessonTag.isEmpty()) {
+            tag.text = timetable.name
+        } else {
+            tag.text = timetable.lessonTag
+        }
+        type.text = timetable.type.fullLessonType
         rooms.text = TextUtils.join(", ", timetable.rooms)
         lessonItemContainer.setColorForLessonType(timetable.type)
     }

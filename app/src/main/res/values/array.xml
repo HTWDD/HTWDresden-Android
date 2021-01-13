@@ -16,6 +16,12 @@
         <item>@string/one_time</item>
     </string-array>
 
+    <string-array name="export_options">
+        <item>@string/export_option1</item>
+        <item>@string/export_option2</item>
+        <item>@string/export_option3</item>
+    </string-array>
+
     <string-array name="autoExamsUpdateInterval">
         <item>Aus</item>
         <item>jede Stunde</item>

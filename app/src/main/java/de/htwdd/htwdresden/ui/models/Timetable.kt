@@ -374,3 +374,12 @@ fun Any.getAllTimetables() : List<Timetable> {
         it
     ) }
 }
+
+fun Timetable.createDescriptionForCalendar() : String {
+    val content = ArrayList<String>()
+    if(lessonTag.isNotEmpty()) content.add(lessonTag)
+    if(type.isNotEmpty()) content.add(type.fullLessonType)
+    if(!professor.isNullOrEmpty()) content.add(professor ?: "")
+    if(rooms.isNotEmpty()) content.addAll(rooms)
+    return content.joinToString(", ")
+}

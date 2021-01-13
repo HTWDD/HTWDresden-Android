@@ -288,4 +288,12 @@
     <string name="event_removed">Event gelöscht</string>
     <string name="empty_field_error">Das Pflichtfeld kann nicht leer sein</string>
 
+    <string name="export_title">Veranstaltungen exportieren</string>
+    <string name="export_message">Möchten Sie die Veranstaltungen in Ihren Kalender exportieren?</string>
+    <string name="export_option1">Aktuelle Woche exportieren</string>
+    <string name="export_option2">Nächste Woche exportieren</string>
+    <string name="export_option3">Komplettes Semester exportieren</string>
+    <string name="export_calendar_list">Auf dem Gerät verfügbare Kalender:</string>
+    <string name="export_success_message">Export erfolgreich</string>
+    <string name="export_failure_message">Fehler beim Export</string>
 </resources>

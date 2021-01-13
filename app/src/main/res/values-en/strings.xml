@@ -249,4 +249,14 @@
     <string name="remove_event">Remove event</string>
     <string name="event_removed">Event removed</string>
     <string name="empty_field_error">This field cannot be empty</string>
+
+    <string name="export_title">Export events</string>
+    <string name="export_message">Would you like to export the events to your calendar?</string>
+    <string name="export_option1">Export current week</string>
+    <string name="export_option2">Export next week</string>
+    <string name="export_option3">Export complete semester</string>
+    <string name="export_calendar_list">Calendars available on the device:</string>
+    <string name="export_success_message">Export successful</string>
+    <string name="export_failure_message">Error while exporting</string>
+
 </resources>

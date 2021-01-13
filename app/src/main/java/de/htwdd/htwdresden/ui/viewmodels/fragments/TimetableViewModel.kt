@@ -1,18 +1,18 @@
 package de.htwdd.htwdresden.ui.viewmodels.fragments
 
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.provider.CalendarContract
 import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
-import de.htwdd.htwdresden.utils.extensions.TAG
-import de.htwdd.htwdresden.utils.extensions.format
-import de.htwdd.htwdresden.utils.extensions.runInThread
-import de.htwdd.htwdresden.utils.extensions.toDate
+import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
-import io.realm.Realm
 import java.util.*
+import kotlin.collections.HashMap
 
 class TimetableViewModel: ViewModel() {
 
@@ -29,7 +29,7 @@ class TimetableViewModel: ViewModel() {
             .map { it.sortedWith(compareBy { c -> c }) }
             .map { timetableList ->                                                                    // Grouping to lesson days and lessons
                 deleteAllIfNotCreatedByUser()
-//                deleteAllTimetable()
+                deleteAllTimetable()
                 timetableList.forEach { TimetableRealm().update(it) }
 
                 val timetables = getAllTimetables()
@@ -58,4 +58,48 @@ class TimetableViewModel: ViewModel() {
         val d = date.toDate("MM-dd-yyyy")
         return TimetableHeaderItem(d?.format("EEEE") ?: "", d ?: Date())
     }
+
+    fun exportCalendar(contentResolver: ContentResolver, index: Int, calendarId: Long) {
+        val timetables = getAllTimetables().toCollection(ArrayList())
+        val eventsToExport = ArrayList<Pair<Date, Timetable>>()
+
+        when(index) {
+            0 -> {
+                timetables.forEach { timetable -> getLessonDaysAsDates(timetable.lessonDays).forEach {
+                    if(it[Calendar.WEEK_OF_YEAR]==currentWeek) eventsToExport.add(Pair(it.time, timetable))
+                } }
+            }
+            1 -> {
+                timetables.forEach { timetable -> getLessonDaysAsDates(timetable.lessonDays).forEach {
+                    if(it[Calendar.WEEK_OF_YEAR]==currentWeek+1) eventsToExport.add(Pair(it.time, timetable))
+                } }
+            }
+            2 -> {
+                timetables.forEach { timetable -> getLessonDaysAsDates(timetable.lessonDays).forEach {
+                    eventsToExport.add(Pair(it.time, timetable))
+                } }
+            }
+        }
+
+        eventsToExport.forEach {
+            val values = ContentValues().apply {
+                val startTime = it.first.calendar.addTime(it.second.beginTime)
+                val endTime = it.first.calendar.addTime(it.second.endTime)
+                put(CalendarContract.Events.DTSTART, startTime.timeInMillis)
+                put(CalendarContract.Events.DTEND, endTime.timeInMillis)
+                put(CalendarContract.Events.TITLE, it.second.name)
+                put(CalendarContract.Events.DESCRIPTION, it.second.createDescriptionForCalendar())
+                put(CalendarContract.Events.CALENDAR_ID, calendarId)
+                put(
+                    CalendarContract.Events.EVENT_TIMEZONE,
+                    it.first.calendar.timeZone.toString()
+                )
+            }
+            val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
+        }
+    }
+
+    private fun getLessonDaysAsDates(lessonDays: List<String>) : List<Calendar> =
+        lessonDays.mapNotNull { it.toDate("MM-dd-yyyy")}.map { it.calendar }
+
 }
