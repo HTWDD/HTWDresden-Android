@@ -225,7 +225,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             true
         }
         R.id.menu_export -> {
-            showExportMenu()
+            handleExportClick()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -235,31 +235,36 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         (activity as Context?)?.let {
             MaterialDialog(it, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.export_title)
                 .message(R.string.export_message).show {
-                listItems(R.array.export_options) { _, index, text ->
-                    (activity as Context?)?.let {
-                        if (ActivityCompat.checkSelfPermission(
-                                it,
-                                Manifest.permission.WRITE_CALENDAR
-                            ) != PackageManager.PERMISSION_GRANTED
-                            || ActivityCompat.checkSelfPermission(
-                                it,
-                                Manifest.permission.READ_CALENDAR
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            requestPermissions(
-                                arrayOf(
-                                    Manifest.permission.WRITE_CALENDAR,
-                                    Manifest.permission.READ_CALENDAR
-                                ),
-                                PERMISSION_REQUEST_CODE
-                            )
-                        } else {
-                            showCalendarList(index)
-                        }
+                    listItems(R.array.export_options) { _, index, text ->
+                        showCalendarList(index)
                     }
                 }
+        }
+    }
+
+    private fun handleExportClick() {
+        (activity as Context?)?.let {
+            if (ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.WRITE_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.READ_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.WRITE_CALENDAR,
+                        Manifest.permission.READ_CALENDAR
+                    ),
+                    PERMISSION_REQUEST_CODE
+                )
+            } else {
+                showExportMenu()
             }
         }
+
     }
 
     private fun showCalendarList(optionIndex: Int) {
@@ -303,9 +308,8 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if(requestCode==PERMISSION_REQUEST_CODE) {
-            val a = permissions
-//            viewModel.exportCalendar(activity.contentResolver)
+        if(!grantResults.contains(-1) && requestCode == PERMISSION_REQUEST_CODE ) {
+            showExportMenu()
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
