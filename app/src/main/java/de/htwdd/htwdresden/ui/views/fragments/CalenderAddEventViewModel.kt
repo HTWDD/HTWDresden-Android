@@ -4,11 +4,11 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -135,12 +135,12 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
         val timetableName = lessonName.getOrEmpty()
         val timetableType =  createLessonType()
         var timetableWeekDay = sh.getStringArray(R.array.days).indexOf(lessonWeekDay.get())+1.toLong()
-        val timetableStartTime = lessonDateStart
-        val timetableEndTime = lessonDateEnd
+        val timetableStartTime = lessonDateStart?.format("HH:mm:ss")?.toDate("HH:mm:ss")
+        val timetableEndTime = lessonDateEnd?.format("HH:mm:ss")?.toDate("HH:mm:ss")
         val timetableWeeksOnly = createWeeksOnly()
         val timetableProfessor = lessonProf.getOrEmpty()
         val timetableRooms = createRoomList()
-        val timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
+        var timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
         val timetableExactDay = lessonDay.get()?.toDate(lessonDatePattern)
         val timetableLessonRotation = lessonRotation.get()
 
@@ -169,6 +169,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
             if(timetableWeeksOnly.size==1) {
                 val dayOfWeek = timetableExactDay?.calendar?.get(Calendar.DAY_OF_WEEK) ?: 1
                 timetableWeekDay = dayOfWeek-1.toLong()
+                timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
             }
             if(timetable==null) {
                 timetable = Timetable(UUID.randomUUID().toString(),null, timetableTag, timetableName,timetableType, timetableWeekDay,
@@ -192,9 +193,14 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                 }
             }
             timetable?.let {
-                TimetableRealm().update(it)
-                navController.popBackStack()
+                TimetableRealm().updateAsync(it) {goBack(navController)}
             }
+        }
+    }
+
+    fun goBack(navController: NavController) {
+        viewModelScope.launch {
+            navController.popBackStack()
         }
     }
 

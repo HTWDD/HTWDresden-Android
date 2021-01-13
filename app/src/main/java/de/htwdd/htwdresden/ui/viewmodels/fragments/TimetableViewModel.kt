@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.provider.CalendarContract
 import android.util.Log.d
+import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
@@ -11,6 +12,8 @@ import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -29,8 +32,7 @@ class TimetableViewModel: ViewModel() {
             .map { it.sortedWith(compareBy { c -> c }) }
             .map { timetableList ->                                                                    // Grouping to lesson days and lessons
                 deleteAllIfNotCreatedByUser()
-                deleteAllTimetable()
-                timetableList.forEach { TimetableRealm().update(it) }
+                timetableList.forEach { TimetableRealm().update(it) {} }
 
                 val timetables = getAllTimetables()
                 val sortedKeySet = mutableSetOf<String>()

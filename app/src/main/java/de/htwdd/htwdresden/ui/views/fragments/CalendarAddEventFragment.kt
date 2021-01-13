@@ -19,6 +19,9 @@ import de.htwdd.htwdresden.databinding.CalenderAddEventFragmentBinding
 import de.htwdd.htwdresden.ui.viewmodels.fragments.factories.CalendarAddEventViewModelFactory
 import de.htwdd.htwdresden.utils.extensions.calendar
 import de.htwdd.htwdresden.utils.extensions.inflateDataBinding
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CalendarAddEventFragment : Fragment(), DialogInterface  {
@@ -122,7 +125,10 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
             (activity as Context?)?.let {
                 Toast.makeText(it, R.string.event_removed, Toast.LENGTH_SHORT).show()
             }
-            findNavController().popBackStack()
+            MainScope().launch {
+                delay(500)
+                findNavController().popBackStack()
+            }
             true
         }
         else -> super.onOptionsItemSelected(item)

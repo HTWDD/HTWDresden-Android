@@ -54,7 +54,7 @@ private fun drawLessons(layout: RelativeLayout, listener: ClickListener, root: T
     lessonView.id = View.generateViewId()
     layout.addView(lessonView)
     rootConflicts.forEachIndexed { index, timetable ->
-        drawLessons(layout, listener, timetable, ArrayList(), index+1, width)
+        if(index < 2) drawLessons(layout, listener, timetable, ArrayList(), index+1, width)
     }
 }
 
@@ -62,7 +62,8 @@ private fun drawLessons(layout: RelativeLayout, listener: ClickListener, root: T
 @Suppress("UNCHECKED_CAST")
 fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener: ClickListener) {
     if(layout.childCount>1) {
-        layout.removeViewsInLayout(1,layout.childCount-1)
+        layout.removeViews(1,layout.childCount-1)
+        layout.requestLayout()
         layout.invalidate()
     }
     val days = ArrayList<Pair<Long, List<Timetable>>>()
@@ -71,11 +72,12 @@ fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener:
         days.add(Pair(i, items.filter { it.day==i }))
     }
     items.forEach { root ->
-        val rootConflicts = items.filter{ it.id != root.id && it.day == root.day }.filter { it.beginTime.after(root.beginTime) && it.beginTime.before(root.endTime) }.toCollection(ArrayList())
+        val rootConflicts = items.filter{ it.id != root.id && it.day == root.day }.filter { (it.beginTime.after(root.beginTime) && it.beginTime.before(root.endTime)) || it.beginTime == root.beginTime}.toCollection(ArrayList())
         if(rootConflicts.isNotEmpty()) {
+            if(itemsWithoutConflicts.contains(root))
+                drawLessons(layout,listener,root, rootConflicts)
             itemsWithoutConflicts.remove(root)
             itemsWithoutConflicts.removeAll(rootConflicts)
-            drawLessons(layout,listener,root, rootConflicts)
         }
     }
 

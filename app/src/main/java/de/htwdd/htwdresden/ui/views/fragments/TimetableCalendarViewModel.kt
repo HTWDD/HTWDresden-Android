@@ -14,6 +14,7 @@ import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -21,27 +22,29 @@ import java.util.*
 class TimetableCalendarViewModel(private val calenderType: Int) : ViewModel() {
 
     val items = ObservableArrayList<Timetable>()
-    private val cph by lazy { CryptoSharedPreferencesHolder.instance }
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
 
     fun setup() {
         request()
     }
 
-    @Suppress("UNCHECKED_CAST")
     fun request() {
         viewModelScope.launch {
             try {
-//                val auth = cph.getStudyAuth() ?: return@launch
                 withContext(Dispatchers.IO) {
-//                    val timetableList = RestApi.timetableEndpoint.getTimetableList(auth.group, auth.major, auth.studyYear).map { Timetable.from(it) }
-                    val timetableList = getAllTimetables()
-                    setWeekOverviewData(timetableList)
+                    delay(1000)
+                    val realm = Realm.getDefaultInstance()
+                    try {
+                        val list = realm.where(TimetableRealm::class.java).findAll()
+                        val timetableList = list.map{TimetableRealm.toTimetable(it)}
+                        setWeekOverviewData(timetableList)
+                    } catch (e: Exception) {
+                    } finally {
+                        realm.close()
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                val test = true
             }
         }
     }

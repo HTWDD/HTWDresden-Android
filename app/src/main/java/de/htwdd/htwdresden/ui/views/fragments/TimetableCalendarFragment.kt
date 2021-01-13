@@ -51,18 +51,9 @@ class TimetableCalendarFragment : Fragment(), ClickListener{
         super.onViewCreated(view, savedInstanceState)
         val isCurrentWeek = calenderType == CALENDAR_CURRENT_WEEK
         calendar = timetableCalendar
-        calendar?.adapter = TimetableGridAdapter(activity as Context, isCurrentWeek) { onEventClick() }
+        calendar?.adapter = TimetableGridAdapter(activity as Context, isCurrentWeek)
         timetableTimestampsGrid.adapter = TimestampAdapter(activity as Context)
-    }
-
-    private fun onEventClick() {
-//        findNavController()
-//            .navigate(R.id.action_calender_add_event_fragment)
-    }
-
-    override fun onResume() {
         viewModel.request()
-        super.onResume()
     }
 
     override fun onLessonClick(timetable: Timetable) {
