@@ -139,18 +139,28 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             }, {
                 error(it)
                 weak { self ->
-                    self.includeEmptyLayout.show()
-                    self.tvIcon.text = getString(R.string.exams_no_results_icon)
-                    self.tvTitle.text = getString(R.string.exams_no_credentials_title)
-                    self.tvMessage.text = getString(R.string.timetable_no_credentials_message)
-                    self.btnEmptyAction.apply {
-                        show()
-                        text = getString(R.string.general_add)
-                        click {
-                            self.findNavController()
-                                .navigate(R.id.action_to_study_group_page_fragment)
-                        }
-                    }
+                    viewModel.getTimetablesFromDb()
+                        .runInUiThread()
+                        .subscribe({ timetables ->
+                            weak { self ->
+                                if (timetables.isNotEmpty()) {
+                                    self.adapter.update(timetables)
+                                }
+                            }
+                        }, {
+                            self.includeEmptyLayout.show()
+                            self.tvIcon.text = getString(R.string.exams_no_results_icon)
+                            self.tvTitle.text = getString(R.string.exams_no_credentials_title)
+                            self.tvMessage.text = getString(R.string.timetable_no_credentials_message)
+                            self.btnEmptyAction.apply {
+                                show()
+                                text = getString(R.string.general_add)
+                                click {
+                                    self.findNavController()
+                                        .navigate(R.id.action_to_study_group_page_fragment)
+                                }
+                            }
+                        }).addTo(disposeBag)
                 }
             })
             .addTo(disposeBag)
@@ -204,9 +214,15 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         val todayItem = menu.findItem(R.id.menu_today)
         val exportItem = menu.findItem(R.id.menu_export)
         val addEventItem = menu.findItem(R.id.menu_add_event)
+        val calendarItem = menu.findItem(R.id.menu_calendar)
         todayItem.isVisible = !isCalendarView
         exportItem.isVisible = isCalendarView
         addEventItem.isVisible = isCalendarView
+        if(isCalendarView) {
+            calendarItem.setIcon(R.drawable.ic_list)
+        } else {
+            calendarItem.setIcon(R.drawable.ic_calendar)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

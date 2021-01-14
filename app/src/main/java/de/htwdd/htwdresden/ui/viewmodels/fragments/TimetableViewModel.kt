@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.provider.CalendarContract
 import android.util.Log.d
+import android.util.Log.e
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
@@ -24,25 +25,27 @@ class TimetableViewModel: ViewModel() {
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
         val auth = cph.getStudyAuth() ?: return Observable.error(Exception("No Credentials"))
-
-
-        return RestApi.timetableEndpoint.timetable(auth.group, auth.major, auth.studyYear)
+        val timetables = RestApi.timetableEndpoint.timetable(auth.group, auth.major, auth.studyYear)
             .runInThread()
             .map { jTimetables -> jTimetables.map { Timetable.from(it) } }
             .map { it.sortedWith(compareBy { c -> c }) }
-            .map { timetableList ->                                                                    // Grouping to lesson days and lessons
-                deleteAllIfNotCreatedByUser()
-                timetableList.forEach { TimetableRealm().update(it) {} }
+        return handleTimetableResult(timetables)
+    }
 
-                val timetables = getAllTimetables()
-                val sortedKeySet = mutableSetOf<String>()
-                val sortedValueSet = mutableSetOf<Timetable>()
-                timetables.groupBy { it.lessonDays }.apply {
-                    keys.forEach { k -> k.sorted().forEach { sortedKeySet.add(it) } }               // Lesson days
-                    values.forEach { v -> v.forEach { sortedValueSet.add(it) } }                    // Lessons
-                }
-                Pair(sortedKeySet.sortedWith(compareBy { it }), sortedValueSet)
+    private fun handleTimetableResult(timetables: Observable<List<Timetable>>): Observable<Timetables> {
+        return timetables.map { timetableList ->                                                    // Grouping to lesson days and lessons
+            deleteAllIfNotCreatedByUser()
+            timetableList.forEach { TimetableRealm().update(it) {} }
+            val sortedKeySet = mutableSetOf<String>()
+            val sortedValueSet = mutableSetOf<Timetable>()
+            getAllTimetables().groupBy { it.lessonDays }.apply {
+                keys.forEach { k ->
+                    k.sorted().forEach { sortedKeySet.add(it) }
+                }                                                                                   // Lesson days
+                values.forEach { v -> v.forEach { sortedValueSet.add(it) } }                        // Lessons
             }
+            Pair(sortedKeySet.sortedWith(compareBy { it }), sortedValueSet)
+        }
             .map {                                                                                  // Pair -> Single List -> Lesson Days[ Lessons ]
                 val result = Timetables()
                 it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
@@ -53,6 +56,13 @@ class TimetableViewModel: ViewModel() {
                 }
                 result
             }
+    }
+
+
+    fun getTimetablesFromDb(): Observable<Timetables> {
+        val timetables = getAllTimetables()
+        if(timetables.isEmpty()) return Observable.error(Exception("No Credentials"))
+        else return handleTimetableResult(Observable.just(timetables))
     }
 
     private fun dateStringToHeaderItem(date: String): TimetableHeaderItem {
