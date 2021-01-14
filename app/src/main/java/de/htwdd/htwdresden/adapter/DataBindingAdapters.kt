@@ -109,7 +109,7 @@ fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener:
         lessonView.layoutParams = params
 
         lessonView.id = View.generateViewId()
-        layout.addView(lessonView)
+        if (lessonDuration > 0) layout.addView(lessonView)
     }
     layout.invalidate()
 }

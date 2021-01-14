@@ -52,7 +52,8 @@ val Date.timeInDpForCalendar: Int
     get() {
         val calendar = Calendar.getInstance()
         calendar.time = this
-        return calendar.get(Calendar.MINUTE) + 60 * (calendar.get(Calendar.HOUR_OF_DAY) - 7)
+        val dp = calendar.get(Calendar.MINUTE) + 60 * (calendar.get(Calendar.HOUR_OF_DAY) - 7)
+        return if (dp < 0) 0 else dp
     }
 
 val Calendar.getStartDateForLesson: Date
