@@ -8,10 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
-import de.htwdd.htwdresden.utils.extensions.addTo
-import de.htwdd.htwdresden.utils.extensions.click
-import de.htwdd.htwdresden.utils.extensions.disposeBag
-import de.htwdd.htwdresden.utils.extensions.runInUiThread
+import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_crashlytics.*
 
@@ -45,6 +42,7 @@ class CrashlyticsFragment : Fragment(R.layout.fragment_crashlytics), Swipeable {
         checkState()
         btnYes.click {
             cph.setCrashlytics(true)
+            handleCrashlyticsChange()
             delegate?.moveNext()
         }
         tvTimetableSummary.click {

@@ -1,5 +1,7 @@
 package de.htwdd.htwdresden.utils.extensions
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import java.util.*
 
 fun <T: Any> T.TAG() = this::class.java.simpleName
@@ -64,3 +66,10 @@ fun Any.getDaysOfWeek(currentWeek: Boolean = true): Array<Date?> {
     }
 }
 
+fun Any.handleCrashlyticsChange() {
+    if (CryptoSharedPreferencesHolder.instance.hasCrashlytics()) {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+    } else {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false)
+    }
+}
