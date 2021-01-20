@@ -57,8 +57,9 @@ class TimetableCalendarFragment : Fragment(), ClickListener{
     }
 
     override fun onLessonClick(timetable: Timetable) {
+        val destinationTitle = if(timetable.createdByUser) activity?.resources?.getString(R.string.timetable_edit_activity_title) ?: "" else activity?.resources?.getString(R.string.timetable_event) ?: ""
         findNavController()
-            .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_ID to timetable.id))
+            .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_ID to timetable.id, CalendarAddEventFragment.ARG_TITLE to destinationTitle))
     }
 
 }

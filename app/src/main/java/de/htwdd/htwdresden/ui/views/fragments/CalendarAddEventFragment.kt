@@ -28,6 +28,7 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
 
     companion object {
         const val ARG_ID = "id"
+        const val ARG_TITLE = "title"
     }
 
     private val viewModel: CalenderAddEventViewModel by viewModels { CalendarAddEventViewModelFactory(timetableId) }

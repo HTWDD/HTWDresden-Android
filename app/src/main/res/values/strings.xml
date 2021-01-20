@@ -80,6 +80,8 @@
     <string name="timetable_ds_list_simple" translatable="false">%1$s - %2$s</string>
     <string name="timetable_calendar_week">%d. KW</string>
     <string name="timetable_edit_activity_title">Veranstaltung bearbeiten</string>
+    <string name="timetable_add_event">Veranstaltung hinzufügen</string>
+    <string name="timetable_event">Veranstaltung</string>
     <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung*</string>
     <string name="timetable_edit_lessonTag_hint">Kurzform</string>
     <string name="timetable_edit_lessonType">Art</string>

@@ -172,12 +172,16 @@
     <fragment
         android:id="@+id/calender_add_event_fragment"
         android:name="de.htwdd.htwdresden.ui.views.fragments.CalendarAddEventFragment"
-        android:label="@string/timetable_edit_activity_title"
+        android:label="{title}"
         tools:layout="@layout/calender_add_event_fragment">
         <argument
             android:name="id"
             app:argType="string"
             android:defaultValue="" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 
 </navigation>

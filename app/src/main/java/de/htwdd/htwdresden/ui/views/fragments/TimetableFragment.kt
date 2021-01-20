@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,9 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.SectionsPagerAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
+import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
+import de.htwdd.htwdresden.ui.models.TimetableItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_CURRENT_WEEK
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_NEXT_WEEK
@@ -72,6 +75,13 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             handleViewChange()
         } else {
             request()
+        }
+        adapter.onItemClick {
+            if(it is TimetableItem) {
+                val destinationTitle = if(it.item.createdByUser) activity?.resources?.getString(R.string.timetable_edit_activity_title) ?: "" else activity?.resources?.getString(R.string.timetable_event) ?: ""
+                findNavController()
+                    .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_ID to it.item.id, CalendarAddEventFragment.ARG_TITLE to destinationTitle))
+            }
         }
     }
 
@@ -213,11 +223,9 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         super.onPrepareOptionsMenu(menu)
         val todayItem = menu.findItem(R.id.menu_today)
         val exportItem = menu.findItem(R.id.menu_export)
-        val addEventItem = menu.findItem(R.id.menu_add_event)
         val calendarItem = menu.findItem(R.id.menu_calendar)
         todayItem.isVisible = !isCalendarView
         exportItem.isVisible = isCalendarView
-        addEventItem.isVisible = isCalendarView
         if(isCalendarView) {
             calendarItem.setIcon(R.drawable.ic_list)
         } else {
@@ -304,8 +312,9 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
     }
 
     private fun onEventClick() {
+        val destinationTitle = activity?.resources?.getString(R.string.timetable_add_event) ?: ""
         findNavController()
-            .navigate(R.id.action_calender_add_event_fragment)
+            .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_TITLE to destinationTitle))
     }
 
     private fun handleViewChange() {

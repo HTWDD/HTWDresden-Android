@@ -23,6 +23,7 @@
         android:id="@+id/menu_export"
         android:checkable="true"
         android:checked="true"
+        android:icon="@drawable/ic_export"
         android:title="@string/export"
         app:showAsAction="ifRoom" />
 </menu>

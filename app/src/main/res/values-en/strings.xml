@@ -95,6 +95,8 @@
     <string name="timetable_details_subtitle">%1$s by %2$s</string>
     <string name="timetable_ds_list">lesson block %1$d (%2$s - %3$s)</string>
     <string name="timetable_edit_activity_title">Edit event</string>
+    <string name="timetable_add_event">Add event</string>
+    <string name="timetable_event">Event</string>
     <string name="timetable_edit_lessonDS">Time</string>
     <string name="timetable_edit_lessonDS_value">set time individually</string>
     <string name="timetable_edit_lessonDay">Day</string>
