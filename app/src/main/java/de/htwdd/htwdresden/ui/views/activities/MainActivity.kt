@@ -89,7 +89,15 @@ class MainActivity: AppCompatActivity() {
                     }
                 }
                 R.id.timetable_page_fragment, R.id.calender_add_event_fragment -> {
-                    appBarLayout.setExpanded(false)
+                    window.statusBarColor = getColor(R.color.primary_dark)
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    appBarLayout.apply {
+                        val lp = layoutParams as CoordinatorLayout.LayoutParams
+                        lp.height = 140.dp
+                        layoutParams = lp
+                        invalidate()
+                        setExpanded(false, false)
+                    }
                 }
                 else -> {
                     window.statusBarColor = getColor(R.color.primary_dark)

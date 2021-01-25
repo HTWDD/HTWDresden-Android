@@ -29,7 +29,6 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.SectionsPagerAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
-import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
 import de.htwdd.htwdresden.ui.models.TimetableItem
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
@@ -43,7 +42,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.properties.Delegates
-
 
 class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
