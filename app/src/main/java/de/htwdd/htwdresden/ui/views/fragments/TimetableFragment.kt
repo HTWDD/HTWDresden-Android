@@ -2,10 +2,13 @@ package de.htwdd.htwdresden.ui.views.fragments
 
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,8 +48,19 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //TODO: to be removed after fix
+        createErrorMessage()
         setup()
         request()
+    }
+
+    private fun createErrorMessage() {
+        val message = resources.getString(R.string.timetable_message)
+        view?.findViewById<TextView>(R.id.timetableMessage)?.apply {
+            text = Html.fromHtml(message)
+            isClickable = true
+            movementMethod = LinkMovementMethod.getInstance()
+        }
     }
 
     override fun onResume() {

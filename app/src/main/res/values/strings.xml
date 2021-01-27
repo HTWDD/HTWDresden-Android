@@ -260,4 +260,6 @@
     <string name="grades">%s Noten</string>
     <string name="double_tap_to_exit">Drücke erneut Zurück, um die App zu verlassen.</string>
     <string name="lets_go">Los geht\'s</string>
+
+    <string name="timetable_message">Aufgrund technischer Probleme kann es zu Verschiebungen im Stundenplan kommen. Bitte mit Version der HTW Webseite abgleichen. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Zum Online-Stundenplan&lt;/a></string>
 </resources>
