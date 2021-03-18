@@ -49,6 +49,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //TODO: to be removed after fix
+        setHasOptionsMenu(true)
         createErrorMessage()
         setup()
         request()
