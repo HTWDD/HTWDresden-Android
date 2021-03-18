@@ -36,6 +36,7 @@ class RoomOccupancyFragment: Fragment(R.layout.fragment_room_occupancy) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         swipeRefreshLayout?.isEnabled = false
         adapter = RoomOccupancyItemAdapter(items)
         roomOccupancyRecycler.adapter = adapter
