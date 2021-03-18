@@ -5,8 +5,10 @@ import android.content.Intent.*
 import android.net.Uri
 import android.util.Base64
 import androidx.databinding.ObservableField
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import de.htwdd.htwdresden.utils.extensions.debug
 import de.htwdd.htwdresden.utils.extensions.guard
+import de.htwdd.htwdresden.utils.extensions.handleCrashlyticsChange
 import de.htwdd.htwdresden.utils.extensions.runInUiThread
 import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
@@ -89,7 +91,10 @@ class SettingsModel {
 
     fun changeLogin() = onLoginClosure()
 
-    fun onCrashlytics(checked: Boolean) = cph.setCrashlytics(checked)
+    fun onCrashlytics(checked: Boolean) {
+        cph.setCrashlytics(checked)
+        handleCrashlyticsChange()
+    }
 
     private fun readStudyToken(token: String?): String {
         token.guard { return "" }
