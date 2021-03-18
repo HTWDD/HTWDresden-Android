@@ -237,6 +237,8 @@
     <string name="welcome_text_timetable">Know when lectures and seminars start.</string>
     <string name="meals_widget_label">Canteen Reichenbachstraße | Meals</string>
 
+    <string name="timetable_message">Due to technical problems, there may be shifts in the schedule. Please check your schedule on the HTW website. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Go to the online schedule&lt;/a></string>
+
     <string name="am_7">7 AM</string>
     <string name="add_event">Add event</string>
 

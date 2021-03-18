@@ -298,4 +298,6 @@
     <string name="export_calendar_list">Auf dem Gerät verfügbare Kalender:</string>
     <string name="export_success_message">Export erfolgreich</string>
     <string name="export_failure_message">Fehler beim Export</string>
+
+    <string name="timetable_message">Aufgrund technischer Probleme kann es zu Verschiebungen im Stundenplan kommen. Bitte mit Version der HTW Webseite abgleichen. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Zum Online-Stundenplan&lt;/a></string>
 </resources>
