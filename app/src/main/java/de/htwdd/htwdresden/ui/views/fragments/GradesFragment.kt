@@ -62,30 +62,34 @@ class GradesFragment: Fragment(R.layout.fragment_grades) {
     }
 
     private fun request() {
-        viewModel.request()
-            .runInUiThread()
-            .doOnSubscribe { isRefreshing = true }
-            .doOnTerminate { isRefreshing = false }
-            .subscribe({ grades ->
-                weak { self ->
-                    self.adapter.update(grades)
-                }
-            }, {
-                error(it)
-                weak { self ->
-                    self.includeEmptyLayout.show()
-                    self.tvIcon.text    = getString(R.string.exams_no_results_icon)
-                    self.tvTitle.text   = getString(R.string.grades_no_credentials_title)
-                    self.tvMessage.text = getString(R.string.grades_no_credentials_message)
-                    self.btnEmptyAction.apply {
-                        show()
-                        text = getString(R.string.login_with_img)
-                        click {
-                            self.findNavController().navigate(R.id.action_to_login_page_fragment)
+        try {
+            viewModel.request()
+                .runInUiThread()
+                .doOnSubscribe { isRefreshing = true }
+                .doOnTerminate { isRefreshing = false }
+                .subscribe({ grades ->
+                    weak { self ->
+                        self.adapter.update(grades)
+                    }
+                }, {
+                    error(it)
+                    weak { self ->
+                        self.includeEmptyLayout?.show()
+                        self.tvIcon?.text    = getString(R.string.exams_no_results_icon)
+                        self.tvTitle?.text   = getString(R.string.grades_no_credentials_title)
+                        self.tvMessage?.text = getString(R.string.grades_no_credentials_message)
+                        self.btnEmptyAction?.apply {
+                            show()
+                            text = getString(R.string.login_with_img)
+                            click {
+                                self.findNavController().navigate(R.id.action_to_login_page_fragment)
+                            }
                         }
                     }
-                }
-            })
-            .addTo(disposeBag)
+                })
+                .addTo(disposeBag)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
