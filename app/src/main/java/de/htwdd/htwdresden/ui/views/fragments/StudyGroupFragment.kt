@@ -81,50 +81,58 @@ class StudyGroupFragment: Fragment(R.layout.fragment_study_group), Swipeable {
 
     private fun setup() {
         btnLater.toggle(arguments?.getBoolean(ARG_IS_BOARDING) == false)
-
-        viewModel
-            .request()
-            .runInUiThread()
-            .subscribe {
-                weak { self ->
-                    self.state.years.apply {
-                        clear()
-                        addAll(it)
+        try {
+            viewModel
+                .request()
+                .runInUiThread()
+                .subscribe {
+                    weak { self ->
+                        self.state.years.apply {
+                            clear()
+                            addAll(it)
+                        }
+                        self.btnYear?.isEnabled = it.isNotEmpty()
                     }
-                    self.btnYear.isEnabled = it.isNotEmpty()
                 }
-            }
-            .addTo(disposeBag)
-
-
-        btnYear.click {
-            MaterialDialog(context!!, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                title(R.string.year)
-                listItems(items = state.years.map { "${it.studyYear + 2000}"}, selection = { _, index, _ ->
-                    state.year = state.years[index]
-                })
-            }
+                .addTo(disposeBag)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
-        btnMajor.click {
-            MaterialDialog(context!!, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                title(R.string.major)
-                listItems(items = state.majors.map { "${it.studyCourse} | ${it.name.defaultWhenNull("---")}" }) { _, index, _ ->
-                    state.major = state.majors[index]
+        btnYear?.click {
+            context?.let {
+                MaterialDialog(it, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.year)
+                    listItems(items = state.years.map { "${it.studyYear + 2000}"}, selection = { _, index, _ ->
+                        state.year = state.years[index]
+                    })
                 }
             }
         }
 
-        btnGroup.click {
-            MaterialDialog(context!!, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-                title(R.string.group)
-                listItems(items = state.groups.map { "${it.studyGroup} | ${it.name.defaultWhenNull("---")}" }) { _, index, _ ->
-                    state.group = state.groups[index]
+        btnMajor?.click {
+            context?.let {
+                MaterialDialog(it, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.major)
+                    listItems(items = state.majors.map { "${it.studyCourse} | ${it.name.defaultWhenNull("---")}" }) { _, index, _ ->
+                        state.major = state.majors[index]
+                    }
                 }
             }
         }
 
-        btnLater.click {
+        btnGroup?.click {
+            context?.let {
+                MaterialDialog(it, BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                    title(R.string.group)
+                    listItems(items = state.groups.map { "${it.studyGroup} | ${it.name.defaultWhenNull("---")}" }) { _, index, _ ->
+                        state.group = state.groups[index]
+                    }
+                }
+            }
+        }
+
+        btnLater?.click {
             findNavController().popBackStack()
         }
     }
