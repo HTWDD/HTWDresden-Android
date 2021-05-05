@@ -19,7 +19,7 @@ class OverviewItemAdapter(items: Overviews):
 }
 
 //-------------------------------------------------------------------------------------------------- Timetable
-class TimetableItemAdapter(items: Timetables):
+class TimetableItemAdapter(val items: Timetables):
     GenericAdapter<Identifiable<Modelable>, Modelable>(items) {
     override fun afterBind(item: Identifiable<Modelable>, view: View, position: Int) {}
 }

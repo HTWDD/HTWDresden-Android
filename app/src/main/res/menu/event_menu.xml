@@ -7,4 +7,10 @@
         android:title="@string/remove_event"
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/hideEvent"
+        android:checkable="true"
+        android:title="@string/hide_event"
+        android:icon="@drawable/ic_eye"
+        app:showAsAction="ifRoom" />
 </menu>

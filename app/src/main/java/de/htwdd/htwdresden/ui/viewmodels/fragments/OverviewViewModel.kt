@@ -49,9 +49,13 @@ class OverviewViewModel: ViewModel() {
             .map { it.map { jTimetable -> Timetable.from(jTimetable) } }
             .map { it.sortedWith(compareBy { c -> c }) }
             .map {
+                val hiddenEventsIds = getHiddenTimetables()
                 deleteAllIfNotCreatedByUser()
-                it.forEach { timetable -> TimetableRealm().update(timetable) {} }
-                getAllTimetables()
+                it.forEach { timetable ->
+                    if(hiddenEventsIds.contains(timetable.id)) timetable.isHidden = true
+                    TimetableRealm().update(timetable) {}
+                }
+                getNotHiddenTimetables()
             }
             .map { it.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) } }
             .map { it.sortedWith(compareBy { c -> c }) }
@@ -73,7 +77,7 @@ class OverviewViewModel: ViewModel() {
     }
 
     private fun getTimetablesFromDb(): List<TimetableItem> {
-        val timetables2 = getAllTimetables()
+        val timetables2 = getNotHiddenTimetables()
         return if(timetables2.isEmpty()) emptyList()
         else timetables2.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) }.sortedWith(compareBy { c -> c }).map { TimetableItem(it) }
     }

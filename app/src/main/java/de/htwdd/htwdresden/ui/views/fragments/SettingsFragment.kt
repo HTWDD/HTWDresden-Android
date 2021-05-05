@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.databinding.FragmentSettingsBinding
+import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.viewmodels.fragments.SettingsViewModel
 import de.htwdd.htwdresden.utils.extensions.error
 import de.htwdd.htwdresden.utils.extensions.getViewModel
@@ -98,6 +99,7 @@ class SettingsFragment : Fragment() {
                     message(R.string.delete_all_saved_data_question)
                     positiveButton(R.string.general_delete) {
                         cph.clear()
+                        deleteAllTimetable()
                         findNavController().navigate(R.id.onboarding_page_fragment)
                     }
                     negativeButton(R.string.general_cancel)
@@ -110,7 +112,16 @@ class SettingsFragment : Fragment() {
                     message(R.string.show_hidden_elective_lecture_question)
                     positiveButton(R.string.general_reset) {
                         activity?.let {
-                            Toast.makeText(it, R.string.show_hidden_elective_lecture_message, Toast.LENGTH_SHORT).show()
+                            val getAllTimetables = getAllTimetables()
+                            getAllTimetables.forEach {
+                                it.isHidden = false
+                                TimetableRealm().updateAsync(it) {}
+                            }
+                            Toast.makeText(
+                                it,
+                                R.string.show_hidden_elective_lecture_message,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     negativeButton(R.string.general_cancel)

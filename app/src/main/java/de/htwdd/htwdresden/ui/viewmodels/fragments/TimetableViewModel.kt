@@ -4,8 +4,6 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.provider.CalendarContract
 import android.util.Log.d
-import android.util.Log.e
-import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
@@ -13,10 +11,7 @@ import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.*
-import kotlin.collections.HashMap
 
 class TimetableViewModel: ViewModel() {
 
@@ -34,11 +29,15 @@ class TimetableViewModel: ViewModel() {
 
     private fun handleTimetableResult(timetables: Observable<List<Timetable>>): Observable<Timetables> {
         return timetables.map { timetableList ->                                                    // Grouping to lesson days and lessons
+            val hiddenEventsIds = getHiddenTimetables()
             deleteAllIfNotCreatedByUser()
-            timetableList.forEach { TimetableRealm().update(it) {} }
+            timetableList.forEach {
+                if(hiddenEventsIds.contains(it.id)) it.isHidden = true
+                TimetableRealm().update(it) {}
+            }
             val sortedKeySet = mutableSetOf<String>()
             val sortedValueSet = mutableSetOf<Timetable>()
-            getAllTimetables().groupBy { it.lessonDays }.apply {
+            getNotHiddenTimetables().groupBy { it.lessonDays }.apply {
                 keys.forEach { k ->
                     k.sorted().forEach { sortedKeySet.add(it) }
                 }                                                                                   // Lesson days
@@ -72,7 +71,7 @@ class TimetableViewModel: ViewModel() {
     }
 
     fun exportCalendar(contentResolver: ContentResolver, index: Int, calendarId: Long) {
-        val timetables = getAllTimetables().toCollection(ArrayList())
+        val timetables = getNotHiddenTimetables().toCollection(ArrayList())
         val eventsToExport = ArrayList<Pair<Date, Timetable>>()
 
         when(index) {

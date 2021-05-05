@@ -54,7 +54,8 @@ class Timetable(
     var lessonDays: List<String>,
     var createdByUser: Boolean = false,
     var exactDay: Date? = null,
-    var weekRotation: String? = null
+    var weekRotation: String? = null,
+    var isHidden: Boolean = false
 ) : Comparable<Timetable> {
 
     companion object {
@@ -145,7 +146,8 @@ open class TimetableRealm(
     var lessonDays: RealmList<String> = RealmList(),
     var createdByUser: Boolean = false,
     var exactDay: Date? = null,
-    var weekRotation: String? = null
+    var weekRotation: String? = null,
+    var isHidden: Boolean = false
 ) : RealmObject() {
 
     companion object {
@@ -174,7 +176,8 @@ open class TimetableRealm(
                 },
                 createdByUser,
                 exactDay,
-                weekRotation
+                weekRotation,
+                isHidden = isHidden
             )
         }
 
@@ -198,7 +201,8 @@ open class TimetableRealm(
                 lessonDays.toCollection(ArrayList()),
                 createdByUser,
                 exactDay,
-                weekRotation
+                weekRotation,
+                isHidden = isHidden
             )
         }
     }
@@ -419,10 +423,24 @@ fun Any.deleteById(id: String) {
     }
 }
 
-fun Any.getAllTimetables() : List<Timetable> {
-   return Realm.getDefaultInstance().where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
+fun Any.getNotHiddenTimetables() : List<Timetable> {
+   val list = Realm.getDefaultInstance().where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
        it
    ) }
+    return list.filter { !it.isHidden }
+}
+
+fun Any.getAllTimetables() : List<Timetable> {
+    return Realm.getDefaultInstance().where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
+        it
+    ) }
+}
+
+fun Any.getHiddenTimetables() : List<String> {
+    val list = Realm.getDefaultInstance().where(TimetableRealm::class.java).findAll().map { TimetableRealm.toTimetable(
+        it
+    ) }
+    return list.filter { it.isHidden }.map {it.id}
 }
 
 fun Timetable.createDescriptionForCalendar() : String {

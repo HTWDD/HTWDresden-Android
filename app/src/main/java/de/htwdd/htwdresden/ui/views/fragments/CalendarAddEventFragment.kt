@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +21,6 @@ import de.htwdd.htwdresden.utils.extensions.inflateDataBinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
 class CalendarAddEventFragment : Fragment(), DialogInterface  {
 
@@ -132,12 +130,34 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
             }
             true
         }
+        R.id.hideEvent -> {
+            (activity as Context?)?.let {
+                Toast.makeText(it, R.string.event_hidden, Toast.LENGTH_SHORT).show()
+            }
+            viewModel.hideEvent(findNavController())
+            true
+        }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+
+        val removeButton = menu.findItem(R.id.eventRemoveButton)
+        val hideButton = menu.findItem(R.id.hideEvent)
+        if(viewModel.isElective) {
+            removeButton.isVisible = false
+            hideButton.isVisible = true
+        } else if(viewModel.isEditable.get()==true) {
+            removeButton.isVisible = true
+            hideButton.isVisible = false
+        }
+        activity?.invalidateOptionsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        if(viewModel.isEditable.get()==true) {
+        if(viewModel.isEditable.get()==true || viewModel.isElective) {
             inflater.inflate(R.menu.event_menu, menu)
         }
         return super.onCreateOptionsMenu(menu, inflater)

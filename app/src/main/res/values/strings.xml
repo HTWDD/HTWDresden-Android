@@ -292,6 +292,8 @@
     <string name="fill_all_fields">Bitte füllen Sie alle Pflichtfelder aus</string>
     <string name="required">* Pflichtfeld</string>
     <string name="remove_event">Event löschen</string>
+    <string name="hide_event">Veranstaltung ausblenden</string>
+    <string name="event_hidden">Veranstaltung ausgeblendet</string>
     <string name="event_removed">Event gelöscht</string>
     <string name="empty_field_error">Das Pflichtfeld kann nicht leer sein</string>
 

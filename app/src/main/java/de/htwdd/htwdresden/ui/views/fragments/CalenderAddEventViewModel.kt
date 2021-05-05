@@ -8,7 +8,6 @@ import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,6 +28,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
     var lessonDateEnd: Date? = null
     val lessonWeekDayVisible = ObservableField(true)
     val isEditable = ObservableField(true)
+    var isElective = false
     var timetable: Timetable? = null
 
     val lessonNameError  = ObservableField<String?>()
@@ -77,6 +77,9 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
         }
         if(timetable?.createdByUser==false) {
             isEditable.set(false)
+        }
+        timetable?.type?.let {
+            isElective = it.isElective()
         }
     }
 
@@ -194,6 +197,15 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
             }
             timetable?.let {
                 TimetableRealm().updateAsync(it) {goBack(navController)}
+            }
+        }
+    }
+
+    fun hideEvent(navController: NavController) {
+        if (isElective) {
+            timetable?.let {
+                it.isHidden = true
+                TimetableRealm().updateAsync(it) { goBack(navController) }
             }
         }
     }

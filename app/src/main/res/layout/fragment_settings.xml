@@ -427,7 +427,8 @@
                     android:layout_width="@dimen/list_item_small_icon_size"
                     android:layout_height="@dimen/list_item_small_icon_size"
                     android:layout_marginStart="8dp"
-                    android:src="@drawable/ic_trash_delete"
+                    android:src="@drawable/ic_eye"
+                    app:tint="@color/black"
                     android:layout_gravity="start|center"
                     tools:ignore="ContentDescription" />
 

@@ -257,6 +257,8 @@
 
     <string name="required">* required</string>
     <string name="remove_event">Remove event</string>
+    <string name="hide_event">Hide event</string>
+    <string name="event_hidden">Event hidden</string>
     <string name="event_removed">Event removed</string>
     <string name="empty_field_error">This field cannot be empty</string>
 
