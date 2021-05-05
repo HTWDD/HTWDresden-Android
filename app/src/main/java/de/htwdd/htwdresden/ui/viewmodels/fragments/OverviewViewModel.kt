@@ -47,17 +47,35 @@ class OverviewViewModel: ViewModel() {
             .timetableEndpoint
             .timetable(auth.group, auth.major, auth.studyYear)
             .map { it.map { jTimetable -> Timetable.from(jTimetable) } }
+            .map { it.sortedWith(compareBy { c -> c }) }
+            .map {
+                deleteAllIfNotCreatedByUser()
+                it.forEach { timetable -> TimetableRealm().update(timetable) {} }
+                getAllTimetables()
+            }
             .map { it.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) } }
             .map { it.sortedWith(compareBy { c -> c }) }
             .map {
                 result.apply {
-                    addAll(it.map { OverviewScheduleItem(it) })
+                    addAll(it.map { TimetableItem(it) })
                     if (it.isEmpty()) {
                         add(OverviewFreeDayItem())
                     }
                 }
             }
-            .onErrorReturn { Overviews() }
+            .onErrorReturn { Overviews().apply {
+                val timetablesFromDB = getTimetablesFromDb()
+                if(timetablesFromDB.isNotEmpty()) {
+                    add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM")))
+                    addAll(getTimetablesFromDb())
+                }
+            } }
+    }
+
+    private fun getTimetablesFromDb(): List<TimetableItem> {
+        val timetables2 = getAllTimetables()
+        return if(timetables2.isEmpty()) emptyList()
+        else timetables2.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) }.sortedWith(compareBy { c -> c }).map { TimetableItem(it) }
     }
 
     private fun requestMealsForToday(): Observable<Overviews> {

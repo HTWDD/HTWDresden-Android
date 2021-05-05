@@ -34,6 +34,7 @@
     <string name="general_close">Close</string>
     <string name="timetable_overview_options_menu_timetable_reset">Reset timetable</string>
     <string name="general_cancel">Cancel</string>
+    <string name="general_reset">Reset</string>
     <string name="about_contact">Contact</string>
     <string name="exams_exams">Exams</string>
     <string name="exams_grade">Grades</string>
@@ -183,6 +184,10 @@
     <string name="data_protection">Data Protection</string>
     <string name="delete_all_saved_data">Delete all stored data</string>
     <string name="delete_all_saved_data_question">Do you really want to delete all data stored in the HTW Dresden App?</string>
+    <string name="show_hidden_elective_lectures">Hidden events</string>
+    <string name="show_hidden_elective_lectures_title">Reset hidden events</string>
+    <string name="show_hidden_elective_lecture_question">Do you really want to reset all hidden events?</string>
+    <string name="show_hidden_elective_lecture_message">Hidden events are reset</string>
     <string name="year">Year</string>
     <string name="major">Major</string>
     <string name="group">Group</string>
@@ -238,6 +243,7 @@
     <string name="meals_widget_label">Canteen Reichenbachstraße | Meals</string>
 
     <string name="timetable_message">Due to technical problems, there may be shifts in the schedule. Please check your schedule on the HTW website. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Go to the online schedule&lt;/a></string>
+    <string name="elective">Elective</string>
 
     <string name="am_7">7 AM</string>
     <string name="add_event">Add event</string>

@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -12,6 +13,7 @@ import de.htwdd.htwdresden.custom.LessonView
 import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.ui.views.fragments.ClickListener
 import de.htwdd.htwdresden.utils.extensions.convertDpToPixel
+import de.htwdd.htwdresden.utils.extensions.getColorForLessonType
 import de.htwdd.htwdresden.utils.extensions.timeInDpForCalendar
 import kotlin.math.floor
 
@@ -118,6 +120,12 @@ fun addLessonsToLayout(layout: RelativeLayout, items: List<Timetable>, listener:
 fun goneUnless(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
 }
+
+@BindingAdapter("app:setBackgroundTint")
+fun setBackgroundTint(view: View, color: Int) {
+    view.setBackgroundColor(ContextCompat.getColor(view.context, color))
+}
+
 
 @BindingAdapter("app:isEnabled")
 fun enableSwipeRefresh(view: SwipeRefreshLayout, isEnabled: Boolean) {

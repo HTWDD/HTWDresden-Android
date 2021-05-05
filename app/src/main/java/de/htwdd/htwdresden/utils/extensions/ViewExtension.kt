@@ -48,15 +48,16 @@ fun View.toggle(condition: Boolean): View {
 }
 
 fun CardView.setColorForLessonType(lessonType: String) {
-    val color = with(lessonType) {
-        when {
-            startsWith('V', true) -> R.color.red_300
-            startsWith('Ü', true) -> R.color.green_300
-            startsWith('B', true) -> R.color.blue_grey_300
-            else -> R.color.indigo_400
-        }
+    setCardBackgroundColor(ContextCompat.getColor(context, getColorForLessonType(lessonType)))
+}
+
+fun Any.getColorForLessonType(lessonType: String) = with(lessonType) {
+    when {
+        startsWith('V', true) -> R.color.red_300
+        startsWith('Ü', true) -> R.color.green_300
+        startsWith('B', true) -> R.color.blue_grey_300
+        else -> R.color.indigo_400
     }
-    setCardBackgroundColor(ContextCompat.getColor(context, color))
 }
 
 fun ConstraintLayout.configureForBreak(rowNumber: Int) {

@@ -6,20 +6,22 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.interfaces.Identifiable
+import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.dp
 import de.htwdd.htwdresden.utils.holders.ResourceHolder
 
 //-------------------------------------------------------------------------------------------------- Overview
 class OverviewItemAdapter(items: Overviews):
-    GenericAdapter<Overviewable, OverviewableModels>(items) {
+    GenericAdapter<Overviewable, Modelable>(items) {
     override fun afterBind(item: Overviewable, view: View, position: Int) {}
 }
 
 //-------------------------------------------------------------------------------------------------- Timetable
 class TimetableItemAdapter(items: Timetables):
-    GenericAdapter<Timetableable, TimetableableModels>(items) {
-    override fun afterBind(item: Timetableable, view: View, position: Int) {}
+    GenericAdapter<Identifiable<Modelable>, Modelable>(items) {
+    override fun afterBind(item: Identifiable<Modelable>, view: View, position: Int) {}
 }
 
 //-------------------------------------------------------------------------------------------------- Grade

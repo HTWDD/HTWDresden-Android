@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -92,12 +93,25 @@ class SettingsFragment : Fragment() {
             }
 
             onDeleteAllDataClick {
-                MaterialDialog(context!!).show {
+                MaterialDialog(requireContext()).show {
                     title(R.string.delete_all_saved_data)
                     message(R.string.delete_all_saved_data_question)
                     positiveButton(R.string.general_delete) {
                         cph.clear()
                         findNavController().navigate(R.id.onboarding_page_fragment)
+                    }
+                    negativeButton(R.string.general_cancel)
+                }
+            }
+
+            onResetEventsClick {
+                MaterialDialog(requireContext()).show {
+                    title(R.string.show_hidden_elective_lectures_title)
+                    message(R.string.show_hidden_elective_lecture_question)
+                    positiveButton(R.string.general_reset) {
+                        activity?.let {
+                            Toast.makeText(it, R.string.show_hidden_elective_lecture_message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                     negativeButton(R.string.general_cancel)
                 }

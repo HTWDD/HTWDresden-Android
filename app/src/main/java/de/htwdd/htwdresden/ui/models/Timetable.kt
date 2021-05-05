@@ -16,8 +16,8 @@ import java.util.Calendar.*
 import kotlin.collections.ArrayList
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Timetableable: Identifiable<TimetableableModels>
-interface TimetableableModels: Modelable
+interface Timetableable: Identifiable<Modelable>
+
 
 //-------------------------------------------------------------------------------------------------- JSON
 data class JTimetable(
@@ -217,13 +217,13 @@ open class TimetableRealm(
 }
 
 //-------------------------------------------------------------------------------------------------- Item
-class TimetableItem(val item: Timetable): Timetableable {
+class TimetableItem(val item: Timetable): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_timetable_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, TimetableableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.timetableModel to model)
         }
     }
@@ -248,15 +248,8 @@ class TimetableItem(val item: Timetable): Timetableable {
             })
             beginTime.set(item.beginTime.format("HH:mm"))
             endTime.set(item.endTime.format("HH:mm"))
-
-            val colors = sh.getStringArray(R.array.timetableColors)
-            val colorPosition = Integer.parseInt(
-                "${item.name} - ${item.professor}".toSHA256().subSequence(
-                    0..5
-                ).toString(), 16
-            ) % colors.size
-            lessonColor.set(colors[colorPosition].toColor())
-
+            lessonColor.set(getColorForLessonType(item.type))
+            isElective.set(item.type.isElective())
             setRooms(item.rooms)
         }
     }
@@ -273,7 +266,7 @@ class TimetableHeaderItem(private val header: String, private val subheader: Dat
         get() =  R.layout.list_item_timetable_header_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, TimetableableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.timetableHeaderModel to model)
         }
     }
@@ -302,7 +295,7 @@ class TimetableFreeDayItem(private val freeDayText: String): Timetableable {
         get() = R.layout.list_item_timetable_freeday_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, TimetableableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.timetableFreeModel to model)
         }
     }
@@ -321,7 +314,7 @@ class TimetableFreeDayItem(private val freeDayText: String): Timetableable {
 }
 
 //-------------------------------------------------------------------------------------------------- Modable
-class TimetableModel: TimetableableModels {
+class TimetableModel: Modelable {
     val name            = ObservableField<String>()
     val professor       = ObservableField<String>()
     val type            = ObservableField<String>()
@@ -330,6 +323,7 @@ class TimetableModel: TimetableableModels {
     val rooms           = ObservableField<String>()
     val hasProfessor    = ObservableField<Boolean>()
     val hasRooms        = ObservableField<Boolean>()
+    val isElective      = ObservableField<Boolean>(false)
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {
@@ -343,12 +337,12 @@ class TimetableModel: TimetableableModels {
     }
 }
 
-class TimetableHeaderModel: TimetableableModels {
+class TimetableHeaderModel: Modelable {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
 }
 
-class TimetableFreeModel: TimetableableModels {
+class TimetableFreeModel: Modelable {
     val freeDayText = ObservableField<String>()
 }
 

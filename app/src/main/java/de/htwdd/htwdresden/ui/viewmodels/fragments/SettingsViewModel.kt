@@ -9,6 +9,7 @@ class SettingsViewModel: ViewModel() {
     private var onImprintClosure: () -> Unit = {}
     private var onDataProtectionClosure: () -> Unit = {}
     private var onDeleteAllDataClosure: () -> Unit = {}
+    private var onResetEventsClosure: () -> Unit = {}
     private var onStudyGroupClosure: () -> Unit = {}
     private var onLoginClickClosure: () -> Unit = {}
 
@@ -21,6 +22,7 @@ class SettingsViewModel: ViewModel() {
             onImprintClick { onImprintClosure() }
             onDataProtectionClick { onDataProtectionClosure() }
             onDeleteAllDataClick { onDeleteAllDataClosure() }
+            onResetEventsClick { onResetEventsClosure() }
             onStudyGroupClick { onStudyGroupClosure() }
             onLoginClick { onLoginClickClosure() }
         }
@@ -35,6 +37,10 @@ class SettingsViewModel: ViewModel() {
 
     fun onDeleteAllDataClick(callback: () -> Unit) {
         onDeleteAllDataClosure = callback
+    }
+
+    fun onResetEventsClick(callback: () -> Unit) {
+        onResetEventsClosure = callback
     }
 
     fun onStudyGroupClick(callback: () -> Unit) {

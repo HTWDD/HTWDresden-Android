@@ -144,6 +144,10 @@
         <item name="android:background">@drawable/badge_label_light_blue</item>
     </style>
 
+    <style name="HTW.BadgeLabel.Small.Green" parent="HTW.BadgeLabel.Small.Dark">
+        <item name="android:background">@drawable/badge_label_green</item>
+    </style>
+
     <style name="HTW.BadgeLabel.Small.Blue.Bold" parent="HTW.BadgeLabel.Small.Blue">
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
