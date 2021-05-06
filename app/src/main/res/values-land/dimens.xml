@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding -->
+    <dimen name="onboarding_padding_top">20dp</dimen>
+    <dimen name="onboarding_padding_bottom">40dp</dimen>
+</resources>

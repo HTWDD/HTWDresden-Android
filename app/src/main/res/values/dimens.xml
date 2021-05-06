@@ -49,4 +49,8 @@
     <dimen name="calendar_header_height_plus_space">51dp</dimen>
     <dimen name="calendar_divider">1dp</dimen>
 
+    <!-- Onboarding -->
+    <dimen name="onboarding_padding_top">100dp</dimen>
+    <dimen name="onboarding_padding_bottom">100dp</dimen>
+
 </resources>
