@@ -53,4 +53,6 @@
     <dimen name="onboarding_padding_top">100dp</dimen>
     <dimen name="onboarding_padding_bottom">100dp</dimen>
 
+    <!-- Empty View -->
+    <dimen name="empty_layout_vertical_bias">0.35</dimen>
 </resources>
