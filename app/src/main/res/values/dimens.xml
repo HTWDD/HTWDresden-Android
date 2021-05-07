@@ -53,6 +53,10 @@
     <dimen name="onboarding_padding_top">100dp</dimen>
     <dimen name="onboarding_padding_bottom">100dp</dimen>
 
+    <!-- Campus Plan -->
+    <dimen name="campus_plan_zoom_image_horizontal_margin">0dp</dimen>
+    <dimen name="campus_plan_zoom_image_max_height"/>
+
     <!-- Empty View -->
     <dimen name="empty_layout_vertical_bias">0.35</dimen>
 </resources>
