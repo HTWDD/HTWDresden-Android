@@ -35,7 +35,7 @@ class TimetableCalendarViewModel(private val calenderType: Int) : ViewModel() {
                     val realm = Realm.getDefaultInstance()
                     try {
                         val list = realm.where(TimetableRealm::class.java).findAll()
-                        val timetableList = list.map{TimetableRealm.toTimetable(it)}
+                        val timetableList = list.map{TimetableRealm.toTimetable(it)}.filter { !it.isHidden }
                         setWeekOverviewData(timetableList)
                     } catch (e: Exception) {
                     } finally {

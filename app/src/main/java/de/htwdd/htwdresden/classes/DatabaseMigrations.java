@@ -143,6 +143,11 @@ public class DatabaseMigrations implements RealmMigration {
             if(timetableRealmSchema!=null) {
                 timetableRealmSchema.addField("isHidden", Boolean.class);
             }
+            schema.create("CurrentSemesterRealm")
+                    .addField("startDate", Date.class)
+                    .addField("endDate", Date.class)
+                    .addRealmListField("freeDays", Date.class);
+
             oldVersion++;
         }
 

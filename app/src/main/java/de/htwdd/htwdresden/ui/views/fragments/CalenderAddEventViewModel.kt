@@ -1,10 +1,12 @@
 package de.htwdd.htwdresden.ui.views.fragments
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
@@ -134,69 +136,71 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
     }
 
     fun createLesson(navController: NavController) {
-        val timetableTag = lessonTag.getOrEmpty()
-        val timetableName = lessonName.getOrEmpty()
-        val timetableType =  createLessonType()
-        var timetableWeekDay = sh.getStringArray(R.array.days).indexOf(lessonWeekDay.get())+1.toLong()
-        val timetableStartTime = lessonDateStart?.format("HH:mm:ss")?.toDate("HH:mm:ss")
-        val timetableEndTime = lessonDateEnd?.format("HH:mm:ss")?.toDate("HH:mm:ss")
-        val timetableWeeksOnly = createWeeksOnly()
-        val timetableProfessor = lessonProf.getOrEmpty()
-        val timetableRooms = createRoomList()
-        var timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
-        val timetableExactDay = lessonDay.get()?.toDate(lessonDatePattern)
-        val timetableLessonRotation = lessonRotation.get()
+        viewModelScope.launch {
+            val timetableTag = lessonTag.getOrEmpty()
+            val timetableName = lessonName.getOrEmpty()
+            val timetableType =  createLessonType()
+            var timetableWeekDay = sh.getStringArray(R.array.days).indexOf(lessonWeekDay.get())+1.toLong()
+            val timetableStartTime = lessonDateStart?.format("HH:mm:ss")?.toDate("HH:mm:ss")
+            val timetableEndTime = lessonDateEnd?.format("HH:mm:ss")?.toDate("HH:mm:ss")
+            val timetableWeeksOnly = createWeeksOnly()
+            val timetableProfessor = lessonProf.getOrEmpty()
+            val timetableRooms = createRoomList()
+            var timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
+            val timetableExactDay = lessonDay.get()?.toDate(lessonDatePattern)
+            val timetableLessonRotation = lessonRotation.get()
 
-        var errorExists = false
-        val errorMessage = sh.getString(R.string.empty_field_error)
+            var errorExists = false
+            val errorMessage = sh.getString(R.string.empty_field_error)
 
-        if(timetableName.isEmpty()) {
-            lessonNameError.setAndResetOld(errorMessage)
-            errorExists = true
-        }
-        if(timetableLessonRotation.isNullOrBlank()) {
-            lessonRotationError.set(errorMessage)
-            errorExists = true
-        }
-        if(timetableWeeksOnly.isEmpty() &&  timetableWeekDay<1) {
-            lessonWeekDayError.set(errorMessage)
-            errorExists = true
-        } else if(timetableWeeksOnly.size > 1 && timetableWeekDay < 1) {
-            lessonWeekDayError.set(errorMessage)
-            errorExists = true
-        }
-
-        if(errorExists) {
-            errorViewVisible.set(true)
-        } else {
-            if(timetableWeeksOnly.size==1) {
-                val dayOfWeek = timetableExactDay?.calendar?.get(Calendar.DAY_OF_WEEK) ?: 1
-                timetableWeekDay = dayOfWeek-1.toLong()
-                timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
+            if(timetableName.isEmpty()) {
+                lessonNameError.setAndResetOld(errorMessage)
+                errorExists = true
             }
-            if(timetable==null) {
-                timetable = Timetable(UUID.randomUUID().toString(),null, timetableTag, timetableName,timetableType, timetableWeekDay,
-                    timetableStartTime!!, timetableEndTime!!,0L, timetableWeeksOnly ,timetableProfessor, timetableRooms,"",
-                    timetableLessonDays,true, timetableExactDay,timetableLessonRotation )
+            if(timetableLessonRotation.isNullOrBlank()) {
+                lessonRotationError.set(errorMessage)
+                errorExists = true
+            }
+            if(timetableWeeksOnly.isEmpty() &&  timetableWeekDay<1) {
+                lessonWeekDayError.set(errorMessage)
+                errorExists = true
+            } else if(timetableWeeksOnly.size > 1 && timetableWeekDay < 1) {
+                lessonWeekDayError.set(errorMessage)
+                errorExists = true
+            }
+
+            if(errorExists) {
+                errorViewVisible.set(true)
             } else {
-                timetable?.apply {
-                    lessonTag = timetableTag
-                    name = timetableName
-                    type = timetableType
-                    day = timetableWeekDay
-                    beginTime = timetableStartTime!!
-                    endTime = timetableEndTime!!
-                    weeksOnly = timetableWeeksOnly
-                    professor = timetableProfessor
-                    rooms = timetableRooms
-                    lessonDays = timetableLessonDays
-                    createdByUser = true
-                    exactDay = timetableExactDay
-                    weekRotation = timetableLessonRotation
+                if(timetableWeeksOnly.size==1) {
+                    val dayOfWeek = timetableExactDay?.calendar?.get(Calendar.DAY_OF_WEEK) ?: 1
+                    timetableWeekDay = dayOfWeek-1.toLong()
+                    timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
                 }
-            }
-            timetable?.let {
-                TimetableRealm().updateAsync(it) {goBack(navController)}
+                if(timetable==null) {
+                    timetable = Timetable(UUID.randomUUID().toString(),null, timetableTag, timetableName,timetableType, timetableWeekDay,
+                        timetableStartTime!!, timetableEndTime!!,0L, timetableWeeksOnly ,timetableProfessor, timetableRooms,"",
+                        timetableLessonDays,true, timetableExactDay,timetableLessonRotation )
+                } else {
+                    timetable?.apply {
+                        lessonTag = timetableTag
+                        name = timetableName
+                        type = timetableType
+                        day = timetableWeekDay
+                        beginTime = timetableStartTime!!
+                        endTime = timetableEndTime!!
+                        weeksOnly = timetableWeeksOnly
+                        professor = timetableProfessor
+                        rooms = timetableRooms
+                        lessonDays = timetableLessonDays
+                        createdByUser = true
+                        exactDay = timetableExactDay
+                        weekRotation = timetableLessonRotation
+                    }
+                }
+                timetable?.let {
+                    TimetableRealm().updateAsync(it) {goBack(navController)}
+                }
             }
         }
     }
@@ -242,31 +246,52 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
         }
     }
 
-    private fun createWeeksOnly(): ArrayList<Long> {
+    private suspend fun createWeeksOnly(): ArrayList<Long> {
+        val semesterData = runCatching { RestApi.managementEndpoint.semesterPlanSuspend() }.getOrNull()
+        val semesterPlan = semesterData?.map { SemesterPlan.from(it) }?.firstOrNull { Date() in it.period.beginDay..it.period.endDay }
+        if(semesterPlan!=null) {
+            createNewCurrentSemester(semesterPlan)
+        }
+        val currentSemester = CurrentSemester.fromDB(getCurrentSemester())
+        Log.i("CurrentSemester", currentSemester.toString())
         val weeksOfYear = Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR);
-        val weeksOnly = arrayListOf<Long>()
+        val weekDay = sh.getStringArray(R.array.days).indexOf(lessonWeekDay.get()) + 1.toLong()
+        val weeksOnly = calculateWeeksOnly(weekDay, currentSemester)
+        val finalWeeks = arrayListOf<Long>()
+
         when (sh.getStringArray(R.array.lesson_week).indexOf(lessonRotation.get())) {
             0 -> {
-                for(i in 1..weeksOfYear) {
-                    weeksOnly.add(i.toLong())
-                }
+                finalWeeks.addAll(weeksOnly)
             }
             1 -> {
-                for(i in 2..weeksOfYear step 2) {
-                    weeksOnly.add(i.toLong())
-                }
+                weeksOnly.forEach { item -> if (item.toInt() % 2 == 0) finalWeeks.add(item) }
             }
             2 -> {
-                for(i in 1..weeksOfYear step 2) {
-                    weeksOnly.add(i.toLong())
-                }
+                weeksOnly.forEach { item -> if (item.toInt() % 2 != 0) finalWeeks.add(item) }
             }
             3 -> {
                 lessonDay.get()?.toDate(lessonDatePattern)?.let {
-                    weeksOnly.add(it.week.toLong())
+                    finalWeeks.add(it.week.toLong())
                 }
             }
             else -> emptyList<Long>()
+        }
+        return finalWeeks
+    }
+
+    private fun calculateWeeksOnly(weekDay: Long, currentSemester: CurrentSemester?) : ArrayList<Long> {
+        val weeksOnly = arrayListOf<Long>()
+        if(currentSemester?.startDate == null || currentSemester.endDate == null) return weeksOnly
+        var startWeek = currentSemester.startDate.calendar.get(Calendar.WEEK_OF_YEAR)
+        var endWeek = currentSemester.endDate.calendar.get(Calendar.WEEK_OF_YEAR)
+        val startDay = currentSemester.startDate.calendar.get(Calendar.DAY_OF_WEEK)-1
+        val endDay = currentSemester.endDate.calendar.get(Calendar.DAY_OF_WEEK)-1
+        if(weekDay<startDay) startWeek += 1
+        if(weekDay>endDay) endWeek += -1
+        while(startWeek <= endWeek) {
+            val freeDay = currentSemester.freeDays.find { it.calendar.get(Calendar.WEEK_OF_YEAR)==startWeek && it.calendar.get(Calendar.DAY_OF_WEEK)-1== weekDay.toInt() }
+            if(freeDay==null) weeksOnly.add(startWeek.toLong())
+            startWeek++
         }
         return weeksOnly
     }

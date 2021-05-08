@@ -80,3 +80,13 @@ fun Calendar.addTime(date: Date): Calendar {
     add(Calendar.MINUTE, date.calendar[Calendar.MINUTE])
     return this
 }
+
+fun Date.getDaysBetween(endDate: Date): ArrayList<Date> {
+    val dates = ArrayList<Date>()
+    val startCalendar = calendar
+    while (startCalendar <= endDate.calendar) {
+        dates.add(startCalendar.time)
+        startCalendar.add(Calendar.DAY_OF_MONTH, 1)
+    }
+    return dates
+}

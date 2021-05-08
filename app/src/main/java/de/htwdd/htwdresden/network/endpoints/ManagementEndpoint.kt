@@ -8,4 +8,7 @@ interface ManagementEndpoint {
 
     @GET("semesterplan.json")
     fun semesterPlan(): Observable<List<JSemesterPlan>>
+
+    @GET("semesterplan.json")
+    suspend fun semesterPlanSuspend(): List<JSemesterPlan>
 }

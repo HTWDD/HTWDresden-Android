@@ -43,10 +43,7 @@ val Any.today: String
 
 
 fun Any.getDaysOfWeek(currentWeek: Boolean = true): Array<Date?> {
-    val refCalendar = Calendar.getInstance()
-    refCalendar.add(Calendar.DAY_OF_WEEK, Calendar.getInstance().firstDayOfWeek)
     val calendar = Calendar.getInstance()
-    calendar.time = refCalendar.time
     calendar[Calendar.DAY_OF_WEEK] = Calendar.getInstance().firstDayOfWeek
     val daysOfWeek = arrayOfNulls<Date>(5)
     val daysOfNextWeek = arrayOfNulls<Date>(5)

@@ -30,6 +30,10 @@ android {
         release
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         debug {
             debuggable true
