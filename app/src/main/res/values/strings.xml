@@ -82,6 +82,8 @@
     <string name="timetable_calendar_week">%d. KW</string>
     <string name="timetable_edit_activity_title">Veranstaltung bearbeiten</string>
     <string name="timetable_add_event">Veranstaltung hinzufügen</string>
+    <string name="timetable_event_added">Veranstaltung hinzugefügt</string>
+    <string name="timetable_add_elective_lecture">Wahlpflichtveranstaltung hinzufügen</string>
     <string name="timetable_event">Veranstaltung</string>
     <string name="timetable_edit_lessonName_hint">Name der Lehrveranstaltung*</string>
     <string name="timetable_edit_lessonTag_hint">Kurzform</string>
@@ -128,6 +130,8 @@
     <string name="room_timetable_update_success">Belegungsplan aktualisiert!</string>
     <string name="room_timetable_invalid">Keine gültige Raumnummer</string>
     <string name="room_occupancy_no_room">Keine Räume</string>
+
+    <string name="error">Sorry, hier ging was schief. Bitte überprüfe deine Internetverbindung</string>
 
     <string name="exams_grade">Noten</string>
     <string name="exams_exams">Prüfungen</string>

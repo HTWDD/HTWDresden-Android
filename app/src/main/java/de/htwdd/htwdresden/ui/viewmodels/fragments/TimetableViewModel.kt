@@ -11,6 +11,8 @@ import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class TimetableViewModel: ViewModel() {
@@ -112,5 +114,9 @@ class TimetableViewModel: ViewModel() {
 
     private fun getLessonDaysAsDates(lessonDays: List<String>) : List<Calendar> =
         lessonDays.mapNotNull { it.toDate("MM-dd-yyyy")}.map { it.calendar }
+
+    suspend fun getElectiveTimetables() = withContext(Dispatchers.IO) {
+        RestApi.timetableEndpoint.getAllTimetable()
+    }
 
 }

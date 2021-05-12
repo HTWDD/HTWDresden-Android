@@ -14,12 +14,8 @@ interface TimetableEndpoint {
         @Query("StgJhr") studyYear: String
     ): Observable<List<JTimetable>>
 
-    @GET("studentTimetable.php")
-    suspend fun getTimetableList(
-        @Query("StgGrp") studyGroup: String,
-        @Query("Stg") studyMajor: String,
-        @Query("StgJhr") studyYear: String
-    ): List<JTimetable>
+    @GET("studentTimetable.php?all=true")
+    suspend fun getAllTimetable(): List<JTimetable>
 
     @GET("roomTimetable.php")
     fun roomTimetable(@Query("room") room: String): Observable<List<JTimetable>>

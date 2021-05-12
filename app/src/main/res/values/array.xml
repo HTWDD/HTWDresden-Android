@@ -85,4 +85,9 @@
         <item>21:00</item>
     </string-array>
 
+    <string-array name="addEventOptions">
+        <item>Wahlpflichtveranstaltung</item>
+        <item>Eigene Veranstaltung</item>
+    </string-array>
+
 </resources>

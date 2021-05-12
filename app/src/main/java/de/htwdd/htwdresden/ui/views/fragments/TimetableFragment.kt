@@ -9,31 +9,32 @@ import android.os.Handler
 import android.provider.CalendarContract.Calendars
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import androidx.viewpager.widget.ViewPager
+import com.afollestad.materialdialogs.DialogBehavior
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.updateListItems
 import com.google.android.material.tabs.TabLayout
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.SectionsPagerAdapter
 import de.htwdd.htwdresden.adapter.TimetableItemAdapter
 import de.htwdd.htwdresden.adapter.Timetables
-import de.htwdd.htwdresden.ui.models.TimetableHeaderItem
-import de.htwdd.htwdresden.ui.models.TimetableItem
+import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_CURRENT_WEEK
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_NEXT_WEEK
@@ -41,6 +42,8 @@ import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -245,9 +248,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         items.forEach {
             position += 1
             if (it is TimetableHeaderItem) {
-                if (it.subheader().format(defaultPattern) == currentDate.format(defaultPattern) || it.subheader().after(
-                        currentDate
-                    )) {
+                if (it.subheader().format(defaultPattern) == currentDate.format(defaultPattern) || it.subheader().after(currentDate)) {
                     return position
                 }
             }
@@ -348,6 +349,50 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
     }
 
     private fun onEventClick() {
+        (activity as Context?)?.let { context ->
+            MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.timetable_add_event).show {
+                listItems(res = R.array.addEventOptions) { _, index, _ ->
+                    when(index) {
+                        0 -> addElectiveTimetable()
+                        1 -> addOwnEvent()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addElectiveTimetable() {
+        lifecycleScope.launch {
+            (activity as Context?)?.let { context ->
+                val initialDialog = MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.timetable_add_elective_lecture).show {
+                    customView(viewRes = R.layout.dialog_progress_bar, scrollable = true)
+                }
+                val timetables = kotlin.runCatching { viewModel.getElectiveTimetables().map { Timetable.from(it) }.filter { it.type.isElective()} }.getOrNull()
+                initialDialog.dismiss()
+                if(timetables==null) {
+                    delay(500)
+                    Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show()
+                } else {
+                    MaterialDialog(context, BottomSheet(LayoutMode.MATCH_PARENT)).title(R.string.timetable_add_elective_lecture).show {
+                        listItems(items = timetables.map { it.name }.sortedBy { it }.distinct()) { _, _, text ->
+                            val timetablesToAdd = timetables.toCollection(ArrayList()).filter { it.name == text }
+                            timetablesToAdd.forEach {
+                                it.createdByUser = true
+                                TimetableRealm().updateAsync(it) {}
+                                Toast.makeText(context, R.string.timetable_event_added, Toast.LENGTH_SHORT).show()
+                                lifecycleScope.launch {
+                                    delay(1000)
+                                    onResume()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addOwnEvent() {
         val destinationTitle = activity?.resources?.getString(R.string.timetable_add_event) ?: ""
         findNavController()
             .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_TITLE to destinationTitle))

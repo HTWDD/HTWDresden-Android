@@ -30,4 +30,9 @@
         <item>8 PM</item>
         <item>9 PM</item>
     </string-array>
+
+    <string-array name="addEventOptions">
+        <item>Elective lecture</item>
+        <item>Own event</item>
+    </string-array>
 </resources>

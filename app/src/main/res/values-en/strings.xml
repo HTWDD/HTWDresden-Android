@@ -97,6 +97,8 @@
     <string name="timetable_ds_list">lesson block %1$d (%2$s - %3$s)</string>
     <string name="timetable_edit_activity_title">Edit event</string>
     <string name="timetable_add_event">Add event</string>
+    <string name="timetable_event_added">Event added</string>
+    <string name="timetable_add_elective_lecture">Add elective lecture</string>
     <string name="timetable_event">Event</string>
     <string name="timetable_edit_lessonDS">Time</string>
     <string name="timetable_edit_lessonDS_value">set time individually</string>
@@ -205,6 +207,7 @@
     <string name="exams_result_no_remark">No comments</string>
     <string name="grades_no_credentials_title">Please enter your access data\nso that I can show you exams.</string>
     <string name="room_occupancy_no_room">No rooms</string>
+    <string name="error">Sorry, something went wrong. Please check your internet connection</string>
     <string name="room_occupancy_add_new_rooms">New rooms can be added via +.\n\nThe room timetable does not consider additional events or changes. Please ask Mrs. Neumann (Z 228 A) for room reservations.</string>
     <string name="meal_price_student">Students: %.2f €</string>
     <string name="meal_price_employee">Employees: %.2f €</string>
