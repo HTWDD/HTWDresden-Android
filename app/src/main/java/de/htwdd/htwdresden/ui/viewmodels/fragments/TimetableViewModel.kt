@@ -34,7 +34,9 @@ class TimetableViewModel: ViewModel() {
             val hiddenEventsIds = getHiddenTimetables()
             deleteAllIfNotCreatedByUser()
             timetableList.forEach {
-                if(hiddenEventsIds.contains(it.id)) it.isHidden = true
+                if(hiddenEventsIds.contains(it.id)) {
+                    it.isHidden = true
+                }
                 TimetableRealm().update(it) {}
             }
             val sortedKeySet = mutableSetOf<String>()

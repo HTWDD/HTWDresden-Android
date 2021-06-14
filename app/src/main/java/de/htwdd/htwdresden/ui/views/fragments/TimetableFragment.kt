@@ -140,46 +140,6 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
     }
 
     private fun request() {
-        viewModel.request()
-            .runInUiThread()
-            .doOnSubscribe { isRefreshing = true }
-            .doOnTerminate { isRefreshing = false }
-            .doOnComplete { isRefreshing = false }
-            .doOnDispose { isRefreshing = false }
-            .subscribe({ timetables ->
-                weak { self ->
-                    if (timetables.isNotEmpty()) {
-                        self.adapter.update(timetables)
-                    }
-                }
-            }, {
-                error(it)
-                weak { self ->
-                    viewModel.getTimetablesFromDb()
-                        .runInUiThread()
-                        .subscribe({ timetables ->
-                            weak { self ->
-                                if (timetables.isNotEmpty()) {
-                                    self.adapter.update(timetables)
-                                }
-                            }
-                        }, {
-                            self.includeEmptyLayout.show()
-                            self.tvIcon.text = getString(R.string.exams_no_results_icon)
-                            self.tvTitle.text = getString(R.string.exams_no_credentials_title)
-                            self.tvMessage.text = getString(R.string.timetable_no_credentials_message)
-                            self.btnEmptyAction.apply {
-                                show()
-                                text = getString(R.string.general_add)
-                                click {
-                                    self.findNavController()
-                                        .navigate(R.id.action_to_study_group_page_fragment)
-                                }
-                            }
-                        }).addTo(disposeBag)
-                }
-            })
-            .addTo(disposeBag)
         try {
             viewModel.request()
                 .runInUiThread()
