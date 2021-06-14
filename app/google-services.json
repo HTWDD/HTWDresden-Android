@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "301043501047",
+    "firebase_url": "https://htw-dresden.firebaseio.com",
+    "project_id": "htw-dresden",
+    "storage_bucket": "htw-dresden.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301043501047:android:40e07e5617b613d5",
+        "android_client_info": {
+          "package_name": "de.htwdd.htwdresden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301043501047-cs4j4l9dk9f41463ch7it1a0s1j3ni0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCczgubevSr1UVSTbEEz-2Rk_Nv1WWBn5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301043501047-cs4j4l9dk9f41463ch7it1a0s1j3ni0u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "301043501047-c9v8jlhr0meiafgop5prqmh55hvoj765.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.develappers.htw-dresden.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
