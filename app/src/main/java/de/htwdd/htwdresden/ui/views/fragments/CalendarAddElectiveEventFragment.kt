@@ -58,7 +58,8 @@ class CalendarAddElectiveEventFragment: Fragment() {
             timetableViewModel = viewModel
         }
 
-        binding.electivesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        //hide or show search view when scrolling
+       /* binding.electivesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 searchMenu?.let {
                     if (dy<-20 && it.isActionViewExpanded){
@@ -71,7 +72,7 @@ class CalendarAddElectiveEventFragment: Fragment() {
                 }
                 super.onScrolled(recyclerView, dx, dy)
             }
-        })
+        })*/
 
         setHasOptionsMenu(true)
         return binding.root
@@ -164,7 +165,8 @@ class CalendarAddElectiveEventFragment: Fragment() {
                 return true
             }
         })
-/*
+
+        //the back button in searchview closes the fragment instantly
         searchMenu?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 return true
@@ -174,7 +176,7 @@ class CalendarAddElectiveEventFragment: Fragment() {
                 findNavController().popBackStack()
                return true
             }
-        });*/
+        });
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
