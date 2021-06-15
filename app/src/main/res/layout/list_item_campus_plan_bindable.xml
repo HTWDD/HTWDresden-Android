@@ -43,6 +43,8 @@
                 <com.jsibbold.zoomage.ZoomageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxHeight="@dimen/campus_plan_zoom_image_max_height"
+                        android:layout_marginHorizontal="@dimen/campus_plan_zoom_image_horizontal_margin"
                         android:src="@{safeUnbox(campusPlanItem.image)}"
                         android:scaleType="fitCenter"
                         android:adjustViewBounds="true"

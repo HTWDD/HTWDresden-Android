@@ -19,7 +19,9 @@ class OverviewFragment: Fragment(R.layout.fragment_overview) {
     private lateinit var adapter: OverviewItemAdapter
     private val items: Overviews = ArrayList()
     private var isRefreshing: Boolean by Delegates.observable(true) { _, _, new ->
-        weak { self -> self.swipeRefreshLayout.isRefreshing = new }
+        weak { self ->
+            swipeRefreshLayout?.let { self.swipeRefreshLayout.isRefreshing = new  }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
