@@ -313,5 +313,6 @@
     <string name="timetable_message">Aufgrund technischer Probleme kann es zu Verschiebungen im Stundenplan kommen. Bitte mit Version der HTW Webseite abgleichen. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Zum Online-Stundenplan&lt;/a></string>
     <string name="elective">Wahlpflicht</string>
     <string name="studium_integrale">Studium Integrale</string>
+    <string name="search">Suche</string>
 
 </resources>

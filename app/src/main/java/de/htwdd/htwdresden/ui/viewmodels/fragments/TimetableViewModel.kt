@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.provider.CalendarContract
 import android.util.Log.d
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
@@ -12,12 +12,27 @@ import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
 class TimetableViewModel: ViewModel() {
 
     private val cph by lazy { CryptoSharedPreferencesHolder.instance }
+
+    private val _electives = mutableListOf<Timetable>()
+    private val _searchTerm = MutableLiveData<String>("")
+    private val _filteredElectives = Transformations.switchMap(_searchTerm){ string->
+        MutableLiveData(filterElectivesBySearch(string))
+    }
+    private val _searchVisible = MutableLiveData(false)
+    private val _showError = MutableLiveData(false)
+
+    val filteredElectives: LiveData<List<OverviewScheduleItem>?> = _filteredElectives
+    val searchTerm: LiveData<String> = _searchTerm
+    val searchVisible: LiveData<Boolean> = _searchVisible
+    val showError: LiveData<Boolean> = _showError
 
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
@@ -119,6 +134,37 @@ class TimetableViewModel: ViewModel() {
 
     suspend fun getElectiveTimetables() = withContext(Dispatchers.IO) {
         RestApi.timetableEndpoint.getAllTimetable()
+    }
+
+
+    fun loadElectiveTimetables(){
+        viewModelScope.launch {
+            val timetables = getElectiveTimetables().map { Timetable.from(it) }.filter { it.type.isElective()}
+            if(timetables.isEmpty()) {
+                delay(1000)
+                _showError.value = true
+            } else {
+                _electives.clear()
+                _electives.apply { addAll(timetables.sortedBy { it.name }.distinct() ) }
+                _searchTerm.value = searchTerm.value
+            }
+        }
+    }
+
+    fun filterElectivesBySearch(string: String): List<OverviewScheduleItem>{
+        val result = _electives.filter { it.name.toLowerCase(Locale.ROOT).contains(string.toLowerCase(
+            Locale.ROOT))
+        }
+        return result.map {OverviewScheduleItem(it, true)}
+    }
+
+
+    fun resetShowError() {
+        _showError.value = null
+    }
+
+    fun setSearchTerm(query: String?){
+        _searchTerm.value = query
     }
 
 }

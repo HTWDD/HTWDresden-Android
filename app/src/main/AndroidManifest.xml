@@ -51,6 +51,9 @@
                         android:host="www.htw-dresden.de/app"
                         android:scheme="https" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
             <meta-data
                     android:name="android.app.shortcuts"
                     android:resource="@xml/shortcuts" />
@@ -89,6 +92,9 @@
         <meta-data
                 android:name="firebase_crashlytics_collection_enabled"
                 android:value="false" />
+
+        <meta-data android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
     </application>
 
 </manifest>
