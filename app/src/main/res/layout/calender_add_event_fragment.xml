@@ -10,7 +10,7 @@
 
         <variable
             name="calenderAddEventViewModel"
-            type="de.htwdd.htwdresden.ui.views.fragments.CalenderAddEventViewModel" />
+            type="de.htwdd.htwdresden.ui.viewmodels.fragments.CalenderAddEventViewModel" />
     </data>
 
     <ScrollView

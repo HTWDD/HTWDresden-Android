@@ -14,7 +14,7 @@ import de.htwdd.htwdresden.utils.holders.StringHolder
 interface Overviewable: Identifiable<Modelable>
 
 //-------------------------------------------------------------------------------------------------- Schedule Item
-class OverviewScheduleItem(private val item: Timetable): Overviewable {
+class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_overview_schedule_bindable
@@ -33,6 +33,7 @@ class OverviewScheduleItem(private val item: Timetable): Overviewable {
         model.apply {
             name.set(item.name)
             setProfessor(item.professor)
+            studiumIntegrale.set(item.studiumIntegrale)
             type.set(with(item.type) {
                 when {
                     startsWith("v", true) -> sh.getString(R.string.lecture)
@@ -49,6 +50,22 @@ class OverviewScheduleItem(private val item: Timetable): Overviewable {
             val colors = sh.getStringArray(R.array.timetableColors)
             val colorPosition = Integer.parseInt("${item.name} - ${item.professor}".toSHA256().subSequence(0..5).toString(), 16) % colors.size
             lessonColor.set(colors[colorPosition].toColor())
+
+            if (addElective){
+                showDay.set(true)
+                day.set(
+                    when (item.day) {
+                        1L -> sh.getString(R.string.monday)
+                        2L -> sh.getString(R.string.tuesday)
+                        3L -> sh.getString(R.string.wednesday)
+                        4L -> sh.getString(R.string.thursday)
+                        5L -> sh.getString(R.string.friday)
+                        6L -> sh.getString(R.string.saturday)
+                        7L -> sh.getString(R.string.sunday)
+                        else -> sh.getString(R.string.unknown)
+                    }
+                )
+            }
 
             setRooms(item.rooms)
         }
@@ -202,6 +219,9 @@ class OverviewScheduleModel: Modelable {
     val rooms           = ObservableField<String>()
     val hasProfessor    = ObservableField<Boolean>()
     val hasRooms        = ObservableField<Boolean>()
+    val showDay        = ObservableField<Boolean>()
+    val day       = ObservableField<String>()
+    val studiumIntegrale        = ObservableField<Boolean>()
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {

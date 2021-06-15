@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.GridView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,8 +15,8 @@ import de.htwdd.htwdresden.adapter.TimetableGridAdapter
 import de.htwdd.htwdresden.adapter.TimestampAdapter
 import de.htwdd.htwdresden.databinding.TimetableCalendarFragmentBinding
 import de.htwdd.htwdresden.ui.models.Timetable
+import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableCalendarViewModel
 import de.htwdd.htwdresden.ui.viewmodels.fragments.factories.TimetableCalendarViewModelFactory
-import de.htwdd.htwdresden.utils.extensions.currentWeek
 import de.htwdd.htwdresden.utils.extensions.inflateDataBinding
 import de.htwdd.htwdresden.utils.extensions.withArgumentsOf
 import kotlinx.android.synthetic.main.timetable_calendar_fragment.*

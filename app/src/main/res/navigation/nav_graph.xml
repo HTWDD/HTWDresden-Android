@@ -55,6 +55,14 @@
         app:popEnterAnim="@anim/slide_in_left"
         app:popExitAnim="@anim/slide_out_right"/>
 
+    <action
+        android:id="@+id/action_calender_add_elective_event_fragment"
+        app:destination="@id/calender_add_elective_event_fragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"/>
+
 
     <fragment android:id="@+id/exams_page_fragment"
               android:name="de.htwdd.htwdresden.ui.views.fragments.ExamsFragment"
@@ -178,6 +186,17 @@
             android:name="id"
             app:argType="string"
             android:defaultValue="" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/calender_add_elective_event_fragment"
+        android:name="de.htwdd.htwdresden.ui.views.fragments.CalendarAddElectiveEventFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_overview">
         <argument
             android:name="title"
             app:argType="string"

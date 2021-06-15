@@ -313,7 +313,7 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
             MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.timetable_add_event).show {
                 listItems(res = R.array.addEventOptions) { _, index, _ ->
                     when(index) {
-                        0 -> addElectiveTimetable()
+                        0 -> addElectiveEvent()
                         1 -> addOwnEvent()
                     }
                 }
@@ -321,41 +321,17 @@ class TimetableFragment: Fragment(R.layout.fragment_timetable) {
         }
     }
 
-    private fun addElectiveTimetable() {
-        lifecycleScope.launch {
-            (activity as Context?)?.let { context ->
-                val initialDialog = MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT)).title(R.string.timetable_add_elective_lecture).show {
-                    customView(viewRes = R.layout.dialog_progress_bar, scrollable = true)
-                }
-                val timetables = kotlin.runCatching { viewModel.getElectiveTimetables().map { Timetable.from(it) }.filter { it.type.isElective()} }.getOrNull()
-                initialDialog.dismiss()
-                if(timetables==null) {
-                    delay(500)
-                    Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show()
-                } else {
-                    MaterialDialog(context, BottomSheet(LayoutMode.MATCH_PARENT)).title(R.string.timetable_add_elective_lecture).show {
-                        listItems(items = timetables.map { it.name }.sortedBy { it }.distinct()) { _, _, text ->
-                            val timetablesToAdd = timetables.toCollection(ArrayList()).filter { it.name == text }
-                            timetablesToAdd.forEach {
-                                it.createdByUser = true
-                                TimetableRealm().updateAsync(it) {}
-                                Toast.makeText(context, R.string.timetable_event_added, Toast.LENGTH_SHORT).show()
-                                lifecycleScope.launch {
-                                    delay(1000)
-                                    onResume()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private fun addOwnEvent() {
         val destinationTitle = activity?.resources?.getString(R.string.timetable_add_event) ?: ""
         findNavController()
             .navigate(R.id.action_calender_add_event_fragment, bundleOf(CalendarAddEventFragment.ARG_TITLE to destinationTitle))
+    }
+
+    private fun addElectiveEvent() {
+        val destinationTitle = activity?.resources?.getString(R.string.timetable_add_elective_lecture) ?: ""
+        findNavController()
+            .navigate(R.id.action_calender_add_elective_event_fragment, bundleOf(CalendarAddElectiveEventFragment.ARG_TITLE to destinationTitle))
     }
 
     private fun handleViewChange() {

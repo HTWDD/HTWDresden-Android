@@ -1,4 +1,4 @@
-package de.htwdd.htwdresden.ui.views.fragments
+package de.htwdd.htwdresden.ui.viewmodels.fragments
 
 import android.util.Log
 import androidx.databinding.ObservableField
@@ -30,6 +30,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
     var lessonDateEnd: Date? = null
     val lessonWeekDayVisible = ObservableField(true)
     val isEditable = ObservableField(true)
+    val isStudiumIntegrale = ObservableField(false)
     var isElective = false
     var timetable: Timetable? = null
 
@@ -51,6 +52,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                     lessonName.set(it.name)
                     lessonTag.set(it.lessonTag)
                     lessonProf.set(it.professor)
+                    isStudiumIntegrale.set(it.studiumIntegrale)
                     handleLessonType(it.type)
 
                     if (it.rooms.isNotEmpty()) {
@@ -146,6 +148,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
             val timetableWeeksOnly = createWeeksOnly()
             val timetableProfessor = lessonProf.getOrEmpty()
             val timetableRooms = createRoomList()
+            val timetableStudiumIntegrale = isStudiumIntegrale.get()?:false
             var timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
             val timetableExactDay = lessonDay.get()?.toDate(lessonDatePattern)
             val timetableLessonRotation = lessonRotation.get()
@@ -180,7 +183,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                 if(timetable==null) {
                     timetable = Timetable(UUID.randomUUID().toString(),null, timetableTag, timetableName,timetableType, timetableWeekDay,
                         timetableStartTime!!, timetableEndTime!!,0L, timetableWeeksOnly ,timetableProfessor, timetableRooms,"",
-                        timetableLessonDays,true, timetableExactDay,timetableLessonRotation )
+                        timetableLessonDays,false,true, timetableExactDay,timetableLessonRotation )
                 } else {
                     timetable?.apply {
                         lessonTag = timetableTag
@@ -194,6 +197,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                         rooms = timetableRooms
                         lessonDays = timetableLessonDays
                         createdByUser = true
+                        studiumIntegrale = timetableStudiumIntegrale
                         exactDay = timetableExactDay
                         weekRotation = timetableLessonRotation
                     }

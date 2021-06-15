@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.datetime.timePicker
 import com.afollestad.materialdialogs.list.listItems
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.databinding.CalenderAddEventFragmentBinding
+import de.htwdd.htwdresden.ui.viewmodels.fragments.CalenderAddEventViewModel
 import de.htwdd.htwdresden.ui.viewmodels.fragments.factories.CalendarAddEventViewModelFactory
 import de.htwdd.htwdresden.utils.extensions.calendar
 import de.htwdd.htwdresden.utils.extensions.inflateDataBinding

@@ -2,7 +2,7 @@ package de.htwdd.htwdresden.ui.viewmodels.fragments.factories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarViewModel
+import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableCalendarViewModel
 
 class TimetableCalendarViewModelFactory(private val calenderType: Int) : ViewModelProvider.Factory {
 

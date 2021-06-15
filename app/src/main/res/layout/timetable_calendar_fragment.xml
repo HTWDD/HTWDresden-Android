@@ -7,7 +7,7 @@
 
         <variable
             name="timetableCalendarViewModel"
-            type="de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarViewModel" />
+            type="de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableCalendarViewModel" />
 
         <variable
             name="clickListener"

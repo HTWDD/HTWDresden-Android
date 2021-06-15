@@ -1,17 +1,14 @@
-package de.htwdd.htwdresden.ui.views.fragments
+package de.htwdd.htwdresden.ui.viewmodels.fragments
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_CURRENT_WEEK
 import de.htwdd.htwdresden.ui.views.fragments.TimetableCalendarFragment.Companion.CALENDAR_NEXT_WEEK
 import de.htwdd.htwdresden.utils.extensions.currentWeek
 import de.htwdd.htwdresden.utils.extensions.currentYear
 import de.htwdd.htwdresden.utils.extensions.toDate
-import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

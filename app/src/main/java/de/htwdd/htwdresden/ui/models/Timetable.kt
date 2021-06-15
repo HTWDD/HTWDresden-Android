@@ -33,6 +33,7 @@ data class JTimetable(
     val weeksOnly: List<Long>,
     val professor: String? = null,
     val rooms: List<String>,
+    val studiumIntegrale: Boolean,
     val lastChanged: String
 )
 
@@ -52,6 +53,7 @@ class Timetable(
     var rooms: List<String>,
     val lastChanged: String,
     var lessonDays: List<String>,
+    var studiumIntegrale: Boolean = false,
     var createdByUser: Boolean = false,
     var exactDay: Date? = null,
     var weekRotation: String? = null,
@@ -74,7 +76,8 @@ class Timetable(
                 json.professor,
                 json.rooms,
                 json.lastChanged,
-                lessonDays(json.day, json.weeksOnly)
+                lessonDays(json.day, json.weeksOnly),
+                json.studiumIntegrale
             )
         }
 
@@ -124,6 +127,7 @@ class Timetable(
         result = 31 * result + rooms.hashCode()
         result = 31 * result + lastChanged.hashCode()
         result = 31 * result + lessonDays.hashCode()
+        result = 31 * result + studiumIntegrale.hashCode()
         return result
     }
 }
@@ -144,6 +148,7 @@ open class TimetableRealm(
     var rooms: RealmList<String> = RealmList(),
     var lastChanged: String = "",
     var lessonDays: RealmList<String> = RealmList(),
+    var studiumIntegrale: Boolean = false,
     var createdByUser: Boolean = false,
     var exactDay: Date? = null,
     var weekRotation: String? = null,
@@ -174,6 +179,7 @@ open class TimetableRealm(
                         lessonDays
                     )
                 },
+                studiumIntegrale,
                 createdByUser,
                 exactDay,
                 weekRotation,
@@ -199,6 +205,7 @@ open class TimetableRealm(
                 rooms.toCollection(ArrayList()),
                 lastChanged,
                 lessonDays.toCollection(ArrayList()),
+                studiumIntegrale,
                 createdByUser,
                 exactDay,
                 weekRotation,
@@ -253,6 +260,7 @@ class TimetableItem(val item: Timetable): Overviewable {
             beginTime.set(item.beginTime.format("HH:mm"))
             endTime.set(item.endTime.format("HH:mm"))
             lessonColor.set(getColorForLessonType(item.type))
+            studiumIntegrale.set(item.studiumIntegrale)
             isElective.set(item.type.isElective())
             setRooms(item.rooms)
         }
@@ -328,6 +336,7 @@ class TimetableModel: Modelable {
     val hasProfessor    = ObservableField<Boolean>()
     val hasRooms        = ObservableField<Boolean>()
     val isElective      = ObservableField<Boolean>(false)
+    val studiumIntegrale      = ObservableField<Boolean>(false)
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {

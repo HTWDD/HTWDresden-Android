@@ -102,6 +102,7 @@
                     tools:text="Pratikum" />
 
             <TextView
+                android:id="@+id/tvOnline"
                     android:visibility="@{safeUnbox(overviewScheduleModel.hasRooms) ? View.VISIBLE : View.GONE, default=visible}"
                     style="@style/HTW.BadgeLabel.Small.Blue"
                     android:layout_width="wrap_content"
@@ -111,6 +112,30 @@
                     app:layout_constraintTop_toTopOf="@+id/tvType"
                     tools:text="S 228"
                     android:text="@{overviewScheduleModel.rooms}"/>
+
+            <TextView
+                android:id="@+id/tvDay"
+                android:visibility="@{safeUnbox(overviewScheduleModel.showDay) ? View.VISIBLE : View.GONE, default=invisible}"
+                style="@style/HTW.BadgeLabel.Small.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_space"
+                app:layout_constraintStart_toEndOf="@+id/tvType"
+                app:layout_constraintTop_toTopOf="@+id/tvType"
+                tools:text="S 228"
+                android:text="@{overviewScheduleModel.day}"/>
+
+            <TextView
+                android:id="@+id/tvIntegrale"
+                android:visibility="@{safeUnbox(overviewScheduleModel.studiumIntegrale) &amp;&amp; safeUnbox(overviewScheduleModel.showDay) ? View.VISIBLE : View.GONE, default=invisible}"
+                style="@style/HTW.BadgeLabel.Small.Green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_space"
+                app:layout_constraintStart_toEndOf="@+id/tvDay"
+                app:layout_constraintTop_toTopOf="@+id/tvDay"
+                tools:text="Studium Integrale"
+                android:text="@string/studium_integrale"/>
 
             <ImageView
                     android:id="@+id/imageView4"
