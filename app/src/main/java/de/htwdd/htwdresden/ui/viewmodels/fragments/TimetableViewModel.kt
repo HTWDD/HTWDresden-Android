@@ -5,11 +5,13 @@ import android.content.ContentValues
 import android.provider.CalendarContract
 import android.util.Log.d
 import androidx.lifecycle.*
+import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
+import de.htwdd.htwdresden.utils.holders.StringHolder
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -33,6 +35,8 @@ class TimetableViewModel: ViewModel() {
     val searchTerm: LiveData<String> = _searchTerm
     val searchVisible: LiveData<Boolean> = _searchVisible
     val showError: LiveData<Boolean> = _showError
+
+    private val sh: StringHolder by lazy { StringHolder.instance }
 
     @Suppress("UNCHECKED_CAST")
     fun request(): Observable<Timetables> {
@@ -152,8 +156,11 @@ class TimetableViewModel: ViewModel() {
     }
 
     fun filterElectivesBySearch(string: String): List<OverviewScheduleItem>{
-        val result = _electives.filter { it.name.toLowerCase(Locale.ROOT).contains(string.toLowerCase(
-            Locale.ROOT))
+        val result = _electives.filter {
+            it.name.toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)) ||
+                    it.day.convertDayToString(sh).toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)) ||
+                    it.studiumIntegrale && "Studium Integrale".contains(string.toLowerCase(Locale.ROOT)) ||
+                    it.professor?.toLowerCase(Locale.ROOT)?.contains(string.toLowerCase(Locale.ROOT)) == true
         }
         return result.map {OverviewScheduleItem(it, true)}
     }

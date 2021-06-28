@@ -5,6 +5,7 @@ import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.interfaces.Modelable
+import de.htwdd.htwdresden.utils.extensions.convertDayToString
 import de.htwdd.htwdresden.utils.extensions.format
 import de.htwdd.htwdresden.utils.extensions.toColor
 import de.htwdd.htwdresden.utils.extensions.toSHA256
@@ -54,16 +55,7 @@ class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false
             if (addElective){
                 showDay.set(true)
                 day.set(
-                    when (item.day) {
-                        1L -> sh.getString(R.string.monday)
-                        2L -> sh.getString(R.string.tuesday)
-                        3L -> sh.getString(R.string.wednesday)
-                        4L -> sh.getString(R.string.thursday)
-                        5L -> sh.getString(R.string.friday)
-                        6L -> sh.getString(R.string.saturday)
-                        7L -> sh.getString(R.string.sunday)
-                        else -> sh.getString(R.string.unknown)
-                    }
+                    item.day.convertDayToString(sh)
                 )
             }
 
