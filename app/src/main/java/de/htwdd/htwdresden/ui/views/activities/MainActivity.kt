@@ -54,6 +54,7 @@ class MainActivity: AppCompatActivity() {
         setupNavigation()
         handleIntent(intent)
         if (cph.needsOnboarding()) {
+            //without configChanges in Manifest the OnboardingFragment is recreated twice after orientation change
             navController.navigate(R.id.onboarding_page_fragment)
         }
     }
