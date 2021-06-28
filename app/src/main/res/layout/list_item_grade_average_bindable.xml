@@ -19,7 +19,8 @@
             android:layout_marginBottom="@dimen/default_space"
             android:elevation="@dimen/card_view_elevation">
 
-        <TextView
+        <!--bug 21007 turn off average grades-->
+        <!--<TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/list_item_left_and_right_space"
@@ -30,7 +31,7 @@
                 tools:text="Ø 1.77"
                 android:fontFamily="@font/ubuntu"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.HTW.Header"/>
+                android:textAppearance="@style/TextAppearance.HTW.Header"/>-->
 
         <TextView
                 android:layout_width="match_parent"

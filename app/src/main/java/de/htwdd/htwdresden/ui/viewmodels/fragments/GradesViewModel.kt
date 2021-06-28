@@ -45,6 +45,7 @@ class GradesViewModel: ViewModel() {
                 // hole average & credits
                 val holeCredits = pair.second.map { it.credits }.sum()
                 val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
+                //bug 21007 average grades turned off
                 result.add(GradeAverageItem(try { if (holeGrades > 0) { holeGrades / holeCredits } else { 0f } } catch (e: Exception) { 0f }, holeCredits))
 
                 // flatten list and converting to header and grade item
@@ -53,7 +54,11 @@ class GradesViewModel: ViewModel() {
                     val credits = gradeValues.map { it.credits }.sum()
                     val grades = gradeValues.map { it.credits *  (it.grade?.div(100f) ?: 0f) }.sum()
                     val gradeAverage = try { if (grades > 0) { grades / credits } else { 0f } } catch (e: Exception) { 0f }
-                    result.add(GradeHeaderItem(getSemester(key), "${sh.getString(R.string.exams_grade_average, gradeAverage)} (${sh.getString(R.string.exams_stats_count_credits, credits)})"))
+                    //bug 21007 average grades turned off
+                    //result.add(GradeHeaderItem(getSemester(key), "${sh.getString(R.string.exams_grade_average, gradeAverage)} (${sh.getString(R.string.exams_stats_count_credits, credits)})"))
+                    result.add(GradeHeaderItem(getSemester(key),
+                        sh.getString(R.string.exams_stats_count_credits, credits)
+                    ))
                     result.addAll(gradeValues.map { v -> GradeItem(v) })
                 }
                 result
