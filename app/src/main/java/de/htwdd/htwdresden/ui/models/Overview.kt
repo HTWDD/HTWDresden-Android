@@ -140,7 +140,7 @@ class OverviewGradeItem(private val grades: String, private val credits: Float):
 }
 
 //-------------------------------------------------------------------------------------------------- Header Item
-class OverviewHeaderItem(private val header: String, private val subheader: String, private val subheaderVisible: Boolean? = false): Overviewable {
+class OverviewHeaderItem(private val header: String, private val subheader: String, private val subheaderVisible: Boolean? = true): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_overview_header_bindable
