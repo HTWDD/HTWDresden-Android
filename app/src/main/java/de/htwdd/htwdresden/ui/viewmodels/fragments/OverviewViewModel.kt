@@ -36,7 +36,7 @@ class OverviewViewModel: ViewModel() {
 
     private fun requestScheduleForToday(): Observable<Overviews> {
         val result = Overviews()
-        result.add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM")))
+        result.add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM"), true))
 
         val auth = CryptoSharedPreferencesHolder.instance.getStudyAuth() ?: return Observable.defer {
             result.add(OverviewStudyGroupItem())
@@ -70,7 +70,7 @@ class OverviewViewModel: ViewModel() {
             .onErrorReturn { Overviews().apply {
                 val timetablesFromDB = getTimetablesFromDb()
                 if(timetablesFromDB.isNotEmpty()) {
-                    add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM")))
+                    add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM"), true))
                     addAll(getTimetablesFromDb())
                 }
             } }
@@ -91,7 +91,7 @@ class OverviewViewModel: ViewModel() {
             .map { meals ->
                 val result = Overviews()
                 if (meals.isNotEmpty()) {
-                    result.add(OverviewHeaderItem(sh.getString(R.string.mensa), sh.getString(R.string.mensa_reichenbach)))
+                    result.add(OverviewHeaderItem(sh.getString(R.string.mensa), sh.getString(R.string.mensa_reichenbach), true))
                 }
                 result.addAll(meals.map { OverviewMensaItem(it) })
                 result
@@ -102,6 +102,7 @@ class OverviewViewModel: ViewModel() {
     @Suppress("UNCHECKED_CAST")
     private fun requestGrades(): Observable<Overviews> {
         val result = Overviews().apply {
+            //bug 21007 average grades turned off
             add(OverviewHeaderItem(sh.getString(R.string.navi_exams), sh.getString(R.string.exams_grade_average, 0.0)))
         }
 
@@ -130,6 +131,7 @@ class OverviewViewModel: ViewModel() {
                 val holeCredits = pair.second.map { it.credits }.sum()
                 val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
                 val avg =  if (holeGrades > 0) { holeGrades / holeCredits } else { 0f }
+                //bug 21007 average grades turned off
                 val headerItem = result[0] as OverviewHeaderItem
                 headerItem.credits = sh.getString(R.string.exams_grade_average, avg)
                 result.add(OverviewGradeItem(pair.second.filter { it.grade != null }.size.toString(), holeCredits))
