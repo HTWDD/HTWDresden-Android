@@ -266,9 +266,9 @@
     <string name="data_protection">Datenschutz</string>
     <string name="delete_all_saved_data">Gespeicherte Daten löschen</string>
     <string name="delete_all_saved_data_question">Möchtest Du wirklich alle in der HTW Dresden App gespeicherten Daten löschen?</string>
-    <string name="show_hidden_elective_lectures">Ausgeblendete Veranstaltungen</string>
+    <string name="show_hidden_elective_lectures">Anzeige der Wahlpflichtveranstaltungen zurücksetzen</string>
     <string name="show_hidden_elective_lectures_title">Ausgeblendete Veranstaltungen zurücksetzen</string>
-    <string name="show_hidden_elective_lecture_question">Möchtest Du wirklich alle ausgeblendete Veranstaltungen zurüvcksetzen?</string>
+    <string name="show_hidden_elective_lecture_question">Möchtest Du wirklich alle ausgeblendete Veranstaltungen zurücksetzen?</string>
     <string name="show_hidden_elective_lecture_message">Ausgeblendete Veranstaltungen werden zurückgesetzt</string>
     <string name="year">Jahr</string>
     <string name="major">Fach</string>
