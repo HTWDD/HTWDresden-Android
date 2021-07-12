@@ -5,10 +5,7 @@ import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.interfaces.Modelable
-import de.htwdd.htwdresden.utils.extensions.convertDayToString
-import de.htwdd.htwdresden.utils.extensions.format
-import de.htwdd.htwdresden.utils.extensions.toColor
-import de.htwdd.htwdresden.utils.extensions.toSHA256
+import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
 
 //-------------------------------------------------------------------------------------------------- Protocols
@@ -48,8 +45,12 @@ class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false
             beginTime.set(item.beginTime.format("HH:mm"))
             endTime.set(item.endTime.format("HH:mm"))
 
-            val colors = sh.getStringArray(R.array.timetableColors)
+           /* val colors = sh.getStringArray(R.array.timetableColors)
             val colorPosition = Integer.parseInt("${item.name} - ${item.professor}".toSHA256().subSequence(0..5).toString(), 16) % colors.size
+            lessonColor.set(colors[colorPosition].toColor())*/
+
+            val colors = sh.getStringArray(R.array.typeColors)
+            val colorPosition = item.type.getColorPositionForLessonType() % colors.size
             lessonColor.set(colors[colorPosition].toColor())
 
             if (addElective){

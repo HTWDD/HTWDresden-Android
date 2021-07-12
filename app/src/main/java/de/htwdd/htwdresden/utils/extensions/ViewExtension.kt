@@ -60,6 +60,15 @@ fun Any.getColorForLessonType(lessonType: String) = with(lessonType) {
     }
 }
 
+fun String.getColorPositionForLessonType(): Int {
+    return when {
+        this.startsWith('V', true) -> 0
+        this.startsWith('Ü', true) -> 1
+        this.startsWith('B', true) -> 2
+        else -> 3
+    }
+}
+
 fun ConstraintLayout.configureForBreak(rowNumber: Int) {
     layoutParams = when(rowNumber) {
         6 -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 120)

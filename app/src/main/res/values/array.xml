@@ -60,6 +60,13 @@
         <item>#607D8B</item>
     </string-array>
 
+    <string-array name="typeColors">
+        <item>#ff5252</item>
+        <item>#4caf50</item>
+        <item>#90a4ae</item>
+        <item>#5c6bc0</item>
+    </string-array>
+
     <string-array name="days">
         <item>@string/monday</item>
         <item>@string/tuesday</item>
