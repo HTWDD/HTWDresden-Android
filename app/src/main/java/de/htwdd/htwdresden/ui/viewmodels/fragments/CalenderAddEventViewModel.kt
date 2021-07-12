@@ -85,6 +85,9 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
         timetable?.type?.let {
             isElective = it.isElective()
         }
+        if(isElective) {
+            isEditable.set(false)
+        }
     }
 
     private fun setupWeekRotation(weekRotation: String?) {
