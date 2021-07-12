@@ -102,7 +102,8 @@ class OverviewViewModel: ViewModel() {
     @Suppress("UNCHECKED_CAST")
     private fun requestGrades(): Observable<Overviews> {
         val result = Overviews().apply {
-            add(OverviewHeaderItem(sh.getString(R.string.navi_exams), sh.getString(R.string.exams_grade_average, 0.0)))
+            //bug 21007 average grades turned off
+            add(OverviewHeaderItem(sh.getString(R.string.navi_exams), sh.getString(R.string.exams_grade_average, 0.0), false))
         }
 
         val auth = CryptoSharedPreferencesHolder.instance.getAuthToken()?.nullWhenEmpty ?: return Observable.defer {
@@ -130,6 +131,7 @@ class OverviewViewModel: ViewModel() {
                 val holeCredits = pair.second.map { it.credits }.sum()
                 val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
                 val avg =  if (holeGrades > 0) { holeGrades / holeCredits } else { 0f }
+                //bug 21007 average grades turned off
                 val headerItem = result[0] as OverviewHeaderItem
                 headerItem.credits = sh.getString(R.string.exams_grade_average, avg)
                 result.add(OverviewGradeItem(pair.second.filter { it.grade != null }.size.toString(), holeCredits))

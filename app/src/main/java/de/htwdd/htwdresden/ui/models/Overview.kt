@@ -140,7 +140,7 @@ class OverviewGradeItem(private val grades: String, private val credits: Float):
 }
 
 //-------------------------------------------------------------------------------------------------- Header Item
-class OverviewHeaderItem(private val header: String, private val subheader: String): Overviewable {
+class OverviewHeaderItem(private val header: String, private val subheader: String, private val subheaderVisible: Boolean? = true): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_overview_header_bindable
@@ -161,6 +161,8 @@ class OverviewHeaderItem(private val header: String, private val subheader: Stri
         model.apply {
             header.set(this@OverviewHeaderItem.header)
             subheader.set(this@OverviewHeaderItem.subheader)
+            //bug 21007 average grades turned off
+            subheaderVisible.set(this@OverviewHeaderItem.subheaderVisible)
         }
     }
 
@@ -169,7 +171,8 @@ class OverviewHeaderItem(private val header: String, private val subheader: Stri
     override fun hashCode(): Int {
         var result = header.hashCode()
         result = 31 * result + subheader.hashCode()
-        return result
+        result = 31 * result + subheaderVisible.hashCode()
+                return result
     }
 }
 
@@ -243,4 +246,5 @@ class OverviewGradeModel: Modelable {
 class OverviewHeaderModel: Modelable {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
+    val subheaderVisible   = ObservableField<Boolean>()
 }

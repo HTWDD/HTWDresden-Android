@@ -3,6 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools">
     
     <data>
+        <import type="android.view.View"/>
         <variable
                 name="overviewHeaderModel"
                 type="de.htwdd.htwdresden.ui.models.OverviewHeaderModel" />
@@ -32,6 +33,7 @@
                 android:layout_marginBottom="@dimen/default_space"
                 tools:text="Subheader"
                 android:text="@{overviewHeaderModel.subheader}"
+                android:visibility="@{overviewHeaderModel.subheaderVisible? View.VISIBLE : View.GONE}"
                 android:textAppearance="@style/TextAppearance.HTW.Small"/>
 
     </LinearLayout>
