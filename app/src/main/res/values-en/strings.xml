@@ -186,10 +186,10 @@
     <string name="data_protection">Data Protection</string>
     <string name="delete_all_saved_data">Delete all stored data</string>
     <string name="delete_all_saved_data_question">Do you really want to delete all data stored in the HTW Dresden App?</string>
-    <string name="show_hidden_elective_lectures">Reset hidden events</string>
-    <string name="show_hidden_elective_lectures_title">Reset hidden events</string>
-    <string name="show_hidden_elective_lecture_question">Do you really want to reset all hidden events?</string>
-    <string name="show_hidden_elective_lecture_message">Hidden events are reset</string>
+    <string name="show_hidden_elective_lectures">Reset elective lectures</string>
+    <string name="show_hidden_elective_lectures_title">Reset elective lectures</string>
+    <string name="show_hidden_elective_lecture_question">Do you really want to reset all elective lectures?</string>
+    <string name="show_hidden_elective_lecture_message">Elective lectures have been reset</string>
     <string name="year">Year</string>
     <string name="major">Major</string>
     <string name="group">Group</string>

@@ -17,6 +17,7 @@ import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.viewmodels.fragments.SettingsViewModel
 import de.htwdd.htwdresden.utils.extensions.error
 import de.htwdd.htwdresden.utils.extensions.getViewModel
+import de.htwdd.htwdresden.utils.extensions.isElective
 import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 
@@ -115,7 +116,10 @@ class SettingsFragment : Fragment() {
                             val getAllTimetables = getAllTimetables()
                             getAllTimetables.forEach {
                                 it.isHidden = false
-                                TimetableRealm().updateAsync(it) {}
+                                //renaming of the settings button to "Anzeige der Wahlpflichtveranstaltungen zurücksetzen"
+                                if (it.type.isElective()){
+                                   deleteById(it.id)
+                                }
                             }
                             Toast.makeText(
                                 it,

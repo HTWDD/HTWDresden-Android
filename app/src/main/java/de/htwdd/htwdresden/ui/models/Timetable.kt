@@ -422,6 +422,19 @@ fun Any.deleteAllIfNotCreatedByUser() {
     }
 }
 
+fun Any.deleteAllElectives() {
+    val realm = Realm.getDefaultInstance()
+    realm.use {
+        it.executeTransaction {
+            val result = realm.where(TimetableRealm::class.java)
+                .contains("type", "w")
+                .contains("type", "Modul(SI)")
+                .findAll()
+            result.deleteAllFromRealm()
+        }
+    }
+}
+
 fun Any.deleteById(id: String) {
     val realm = Realm.getDefaultInstance()
     realm.use {

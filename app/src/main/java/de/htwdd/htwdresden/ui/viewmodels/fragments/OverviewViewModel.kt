@@ -77,9 +77,9 @@ class OverviewViewModel: ViewModel() {
     }
 
     private fun getTimetablesFromDb(): List<TimetableItem> {
-        val timetables2 = getNotHiddenTimetables()
-        return if(timetables2.isEmpty()) emptyList()
-        else timetables2.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) }.sortedWith(compareBy { c -> c }).map { TimetableItem(it) }
+        val timetables = getNotHiddenTimetables()
+        return if(timetables.isEmpty()) emptyList()
+        else timetables.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) }.sortedWith(compareBy { c -> c }).map { TimetableItem(it) }
     }
 
     private fun requestMealsForToday(): Observable<Overviews> {
