@@ -68,5 +68,5 @@ val String.fullLessonType: String
         })
     }
 
-fun String.isElective() = this.contains("w")
+fun String.isElective() = this.contains("w") || this.contains("Modul(SI)")
 
