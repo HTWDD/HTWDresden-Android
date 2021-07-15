@@ -49,7 +49,8 @@ class ExamsFragment: Fragment(R.layout.fragment_exams) {
         swipeRefreshLayout.setOnRefreshListener { request() }
         adapter = ExamItemAdapter(items)
         examableRecycler.adapter = adapter
-        adapter.onEmpty {
+        //TODO: enable when backend fixed
+       /* adapter.onEmpty {
             weak { self ->
                 self.includeEmptyLayout.toggle(it)
                 self.tvIcon.text    = getString(R.string.exams_no_results_icon)
@@ -57,7 +58,13 @@ class ExamsFragment: Fragment(R.layout.fragment_exams) {
                 self.tvMessage.text = getString(R.string.exams_no_results_message)
             }
         }
-        request()
+        request()*/
+        weak { self ->
+            self.includeEmptyLayout.toggle(true)
+            self.tvIcon.text    = getString(R.string.exams_no_results_icon)
+            self.tvTitle.text   = getString(R.string.exams_no_results_title)
+            self.tvMessage.text = getString(R.string.exams_under_construction)
+        }
     }
 
     private fun request() {

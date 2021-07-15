@@ -178,6 +178,7 @@
     <string name="exams_no_results_icon" translatable="false">🤯</string>
     <string name="exams_no_results_title">Keine Prüfungen</string>
     <string name="exams_no_results_message">😖 Ich kann leider\nkeine Prüfungen für Dich finden.\nSind Deine Zugangsdaten korrekt?</string>
+    <string name="exams_under_construction">Die Prüfungsansicht wird überarbeitet und ist vorerst nicht verfügbar.</string>
     <string name="exams_no_credentials_title">Keine Studiengruppe</string>
     <string name="exams_no_credentials_message">Bitte trage deine Studiengruppe ein,\ndamit ich Dir Prüfungen anzeigen kann.</string>
     <string name="timetable_no_credentials_message">Bitte trage deine Studiengruppe ein,\ndamit ich Dir deinen Stundenplan anzeigen kann.</string>
@@ -314,5 +315,6 @@
     <string name="elective">Wahlpflicht</string>
     <string name="studium_integrale">Studium Integrale</string>
     <string name="search">Suche</string>
+
 
 </resources>
