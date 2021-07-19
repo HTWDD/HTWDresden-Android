@@ -10,9 +10,11 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.ui.models.Timetable
 import de.htwdd.htwdresden.utils.extensions.fullLessonType
+import de.htwdd.htwdresden.utils.extensions.getColorForLessonType
 import de.htwdd.htwdresden.utils.extensions.setColorForLessonType
 
 @SuppressLint("ViewConstructor")
@@ -39,5 +41,9 @@ class LessonView @JvmOverloads constructor(
         type.text = timetable.type.fullLessonType
         rooms.text = TextUtils.join(", ", timetable.rooms)
         lessonItemContainer.setColorForLessonType(timetable.type)
+        //own elective lectures must be recognisable
+        if (timetable.createdByUser){
+            lessonItemContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.htw_orange))
+        }
     }
 }

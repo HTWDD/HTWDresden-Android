@@ -11,8 +11,8 @@
     <color name="red_500">#f44336</color>
     <color name="timetable_red">#f56545</color>
     <color name="htw_orange">#f49e00</color>
-    <color name="timetable_organge">#ffbb22</color>
-    <color name="medium_organge">#ff9d14</color>
+    <color name="timetable_orange">#ffbb22</color>
+    <color name="medium_orange">#ff9d14</color>
 
     <color name="exam_results_green">#090</color>
     <color name="overview_header">#8BC34A</color>
