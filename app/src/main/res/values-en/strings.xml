@@ -275,4 +275,8 @@
     <string name="export_success_message">Export successful</string>
     <string name="export_failure_message">Error while exporting</string>
 
+    <string name="studium_integrale">Studium Integrale</string>
+    <string name="custom_tag">Custom</string>
+    <string name="search">Search</string>
+
 </resources>

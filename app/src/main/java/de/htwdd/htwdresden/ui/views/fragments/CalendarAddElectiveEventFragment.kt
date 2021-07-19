@@ -114,7 +114,7 @@ class CalendarAddElectiveEventFragment: Fragment() {
             when (item) {
                 is OverviewScheduleItem     -> {
                     val elective = (item as OverviewScheduleItem).item
-                    elective.createdByUser = true
+                    elective.createdByUser = false
                     TimetableRealm().updateAsync(elective) {}
                     Toast.makeText(context, R.string.timetable_event_added, Toast.LENGTH_SHORT).show()
                     lifecycleScope.launch {

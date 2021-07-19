@@ -55,6 +55,7 @@ class Timetable(
     var lessonDays: List<String>,
     var studiumIntegrale: Boolean = false,
     var createdByUser: Boolean = false,
+    var elective: Boolean = false,
     var exactDay: Date? = null,
     var weekRotation: String? = null,
     var isHidden: Boolean = false
@@ -150,6 +151,7 @@ open class TimetableRealm(
     var lessonDays: RealmList<String> = RealmList(),
     var studiumIntegrale: Boolean = false,
     var createdByUser: Boolean = false,
+    var elective: Boolean = false,
     var exactDay: Date? = null,
     var weekRotation: String? = null,
     var isHidden: Boolean = false
@@ -181,6 +183,7 @@ open class TimetableRealm(
                 },
                 studiumIntegrale,
                 createdByUser,
+                type.isElective(),
                 exactDay,
                 weekRotation,
                 isHidden = isHidden
@@ -207,6 +210,7 @@ open class TimetableRealm(
                 lessonDays.toCollection(ArrayList()),
                 studiumIntegrale,
                 createdByUser,
+                elective,
                 exactDay,
                 weekRotation,
                 isHidden = isHidden
@@ -261,6 +265,7 @@ class TimetableItem(val item: Timetable): Overviewable {
             endTime.set(item.endTime.format("HH:mm"))
             lessonColor.set(getColorForLessonType(item.type))
             studiumIntegrale.set(item.studiumIntegrale)
+            custom.set(item.createdByUser)
             isElective.set(item.type.isElective())
             setRooms(item.rooms)
         }
@@ -337,6 +342,7 @@ class TimetableModel: Modelable {
     val hasRooms        = ObservableField<Boolean>()
     val isElective      = ObservableField<Boolean>(false)
     val studiumIntegrale      = ObservableField<Boolean>(false)
+    val custom      = ObservableField<Boolean>(false)
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {
@@ -412,11 +418,15 @@ fun Any.deleteAllTimetable() {
     }
 }
 
-fun Any.deleteAllIfNotCreatedByUser() {
+fun Any.deleteAllIfNotCreatedByUserOrElective() {
     val realm = Realm.getDefaultInstance()
     realm.use {
         it.executeTransaction {
-            val result = realm.where(TimetableRealm::class.java).equalTo("createdByUser", false).findAll()
+            val result = realm.where(TimetableRealm::class.java)
+                .equalTo("createdByUser", false)
+                .and()
+                .equalTo("elective", false)
+                .findAll()
             result.deleteAllFromRealm()
         }
     }

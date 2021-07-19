@@ -160,6 +160,15 @@ public class DatabaseMigrations implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 10) {
+            RealmObjectSchema timetableRealmSchema = schema.get("TimetableRealm");
+            if(timetableRealmSchema!=null) {
+                timetableRealmSchema
+                        .addField("elective", Boolean.class);
+            }
+            oldVersion++;
+        }
+
 
         // weeksOnly in primitiven Datentyp umwandeln
         // TODO Wartet auf Umsetzung https://github.com/realm/realm-java/issues/5361

@@ -152,6 +152,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
             val timetableProfessor = lessonProf.getOrEmpty()
             val timetableRooms = createRoomList()
             val timetableStudiumIntegrale = isStudiumIntegrale.get()?:false
+            val timetableElective = isElective
             var timetableLessonDays = Timetable.lessonDays(timetableWeekDay, timetableWeeksOnly)
             val timetableExactDay = lessonDay.get()?.toDate(lessonDatePattern)
             val timetableLessonRotation = lessonRotation.get()
@@ -186,7 +187,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                 if(timetable==null) {
                     timetable = Timetable(UUID.randomUUID().toString(),null, timetableTag, timetableName,timetableType, timetableWeekDay,
                         timetableStartTime!!, timetableEndTime!!,0L, timetableWeeksOnly ,timetableProfessor, timetableRooms,"",
-                        timetableLessonDays,false,true, timetableExactDay,timetableLessonRotation )
+                        timetableLessonDays,false,true, timetableElective, timetableExactDay,timetableLessonRotation )
                 } else {
                     timetable?.apply {
                         lessonTag = timetableTag
@@ -200,6 +201,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
                         rooms = timetableRooms
                         lessonDays = timetableLessonDays
                         createdByUser = true
+                        elective = timetableElective
                         studiumIntegrale = timetableStudiumIntegrale
                         exactDay = timetableExactDay
                         weekRotation = timetableLessonRotation

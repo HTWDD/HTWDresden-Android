@@ -32,6 +32,7 @@ class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false
             name.set(item.name)
             setProfessor(item.professor)
             studiumIntegrale.set(item.studiumIntegrale)
+            custom.set(item.createdByUser)
             type.set(with(item.type) {
                 when {
                     startsWith("v", true) -> sh.getString(R.string.lecture)
@@ -53,6 +54,7 @@ class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false
             val colorPosition = item.type.getColorPositionForLessonType() % colors.size
             lessonColor.set(colors[colorPosition].toColor())
 
+            //if we're in the elective choice list
             if (addElective){
                 showDay.set(true)
                 day.set(
@@ -218,6 +220,7 @@ class OverviewScheduleModel: Modelable {
     val showDay        = ObservableField<Boolean>()
     val day       = ObservableField<String>()
     val studiumIntegrale        = ObservableField<Boolean>()
+    val custom       = ObservableField<Boolean>()
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {

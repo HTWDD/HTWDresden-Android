@@ -3,9 +3,7 @@ package de.htwdd.htwdresden.ui.viewmodels.fragments
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.provider.CalendarContract
-import android.util.Log.d
 import androidx.lifecycle.*
-import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.adapter.Timetables
 import de.htwdd.htwdresden.network.RestApi
 import de.htwdd.htwdresden.ui.models.*
@@ -51,7 +49,7 @@ class TimetableViewModel: ViewModel() {
     private fun handleTimetableResult(timetables: Observable<List<Timetable>>): Observable<Timetables> {
         return timetables.map { timetableList ->                                                    // Grouping to lesson days and lessons
             val hiddenEventsIds = getHiddenTimetables()
-            deleteAllIfNotCreatedByUser()
+            deleteAllIfNotCreatedByUserOrElective()
             timetableList.forEach {
                 if(hiddenEventsIds.contains(it.id)) {
                     it.isHidden = true
@@ -88,7 +86,6 @@ class TimetableViewModel: ViewModel() {
     }
 
     private fun dateStringToHeaderItem(date: String): TimetableHeaderItem {
-        d(TAG(), date)
         val d = date.toDate("MM-dd-yyyy")
         return TimetableHeaderItem(d?.format("EEEE") ?: "", d ?: Date())
     }

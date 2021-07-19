@@ -50,7 +50,7 @@ class OverviewViewModel: ViewModel() {
             .map { it.sortedWith(compareBy { c -> c }) }
             .map {
                 val hiddenEventsIds = getHiddenTimetables()
-                deleteAllIfNotCreatedByUser()
+                deleteAllIfNotCreatedByUserOrElective()
                 it.forEach { timetable ->
                     if(hiddenEventsIds.contains(timetable.id)) timetable.isHidden = true
                     TimetableRealm().update(timetable) {}

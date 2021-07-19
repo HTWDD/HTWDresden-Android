@@ -110,6 +110,8 @@
                     android:text="@{timetableModel.rooms}"/>
 
             <TextView
+
+                android:id="@+id/tvElective"
                 app:goneUnless="@{timetableModel.isElective()}"
                 style="@style/HTW.BadgeLabel.Small.Green"
                 android:layout_width="wrap_content"
@@ -118,6 +120,19 @@
                 app:layout_constraintStart_toEndOf="@+id/tvRooms"
                 app:layout_constraintTop_toTopOf="@+id/tvRooms"
                 android:text="@string/elective"/>
+
+
+            <TextView
+                android:id="@+id/tvCustom"
+                android:visibility="@{safeUnbox(timetableModel.custom) ? View.VISIBLE : View.GONE, default=visible}"
+                style="@style/HTW.BadgeLabel.Small.Orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_space"
+                app:layout_constraintStart_toEndOf="@+id/tvElective"
+                app:layout_constraintTop_toTopOf="@+id/tvElective"
+                tools:text="Custom"
+                android:text="@string/custom_tag"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
