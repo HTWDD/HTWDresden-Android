@@ -278,5 +278,6 @@
     <string name="studium_integrale">Studium Integrale</string>
     <string name="custom_tag">Custom</string>
     <string name="search">Search</string>
+    <string name="qis_warning">The information in the app is not legally binding, the grade portal (QIS) is legally binding! \n You can also find all information (e.g. sick note) in the grade portal (QIS).</string>
 
 </resources>

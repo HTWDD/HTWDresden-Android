@@ -316,6 +316,6 @@
     <string name="studium_integrale">Studium Integrale</string>
     <string name="custom_tag">Eigene</string>
     <string name="search">Suche</string>
-
+    <string name="qis_warning">Die Informationen in der App sind unverbindlich, rechtsverbindlich ist das Notenportal (QIS)! \n Alle Hinweise (z.B. zu Krankmeldungen) finden Sie ebenfalls im Notenportal (QIS).</string>
 
 </resources>

@@ -67,11 +67,13 @@ class GradesFragment: Fragment(R.layout.fragment_grades) {
                 .runInUiThread()
                 .doOnSubscribe { isRefreshing = true }
                 .doOnTerminate { isRefreshing = false }
-                .subscribe({ grades ->
+                .subscribe(
+                    { grades ->
                     weak { self ->
                         self.adapter.update(grades)
                     }
-                }, {
+                },
+                    {
                     error(it)
                     weak { self ->
                         self.includeEmptyLayout?.show()
