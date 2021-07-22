@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="dialogInterface"
             type="de.htwdd.htwdresden.ui.views.fragments.DialogInterface" />
@@ -59,8 +58,8 @@
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lessonName_hint"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_lessonname" />
+                            app:srcCompat="@drawable/ic_lessonname"
+                            app:tint="@color/light_black" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -71,6 +70,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonName_hint"
+                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:maxLines="1"
@@ -94,8 +94,8 @@
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lessonTag_hint"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_abbrevetion" />
+                            app:srcCompat="@drawable/ic_abbrevetion"
+                            app:tint="@color/light_black" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -106,6 +106,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonTag_hint"
+                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:textColor="@drawable/input_layout_color_states"
@@ -128,8 +129,8 @@
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lessonProf_hint"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_doctor" />
+                            app:srcCompat="@drawable/ic_doctor"
+                            app:tint="@color/light_black" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -140,6 +141,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonProf_hint"
+                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:textColor="@drawable/input_layout_color_states"
@@ -162,8 +164,8 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_lecture" />
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -196,7 +198,8 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="6dp"
                                 android:src="@drawable/ic_chevron_down"
-                                android:tint="@color/middle_gray" />
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
+                                app:tint="@color/middle_gray" />
 
                         </RelativeLayout>
 
@@ -216,8 +219,8 @@
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lessonRoom"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_room" />
+                            app:srcCompat="@drawable/ic_room"
+                            app:tint="@color/light_black" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -229,6 +232,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonRoom"
                                 android:inputType="text"
+                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
                                 android:textColor="@drawable/input_layout_color_states"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:maxLines="1"
@@ -281,8 +285,8 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lesson_week_rotation"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_calendar" />
+                            app:srcCompat="@drawable/ic_calendar"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -316,8 +320,9 @@
                                 android:layout_gravity="end|center_horizontal"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginEnd="6dp"
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
                                 android:src="@drawable/ic_chevron_down"
-                                android:tint="@color/middle_gray" />
+                                app:tint="@color/middle_gray" />
 
                         </RelativeLayout>
 
@@ -336,8 +341,8 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lesson_week_day"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_lecture" />
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -371,8 +376,9 @@
                                 android:layout_gravity="end|center_horizontal"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginEnd="6dp"
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
                                 android:src="@drawable/ic_chevron_down"
-                                android:tint="@color/middle_gray" />
+                                app:tint="@color/middle_gray" />
 
                         </RelativeLayout>
 
@@ -391,8 +397,8 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lesson_week_day"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_lecture" />
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -450,8 +456,8 @@
                             android:layout_marginStart="2dp"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lesson_block"
-                            android:tint="@color/light_black"
-                            app:srcCompat="@drawable/ic_lessonblock" />
+                            app:srcCompat="@drawable/ic_lessonblock"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -509,9 +515,9 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="@dimen/space_between_table_rows"
                             android:contentDescription="@string/timetable_edit_lesson_block"
-                            android:tint="@color/light_black"
                             android:visibility="invisible"
-                            app:srcCompat="@drawable/ic_lessonblock" />
+                            app:srcCompat="@drawable/ic_lessonblock"
+                            app:tint="@color/light_black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"

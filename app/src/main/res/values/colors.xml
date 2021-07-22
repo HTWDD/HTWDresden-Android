@@ -34,6 +34,8 @@
     <color name="light_grey">#EFEFEF</color>
     <color name="white">#FFF</color>
 
+    <color name="transparent">#00FFFFFF</color>
+
     <color name="indigo_400">#5c6bc0</color>
     <color name="light_black">#383838</color>
 </resources>

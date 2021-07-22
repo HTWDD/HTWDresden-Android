@@ -181,7 +181,7 @@
         android:id="@+id/calender_add_event_fragment"
         android:name="de.htwdd.htwdresden.ui.views.fragments.CalendarAddEventFragment"
         android:label="{title}"
-        tools:layout="@layout/calender_add_event_fragment">
+        tools:layout="@layout/fragment_calender_add_event">
         <argument
             android:name="id"
             app:argType="string"

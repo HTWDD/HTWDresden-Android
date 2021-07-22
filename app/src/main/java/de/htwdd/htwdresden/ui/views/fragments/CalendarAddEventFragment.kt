@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.datetime.timePicker
 import com.afollestad.materialdialogs.list.listItems
 import de.htwdd.htwdresden.R
-import de.htwdd.htwdresden.databinding.CalenderAddEventFragmentBinding
+import de.htwdd.htwdresden.databinding.FragmentCalenderAddEventBinding
 import de.htwdd.htwdresden.ui.viewmodels.fragments.CalenderAddEventViewModel
 import de.htwdd.htwdresden.ui.viewmodels.fragments.factories.CalendarAddEventViewModelFactory
 import de.htwdd.htwdresden.utils.extensions.calendar
@@ -37,7 +37,7 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = inflateDataBinding<CalenderAddEventFragmentBinding>(R.layout.calender_add_event_fragment, container).apply {
+        val binding = inflateDataBinding<FragmentCalenderAddEventBinding>(R.layout.fragment_calender_add_event, container).apply {
             calenderAddEventViewModel = viewModel
         }
         binding.dialogInterface = this

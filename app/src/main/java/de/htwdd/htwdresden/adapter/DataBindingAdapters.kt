@@ -126,7 +126,6 @@ fun setBackgroundTint(view: View, color: Int) {
     view.setBackgroundColor(ContextCompat.getColor(view.context, color))
 }
 
-
 @BindingAdapter("app:isEnabled")
 fun enableSwipeRefresh(view: SwipeRefreshLayout, isEnabled: Boolean) {
     view.isEnabled = isEnabled
