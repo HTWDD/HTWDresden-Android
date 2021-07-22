@@ -13,4 +13,12 @@
         android:title="@string/hide_event"
         android:icon="@drawable/ic_eye"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/saveEvent"
+        android:checkable="true"
+        android:visible="false"
+        android:title="@string/timetable_edit_save"
+        android:icon="@drawable/ic_done"
+        app:showAsAction="always" />
 </menu>

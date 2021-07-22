@@ -138,6 +138,10 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
             viewModel.hideEvent(findNavController())
             true
         }
+        R.id.saveEvent -> {
+            goBack(true)
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -146,10 +150,12 @@ class CalendarAddEventFragment : Fragment(), DialogInterface  {
 
         val removeButton = menu.findItem(R.id.eventRemoveButton)
         val hideButton = menu.findItem(R.id.hideEvent)
+        val saveButton = menu.findItem(R.id.saveEvent)
         if(viewModel.isElective) {
             removeButton.isVisible = false
             hideButton.isVisible = true
         } else if(viewModel.isEditable.get()==true) {
+            saveButton.isVisible = true
             removeButton.isVisible = true
             hideButton.isVisible = false
         }

@@ -63,14 +63,15 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            >
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/eventName"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonName_hint"
-                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:maxLines="1"
@@ -106,7 +107,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonTag_hint"
-                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:textColor="@drawable/input_layout_color_states"
@@ -141,7 +142,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonProf_hint"
-                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:inputType="text"
                                 android:textColor="@drawable/input_layout_color_states"
@@ -232,7 +233,7 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/timetable_edit_lessonRoom"
                                 android:inputType="text"
-                                android:background="@{calenderAddEventViewModel.isEditable()? @color/transparent : @color/white }"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
                                 android:textColor="@drawable/input_layout_color_states"
                                 android:enabled="@{calenderAddEventViewModel.isEditable()}"
                                 android:maxLines="1"
@@ -584,50 +585,13 @@
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/fill_all_fields"
                     android:textColor="@color/red"
                     android:textSize="14sp"
                     app:goneUnless="@{calenderAddEventViewModel.errorViewVisible}" />
 
             </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" >
-
-                    <Button
-                        android:id="@+id/eventCloseButton"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:enabled="true"
-                        android:onClick="@{() -> dialogInterface.goBack(false)}"
-                        android:text="@string/general_close" />
-
-                    <Button
-                        android:id="@+id/eventSaveButton"
-                        style="@style/ButtonHTWStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
-                        android:onClick="@{() -> dialogInterface.goBack(true)}"
-                        android:text="@string/timetable_edit_save" />
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
