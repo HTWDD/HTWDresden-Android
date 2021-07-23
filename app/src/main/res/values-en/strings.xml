@@ -34,6 +34,7 @@
     <string name="general_close">Close</string>
     <string name="timetable_overview_options_menu_timetable_reset">Reset timetable</string>
     <string name="general_cancel">Cancel</string>
+    <string name="general_reset">Reset</string>
     <string name="about_contact">Contact</string>
     <string name="exams_exams">Exams</string>
     <string name="exams_grade">Grades</string>
@@ -47,7 +48,7 @@
     <string name="exams_result_note_ill">certified sick</string>
     <string name="exams_result_note_not_allowed">not admitted</string>
     <string name="exams_result_note_sign_off">deregistered</string>
-    <string name="exams_result_wrong_auth">Authentification error! Please check your data.</string>
+    <string name="exams_result_wrong_auth">Authentication error! Please check your data.</string>
     <string name="exams_result_note_recognized">recognized</string>
     <string name="exams_result_note_blocked">blocked</string>
     <string name="exams_result_note_unexcused_missing">unexcused absent</string>
@@ -94,23 +95,34 @@
     <string name="timetable_calendar_week">calender week %d</string>
     <string name="timetable_details_subtitle">%1$s by %2$s</string>
     <string name="timetable_ds_list">lesson block %1$d (%2$s - %3$s)</string>
-    <string name="timetable_edit_activity_titel">edit lesson</string>
+    <string name="timetable_edit_activity_title">Edit event</string>
+    <string name="timetable_add_event">Add event</string>
+    <string name="timetable_event_added">Event added</string>
+    <string name="timetable_add_elective_lecture">Add elective lecture</string>
+    <string name="timetable_event">Event</string>
     <string name="timetable_edit_lessonDS">Time</string>
     <string name="timetable_edit_lessonDS_value">set time individually</string>
     <string name="timetable_edit_lessonDay">Day</string>
     <string name="timetable_edit_lessonDeleteSuccess">Lesson successfully deleted</string>
-    <string name="timetable_edit_lessonName_hint">Name of the lesson</string>
+    <string name="timetable_edit_lessonName_hint">Name of the lesson*</string>
     <string name="timetable_edit_lessonProf_hint">Name of the docent</string>
     <string name="timetable_edit_lessonRoom">Room</string>
     <string name="timetable_edit_lessonSaveSuccess">Lesson successfully saved!</string>
     <string name="timetable_edit_lessonTag_hint">Abbreviation</string>
-    <string name="timetable_edit_lessonType">Type</string>
+    <string name="timetable_edit_lessonType">Lesson type</string>
+    <string name="timetable_edit_lessonType_description">Choose lesson type</string>
+    <string name="timetable_edit_lesson_rotation_description">Choose week rotation</string>
+    <string name="timetable_edit_lesson_week_day_description">Choose weekday</string>
     <string name="timetable_edit_lessonWeek">Week</string>
+    <string name="timetable_edit_lesson_week_rotation">Week Rotation*</string>
+    <string name="timetable_edit_lesson_block">Lesson Block</string>
     <string name="timetable_edit_lessonWeeks">Only in CW</string>
+    <string name="timetable_edit_lesson_week_day">Weekday*</string>
     <string name="timetable_edit_lessonWeeks_hint">only in these calender weeks</string>
     <string name="timetable_edit_lessonWeeks_title">Lesson only takes place in the following calender weeks</string>
     <string name="timetable_edit_time_individual_to">to</string>
     <string name="timetable_only_KW">some CW</string>
+    <string name="timetable_tab_calendar">Calendar</string>
     <string name="management_examination_office">Principal exam office</string>
     <string name="management_office">Student administration</string>
     <string name="management_opening_hours">Office hours</string>
@@ -174,6 +186,10 @@
     <string name="data_protection">Data Protection</string>
     <string name="delete_all_saved_data">Delete all stored data</string>
     <string name="delete_all_saved_data_question">Do you really want to delete all data stored in the HTW Dresden App?</string>
+    <string name="show_hidden_elective_lectures">Reset elective lectures</string>
+    <string name="show_hidden_elective_lectures_title">Reset elective lectures</string>
+    <string name="show_hidden_elective_lecture_question">Do you really want to reset all elective lectures?</string>
+    <string name="show_hidden_elective_lecture_message">Elective lectures have been reset</string>
     <string name="year">Year</string>
     <string name="major">Major</string>
     <string name="group">Group</string>
@@ -189,8 +205,9 @@
     <string name="exams_result_tries">%d. try</string>
     <string name="exams_result_no_date">No date</string>
     <string name="exams_result_no_remark">No comments</string>
-    <string name="grades_no_credentials_title">Please enter your access data\nso that I can show you exams.</string>
+    <string name="grades_no_credentials_title">No access data.</string>
     <string name="room_occupancy_no_room">No rooms</string>
+    <string name="error">Sorry, something went wrong. Please check your internet connection</string>
     <string name="room_occupancy_add_new_rooms">New rooms can be added via +.\n\nThe room timetable does not consider additional events or changes. Please ask Mrs. Neumann (Z 228 A) for room reservations.</string>
     <string name="meal_price_student">Students: %.2f €</string>
     <string name="meal_price_employee">Employees: %.2f €</string>
@@ -207,9 +224,10 @@
     <string name="lets_go">Let\'s go</string>
     <string name="exams_no_credentials_message">Please enter your study group, so I can show you exams.</string>
     <string name="exams_no_credentials_title">No study group</string>
-    <string name="exams_no_results_message">😖 Unfortunately I can I can\'t find any exams for you. Are your access data correct?</string>
+    <string name="exams_no_results_message">😖 Unfortunately I can I can\'t find any exams for you. Is your access data correct?</string>
+    <string name="exams_under_construction">The exam section is currently not available. We\'re working on a solution.</string>
     <string name="exams_no_results_title">No exams</string>
-    <string name="grades_no_credentials_message">Please enter your access data so that I can show you sheet music.</string>
+    <string name="grades_no_credentials_message">Please enter your access data so that I can show your grades.</string>
     <string name="mensa_meal_info_alcohol">Alcohol</string>
     <string name="mensa_meal_info_garlic">Garlic</string>
     <string name="mensa_no_meals">No food</string>
@@ -227,4 +245,39 @@
     <string name="welcome_text_mensa">What\'s planned for lunch today? 🍏🍕🥙 How much 💶 is still on your card?</string>
     <string name="welcome_text_timetable">Know when lectures and seminars start.</string>
     <string name="meals_widget_label">Canteen Reichenbachstraße | Meals</string>
+
+    <string name="timetable_message">Due to technical problems, there may be shifts in the schedule. Please check your schedule on the HTW website. &lt;br> &lt;a href="https://www.htw-dresden.de/studium/im-studium/aktuelle-stunden-und-raumplaene">Go to the online schedule&lt;/a></string>
+    <string name="elective">Elective</string>
+
+    <string name="am_7">7 AM</string>
+    <string name="add_event">Add event</string>
+
+    <string name="start">Start</string>
+    <string name="end">End</string>
+
+    <string name="time_format">h:mm aa</string>
+    <string name="one_time">one time</string>
+    <string name="fill_all_fields">Please fill all required fields</string>
+
+    <string name="required">* required</string>
+    <string name="remove_event">Remove event</string>
+    <string name="hide_event">Hide event</string>
+    <string name="event_hidden">Event hidden</string>
+    <string name="event_removed">Event removed</string>
+    <string name="empty_field_error">This field cannot be empty</string>
+
+    <string name="export_title">Export events</string>
+    <string name="export_message">Would you like to export the events to your calendar?</string>
+    <string name="export_option1">Export current week</string>
+    <string name="export_option2">Export next week</string>
+    <string name="export_option3">Export complete semester</string>
+    <string name="export_calendar_list">Calendars available on the device:</string>
+    <string name="export_success_message">Export successful</string>
+    <string name="export_failure_message">Error while exporting</string>
+
+    <string name="studium_integrale">Studium Integrale</string>
+    <string name="custom_tag">Custom</string>
+    <string name="search">Search</string>
+    <string name="qis_warning">The information in the app is not legally binding, the grade portal (QIS) is legally binding! \n You can also find all information (e.g. sick note) in the grade portal (QIS).</string>
+
 </resources>

@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="lesson_type">
-        <item>Lecture</item>
-        <item>Internship</item>
-        <item>Tutorial</item>
-        <item>Others</item>
-    </string-array>
     <string-array name="lesson_week">
         <item>every CW</item>
+        <item>even CW</item>
         <item>odd CW</item>
-        <item>just CW</item>
+        <item>@string/one_time</item>
     </string-array>
     <string-array name="autoExamsUpdateInterval">
         <item>Off</item>
@@ -17,5 +12,27 @@
         <item>Every 4 hours</item>
         <item>Every 4 hours</item>
         <item>Every day</item>
+    </string-array>
+
+    <string-array name="hours">
+        <item>8 AM</item>
+        <item>9 AM</item>
+        <item>10 AM</item>
+        <item>11 AM</item>
+        <item>12 PM</item>
+        <item>1 PM</item>
+        <item>2 PM</item>
+        <item>3 PM</item>
+        <item>4 PM</item>
+        <item>5 PM</item>
+        <item>6 PM</item>
+        <item>7 PM</item>
+        <item>8 PM</item>
+        <item>9 PM</item>
+    </string-array>
+
+    <string-array name="addEventOptions">
+        <item>Elective lecture</item>
+        <item>Own event</item>
     </string-array>
 </resources>

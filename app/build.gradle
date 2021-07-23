@@ -1,13 +1,17 @@
 plugins {
-    id "de.develappers.versioning" version "1.0.16"
+    id "de.develappers.versioning" version "1.1.6"
 }
+
+apply plugin: 'de.develappers.versioning'
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
+apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -17,10 +21,17 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        versionName versioning.versionName
+        versionCode versioning.versionCode
     }
 
     signingConfigs {
         release
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -75,14 +86,17 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     //noinspection GradleCompatible
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.activity:activity-ktx:1.1.0"
 
     // https://github.com/realm/realm-android-adapters
     implementation 'io.realm:android-adapters:2.1.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
     // https://github.com/square/retrofit
     def retrofit2_version = '2.9.0'
@@ -98,18 +112,18 @@ dependencies {
 
     implementation 'com.github.msayan:tutorial-view:v1.0.10'
 
-    implementation 'com.google.firebase:firebase-core:17.4.2'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-core:18.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics:17.4.0'
 
     //Lottie
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Android Kotlin Core Extensions
-    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
 
     // Android Security
-    def security_version = '1.0.0-rc02'
+    def security_version = '1.1.0-alpha03'
     implementation "androidx.security:security-crypto:$security_version"
 
     // Android Lifecycle
@@ -121,7 +135,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
 
     // Navigation Components
-    def nav_version = "2.2.2"
+    def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -129,9 +143,10 @@ dependencies {
 
     // Material Dialogs
     def md_version = "3.1.0"
-    implementation "com.afollestad.material-dialogs:core:$md_version"
+    implementation "com.afollestad.material-dialogs:core:3.3.0"
     implementation "com.afollestad.material-dialogs:input:$md_version"
-    implementation "com.afollestad.material-dialogs:bottomsheets:$md_version"
+    implementation "com.afollestad.material-dialogs:bottomsheets:3.3.0"
+    implementation 'com.afollestad.material-dialogs:datetime:3.2.1'
 
     // Toasts with steroids
     def toast_version = "1.4.2"

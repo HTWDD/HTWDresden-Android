@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,9 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.databinding.FragmentSettingsBinding
+import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.viewmodels.fragments.SettingsViewModel
 import de.htwdd.htwdresden.utils.extensions.error
 import de.htwdd.htwdresden.utils.extensions.getViewModel
+import de.htwdd.htwdresden.utils.extensions.isElective
 import de.htwdd.htwdresden.utils.extensions.verbose
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 
@@ -92,12 +95,38 @@ class SettingsFragment : Fragment() {
             }
 
             onDeleteAllDataClick {
-                MaterialDialog(context!!).show {
+                MaterialDialog(requireContext()).show {
                     title(R.string.delete_all_saved_data)
                     message(R.string.delete_all_saved_data_question)
                     positiveButton(R.string.general_delete) {
                         cph.clear()
+                        deleteAllTimetable()
                         findNavController().navigate(R.id.onboarding_page_fragment)
+                    }
+                    negativeButton(R.string.general_cancel)
+                }
+            }
+
+            onResetEventsClick {
+                MaterialDialog(requireContext()).show {
+                    title(R.string.show_hidden_elective_lectures_title)
+                    message(R.string.show_hidden_elective_lecture_question)
+                    positiveButton(R.string.general_reset) {
+                        activity?.let {
+                            val getAllTimetables = getAllTimetables()
+                            getAllTimetables.forEach {
+                                it.isHidden = false
+                                //renaming of the settings button to "Anzeige der Wahlpflichtveranstaltungen zurücksetzen"
+                                if (it.type.isElective()){
+                                   deleteById(it.id)
+                                }
+                            }
+                            Toast.makeText(
+                                it,
+                                R.string.show_hidden_elective_lecture_message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                     negativeButton(R.string.general_cancel)
                 }

@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="lesson_type">
-        <item>Vorlesung</item>
-        <item>Praktikum</item>
-        <item>Übung</item>
-        <item>sonstiges</item>
+        <item>@string/lecture</item>
+        <item>@string/excersise</item>
+        <item>@string/practical</item>
+        <item>@string/block</item>
+        <item>@string/requested</item>
+        <item>@string/unknown</item>
     </string-array>
 
     <string-array name="lesson_week">
         <item>jede KW</item>
-        <item>ungerade KW</item>
         <item>gerade KW</item>
+        <item>ungerade KW</item>
+        <item>@string/one_time</item>
+    </string-array>
+
+    <string-array name="export_options">
+        <item>@string/export_option1</item>
+        <item>@string/export_option2</item>
+        <item>@string/export_option3</item>
     </string-array>
 
     <string-array name="autoExamsUpdateInterval">
@@ -51,13 +60,41 @@
         <item>#607D8B</item>
     </string-array>
 
+    <string-array name="typeColors">
+        <item>#ff5252</item>
+        <item>#4caf50</item>
+        <item>#90a4ae</item>
+        <item>#5c6bc0</item>
+    </string-array>
+
     <string-array name="days">
         <item>@string/monday</item>
         <item>@string/tuesday</item>
         <item>@string/wednesday</item>
         <item>@string/thursday</item>
         <item>@string/friday</item>
-        <item>@string/saturday</item>
-        <item>@string/sunday</item>
     </string-array>
+
+    <string-array name="hours">
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+    </string-array>
+
+    <string-array name="addEventOptions">
+        <item>Wahlpflichtveranstaltung</item>
+        <item>Eigene Veranstaltung</item>
+    </string-array>
+
 </resources>

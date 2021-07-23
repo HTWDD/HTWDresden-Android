@@ -1,12 +1,19 @@
 package de.htwdd.htwdresden.ui.views.activities
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.media.session.MediaButtonReceiver.handleIntent
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,7 +21,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableViewModel
 import de.htwdd.htwdresden.utils.extensions.dp
+import de.htwdd.htwdresden.utils.extensions.getViewModel
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,10 +52,16 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupNavigation()
-
+        handleIntent(intent)
         if (cph.needsOnboarding()) {
+            //without configChanges in Manifest the OnboardingFragment is recreated twice after orientation change
             navController.navigate(R.id.onboarding_page_fragment)
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
     }
 
     private fun setupNavigation() {
@@ -74,7 +89,6 @@ class MainActivity: AppCompatActivity() {
                 R.id.room_occupancy_detail_page_fragment -> {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
-
                 R.id.study_group_page_fragment,
                 R.id.login_page_fragment,
                 R.id.onboarding_page_fragment -> {
@@ -86,6 +100,17 @@ class MainActivity: AppCompatActivity() {
                         lp.height = 0
                         layoutParams = lp
                         invalidate()
+                    }
+                }
+                R.id.timetable_page_fragment, R.id.calender_add_event_fragment -> {
+                    window.statusBarColor = getColor(R.color.primary_dark)
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    appBarLayout.apply {
+                        val lp = layoutParams as CoordinatorLayout.LayoutParams
+                        lp.height = 140.dp
+                        layoutParams = lp
+                        invalidate()
+                        setExpanded(false, false)
                     }
                 }
                 else -> {
@@ -120,6 +145,14 @@ class MainActivity: AppCompatActivity() {
                 R.id.onboarding_page_fragment -> return
                 else -> super.onBackPressed()
             }
+        }
+    }
+
+    private fun handleIntent(intent: Intent) {
+
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
+            //use the query to search your data somehow
         }
     }
 

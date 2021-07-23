@@ -5,23 +5,20 @@ import de.htwdd.htwdresden.BR
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.interfaces.Modelable
-import de.htwdd.htwdresden.utils.extensions.format
-import de.htwdd.htwdresden.utils.extensions.toColor
-import de.htwdd.htwdresden.utils.extensions.toSHA256
+import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.StringHolder
 
 //-------------------------------------------------------------------------------------------------- Protocols
-interface Overviewable: Identifiable<OverviewableModels>
-interface OverviewableModels: Modelable
+interface Overviewable: Identifiable<Modelable>
 
 //-------------------------------------------------------------------------------------------------- Schedule Item
-class OverviewScheduleItem(private val item: Timetable): Overviewable {
+class OverviewScheduleItem(val item: Timetable, val addElective: Boolean = false): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_overview_schedule_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, OverviewableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.overviewScheduleModel to model)
         }
     }
@@ -34,6 +31,8 @@ class OverviewScheduleItem(private val item: Timetable): Overviewable {
         model.apply {
             name.set(item.name)
             setProfessor(item.professor)
+            studiumIntegrale.set(item.studiumIntegrale)
+            custom.set(item.createdByUser)
             type.set(with(item.type) {
                 when {
                     startsWith("v", true) -> sh.getString(R.string.lecture)
@@ -47,9 +46,21 @@ class OverviewScheduleItem(private val item: Timetable): Overviewable {
             beginTime.set(item.beginTime.format("HH:mm"))
             endTime.set(item.endTime.format("HH:mm"))
 
-            val colors = sh.getStringArray(R.array.timetableColors)
+           /* val colors = sh.getStringArray(R.array.timetableColors)
             val colorPosition = Integer.parseInt("${item.name} - ${item.professor}".toSHA256().subSequence(0..5).toString(), 16) % colors.size
+            lessonColor.set(colors[colorPosition].toColor())*/
+
+            val colors = sh.getStringArray(R.array.typeColors)
+            val colorPosition = item.type.getColorPositionForLessonType() % colors.size
             lessonColor.set(colors[colorPosition].toColor())
+
+            //if we're in the elective choice list
+            if (addElective){
+                showDay.set(true)
+                day.set(
+                    item.day.convertDayToString(sh)
+                )
+            }
 
             setRooms(item.rooms)
         }
@@ -66,7 +77,7 @@ class OverviewFreeDayItem: Overviewable {
     override val viewType: Int
         get() = R.layout.list_item_overview_free_day_bindable
 
-    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+    override val bindings: ArrayList<Pair<Int, Modelable>>
         get() = ArrayList()
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
@@ -81,7 +92,7 @@ class OverviewMensaItem(private val item: Meal): Overviewable {
         get() = R.layout.list_item_overview_mensa_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, OverviewableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.overviewMensaModel to model)
         }
     }
@@ -106,7 +117,7 @@ class OverviewGradeItem(private val grades: String, private val credits: Float):
         get() = R.layout.list_item_overview_grade_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, OverviewableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.overviewGradeModel to model)
         }
     }
@@ -132,13 +143,13 @@ class OverviewGradeItem(private val grades: String, private val credits: Float):
 }
 
 //-------------------------------------------------------------------------------------------------- Header Item
-class OverviewHeaderItem(private val header: String, private val subheader: String): Overviewable {
+class OverviewHeaderItem(private val header: String, private val subheader: String, private val subheaderVisible: Boolean? = true): Overviewable {
 
     override val viewType: Int
         get() = R.layout.list_item_overview_header_bindable
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, OverviewableModels>>().apply {
+        ArrayList<Pair<Int, Modelable>>().apply {
             add(BR.overviewHeaderModel to model)
         }
     }
@@ -153,6 +164,8 @@ class OverviewHeaderItem(private val header: String, private val subheader: Stri
         model.apply {
             header.set(this@OverviewHeaderItem.header)
             subheader.set(this@OverviewHeaderItem.subheader)
+            //bug 21007 average grades turned off
+            subheaderVisible.set(this@OverviewHeaderItem.subheaderVisible)
         }
     }
 
@@ -161,7 +174,8 @@ class OverviewHeaderItem(private val header: String, private val subheader: Stri
     override fun hashCode(): Int {
         var result = header.hashCode()
         result = 31 * result + subheader.hashCode()
-        return result
+        result = 31 * result + subheaderVisible.hashCode()
+                return result
     }
 }
 
@@ -171,7 +185,7 @@ class OverviewStudyGroupItem: Overviewable {
     override val viewType: Int
         get() = R.layout.list_item_overview_no_studygroup_bindable
 
-    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+    override val bindings: ArrayList<Pair<Int, Modelable>>
         get() = ArrayList()
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
@@ -185,7 +199,7 @@ class OverviewLoginItem: Overviewable {
     override val viewType: Int
         get() = R.layout.list_item_overview_no_login_bindable
 
-    override val bindings: ArrayList<Pair<Int, OverviewableModels>>
+    override val bindings: ArrayList<Pair<Int, Modelable>>
         get() = ArrayList()
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
@@ -194,7 +208,7 @@ class OverviewLoginItem: Overviewable {
 }
 
 //-------------------------------------------------------------------------------------------------- Schedule Model
-class OverviewScheduleModel: OverviewableModels {
+class OverviewScheduleModel: Modelable {
     val name            = ObservableField<String>()
     val professor       = ObservableField<String>()
     val type            = ObservableField<String>()
@@ -203,6 +217,10 @@ class OverviewScheduleModel: OverviewableModels {
     val rooms           = ObservableField<String>()
     val hasProfessor    = ObservableField<Boolean>()
     val hasRooms        = ObservableField<Boolean>()
+    val showDay        = ObservableField<Boolean>()
+    val day       = ObservableField<String>()
+    val studiumIntegrale        = ObservableField<Boolean>()
+    val custom       = ObservableField<Boolean>()
     val lessonColor     = ObservableField<Int>()
 
     fun setProfessor(professor: String?) {
@@ -217,19 +235,20 @@ class OverviewScheduleModel: OverviewableModels {
 }
 
 //-------------------------------------------------------------------------------------------------- Mensa Model
-class OverviewMensaModel: OverviewableModels {
+class OverviewMensaModel: Modelable {
     val name = ObservableField<String>()
 }
 
 //-------------------------------------------------------------------------------------------------- Grade Model
-class OverviewGradeModel: OverviewableModels {
+class OverviewGradeModel: Modelable {
     val grades = ObservableField<String>()
     val credits = ObservableField<String>()
 }
 
 
 //-------------------------------------------------------------------------------------------------- Header Model
-class OverviewHeaderModel: OverviewableModels {
+class OverviewHeaderModel: Modelable {
     val header      = ObservableField<String>()
     val subheader   = ObservableField<String>()
+    val subheaderVisible   = ObservableField<Boolean>()
 }

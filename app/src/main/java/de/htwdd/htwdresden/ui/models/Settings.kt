@@ -5,8 +5,10 @@ import android.content.Intent.*
 import android.net.Uri
 import android.util.Base64
 import androidx.databinding.ObservableField
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import de.htwdd.htwdresden.utils.extensions.debug
 import de.htwdd.htwdresden.utils.extensions.guard
+import de.htwdd.htwdresden.utils.extensions.handleCrashlyticsChange
 import de.htwdd.htwdresden.utils.extensions.runInUiThread
 import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
@@ -22,6 +24,7 @@ class SettingsModel {
     private var onImprintClosure: () -> Unit = {}
     private var onDataProtectionClosure: () -> Unit = {}
     private var onDeleteAllDataClosure: () -> Unit = {}
+    private var onResetEventsClosure: () -> Unit = {}
     private var onStudyGroupClosure: () -> Unit = {}
     private var onLoginClosure: () -> Unit = {}
 
@@ -77,6 +80,12 @@ class SettingsModel {
         onDeleteAllDataClosure = callback
     }
 
+    fun resetEvents() = onResetEventsClosure()
+
+    fun onResetEventsClick(callback: () -> Unit) {
+        onResetEventsClosure = callback
+    }
+
     fun changeStudyGroup() = onStudyGroupClosure()
 
     fun onStudyGroupClick(callback: () -> Unit) {
@@ -89,7 +98,10 @@ class SettingsModel {
 
     fun changeLogin() = onLoginClosure()
 
-    fun onCrashlytics(checked: Boolean) = cph.setCrashlytics(checked)
+    fun onCrashlytics(checked: Boolean) {
+        cph.setCrashlytics(checked)
+        handleCrashlyticsChange()
+    }
 
     private fun readStudyToken(token: String?): String {
         token.guard { return "" }

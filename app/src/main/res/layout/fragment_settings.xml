@@ -415,6 +415,45 @@
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/selector_list_item_click"
+                android:padding="@dimen/default_space"
+                android:onClick="@{() -> settingsModel.resetEvents()}">
+
+                <ImageView
+                    android:layout_width="@dimen/list_item_small_icon_size"
+                    android:layout_height="@dimen/list_item_small_icon_size"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_eye"
+                    app:tint="@color/black"
+                    android:layout_gravity="start|center"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    style="@style/TextAppearance.HTW.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="@string/show_hidden_elective_lectures"
+                    android:layout_gravity="start|center"/>
+
+
+                <ImageView
+                    style="@style/HTW.List.Item.Idicator"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="end|center"
+                    tools:ignore="ContentDescription" />
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
             <!-- Footer -->
             <TextView
                     android:layout_width="match_parent"

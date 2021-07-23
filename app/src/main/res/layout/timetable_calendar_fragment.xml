@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="timetableCalendarViewModel"
+            type="de.htwdd.htwdresden.ui.viewmodels.fragments.TimetableCalendarViewModel" />
+
+        <variable
+            name="clickListener"
+            type="de.htwdd.htwdresden.ui.views.fragments.ClickListener" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.views.fragments.TimetableCalendarFragment">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <GridView
+                    android:id="@+id/timetableTimestampsGrid"
+                    android:layout_width="40dp"
+                    android:layout_height="935dp"
+                    android:layout_marginEnd="1dp"
+                    android:numColumns="1"
+                    android:scrollbars="none">
+
+                </GridView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="935dp"
+                    app:lessons="@{timetableCalendarViewModel.items}"
+                    app:listener="@{clickListener}">
+
+                    <GridView
+                        android:id="@+id/timetableCalendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:horizontalSpacing="1dp"
+                        android:numColumns="5"
+                        android:verticalSpacing="1dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

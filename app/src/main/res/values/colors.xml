@@ -7,15 +7,17 @@
     <color name="light_blue">#0288D1</color>
 
     <color name="red">#FF2E00</color>
+    <color name="red_300">#ff5252</color>
     <color name="red_500">#f44336</color>
     <color name="timetable_red">#f56545</color>
     <color name="htw_orange">#f49e00</color>
-    <color name="timetable_organge">#ffbb22</color>
-    <color name="medium_organge">#ff9d14</color>
+    <color name="timetable_orange">#ffbb22</color>
+    <color name="medium_orange">#ff9d14</color>
 
     <color name="exam_results_green">#090</color>
     <color name="overview_header">#8BC34A</color>
     <color name="timetable_green">#bbe535</color>
+    <color name="green_300">#4caf50</color>
     <color name="green_500">#4caf50</color>
 
     <color name="black">#000</color>
@@ -26,8 +28,14 @@
     <color name="lighter_middle_gray">#99A5A5</color>
     <color name="gray">#b5c5c5</color>
     <color name="light_gray">#efefef</color>
+    <color name="blue_grey_300">#90a4ae</color>
     <color name="text_input_background">#E7E7E7</color>
     <color name="app_background">#e5e5e5</color>
     <color name="light_grey">#EFEFEF</color>
     <color name="white">#FFF</color>
+
+    <color name="transparent">#00FFFFFF</color>
+
+    <color name="indigo_400">#5c6bc0</color>
+    <color name="light_black">#383838</color>
 </resources>

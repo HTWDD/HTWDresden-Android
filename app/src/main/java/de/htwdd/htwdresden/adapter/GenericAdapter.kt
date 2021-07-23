@@ -17,7 +17,7 @@ import io.realm.OrderedCollectionChangeSet
 
 //-------------------------------------------------------------------------------------------------- Types
 typealias Overviews             = ArrayList<Overviewable>
-typealias Timetables            = ArrayList<Timetableable>
+typealias Timetables            = ArrayList<Identifiable<Modelable>>
 typealias Grades                = ArrayList<Gradable>
 typealias Exams                 = ArrayList<Examable>
 typealias Occupancies           = ArrayList<RoomOccupancable>

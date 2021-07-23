@@ -47,17 +47,39 @@ class OverviewViewModel: ViewModel() {
             .timetableEndpoint
             .timetable(auth.group, auth.major, auth.studyYear)
             .map { it.map { jTimetable -> Timetable.from(jTimetable) } }
+            .map { it.sortedWith(compareBy { c -> c }) }
+            .map {
+                val hiddenEventsIds = getHiddenTimetables()
+                deleteAllIfNotCreatedByUserOrElective()
+                it.forEach { timetable ->
+                    if(hiddenEventsIds.contains(timetable.id)) timetable.isHidden = true
+                    TimetableRealm().update(timetable) {}
+                }
+                getNotHiddenTimetables()
+            }
             .map { it.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) } }
             .map { it.sortedWith(compareBy { c -> c }) }
             .map {
                 result.apply {
-                    addAll(it.map { OverviewScheduleItem(it) })
+                    addAll(it.map { TimetableItem(it) })
                     if (it.isEmpty()) {
                         add(OverviewFreeDayItem())
                     }
                 }
             }
-            .onErrorReturn { Overviews() }
+            .onErrorReturn { Overviews().apply {
+                val timetablesFromDB = getTimetablesFromDb()
+                if(timetablesFromDB.isNotEmpty()) {
+                    add(OverviewHeaderItem(sh.getString(R.string.navi_timetable), Date().format("EEEE, dd. MMMM")))
+                    addAll(getTimetablesFromDb())
+                }
+            } }
+    }
+
+    private fun getTimetablesFromDb(): List<TimetableItem> {
+        val timetables = getNotHiddenTimetables()
+        return if(timetables.isEmpty()) emptyList()
+        else timetables.filter { timetable -> timetable.lessonDays.contains(Date().format("MM-dd-yyyy")) }.sortedWith(compareBy { c -> c }).map { TimetableItem(it) }
     }
 
     private fun requestMealsForToday(): Observable<Overviews> {
@@ -80,7 +102,8 @@ class OverviewViewModel: ViewModel() {
     @Suppress("UNCHECKED_CAST")
     private fun requestGrades(): Observable<Overviews> {
         val result = Overviews().apply {
-            add(OverviewHeaderItem(sh.getString(R.string.navi_exams), sh.getString(R.string.exams_grade_average, 0.0)))
+            //bug 21007 average grades turned off
+            add(OverviewHeaderItem(sh.getString(R.string.navi_exams), sh.getString(R.string.exams_grade_average, 0.0), false))
         }
 
         val auth = CryptoSharedPreferencesHolder.instance.getAuthToken()?.nullWhenEmpty ?: return Observable.defer {
@@ -108,6 +131,7 @@ class OverviewViewModel: ViewModel() {
                 val holeCredits = pair.second.map { it.credits }.sum()
                 val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
                 val avg =  if (holeGrades > 0) { holeGrades / holeCredits } else { 0f }
+                //bug 21007 average grades turned off
                 val headerItem = result[0] as OverviewHeaderItem
                 headerItem.credits = sh.getString(R.string.exams_grade_average, avg)
                 result.add(OverviewGradeItem(pair.second.filter { it.grade != null }.size.toString(), holeCredits))

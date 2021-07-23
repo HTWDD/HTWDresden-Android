@@ -91,6 +91,85 @@ public class DatabaseMigrations implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 6) {
+            schema.remove("Meal");
+            schema.create("Meal")
+                    .addField("prices", Prices.class)
+                    .addField("category", String.class)
+                    .addField("name", String.class)
+                    .addRealmListField("notes", String.class)
+                    .addField("date", Date.class)
+                    .addField("id", long.class)
+                    .addField("mensaId", short.class);
+
+            schema.remove("Canteen");
+            schema.create("Canteen")
+                    .addField("id", int.class)
+                    .addField("city", String.class)
+                    .addField("name", String.class)
+                    .addField("address", String.class)
+                    .addField("isFav", Boolean.class)
+                    .addRealmListField("coordinates", Float.class);
+
+            schema.create("Prices")
+                    .addField("students", Double.class)
+                    .addField("employees", Double.class);
+            oldVersion++;
+        }
+
+        if (oldVersion == 7) {
+            schema.create("TimetableRealm")
+                    .addField("id", String.class)
+                    .addField("moduleId", String.class)
+                    .addField("lessonTag", String.class)
+                    .addField("name", String.class)
+                    .addField("day", Long.class)
+                    .addField("beginTime", Date.class)
+                    .addField("endTime", Date.class)
+                    .addField("week", Long.class)
+                    .addRealmListField("weeksOnly", Long.class)
+                    .addField("professor", String.class)
+                    .addRealmListField("rooms", String.class)
+                    .addField("lastChanged", String.class)
+                    .addRealmListField("lessonDays", String.class)
+                    .addField("createdByUser", Boolean.class)
+                    .addField("exactDay", Date.class)
+                    .addField("weekRotation", String.class);
+            oldVersion++;
+        }
+
+        if (oldVersion == 8) {
+            RealmObjectSchema timetableRealmSchema = schema.get("TimetableRealm");
+            if(timetableRealmSchema!=null) {
+                timetableRealmSchema.addField("isHidden", Boolean.class);
+            }
+            schema.create("CurrentSemesterRealm")
+                    .addField("startDate", Date.class)
+                    .addField("endDate", Date.class)
+                    .addRealmListField("freeDays", Date.class);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 9) {
+            RealmObjectSchema timetableRealmSchema = schema.get("TimetableRealm");
+            if(timetableRealmSchema!=null) {
+                timetableRealmSchema
+                        .addField("studiumIntegrale", Boolean.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 10) {
+            RealmObjectSchema timetableRealmSchema = schema.get("TimetableRealm");
+            if(timetableRealmSchema!=null) {
+                timetableRealmSchema
+                        .addField("elective", Boolean.class);
+            }
+            oldVersion++;
+        }
+
+
         // weeksOnly in primitiven Datentyp umwandeln
         // TODO Wartet auf Umsetzung https://github.com/realm/realm-java/issues/5361
 //        lessonUserSchema.addRealmListField("weeksOnly_tmp", Integer.class)

@@ -5,7 +5,11 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.GridView
 import androidx.annotation.AnimRes
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import de.htwdd.htwdresden.R
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
@@ -18,8 +22,8 @@ fun View.show() {
     }
 }
 
-fun View.hide() {
-    if (visibility != GONE) {
+fun View.hide(condition: Boolean = true) {
+    if (condition && visibility != GONE) {
         visibility = GONE
     }
 }
@@ -40,6 +44,36 @@ fun View.toggle(condition: Boolean): View {
         } else {
             hide()
         }
+    }
+}
+
+fun CardView.setColorForLessonType(lessonType: String) {
+    setCardBackgroundColor(ContextCompat.getColor(context, getColorForLessonType(lessonType)))
+}
+
+fun Any.getColorForLessonType(lessonType: String) = with(lessonType) {
+    when {
+        startsWith('V', true) -> R.color.red_300
+        startsWith('Ü', true) -> R.color.green_300
+        startsWith('B', true) -> R.color.blue_grey_300
+        else -> R.color.indigo_400
+    }
+}
+
+fun String.getColorPositionForLessonType(): Int {
+    return when {
+        this.startsWith('V', true) -> 0
+        this.startsWith('Ü', true) -> 1
+        this.startsWith('B', true) -> 2
+        else -> 3
+    }
+}
+
+fun ConstraintLayout.configureForBreak(rowNumber: Int) {
+    layoutParams = when(rowNumber) {
+        6 -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 120)
+        12, 14 -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 30)
+        else -> ConstraintLayout.LayoutParams(GridView.AUTO_FIT, 60)
     }
 }
 

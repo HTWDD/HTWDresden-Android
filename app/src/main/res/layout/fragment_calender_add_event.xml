@@ -1,0 +1,598 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="dialogInterface"
+            type="de.htwdd.htwdresden.ui.views.fragments.DialogInterface" />
+
+        <variable
+            name="calenderAddEventViewModel"
+            type="de.htwdd.htwdresden.ui.viewmodels.fragments.CalenderAddEventViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_grey">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="4dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="@dimen/card_view_corner_radius"
+                app:cardElevation="@dimen/card_view_elevation"
+                app:cardMaxElevation="@dimen/card_view_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:paddingBottom="6dp"
+                        android:text="@string/timetable_edit_label_general"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lessonName_hint"
+                            app:srcCompat="@drawable/ic_lessonname"
+                            app:tint="@color/light_black" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventName"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/timetable_edit_lessonName_hint"
+                                android:enabled="@{calenderAddEventViewModel.isEditable()}"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textColor="@drawable/input_layout_color_states"
+                                android:text="@={calenderAddEventViewModel.lessonName}"
+                                android:textSize="16sp"
+                                app:error="@{calenderAddEventViewModel.lessonNameError}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lessonTag_hint"
+                            app:srcCompat="@drawable/ic_abbrevetion"
+                            app:tint="@color/light_black" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventShortcut"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/timetable_edit_lessonTag_hint"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
+                                android:enabled="@{calenderAddEventViewModel.isEditable()}"
+                                android:inputType="text"
+                                android:textColor="@drawable/input_layout_color_states"
+                                android:maxLines="1"
+                                android:text="@={calenderAddEventViewModel.lessonTag}"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lessonProf_hint"
+                            app:srcCompat="@drawable/ic_doctor"
+                            app:tint="@color/light_black" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventProfessor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/timetable_edit_lessonProf_hint"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
+                                android:enabled="@{calenderAddEventViewModel.isEditable()}"
+                                android:inputType="text"
+                                android:textColor="@drawable/input_layout_color_states"
+                                android:maxLines="1"
+                                android:text="@={calenderAddEventViewModel.lessonProf}"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{() -> dialogInterface.showDialog(0)}">
+
+                            <TextView
+                                android:id="@+id/eventLessonType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:layout_marginTop="6dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/timetable_edit_lessonType"
+                                android:onClick="@{() -> dialogInterface.showDialog(0)}"
+                                android:text="@{calenderAddEventViewModel.lessonType}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="end|center_horizontal"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_chevron_down"
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
+                                app:tint="@color/middle_gray" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lessonRoom"
+                            app:srcCompat="@drawable/ic_room"
+                            app:tint="@color/light_black" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/eventLessonRoom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/timetable_edit_lessonRoom"
+                                android:inputType="text"
+                                android:backgroundTint="@{calenderAddEventViewModel.isEditable()? @color/black: @color/transparent }"
+                                android:textColor="@drawable/input_layout_color_states"
+                                android:enabled="@{calenderAddEventViewModel.isEditable()}"
+                                android:maxLines="1"
+                                android:text="@={calenderAddEventViewModel.lessonRoom}"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="@dimen/card_view_corner_radius"
+                app:cardElevation="@dimen/card_view_elevation"
+                app:cardMaxElevation="@dimen/card_view_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:paddingBottom="6dp"
+                        android:text="@string/timetable_edit_label_time"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lesson_week_rotation"
+                            app:srcCompat="@drawable/ic_calendar"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{() -> dialogInterface.showDialog(1)}">
+
+                            <TextView
+                                android:id="@+id/eventLessonRotation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:paddingStart="0dp"
+                                android:paddingEnd="3dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/timetable_edit_lesson_week_rotation"
+                                android:onClick="@{() -> dialogInterface.showDialog(1)}"
+                                android:text="@{calenderAddEventViewModel.lessonRotation}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:error="@{calenderAddEventViewModel.lessonRotationError}" />
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="end|center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginEnd="6dp"
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
+                                android:src="@drawable/ic_chevron_down"
+                                app:tint="@color/middle_gray" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        app:goneUnless="@{calenderAddEventViewModel.lessonWeekDayVisible}">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lesson_week_day"
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{() -> dialogInterface.showDialog(2)}">
+
+                            <TextView
+                                android:id="@+id/eventLessonWeekDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:paddingStart="0dp"
+                                android:paddingEnd="3dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/timetable_edit_lesson_week_day"
+                                android:onClick="@{() -> dialogInterface.showDialog(2)}"
+                                android:text="@{calenderAddEventViewModel.lessonWeekDay}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:error="@{calenderAddEventViewModel.lessonWeekDayError}" />
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="end|center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginEnd="6dp"
+                                app:goneUnless="@{calenderAddEventViewModel.isEditable()}"
+                                android:src="@drawable/ic_chevron_down"
+                                app:tint="@color/middle_gray" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        app:goneUnless="@{!calenderAddEventViewModel.lessonWeekDayVisible}">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lesson_week_day"
+                            app:srcCompat="@drawable/ic_lecture"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{()->dialogInterface.showDatePicker()}">
+
+                            <TextView
+                                android:id="@+id/eventLessonDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/timetable_edit_lessonDay"
+                                android:onClick="@{()->dialogInterface.showDatePicker()}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="6dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:onClick="@{()->dialogInterface.showDatePicker()}"
+                                android:text="@{calenderAddEventViewModel.lessonDay}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                tools:text="22.10.2021" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:onClick="@{()->dialogInterface.showTimePicker(true)}"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lesson_block"
+                            app:srcCompat="@drawable/ic_lessonblock"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{()->dialogInterface.showTimePicker(true)}">
+
+                            <TextView
+                                android:id="@+id/eventLessonStart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="4dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/start"
+                                android:onClick="@{()->dialogInterface.showTimePicker(true)}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="6dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:onClick="@{()->dialogInterface.showTimePicker(true)}"
+                                android:text="@{calenderAddEventViewModel.lessonStart}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                tools:text="08:00" />
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="16dp"
+                        android:onClick="@{()->dialogInterface.showTimePicker(false)}"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/space_between_table_rows"
+                            android:contentDescription="@string/timetable_edit_lesson_block"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/ic_lessonblock"
+                            app:tint="@color/light_black" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                            android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                            android:onClick="@{()->dialogInterface.showTimePicker(false)}">
+
+                            <TextView
+                                android:id="@+id/eventLessonEnd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="6dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:hint="@string/end"
+                                android:onClick="@{()->dialogInterface.showTimePicker(false)}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="6dp"
+                                android:clickable="@{calenderAddEventViewModel.isEditable()}"
+                                android:focusable="@{calenderAddEventViewModel.isEditable()}"
+                                android:foregroundGravity="center"
+                                android:onClick="@{()->dialogInterface.showTimePicker(false)}"
+                                android:text="@{calenderAddEventViewModel.lessonEnd}"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                tools:text="09:00" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/required"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/fill_all_fields"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    app:goneUnless="@{calenderAddEventViewModel.errorViewVisible}" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

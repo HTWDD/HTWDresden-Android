@@ -12,9 +12,14 @@ import de.htwdd.htwdresden.databinding.TemplateManagementTimesBindableBinding
 import de.htwdd.htwdresden.interfaces.Identifiable
 import de.htwdd.htwdresden.interfaces.Modelable
 import de.htwdd.htwdresden.utils.extensions.format
+import de.htwdd.htwdresden.utils.extensions.getDaysBetween
 import de.htwdd.htwdresden.utils.extensions.toDate
 import de.htwdd.htwdresden.utils.holders.ContextHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,6 +66,51 @@ data class JTime (
     val begin: String,
     val end: String
 )
+
+class CurrentSemester(
+    val startDate: Date? = null,
+    val endDate: Date? = null,
+    val freeDays: ArrayList<Date> = ArrayList()
+) {
+    companion object {
+        fun fromDB(currentSemesterRealm: CurrentSemesterRealm?) = with(currentSemesterRealm) {
+            if(this!=null) CurrentSemester(startDate, endDate, freeDays.toCollection(ArrayList())) else null
+        }
+    }
+
+    override fun toString(): String {
+        return "Startdate: " + this.startDate.toString() +  "Enddate: " + endDate.toString() + "Freedays: " + freeDays.size
+    }
+}
+
+open class CurrentSemesterRealm(
+    var startDate: Date? = null,
+    var endDate: Date? = null,
+    var freeDays: RealmList<Date> = RealmList(),
+    @PrimaryKey
+    var id: Int=0
+) : RealmObject() {
+    companion object {
+        fun fromSemesterPlan(plan: SemesterPlan) = with(plan) {
+            val freeDays = ArrayList<Date>()
+            plan.freeDays.forEach {
+                freeDays.addAll(it.beginDay.getDaysBetween(it.endDay))
+            }
+            CurrentSemesterRealm(plan.period.beginDay, plan.examsPeriod.beginDay, RealmList<Date>().apply {addAll(freeDays)})
+        }
+    }
+}
+
+fun Any.createNewCurrentSemester(plan: SemesterPlan) {
+    val realm = Realm.getDefaultInstance()
+    realm.beginTransaction()
+    realm.delete(CurrentSemesterRealm::class.java)
+    val a = CurrentSemesterRealm.fromSemesterPlan(plan)
+    val currentSemester = realm.copyToRealmOrUpdate(a)
+    realm.commitTransaction()
+}
+
+fun Any.getCurrentSemester() : CurrentSemesterRealm? = Realm.getDefaultInstance().where(CurrentSemesterRealm::class.java).findFirst()
 
 //-------------------------------------------------------------------------------------------------- Concrete Models
 class SemesterPlan(

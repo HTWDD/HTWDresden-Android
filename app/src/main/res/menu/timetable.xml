@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/menu_today"
-            android:checkable="true"
-            android:checked="true"
-            app:showAsAction="ifRoom"
-            android:title="@string/mensa_tab_today"/>
+        android:id="@+id/menu_add_event"
+        android:checkable="true"
+        android:title="@string/add_event"
+        android:icon="@drawable/ic_add_white"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_calendar"
+        android:checkable="true"
+        android:title="@string/timetable_tab_calendar"
+        android:icon="@drawable/ic_calendar"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_today"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/mensa_tab_today"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_export"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/ic_export"
+        android:title="@string/export"
+        app:showAsAction="ifRoom" />
 </menu>

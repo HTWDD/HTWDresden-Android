@@ -42,20 +42,30 @@ class GradesViewModel: ViewModel() {
             .map { pair ->
                 val result = Grades()
 
-                // hole average & credits
-                val holeCredits = pair.second.map { it.credits }.sum()
-                val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
-                result.add(GradeAverageItem(try { if (holeGrades > 0) { holeGrades / holeCredits } else { 0f } } catch (e: Exception) { 0f }, holeCredits))
+                if (pair.second.isNotEmpty()){
+                    // hole average & credits
+                    val holeCredits = pair.second.map { it.credits }.sum()
+                    val holeGrades  = pair.second.map { it.credits * (it.grade?.div(100f) ?: 0f) }.sum()
 
-                // flatten list and converting to header and grade item
-                pair.first.forEach { key ->
-                    val gradeValues = pair.second.filter { f -> f.semester == key }.sortedWith(compareBy { it })
-                    val credits = gradeValues.map { it.credits }.sum()
-                    val grades = gradeValues.map { it.credits *  (it.grade?.div(100f) ?: 0f) }.sum()
-                    val gradeAverage = try { if (grades > 0) { grades / credits } else { 0f } } catch (e: Exception) { 0f }
-                    result.add(GradeHeaderItem(getSemester(key), "${sh.getString(R.string.exams_grade_average, gradeAverage)} (${sh.getString(R.string.exams_stats_count_credits, credits)})"))
-                    result.addAll(gradeValues.map { v -> GradeItem(v) })
+                    //bug 21007 average grades turned off
+                    result.add(GradeAverageItem(try { if (holeGrades > 0) { holeGrades / holeCredits } else { 0f } } catch (e: Exception) { 0f }, holeCredits))
+
+                    // flatten list and converting to header and grade item
+                    pair.first.forEach { key ->
+                        val gradeValues = pair.second.filter { f -> f.semester == key }.sortedWith(compareBy { it })
+                        val credits = gradeValues.map { it.credits }.sum()
+                        val grades = gradeValues.map { it.credits *  (it.grade?.div(100f) ?: 0f) }.sum()
+                        val gradeAverage = try { if (grades > 0) { grades / credits } else { 0f } } catch (e: Exception) { 0f }
+                        //bug 21007 average grades turned off
+                        //result.add(GradeHeaderItem(getSemester(key), "${sh.getString(R.string.exams_grade_average, gradeAverage)} (${sh.getString(R.string.exams_stats_count_credits, credits)})"))
+                        result.add(GradeHeaderItem(getSemester(key),
+                            sh.getString(R.string.exams_stats_count_credits, credits)
+                        ))
+                        result.addAll(gradeValues.map { v -> GradeItem(v) })
+                    }
+                    result.add(GradeWarningItem())
                 }
+
                 result
             }
     }

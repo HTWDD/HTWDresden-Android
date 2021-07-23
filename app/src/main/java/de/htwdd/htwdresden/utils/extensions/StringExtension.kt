@@ -1,6 +1,8 @@
 package de.htwdd.htwdresden.utils.extensions
 
 import android.graphics.Color
+import de.htwdd.htwdresden.R
+import de.htwdd.htwdresden.utils.holders.StringHolder
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,3 +52,21 @@ val String.uid: String
     }.joinToString("")
 
 fun String.toColor() = Color.parseColor(if (startsWith("#")) { this } else { "#$this" })
+
+val String.fullLessonType: String
+    get() {
+        val stringHolder = StringHolder.instance
+        return (with(this) {
+            when {
+                startsWith("v", true) -> stringHolder.getString(R.string.lecture)
+                startsWith("ü", true) -> stringHolder.getString(R.string.excersise)
+                startsWith("p", true) -> stringHolder.getString(R.string.practical)
+                startsWith("b", true) -> stringHolder.getString(R.string.block)
+                startsWith("r", true) -> stringHolder.getString(R.string.requested)
+                else -> stringHolder.getString(R.string.unknown)
+            }
+        })
+    }
+
+fun String.isElective() = this.contains("w") || this.contains("Modul(SI)")
+

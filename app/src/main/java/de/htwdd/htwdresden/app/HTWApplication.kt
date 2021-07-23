@@ -2,13 +2,12 @@ package de.htwdd.htwdresden.app
 
 import android.app.Application
 import android.content.IntentFilter
-import com.crashlytics.android.Crashlytics
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.heinrichreimer.canteenbalance.cardreader.CardBalance
 import de.htwdd.htwdresden.classes.DatabaseMigrations
 import de.htwdd.htwdresden.receivers.MensaCardReceiver
+import de.htwdd.htwdresden.utils.extensions.handleCrashlyticsChange
 import de.htwdd.htwdresden.utils.holders.*
-import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -33,7 +32,7 @@ class HTWApplication: Application() {
         Realm.init(this)
         val realmConfiguration = RealmConfiguration.Builder()
             .migration(DatabaseMigrations())
-            .schemaVersion(6)
+            .schemaVersion(7)
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(realmConfiguration)
@@ -48,10 +47,7 @@ class HTWApplication: Application() {
     }
 
     private fun initializeGoogleServices() {
-        val cph = CryptoSharedPreferencesHolder.instance
-        if (cph.hasCrashlytics()) {
-            Fabric.with(this, Crashlytics())
-        }
+        handleCrashlyticsChange()
     }
 
     override fun onTerminate() {
