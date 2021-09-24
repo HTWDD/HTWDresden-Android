@@ -156,7 +156,7 @@ class TimetableViewModel: ViewModel() {
         val result = _electives.filter {
             it.name.toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)) ||
                     it.day.convertDayToString(sh).toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)) ||
-                    it.studiumIntegrale && "Studium Integrale".contains(string.toLowerCase(Locale.ROOT)) ||
+                    it.studiumIntegrale && "Studium Integrale".toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)) ||
                     it.professor?.toLowerCase(Locale.ROOT)?.contains(string.toLowerCase(Locale.ROOT)) == true
         }
         return result.map {OverviewScheduleItem(it, true)}
