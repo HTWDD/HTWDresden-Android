@@ -20,6 +20,7 @@ class StudyGroupViewModel: ViewModel() {
             .studyGroups()
             .runInThread(Schedulers.io())
             .map { jItems -> jItems.map { StudyYear.from(it) } }
+            .onErrorReturn { emptyList<StudyYear>() }
     }
 
 
