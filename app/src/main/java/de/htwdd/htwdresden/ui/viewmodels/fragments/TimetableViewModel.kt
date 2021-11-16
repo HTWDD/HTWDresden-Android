@@ -70,6 +70,7 @@ class TimetableViewModel: ViewModel() {
                 val result = Timetables()
                 it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
                     result.add(dateStringToHeaderItem(dateKey))
+                    //TODO: if in a list of holidays from semesterplan.json, add a holiday timetable item
                     result.addAll(it.second.filter { p -> p.lessonDays.contains(dateKey) }
                         .sortedBy { it.beginTime }
                         .map { filteredItem -> TimetableItem(filteredItem) })
