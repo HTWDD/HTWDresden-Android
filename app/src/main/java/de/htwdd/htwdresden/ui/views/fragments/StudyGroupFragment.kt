@@ -13,9 +13,7 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.list.listItems
 import de.htwdd.htwdresden.R
 import de.htwdd.htwdresden.interfaces.Swipeable
-import de.htwdd.htwdresden.ui.models.StudyCourse
-import de.htwdd.htwdresden.ui.models.StudyGroup
-import de.htwdd.htwdresden.ui.models.StudyYear
+import de.htwdd.htwdresden.ui.models.*
 import de.htwdd.htwdresden.ui.viewmodels.fragments.StudyGroupViewModel
 import de.htwdd.htwdresden.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_study_group.*
@@ -64,6 +62,7 @@ class StudyGroupFragment: Fragment(R.layout.fragment_study_group), Swipeable {
                 Handler().postDelayed({
                     viewModel.saveToken("${year?.studyYear}:${major?.studyCourse}:${newValue.studyGroup}:${newValue.name}")
                     if (arguments?.getBoolean(ARG_IS_BOARDING) == false) {
+                        Timetable.deleteAllTimetable()
                         findNavController().popBackStack()
                     } else {
                         delegate?.moveNext()
