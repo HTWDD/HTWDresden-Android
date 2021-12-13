@@ -49,7 +49,7 @@ class GradesViewModel: ViewModel() {
 
                     //bug 21007 average grades turned off
                     result.add(GradeAverageItem(try { if (holeGrades > 0) { holeGrades / holeCredits } else { 0f } } catch (e: Exception) { 0f }, holeCredits))
-
+                    result.add(GradeWarningItem())
                     // flatten list and converting to header and grade item
                     pair.first.forEach { key ->
                         val gradeValues = pair.second.filter { f -> f.semester == key }.sortedWith(compareBy { it })
@@ -63,7 +63,7 @@ class GradesViewModel: ViewModel() {
                         ))
                         result.addAll(gradeValues.map { v -> GradeItem(v) })
                     }
-                    result.add(GradeWarningItem())
+
                 }
 
                 result
