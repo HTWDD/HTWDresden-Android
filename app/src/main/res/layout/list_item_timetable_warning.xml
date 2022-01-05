@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="gradeWarningModel"
-            type="de.htwdd.htwdresden.ui.models.GradeWarningModel" />
+            name="timetableWarningModel"
+            type="de.htwdd.htwdresden.ui.models.TimetableWarningModel" />
     </data>
 
 
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_space"
                 android:gravity="center"
-                android:text="@{gradeWarningModel.text}"
+                android:text="@{timetableWarningModel.text}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

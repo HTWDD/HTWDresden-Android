@@ -293,16 +293,24 @@ class GradeAverageItem(private val gradeAverage: Float, private val credits: Flo
     override fun hashCode() = gradeAverage.hashCode() * 37 + credits.hashCode() * 31
 }
 //-------------------------------------------------------------------------------------------------- Grade Warning
-class GradeWarningItem(): Gradable {
+class GradeWarningItem(private val text: String): Gradable {
+
+    private val model = GradeWarningModel()
 
     override val viewType: Int
         get() = R.layout.list_item_grade_warning
 
     override val bindings by lazy {
-        ArrayList<Pair<Int, GradableModels>>().apply {}
+        ArrayList<Pair<Int, GradableModels>>().apply {
+            add(BR.gradeWarningModel to model)
+        }
     }
 
-    private val model = GradeWarningModel()
+    init {
+        model.apply {
+            text.set(this@GradeWarningItem.text)
+        }
+    }
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
     override fun hashCode() = super.hashCode()
@@ -342,10 +350,11 @@ class GradeHeaderModel: GradableModels {
     val subheader   = ObservableField<String>()
 }
 
+class GradeWarningModel: GradableModels {
+    val text      = ObservableField<String>()
+}
+
 class GradeAverageModel: GradableModels {
     val gradeAverage = ObservableField<String>()
     val credits      = ObservableField<String>()
-}
-
-class GradeWarningModel: GradableModels {
 }

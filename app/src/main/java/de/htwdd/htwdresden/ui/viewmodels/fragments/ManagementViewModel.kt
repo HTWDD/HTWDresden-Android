@@ -22,17 +22,21 @@ class ManagementViewModel: ViewModel() {
     fun request(): Observable<Managements> {
         return Observables.combineLatest(
             requestSemesterPlan().runInThread(),
-            loadManagement().runInThread()) { s, m ->
+            loadStudentAdministration().runInThread(),
+            loadStura().runInThread(),
+            loadPrinicipalOffice().runInThread()) { s, m1, m2, m3 ->
             Managements().apply {
                 addAll(s)
-                addAll(m)
+                addAll(m1)
+                addAll(m2)
+                addAll(m3)
             }
         }.debug()
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun requestSemesterPlan(): Observable<Managements> {
-        return RestApi.managementEndpoint.semesterPlan()
+        return RestApi.docsEndpoint.semesterPlan(Locale.getDefault().language)
             .runInThread(Schedulers.io())
             .map { jSemesterPlans -> jSemesterPlans.map { jSemesterPlan -> SemesterPlan.from(jSemesterPlan) } }
             .map { semesterPlans -> semesterPlans.filter { Date() in it.period.beginDay..it.period.endDay } }
@@ -41,13 +45,26 @@ class ManagementViewModel: ViewModel() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun loadManagement(): Observable<Managements> {
-        return Observable.defer {
-            val result = Gson().fromJson(rh.readJsonData("Management.json"), Array<JManagement>::class.java)
-            Observable.just(result)
-        }
+    private fun loadPrinicipalOffice(): Observable<Managements> {
+        return RestApi.docsEndpoint.principalExamOffice(Locale.getDefault().language)
         .runInThread()
-        .map { jManagements -> jManagements.map { jManagement -> Management.from(jManagement) } }
-        .map { managements -> managements.map { ManagementItem(it) }.toCollection(ArrayList()) as Managements }
+        .map { jManagement -> Management.from(jManagement) }
+        .map { managements -> arrayListOf(ManagementItem(managements,2)) as Managements }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun loadStura(): Observable<Managements> {
+        return RestApi.docsEndpoint.sturaHTW(Locale.getDefault().language)
+            .runInThread()
+            .map { jManagement -> Management.from(jManagement) }
+            .map { managements -> arrayListOf(ManagementItem(managements,3)) as Managements }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun loadStudentAdministration(): Observable<Managements> {
+        return RestApi.docsEndpoint.administration(Locale.getDefault().language)
+            .runInThread()
+            .map { jManagement -> Management.from(jManagement) }
+            .map { managements -> arrayListOf(ManagementItem(managements,1)) as Managements }
     }
 }

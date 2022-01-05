@@ -256,7 +256,7 @@ class CalenderAddEventViewModel(private val lessonId: String) : ViewModel() {
     }
 
     private suspend fun createWeeksOnly(): ArrayList<Long> {
-        val semesterData = runCatching { RestApi.managementEndpoint.semesterPlanSuspend() }.getOrNull()
+        val semesterData = runCatching { RestApi.docsEndpoint.semesterPlanSuspend() }.getOrNull()
         val semesterPlan = semesterData?.map { SemesterPlan.from(it) }?.firstOrNull { Date() in it.period.beginDay..it.period.endDay }
         if(semesterPlan!=null) {
             createNewCurrentSemester(semesterPlan)

@@ -231,6 +231,30 @@ open class TimetableRealm(
     }
 }
 
+//-------------------------------------------------------------------------------------------------- Grade Warning
+class TimetableWarningItem(private val text: String): Overviewable {
+
+    private val model = TimetableWarningModel()
+
+    override val viewType: Int
+        get() = R.layout.list_item_timetable_warning
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, Modelable>>().apply {
+            add(BR.timetableWarningModel to model)
+        }
+    }
+
+    init {
+        model.apply {
+            text.set(this@TimetableWarningItem.text)
+        }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+    override fun hashCode() = super.hashCode()
+}
+
 //-------------------------------------------------------------------------------------------------- Item
 class TimetableItem(val item: Timetable): Overviewable {
 
@@ -354,6 +378,11 @@ class TimetableModel: Modelable {
         hasRooms.set(!list.isNullOrEmpty())
         rooms.set(list.joinToString(", "))
     }
+}
+
+
+class TimetableWarningModel: Modelable {
+    val text      = ObservableField<String>()
 }
 
 class TimetableHeaderModel: Modelable {
