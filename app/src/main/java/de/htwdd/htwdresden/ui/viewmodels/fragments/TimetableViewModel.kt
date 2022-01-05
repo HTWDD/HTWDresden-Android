@@ -11,6 +11,7 @@ import de.htwdd.htwdresden.utils.extensions.*
 import de.htwdd.htwdresden.utils.holders.CryptoSharedPreferencesHolder
 import de.htwdd.htwdresden.utils.holders.StringHolder
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,6 +69,9 @@ class TimetableViewModel: ViewModel() {
         }
             .map {                                                                                  // Pair -> Single List -> Lesson Days[ Lessons ]
                 val result = Timetables()
+                if (requestNotes().blockingSingle().isNotEmpty()){
+                    result.add(TimetableWarningItem(requestNotes().blockingSingle()))
+                }
                 it.first.sortedWith(compareBy { it.toDate("MM-dd-yyyy") }).forEach { dateKey ->
                     result.add(dateStringToHeaderItem(dateKey))
                     //TODO: if in a list of holidays from semesterplan.json, add a holiday timetable item
@@ -79,6 +83,13 @@ class TimetableViewModel: ViewModel() {
             }
     }
 
+    private fun requestNotes(): Observable<String> {
+        return RestApi
+            .docsEndpoint
+            .notes(Locale.getDefault().language)
+            .runInThread(Schedulers.io())
+            .map { jNotes -> jNotes.timetable }
+    }
 
     fun getTimetablesFromDb(): Observable<Timetables> {
         val timetables = getAllTimetables()

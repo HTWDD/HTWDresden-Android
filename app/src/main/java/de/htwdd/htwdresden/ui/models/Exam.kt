@@ -72,6 +72,30 @@ class Exam(
     }
 }
 
+//-------------------------------------------------------------------------------------------------- Grade Warning
+class ExamWarningItem(private val text: String): Examable {
+
+    private val model = ExamWarningModel()
+
+    override val viewType: Int
+        get() = R.layout.list_item_exam_warning
+
+    override val bindings by lazy {
+        ArrayList<Pair<Int, ExamableModels>>().apply {
+            add(BR.examWarningModel to model)
+        }
+    }
+
+    init {
+        model.apply {
+            text.set(this@ExamWarningItem.text)
+        }
+    }
+
+    override fun equals(other: Any?) = hashCode() == other.hashCode()
+    override fun hashCode() = super.hashCode()
+}
+
 //-------------------------------------------------------------------------------------------------- Item
 class ExamItem(private val item: Exam): Examable {
 
@@ -118,4 +142,9 @@ class ExamModel: ExamableModels {
     val examiner    = ObservableField<String>()
     val nextChance  = ObservableField<String>()
     val rooms       = ObservableField<String>()
+}
+
+
+class ExamWarningModel: ExamableModels {
+    val text      = ObservableField<String>()
 }
