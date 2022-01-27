@@ -11,6 +11,8 @@ import de.htwdd.htwdresden.utils.holders.StringHolder
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GradesViewModel: ViewModel() {
 
@@ -18,7 +20,7 @@ class GradesViewModel: ViewModel() {
     private val sh by lazy { StringHolder.instance }
 
     @Suppress("UNCHECKED_CAST")
-    fun request(): Observable<Grades> {
+    fun requestGrades(): Observable<Grades> {
         return requestCourses()
             .runInThread()
             .flatMap { courses ->
@@ -49,7 +51,9 @@ class GradesViewModel: ViewModel() {
 
                     //bug 21007 average grades turned off
                     result.add(GradeAverageItem(try { if (holeGrades > 0) { holeGrades / holeCredits } else { 0f } } catch (e: Exception) { 0f }, holeCredits))
-
+                    if (requestNotes().blockingSingle().isNotEmpty()){
+                        result.add(GradeWarningItem(requestNotes().blockingSingle()))
+                    }
                     // flatten list and converting to header and grade item
                     pair.first.forEach { key ->
                         val gradeValues = pair.second.filter { f -> f.semester == key }.sortedWith(compareBy { it })
@@ -63,7 +67,7 @@ class GradesViewModel: ViewModel() {
                         ))
                         result.addAll(gradeValues.map { v -> GradeItem(v) })
                     }
-                    result.add(GradeWarningItem())
+
                 }
 
                 result
@@ -76,6 +80,14 @@ class GradesViewModel: ViewModel() {
             .getCourses("Basic ${cph.getAuthToken()}")
             .runInThread(Schedulers.io())
             .map { it.map { jCourse -> Course.from(jCourse) } }
+    }
+
+    private fun requestNotes(): Observable<String> {
+        return RestApi
+            .docsEndpoint
+            .notes(Locale.getDefault().language)
+            .runInThread(Schedulers.io())
+            .map { jNotes -> jNotes.grades }
     }
 
     private fun requestGrades(forCourse: Course): Observable<List<JGrade>> {

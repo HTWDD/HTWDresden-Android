@@ -184,6 +184,7 @@
     <string name="change_login">Change access data</string>
     <string name="imprint">Imprint</string>
     <string name="data_protection">Data Protection</string>
+    <string name="delete_all_saved_data_protection">Data Protection</string>
     <string name="delete_all_saved_data">Delete all stored data</string>
     <string name="delete_all_saved_data_question">Do you really want to delete all data stored in the HTW Dresden App?</string>
     <string name="show_hidden_elective_lectures">Reset elective lectures</string>

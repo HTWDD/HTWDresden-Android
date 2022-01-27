@@ -63,7 +63,7 @@ class GradesFragment: Fragment(R.layout.fragment_grades) {
 
     private fun request() {
         try {
-            viewModel.request()
+            viewModel.requestGrades()
                 .runInUiThread()
                 .doOnSubscribe { isRefreshing = true }
                 .doOnTerminate { isRefreshing = false }

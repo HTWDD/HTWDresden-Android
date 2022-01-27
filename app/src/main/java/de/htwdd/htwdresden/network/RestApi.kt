@@ -20,6 +20,7 @@ import javax.net.ssl.X509TrustManager
 object RestApi {
 
     private const val WW2_URL = "https://www2.htw-dresden.de/~app/API/"
+    private const val DOCS_URL = "https://rubu2.rz.htw-dresden.de/api/v1/docs/"
     private const val RUBU_URL = "https://rubu2.rz.htw-dresden.de/API/v0/"
     private const val QIS_URL = "https://wwwqis.htw-dresden.de/appservice/v2/"
     private const val MENSA_URL = "https://openmensa.org/api/v2/"
@@ -35,6 +36,19 @@ object RestApi {
                 OkHttpClient.Builder().cache(Cache(rh.getCacheDirectory(), cacheSize)).build()
             }
         }
+
+    val docsEndpoint: DocsEndpoint by lazy {
+        val gson = GsonBuilder().create()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(DOCS_URL)
+            .client(safeOrUnsafeClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        retrofit.create(DocsEndpoint::class.java)
+
+    }
 
     val timetableEndpoint: TimetableEndpoint by lazy {
         val gson = GsonBuilder().create()
@@ -75,17 +89,6 @@ object RestApi {
             .build()
         retrofit.create(GeneralEndpoint::class.java)
 
-    }
-
-    val managementEndpoint: ManagementEndpoint by lazy {
-        val gson = GsonBuilder().create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(RUBU_URL)
-            .client(safeOrUnsafeClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        retrofit.create(ManagementEndpoint::class.java)
     }
 
     val courseEndpoint: CourseEndpoint by lazy {

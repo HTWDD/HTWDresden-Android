@@ -50,11 +50,10 @@ data class JFreeDay (
 )
 
 data class JManagement (
-    val type: Int,
-    val room: String,
     val offeredServices: List<String>,
     val officeHours: List<JOfficeHour>,
-    val link: String
+    val link: String,
+    val notes: String
 )
 
 data class JOfficeHour (
@@ -65,6 +64,12 @@ data class JOfficeHour (
 data class JTime (
     val begin: String,
     val end: String
+)
+
+data class JNotes (
+    val timetable: String,
+    val grades: String,
+    val exams: String
 )
 
 class CurrentSemester(
@@ -198,8 +203,6 @@ class FreeDay(
 }
 
 class Management(
-    val type: Int,
-    val room: String,
     val offeredServices: List<String>,
     val officeHours: List<OfficeHour>,
     val link: String
@@ -207,8 +210,6 @@ class Management(
     companion object {
         fun from(json: JManagement): Management {
             return Management(
-                json.type,
-                json.room,
                 json.offeredServices,
                 json.officeHours.map { OfficeHour.from(it) },
                 json.link
@@ -219,9 +220,7 @@ class Management(
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
     override fun hashCode(): Int {
-        var result = type
-        result = 31 * result + room.hashCode()
-        result = 31 * result + offeredServices.hashCode()
+        var result = offeredServices.hashCode()
         result = 31 * result + officeHours.hashCode()
         result = 31 * result + link.hashCode()
         return result
@@ -326,7 +325,7 @@ class SemesterPlanItem(private val item: SemesterPlan): Managementable, Comparab
 }
 
 //-------------------------------------------------------------------------------------------------- Management Item
-class ManagementItem(private val item: Management): Managementable, Comparable<ManagementItem> {
+class ManagementItem(private val item: Management, private val type: Int): Managementable, Comparable<ManagementItem> {
 
     override val viewType: Int
         get() = R.layout.list_item_management_bindable
@@ -341,13 +340,12 @@ class ManagementItem(private val item: Management): Managementable, Comparable<M
 
     init {
         model.apply {
-            name.set(when (item.type) {
+            name.set(when (type) {
                 1 -> sh.getString(R.string.management_office)
                 2 -> sh.getString(R.string.management_examination_office)
                 else -> sh.getString(R.string.management_stura)
             })
             link.set(item.link)
-            room.set(item.room)
         }
     }
 
@@ -385,7 +383,7 @@ class ManagementItem(private val item: Management): Managementable, Comparable<M
         }
     }
 
-    override fun compareTo(other: ManagementItem) = item.type.compareTo(other.item.type)
+    override fun compareTo(other: ManagementItem) = type.compareTo(other.type)
 
     override fun equals(other: Any?) = hashCode() == other.hashCode()
 
