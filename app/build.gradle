@@ -15,6 +15,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 31
+    buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "de.htwdd.htwdresden"
         minSdkVersion 23
@@ -45,6 +46,11 @@ android {
         }
     }
 
+    lintOptions {
+        disable 'MissingTranslation'
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,11 +63,6 @@ android {
 
     dataBinding {
         enabled = true
-    }
-    lint {
-        abortOnError false
-        checkReleaseBuilds false
-        disable 'MissingTranslation'
     }
 }
 
