@@ -41,9 +41,10 @@ class TimetableWidget: AppWidgetProvider() {
                 data = if (cph.getStudyAuth() == null) { Uri.parse("htw://studygroup") } else { Uri.parse("htw://timetable") }
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            views.setOnClickPendingIntent(R.id.widget_timetable_layout, PendingIntent.getActivity(context, PendingIntent.FLAG_UPDATE_CURRENT, intent, 0))
+            val pendingIntent = PendingIntent.getActivity(context, 0,intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE);
+            views.setOnClickPendingIntent(R.id.widget_timetable_layout, pendingIntent)
 
-            // Requet time table for actual day
+            // request time table for actual day
             request(context, appWidgetManager, appWidgetId, views)
 
 
