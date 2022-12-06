@@ -16,6 +16,6 @@ Our credits go to the initiators of this project:
 * [loudedtwist](https://github.com/loudedtwist)
 * [Meralium](https://github.com/Meralium)
 * [eikw](https://github.com/eikw)
+
+and the maintainers:
 * [Develappers GmbH](https://github.com/DevelappersGmbH)
-
-
